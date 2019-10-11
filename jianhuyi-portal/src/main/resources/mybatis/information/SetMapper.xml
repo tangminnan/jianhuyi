@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.owneruser.dao.SetDao">
+ 
+	<select id="getHouseHolderSet" resultType="com.jianhuyi.owneruser.domain.SetDO">
+		select `id`,`userid`,`intensity`,`rank`,`treat_time` from user_set where userid = #{value}
+	</select>
+
+	<select id="getProfessionSet" resultType="com.jianhuyi.owneruser.domain.SetDO">
+		select `id`,`userid`,`frequency`,`current`,`waveform`,`workmethod`,`electrode` from user_set where userid = #{value}
+	</select>
+	
+	<update id="updateFlag" parameterType="com.jianhuyi.owneruser.domain.SetDO">
+		update t_user set flag=#{flag} where user_id=#{userid}
+	</update>
+	
+	<select id="getFlag" resultType="com.jianhuyi.owneruser.domain.SetDO">
+		select flag from t_user where user_id=#{userid}
+	</select>
+	
+	<select id="list" resultType="com.jianhuyi.owneruser.domain.SetDO">
+		select `id`,`userid`,`intensity`,`rank`,`treat_time` from user_set
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userid != null and userid != ''"> and userid = #{userid} </if>
+		  		  <if test="intensity != null and intensity != ''"> and intensity = #{intensity} </if>
+		  		  <if test="rank != null and rank != ''"> and rank = #{rank} </if>
+		  		  <if test="treatTime != null and treatTime != ''"> and treat_time = #{treatTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from user_set
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userid != null and userid != ''"> and userid = #{userid} </if>
+		  		  <if test="intensity != null and intensity != ''"> and intensity = #{intensity} </if>
+		  		  <if test="rank != null and rank != ''"> and rank = #{rank} </if>
+		  		  <if test="treatTime != null and treatTime != ''"> and treat_time = #{treatTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="addsetUser" parameterType="com.jianhuyi.owneruser.domain.SetDO" useGeneratedKeys="true" keyProperty="id">
+		insert into user_set
+		(
+			`userid`, 
+			`intensity`, 
+			`rank`, 
+			`treat_time`,
+			 frequency,
+			 current,
+			 waveform,
+			 workmethod,
+			 electrode
+		)
+		values
+		(
+			#{userid}, 
+			#{intensity}, 
+			#{rank}, 
+			#{treatTime},
+			#{frequency},
+			#{current},
+			#{waveform},
+			#{workmethod},
+			#{electrode}
+		)
+	</insert>
+	 
+	<update id="updatesetUser" parameterType="com.jianhuyi.owneruser.domain.SetDO">
+		update user_set 
+		<set>
+			<if test="intensity != null">`intensity` = #{intensity}, </if>
+			<if test="rank != null">`rank` = #{rank}, </if>
+			<if test="treatTime != null">`treat_time` = #{treatTime}</if>
+			<if test="frequency != null">`frequency` = #{frequency}, </if>
+			<if test="current != null">`current` = #{current}, </if>
+			<if test="waveform != null">`waveform` = #{waveform}, </if>
+			<if test="workmethod != null">`workmethod` = #{workmethod}, </if>
+			<if test="electrode != null">`electrode` = #{electrode}</if>
+		</set>
+		where userid = #{userid}
+	</update>
+	<delete id="remove">
+		delete from user_set where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from user_set where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.device.dao.DeviceDao">
+
+	<select id="get" resultType="com.jianhuyi.device.domain.DeviceDO">
+		select `id`,`account`,`create_time`,`identity`,`icon`,`name`,`mac`,`default_device`,`device_type` from t_device where id = #{value} and deleted=0
+	</select>
+
+	<select id="list" resultType="com.jianhuyi.device.domain.DeviceDO">
+		select `id`,`account`,`identity`,`icon`,`name`,`default_device`,`mac` from t_device
+        where deleted=0  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="account != null and account != ''"> and account = #{account} </if>
+		  		  <if test="identity != null and identity != ''"> and identity = #{identity} </if>
+		  		  <if test="icon != null and icon != ''"> and icon = #{icon} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="defaultDevice != null and defaultDevice != ''"> and default_device = #{defaultDevice} </if>
+		  		  <if test="mac != null and mac != ''"> and mac = #{mac} </if>
+		  		  
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from t_device
+		 where deleted=0  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="account != null and account != ''"> and account = #{account} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="identity != null and identity != ''"> and identity = #{identity} </if>
+		  		  <if test="icon != null and icon != ''"> and icon = #{icon} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="mac != null and mac != ''"> and mac = #{mac} </if>
+		  		  <if test="defaultDevice != null and defaultDevice != ''"> and default_device = #{defaultDevice} </if>
+		  		  <if test="deviceType != null and deviceType != ''"> and device_type = #{deviceType} </if>
+		  		
+	</select>
+	 
+	<insert id="save" parameterType="com.jianhuyi.device.domain.DeviceDO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_device
+		(
+			`account`, 
+			`create_time`, 
+			`identity`, 
+			`icon`, 
+			`name`, 
+			`mac`, 
+			`default_device`, 
+			`device_type`,
+			deleted
+		)
+		values
+		(
+			#{account}, 
+			#{createTime}, 
+			#{identity}, 
+			#{icon}, 
+			#{name}, 
+			#{mac}, 
+			#{defaultDevice}, 
+			#{deviceType},
+			#{deleted}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.jianhuyi.device.domain.DeviceDO">
+		update t_device 
+		<set>
+			<if test="account != null">`account` = #{account}, </if>
+			<if test="icon != null">`icon` = #{icon}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="mac != null">`mac` = #{mac}, </if>
+			<if test="defaultDevice != null">`default_device` = #{defaultDevice}, </if>
+			<if test="deviceType != null">`device_type` = #{deviceType}</if>
+		</set>
+		where mac = #{mac}
+	</update>
+	
+	<update id="updateByidentity" parameterType="com.jianhuyi.device.domain.DeviceDO">
+		update t_device 
+		<set>
+			<if test="account != null">`account` = #{account}, </if>
+			<if test="icon != null">`icon` = #{icon}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="mac != null">`identity` = #{identity}, </if>
+			<if test="defaultDevice != null">`default_device` = #{defaultDevice}, </if>
+			<if test="deviceType != null">`device_type` = #{deviceType}</if>
+		</set>
+		where identity = #{identity}
+	</update>
+	
+	<delete id="remove">
+		delete from t_device where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from t_device where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

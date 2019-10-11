@@ -1,0 +1,557 @@
+2019-10-11 12:07:18 -Starting BootdoApplication on LAPTOP-TF948AGG with PID 9408 (C:\work\jianhuyiwork\jianhuyi\jianhuyi-portal\target\classes started by 静途 in C:\work\jianhuyiwork\jianhuyi\jianhuyi-portal)
+2019-10-11 12:07:18 -Running with Spring Boot v1.5.9.RELEASE, Spring v4.3.13.RELEASE
+2019-10-11 12:07:18 -The following profiles are active: dev
+2019-10-11 12:07:18 -Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@49049a04: startup date [Fri Oct 11 12:07:18 GMT+08:00 2019]; root of context hierarchy
+2019-10-11 12:07:18 -HV000001: Hibernate Validator 5.3.6.Final
+2019-10-11 12:07:20 -Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-10-11 12:07:21 -Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$de8f0f6c] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:07:21 -Bean 'shiroConfig' of type [com.jianhuyi.system.config.ShiroConfig$$EnhancerBySpringCGLIB$$e38d3edf] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:07:21 -Bean 'userRealm' of type [com.jianhuyi.system.shiro.UserRealm] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:07:22 -Bean 'ehCacheManager' of type [org.apache.shiro.cache.ehcache.EhCacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:07:22 -Cache with name 'com.jianhuyi.system.shiro.UserRealm.authorizationCache' does not yet exist.  Creating now.
+2019-10-11 12:07:22 -Added EhCache named [com.jianhuyi.system.shiro.UserRealm.authorizationCache]
+2019-10-11 12:07:22 -Bean 'sessionDAO' of type [org.apache.shiro.session.mgt.eis.MemorySessionDAO] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:07:22 -Bean 'sessionManager' of type [org.apache.shiro.web.session.mgt.DefaultWebSessionManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:07:22 -Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:07:22 -Bean 'authorizationAttributeSourceAdvisor' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:07:22 -Tomcat initialized with port(s): 8087 (http)
+2019-10-11 12:07:22 -Starting service [Tomcat]
+2019-10-11 12:07:22 -Starting Servlet Engine: Apache Tomcat/8.5.23
+2019-10-11 12:07:22 -Initializing Spring embedded WebApplicationContext
+2019-10-11 12:07:22 -Root WebApplicationContext: initialization completed in 4129 ms
+2019-10-11 12:07:23 -Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-10-11 12:07:23 -Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2019-10-11 12:07:23 -Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2019-10-11 12:07:23 -Mapping filter: 'requestContextFilter' to: [/*]
+2019-10-11 12:07:23 -Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-10-11 12:07:23 -Filter xssFilter was not registered (disabled)
+2019-10-11 12:07:23 -Mapping filter: 'webStatFilter' to urls: [/*]
+2019-10-11 12:07:23 -Mapping filter: 'com.jianhuyi.system.filter.CorsFilter' to: [/*]
+2019-10-11 12:07:23 -Mapping filter: 'remoteIpFilter' to: [/*]
+2019-10-11 12:07:23 -Mapping filter: 'shiroFilterFactoryBean' to: [/*]
+2019-10-11 12:07:23 -Mapping servlet: 'statViewServlet' to [/druid/*]
+2019-10-11 12:07:23 -Mapping servlet: 'dispatcherServlet' to [/]
+2019-10-11 12:07:24 -init datasource error, url: jdbc:mysql://47.92.241.245:3306/jianhuyi?useUnicode=true&characterEncoding=utf8
+java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:964)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3973)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3909)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:873)
+	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1710)
+	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1226)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2191)
+	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2222)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2017)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:779)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:389)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
+	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785)
+	at com.alibaba.druid.filter.FilterEventAdapter.connection_connect(FilterEventAdapter.java:38)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:211)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1454)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1516)
+	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:734)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeCustomInitMethod(AbstractAutowireCapableBeanFactory.java:1758)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1695)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:835)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:741)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:467)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1173)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1067)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireByType(AbstractAutowireCapableBeanFactory.java:1342)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1249)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:867)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107)
+	at com.jianhuyi.BootdoApplication.main(BootdoApplication.java:23)
+2019-10-11 12:07:24 -{dataSource-1} init error
+java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:964)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3973)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3909)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:873)
+	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1710)
+	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1226)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2191)
+	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2222)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2017)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:779)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:389)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
+	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785)
+	at com.alibaba.druid.filter.FilterEventAdapter.connection_connect(FilterEventAdapter.java:38)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:211)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1454)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1516)
+	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:734)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeCustomInitMethod(AbstractAutowireCapableBeanFactory.java:1758)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1695)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:835)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:741)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:467)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1173)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1067)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireByType(AbstractAutowireCapableBeanFactory.java:1342)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1249)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:867)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107)
+	at com.jianhuyi.BootdoApplication.main(BootdoApplication.java:23)
+2019-10-11 12:07:24 -{dataSource-1} inited
+2019-10-11 12:07:24 -Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logAspect': Unsatisfied dependency expressed through field 'logService'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logServiceImpl': Unsatisfied dependency expressed through field 'logMapper'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logDao' defined in file [C:\work\jianhuyiwork\jianhuyi\jianhuyi-portal\target\classes\com\jianhuyi\common\dao\LogDao.class]: Unsatisfied dependency expressed through bean property 'sqlSessionFactory'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionFactory' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [com/jianhuyi/common/config/DruidDBConfig.class]: Invocation of init method failed; nested exception is java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+2019-10-11 12:07:24 -Stopping service [Tomcat]
+2019-10-11 12:07:24 -
+
+Error starting ApplicationContext. To display the auto-configuration report re-run your application with 'debug' enabled.
+2019-10-11 12:07:24 -Application startup failed
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logAspect': Unsatisfied dependency expressed through field 'logService'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logServiceImpl': Unsatisfied dependency expressed through field 'logMapper'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logDao' defined in file [C:\work\jianhuyiwork\jianhuyi\jianhuyi-portal\target\classes\com\jianhuyi\common\dao\LogDao.class]: Unsatisfied dependency expressed through bean property 'sqlSessionFactory'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionFactory' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [com/jianhuyi/common/config/DruidDBConfig.class]: Invocation of init method failed; nested exception is java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:588)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:761)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:867)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:693)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:360)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1118)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1107)
+	at com.jianhuyi.BootdoApplication.main(BootdoApplication.java:23)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logServiceImpl': Unsatisfied dependency expressed through field 'logMapper'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logDao' defined in file [C:\work\jianhuyiwork\jianhuyi\jianhuyi-portal\target\classes\com\jianhuyi\common\dao\LogDao.class]: Unsatisfied dependency expressed through bean property 'sqlSessionFactory'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionFactory' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [com/jianhuyi/common/config/DruidDBConfig.class]: Invocation of init method failed; nested exception is java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:588)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1264)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	... 19 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'logDao' defined in file [C:\work\jianhuyiwork\jianhuyi\jianhuyi-portal\target\classes\com\jianhuyi\common\dao\LogDao.class]: Unsatisfied dependency expressed through bean property 'sqlSessionFactory'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionFactory' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [com/jianhuyi/common/config/DruidDBConfig.class]: Invocation of init method failed; nested exception is java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireByType(AbstractAutowireCapableBeanFactory.java:1357)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1249)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:553)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:585)
+	... 32 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [org/mybatis/spring/boot/autoconfigure/MybatisAutoConfiguration.class]: Unsatisfied dependency expressed through method 'sqlSessionFactory' parameter 0; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [com/jianhuyi/common/config/DruidDBConfig.class]: Invocation of init method failed; nested exception is java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:749)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:467)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1173)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1067)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:513)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireByType(AbstractAutowireCapableBeanFactory.java:1342)
+	... 43 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'dataSource' defined in class path resource [com/jianhuyi/common/config/DruidDBConfig.class]: Invocation of init method failed; nested exception is java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1138)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1066)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:835)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:741)
+	... 56 common frames omitted
+Caused by: java.sql.SQLException: Access denied for user 'root'@'106.39.106.196' (using password: YES)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:964)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3973)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3909)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:873)
+	at com.mysql.jdbc.MysqlIO.proceedHandshakeWithPluggableAuthentication(MysqlIO.java:1710)
+	at com.mysql.jdbc.MysqlIO.doHandshake(MysqlIO.java:1226)
+	at com.mysql.jdbc.ConnectionImpl.coreConnect(ConnectionImpl.java:2191)
+	at com.mysql.jdbc.ConnectionImpl.connectOneTryOnly(ConnectionImpl.java:2222)
+	at com.mysql.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:2017)
+	at com.mysql.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:779)
+	at com.mysql.jdbc.JDBC4Connection.<init>(JDBC4Connection.java:47)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:389)
+	at com.mysql.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:330)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:148)
+	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785)
+	at com.alibaba.druid.filter.FilterEventAdapter.connection_connect(FilterEventAdapter.java:38)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.filter.FilterAdapter.connection_connect(FilterAdapter.java:785)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.filter.stat.StatFilter.connection_connect(StatFilter.java:211)
+	at com.alibaba.druid.filter.FilterChainImpl.connection_connect(FilterChainImpl.java:142)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1454)
+	at com.alibaba.druid.pool.DruidAbstractDataSource.createPhysicalConnection(DruidAbstractDataSource.java:1516)
+	at com.alibaba.druid.pool.DruidDataSource.init(DruidDataSource.java:734)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeCustomInitMethod(AbstractAutowireCapableBeanFactory.java:1758)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1695)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624)
+	... 67 common frames omitted
+2019-10-11 12:09:32 -Starting BootdoApplication on LAPTOP-TF948AGG with PID 17696 (C:\work\jianhuyiwork\jianhuyi\jianhuyi-portal\target\classes started by 静途 in C:\work\jianhuyiwork\jianhuyi\jianhuyi-portal)
+2019-10-11 12:09:32 -Running with Spring Boot v1.5.9.RELEASE, Spring v4.3.13.RELEASE
+2019-10-11 12:09:32 -The following profiles are active: dev
+2019-10-11 12:09:32 -Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@49049a04: startup date [Fri Oct 11 12:09:32 GMT+08:00 2019]; root of context hierarchy
+2019-10-11 12:09:32 -HV000001: Hibernate Validator 5.3.6.Final
+2019-10-11 12:09:33 -Multiple Spring Data modules found, entering strict repository configuration mode!
+2019-10-11 12:09:34 -Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$930c1a9d] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:09:34 -Bean 'shiroConfig' of type [com.jianhuyi.system.config.ShiroConfig$$EnhancerBySpringCGLIB$$980a4a10] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:09:35 -Bean 'userRealm' of type [com.jianhuyi.system.shiro.UserRealm] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:09:35 -Bean 'ehCacheManager' of type [org.apache.shiro.cache.ehcache.EhCacheManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:09:35 -Cache with name 'com.jianhuyi.system.shiro.UserRealm.authorizationCache' does not yet exist.  Creating now.
+2019-10-11 12:09:35 -Added EhCache named [com.jianhuyi.system.shiro.UserRealm.authorizationCache]
+2019-10-11 12:09:35 -Bean 'sessionDAO' of type [org.apache.shiro.session.mgt.eis.MemorySessionDAO] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:09:35 -Bean 'sessionManager' of type [org.apache.shiro.web.session.mgt.DefaultWebSessionManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:09:35 -Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:09:35 -Bean 'authorizationAttributeSourceAdvisor' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-10-11 12:09:36 -Tomcat initialized with port(s): 8087 (http)
+2019-10-11 12:09:36 -Starting service [Tomcat]
+2019-10-11 12:09:36 -Starting Servlet Engine: Apache Tomcat/8.5.23
+2019-10-11 12:09:36 -Initializing Spring embedded WebApplicationContext
+2019-10-11 12:09:36 -Root WebApplicationContext: initialization completed in 4061 ms
+2019-10-11 12:09:36 -Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-10-11 12:09:36 -Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2019-10-11 12:09:36 -Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2019-10-11 12:09:36 -Mapping filter: 'requestContextFilter' to: [/*]
+2019-10-11 12:09:36 -Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-10-11 12:09:36 -Filter xssFilter was not registered (disabled)
+2019-10-11 12:09:36 -Mapping filter: 'webStatFilter' to urls: [/*]
+2019-10-11 12:09:36 -Mapping filter: 'com.jianhuyi.system.filter.CorsFilter' to: [/*]
+2019-10-11 12:09:36 -Mapping filter: 'remoteIpFilter' to: [/*]
+2019-10-11 12:09:36 -Mapping filter: 'shiroFilterFactoryBean' to: [/*]
+2019-10-11 12:09:36 -Mapping servlet: 'statViewServlet' to [/druid/*]
+2019-10-11 12:09:36 -Mapping servlet: 'dispatcherServlet' to [/]
+2019-10-11 12:09:37 -{dataSource-1} inited
+2019-10-11 12:09:38 -ApplicationContext registed-->org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@49049a04: startup date [Fri Oct 11 12:09:32 GMT+08:00 2019]; root of context hierarchy
+2019-10-11 12:09:38 -Using default implementation for ThreadExecutor
+2019-10-11 12:09:38 -Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2019-10-11 12:09:38 -Quartz Scheduler v.2.2.1 created.
+2019-10-11 12:09:38 -RAMJobStore initialized.
+2019-10-11 12:09:38 -Scheduler meta-data: Quartz Scheduler (v2.2.1) 'schedulerFactoryBean' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2019-10-11 12:09:38 -Quartz scheduler 'schedulerFactoryBean' initialized from an externally provided properties instance.
+2019-10-11 12:09:38 -Quartz scheduler version: 2.2.1
+2019-10-11 12:09:38 -JobFactory set to: com.jianhuyi.common.quartz.factory.JobFactory@50122012
+2019-10-11 12:09:39 -Mapped "{[/common/dict/add],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.DictController.add()
+2019-10-11 12:09:39 -Mapped "{[/common/dict/remove],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.DictController.remove(java.lang.Long)
+2019-10-11 12:09:39 -Mapped "{[/common/dict/batchRemove],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.DictController.remove(java.lang.Long[])
+2019-10-11 12:09:39 -Mapped "{[/common/dict/update]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.DictController.update(com.jianhuyi.common.domain.DictDO)
+2019-10-11 12:09:39 -Mapped "{[/common/dict/list],methods=[GET]}" onto public com.jianhuyi.common.utils.PageUtils com.jianhuyi.common.controller.DictController.list(java.util.Map<java.lang.String, java.lang.Object>)
+2019-10-11 12:09:39 -Mapped "{[/common/dict/save],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.DictController.save(com.jianhuyi.common.domain.DictDO)
+2019-10-11 12:09:39 -Mapped "{[/common/dict/type],methods=[GET]}" onto public java.util.List<com.jianhuyi.common.domain.DictDO> com.jianhuyi.common.controller.DictController.listType()
+2019-10-11 12:09:39 -Mapped "{[/common/dict/add/{type}/{description}],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.DictController.addD(org.springframework.ui.Model,java.lang.String,java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/common/dict],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.DictController.dict()
+2019-10-11 12:09:39 -Mapped "{[/common/dict/edit/{id}],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.DictController.edit(java.lang.Long,org.springframework.ui.Model)
+2019-10-11 12:09:39 -Mapped "{[/common/dict/list/{type}],methods=[GET]}" onto public java.util.List<com.jianhuyi.common.domain.DictDO> com.jianhuyi.common.controller.DictController.listByType(java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/add],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.FileController.add()
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/remove],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.FileController.remove(java.lang.Long,javax.servlet.http.HttpServletRequest)
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/batchRemove],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.FileController.remove(java.lang.Long[])
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/update]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.FileController.update(com.jianhuyi.common.domain.FileDO)
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/list],methods=[GET]}" onto public com.jianhuyi.common.utils.PageUtils com.jianhuyi.common.controller.FileController.list(java.util.Map<java.lang.String, java.lang.Object>)
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/save],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.FileController.save(com.jianhuyi.common.domain.FileDO)
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/info/{id}]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.FileController.info(java.lang.Long)
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.FileController.sysFile(org.springframework.ui.Model)
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/edit],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.FileController.edit(java.lang.Long,org.springframework.ui.Model)
+2019-10-11 12:09:39 -Mapped "{[/common/sysFile/upload],methods=[POST]}" onto com.jianhuyi.common.utils.R com.jianhuyi.common.controller.FileController.upload(org.springframework.web.multipart.MultipartFile,javax.servlet.http.HttpServletRequest)
+2019-10-11 12:09:39 -Mapped "{[/common/generator/update],methods=[POST]}" onto com.jianhuyi.common.utils.R com.jianhuyi.common.controller.GeneratorController.update(java.util.Map<java.lang.String, java.lang.Object>)
+2019-10-11 12:09:39 -Mapped "{[/common/generator/list],methods=[GET]}" onto java.util.List<java.util.Map<java.lang.String, java.lang.Object>> com.jianhuyi.common.controller.GeneratorController.list()
+2019-10-11 12:09:39 -Mapped "{[/common/generator/code/{tableName}]}" onto public void com.jianhuyi.common.controller.GeneratorController.code(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse,java.lang.String) throws java.io.IOException
+2019-10-11 12:09:39 -Mapped "{[/common/generator],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.GeneratorController.generator()
+2019-10-11 12:09:39 -Mapped "{[/common/generator/edit],methods=[GET]}" onto public java.lang.String com.jianhuyi.common.controller.GeneratorController.edit(org.springframework.ui.Model)
+2019-10-11 12:09:39 -Mapped "{[/common/generator/batchCode]}" onto public void com.jianhuyi.common.controller.GeneratorController.batchCode(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse,java.lang.String) throws java.io.IOException
+2019-10-11 12:09:39 -Mapped "{[/common/job/add],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.JobController.add()
+2019-10-11 12:09:39 -Mapped "{[/common/job/remove],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.JobController.remove(java.lang.Long)
+2019-10-11 12:09:39 -Mapped "{[/common/job/batchRemove],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.JobController.remove(java.lang.Long[])
+2019-10-11 12:09:39 -Mapped "{[/common/job/update],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.JobController.update(com.jianhuyi.common.domain.TaskDO)
+2019-10-11 12:09:39 -Mapped "{[/common/job/list],methods=[GET]}" onto public com.jianhuyi.common.utils.PageUtils com.jianhuyi.common.controller.JobController.list(java.util.Map<java.lang.String, java.lang.Object>)
+2019-10-11 12:09:39 -Mapped "{[/common/job/save],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.JobController.save(com.jianhuyi.common.domain.TaskDO)
+2019-10-11 12:09:39 -Mapped "{[/common/job/info/{id}]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.JobController.info(java.lang.Long)
+2019-10-11 12:09:39 -Mapped "{[/common/job/edit/{id}],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.JobController.edit(java.lang.Long,org.springframework.ui.Model)
+2019-10-11 12:09:39 -Mapped "{[/common/job/changeJobStatus],methods=[POST]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.controller.JobController.changeJobStatus(java.lang.Long,java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/common/job],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.JobController.taskScheduleJob()
+2019-10-11 12:09:39 -Mapped "{[/common/log/remove],methods=[POST]}" onto com.jianhuyi.common.utils.R com.jianhuyi.common.controller.LogController.remove(java.lang.Long)
+2019-10-11 12:09:39 -Mapped "{[/common/log],methods=[GET]}" onto java.lang.String com.jianhuyi.common.controller.LogController.log()
+2019-10-11 12:09:39 -Mapped "{[/common/log/list],methods=[GET]}" onto com.jianhuyi.common.domain.PageDO<com.jianhuyi.common.domain.LogDO> com.jianhuyi.common.controller.LogController.list(java.util.Map<java.lang.String, java.lang.Object>)
+2019-10-11 12:09:39 -Mapped "{[/common/log/batchRemove],methods=[POST]}" onto com.jianhuyi.common.utils.R com.jianhuyi.common.controller.LogController.batchRemove(java.lang.Long[])
+2019-10-11 12:09:39 -Mapped "{[/error]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.common.exception.MainsiteErrorController.handleError(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-10-11 12:09:39 -Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView com.jianhuyi.common.exception.MainsiteErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-10-11 12:09:39 -Mapped "{[/jianhuyi/device/delete],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.device.controller.DeviceController.delete(java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/jianhuyi/device/list],methods=[GET]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.device.controller.DeviceController.list()
+2019-10-11 12:09:39 -Mapped "{[/jianhuyi/device/addByidentity],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.device.controller.DeviceController.addByidentity(java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/jianhuyi/device/addBymac],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.device.controller.DeviceController.addBymac(java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/msg/list],methods=[GET]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.information.controller.MsgController.list(org.springframework.ui.Model)
+2019-10-11 12:09:39 -Mapped "{[/msg/list/info],methods=[GET]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.information.controller.MsgController.info(org.springframework.ui.Model,java.lang.Long)
+2019-10-11 12:09:39 -Mapped "{[/register],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.String> com.jianhuyi.owneruser.controller.LoginController.register(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/loginWechat],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.LoginController.loginWechat(java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/loginP],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.LoginController.loginP(java.lang.String,java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/getSms],methods=[POST]}" onto static java.util.Map<java.lang.String, java.lang.String> com.jianhuyi.owneruser.controller.LoginController.getSms(java.lang.String,java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/loginC],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.LoginController.loginC(java.lang.String,java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/retpwd],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.String> com.jianhuyi.owneruser.controller.LoginController.retpwd(java.lang.String,java.lang.String,java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/logout],methods=[GET]}" onto java.util.Map<java.lang.String, java.lang.String> com.jianhuyi.owneruser.controller.LoginController.logout()
+2019-10-11 12:09:39 -Mapped "{[/loginqq],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.LoginController.loginqq(java.lang.String)
+2019-10-11 12:09:39 -Mapped "{[/user/userInfo],methods=[GET]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.OwnerUserController.user()
+2019-10-11 12:09:39 -Mapped "{[/user/editInfo],methods=[POST]}" onto java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.OwnerUserController.editInfo(com.jianhuyi.owneruser.domain.OwnerUserDO)
+2019-10-11 12:09:39 -Mapped "{[/jianhuyi/set/getFlag],methods=[GET]}" onto public java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.SetController.getFlag()
+2019-10-11 12:09:39 -Mapped "{[/jianhuyi/set/addSet],methods=[POST]}" onto public java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.SetController.addsetUser(com.jianhuyi.owneruser.domain.SetDO)
+2019-10-11 12:09:39 -Mapped "{[/jianhuyi/set/getSet],methods=[GET]}" onto public java.util.Map<java.lang.String, java.lang.Object> com.jianhuyi.owneruser.controller.SetController.getUserSet(java.lang.Integer)
+2019-10-11 12:09:39 -Mapped "{[/sys/online/list]}" onto public java.util.List<com.jianhuyi.system.domain.UserOnline> com.jianhuyi.system.controller.SessionController.list()
+2019-10-11 12:09:39 -Mapped "{[/sys/online/forceLogout/{sessionId}]}" onto public com.jianhuyi.common.utils.R com.jianhuyi.system.controller.SessionController.forceLogout(java.lang.String,org.springframework.web.servlet.mvc.support.RedirectAttributes)
+2019-10-11 12:09:39 -Mapped "{[/sys/online/sessionList]}" onto public java.util.Collection<org.apache.shiro.session.Session> com.jianhuyi.system.controller.SessionController.sessionList()
+2019-10-11 12:09:39 -Mapped "{[/sys/online],methods=[GET]}" onto public java.lang.String com.jianhuyi.system.controller.SessionController.online()
+2019-10-11 12:09:39 -Mapped "{[/v2/api-docs],methods=[GET],produces=[application/json || application/hal+json]}" onto public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)
+2019-10-11 12:09:39 -Mapped "{[/swagger-resources]}" onto org.springframework.http.ResponseEntity<java.util.List<springfox.documentation.swagger.web.SwaggerResource>> springfox.documentation.swagger.web.ApiResourceController.swaggerResources()
+2019-10-11 12:09:39 -Mapped "{[/swagger-resources/configuration/ui]}" onto org.springframework.http.ResponseEntity<springfox.documentation.swagger.web.UiConfiguration> springfox.documentation.swagger.web.ApiResourceController.uiConfiguration()
+2019-10-11 12:09:39 -Mapped "{[/swagger-resources/configuration/security]}" onto org.springframework.http.ResponseEntity<springfox.documentation.swagger.web.SecurityConfiguration> springfox.documentation.swagger.web.ApiResourceController.securityConfiguration()
+2019-10-11 12:09:40 -Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@49049a04: startup date [Fri Oct 11 12:09:32 GMT+08:00 2019]; root of context hierarchy
+2019-10-11 12:09:40 -Mapped URL path [/files/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-11 12:09:40 -Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-11 12:09:40 -Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-11 12:09:40 -Detected @ExceptionHandler methods in BDExceptionHandler
+2019-10-11 12:09:40 -Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2019-10-11 12:09:41 -
+
+Using default security password: ddf8ae4d-1057-4daa-bbb4-8a581248ce15
+
+2019-10-11 12:09:41 -Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/css/**'], Ant [pattern='/js/**'], Ant [pattern='/images/**'], Ant [pattern='/webjars/**'], Ant [pattern='/**/favicon.ico'], Ant [pattern='/error']]], []
+2019-10-11 12:09:41 -Creating filter chain: org.springframework.boot.autoconfigure.security.SpringBootWebSecurityConfiguration$ApplicationNoWebSecurityConfigurerAdapter$1@78fb72cb, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@398694a6, org.springframework.security.web.context.SecurityContextPersistenceFilter@5ec6a1b6, org.springframework.security.web.header.HeaderWriterFilter@5cfa2ac5, org.springframework.security.web.csrf.CsrfFilter@3355b8ff, org.springframework.security.web.authentication.logout.LogoutFilter@2862271a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@42ffbab6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3c97f5e9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@653e7b, org.springframework.security.web.session.SessionManagementFilter@f42336c, org.springframework.security.web.access.ExceptionTranslationFilter@47eae91d]
+2019-10-11 12:09:42 -Registering beans for JMX exposure on startup
+2019-10-11 12:09:42 -Bean with name 'dataSource' has been autodetected for JMX exposure
+2019-10-11 12:09:42 -Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=dataSource,type=DruidDataSource]
+2019-10-11 12:09:42 -Starting beans in phase 2147483647
+2019-10-11 12:09:42 -Context refreshed
+2019-10-11 12:09:42 -Found 1 custom documentation plugin(s)
+2019-10-11 12:09:42 -Scanning for api listing references
+2019-10-11 12:09:42 -Generating unique operation named: listUsingGET_1
+2019-10-11 12:09:42 -Generating unique operation named: removeUsingPOST_1
+2019-10-11 12:09:42 -Generating unique operation named: addUsingGET_1
+2019-10-11 12:09:42 -Generating unique operation named: editUsingGET_1
+2019-10-11 12:09:42 -Generating unique operation named: listUsingGET_2
+2019-10-11 12:09:42 -Generating unique operation named: removeUsingPOST_2
+2019-10-11 12:09:42 -Generating unique operation named: removeUsingPOST_3
+2019-10-11 12:09:42 -Generating unique operation named: saveUsingPOST_1
+2019-10-11 12:09:42 -Generating unique operation named: updateUsingGET_1
+2019-10-11 12:09:42 -Generating unique operation named: updateUsingHEAD_1
+2019-10-11 12:09:42 -Generating unique operation named: updateUsingPOST_1
+2019-10-11 12:09:42 -Generating unique operation named: updateUsingPUT_1
+2019-10-11 12:09:42 -Generating unique operation named: updateUsingPATCH_1
+2019-10-11 12:09:42 -Generating unique operation named: updateUsingDELETE_1
+2019-10-11 12:09:42 -Generating unique operation named: updateUsingOPTIONS_1
+2019-10-11 12:09:42 -Generating unique operation named: updateUsingTRACE_1
+2019-10-11 12:09:43 -Generating unique operation named: editUsingGET_2
+2019-10-11 12:09:43 -Generating unique operation named: listUsingGET_3
+2019-10-11 12:09:43 -Generating unique operation named: updateUsingPOST_2
+2019-10-11 12:09:43 -Generating unique operation named: addUsingGET_2
+2019-10-11 12:09:43 -Generating unique operation named: editUsingGET_3
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingGET_1
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingHEAD_1
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingPOST_1
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingPUT_1
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingPATCH_1
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingDELETE_1
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingOPTIONS_1
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingTRACE_1
+2019-10-11 12:09:43 -Generating unique operation named: listUsingGET_4
+2019-10-11 12:09:43 -Generating unique operation named: removeUsingPOST_4
+2019-10-11 12:09:43 -Generating unique operation named: removeUsingPOST_5
+2019-10-11 12:09:43 -Generating unique operation named: saveUsingPOST_2
+2019-10-11 12:09:43 -Generating unique operation named: updateUsingPOST_3
+2019-10-11 12:09:43 -Generating unique operation named: listUsingGET_5
+2019-10-11 12:09:43 -Generating unique operation named: removeUsingPOST_6
+2019-10-11 12:09:43 -Generating unique operation named: infoUsingGET_2
+2019-10-11 12:09:43 -Generating unique operation named: listUsingGET_6
+2019-10-11 12:09:43 -Generating unique operation named: listUsingGET_7
+2019-10-11 12:09:43 -Starting Quartz Scheduler now
+2019-10-11 12:09:43 -Scheduler schedulerFactoryBean_$_NON_CLUSTERED started.
+2019-10-11 12:09:43 -Initializing ProtocolHandler ["http-nio-8087"]
+2019-10-11 12:09:43 -Starting ProtocolHandler ["http-nio-8087"]
+2019-10-11 12:09:43 -Using a shared selector for servlet write/read
+2019-10-11 12:09:43 -Tomcat started on port(s): 8087 (http)
+2019-10-11 12:09:43 -==>  Preparing: select `id`,`cron_expression`,`method_name`,`is_concurrent`,`description`,`update_by`,`bean_class`,`create_date`,`job_status`,`job_group`,`update_date`,`create_by`,`spring_bean`,`job_name` from sys_task order by id desc 
+2019-10-11 12:09:43 -==> Parameters: 
+2019-10-11 12:09:43 -<==      Total: 1
+2019-10-11 12:09:43 -Started BootdoApplication in 12.004 seconds (JVM running for 12.448)

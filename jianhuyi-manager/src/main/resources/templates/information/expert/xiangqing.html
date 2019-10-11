@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${expert.id}"  type="hidden">
+							
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">医生等级：</label>
+								<div class="col-sm-3">
+									<input id="doctorLevel" name="doctorLevel" th:value="${expert.doctorLevel}" class="form-control" type="text" readonly="readonly">
+								</div>
+							
+								<label class="col-sm-2 control-label">医生姓名：</label>
+								<div class="col-sm-3">
+									<input id="doctorName" name="doctorName" th:value="${expert.doctorName}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">医生编号：</label>
+								<div class="col-sm-3">
+									<input id="doctorNum" name="doctorNum" th:value="${expert.doctorNum}" class="form-control" type="text" readonly="readonly">
+								</div>
+							
+								<label class="col-sm-2 control-label">性别：</label>
+								<div class="col-sm-3">
+									<select class="form-control" name="sex" id="sex" disabled="disabled">
+										<option value=""></option>
+                        				<option th:selected="${expert.sex=='男'}" value="男">男</option>
+                        				<option th:selected="${expert.sex=='女'}" value="女">女</option>
+                    				</select>
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">年龄：</label>
+								<div class="col-sm-3">
+									<input id="age" name="age" th:value="${expert.age}" class="form-control" type="text" readonly="readonly">
+								</div>
+							
+								<label class="col-sm-2 control-label">身份证号：</label>
+								<div class="col-sm-3">
+									<input id="idCard" name="idCard" th:value="${expert.idCard}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">医龄：</label>
+								<div class="col-sm-3">
+									<input id="workTime" name="workTime" th:value="${expert.workTime}" class="form-control" type="text" readonly="readonly">
+								</div>
+							
+								<label class="col-sm-2 control-label">手机号码：</label>
+								<div class="col-sm-3">
+									<input id="phone" name="phone" th:value="${expert.phone}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">常用邮箱：</label>
+								<div class="col-sm-3">
+									<input id="email" name="email" th:value="${expert.email}" class="form-control" type="text" readonly="readonly">
+								</div>
+								<label class="col-sm-2 control-label">擅长：</label>
+								<div class="col-sm-3">
+									<input id="goodAt" name="goodAt" th:value="${expert.goodAt}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+														
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">所属医院：</label>
+								<div class="col-sm-3">
+									<input id="nowHospital" name="nowHospital" th:value="${expert.nowHospital}" class="form-control" type="text" readonly="readonly">
+								</div>
+							
+								<label class="col-sm-2 control-label">所属科室：</label>
+								<div class="col-sm-3">
+									<input id="diagnoseDepartment" name="diagnoseDepartment" th:value="${expert.diagnoseDepartment}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+														
+								
+						
+														
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">所获荣誉：</label>
+								<div class="col-sm-3">
+									<input id="honor" name="honor" th:value="${expert.honor}" class="form-control" type="text" readonly="readonly">
+								</div>
+							
+								<label class="col-sm-2 control-label">医院所在地：</label>
+								<div class="col-sm-3">
+									<input id="hospitalArea" name="hospitalArea" th:value="${expert.hospitalArea}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">医院等级：</label>
+								<div class="col-sm-3">
+									<select class="form-control" name="hospitalGrade" id="hospitalGrade" disabled="disabled">
+										<option value=""></option>
+                        				<option th:selected="${expert.hospitalGrade=='一甲'}" value="一甲">一甲</option>
+                        				<option th:selected="${expert.hospitalGrade=='二甲'}" value="二甲">二甲</option>
+                        				<option th:selected="${expert.hospitalGrade=='三甲'}" value="三甲">二甲</option>
+                    				</select>
+								</div>
+							
+								<label class="col-sm-2 control-label">在院职称：</label>
+								<div class="col-sm-3">
+									<input id="hospitalJob" name="hospitalJob" th:value="${expert.hospitalJob}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+							<div class="form-group">	
+								<label class="col-sm-2 control-label">个人情况介绍：</label>
+								<div class="col-sm-8">
+									<input id="persenIntroduce" name="persenIntroduce" th:value="${expert.persenIntroduce}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+																				
+														<div class="form-group">	
+								<label class="col-sm-2 control-label">备注：</label>
+								<div class="col-sm-8">
+									<input id="remark" name="remark" th:value="${expert.remark}" class="form-control" type="text" readonly="readonly">
+								</div>
+							</div>
+							
+							<div class="form-group" >	
+								<label class="col-sm-2 control-label">头像：</label>
+								<div class="col-sm-8" >
+									<input class="form-control" id="touxiang" style="display: none;" type="file" name="touxiang" onchange="udpateFileUrl(this)" readonly="readonly"/>
+									<label for="touxiang"><img width="100" height="100" id="fileImgimgFile" alt="点击上传图片" th:src="${expert.headshot}"></label>
+									<span style="color: red;">(750*718)</span>
+								</div>
+							</div>		
+																					
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/information/expert/edit.js"></script>
+	
+	
+</body>
+</html>
