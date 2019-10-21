@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jianhuyi.common.config.BootdoConfig;
 import com.jianhuyi.common.utils.FileUtil;
@@ -174,6 +175,22 @@ public class DeviceController {
 	public R remove(@RequestParam("ids[]") Integer[] ids){
 		deviceService.batchRemove(ids);
 		return R.ok();
+	}
+	
+	@GetMapping("/importtemplate")
+	@RequiresPermissions("information:device:device")
+	public String importtemplate(){
+		return "information/device/importtemplate";
+	}
+	
+	/**
+	 * 导入
+	 */
+	@ResponseBody
+	@PostMapping("/importMember")
+	@RequiresPermissions("information:device:device")
+	public R importMember(MultipartFile file){
+		return deviceService.importMember(file);
 	}
 	
 }

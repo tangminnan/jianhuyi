@@ -27,7 +27,7 @@ public class NewsServiceImpl implements NewsService {
 	public List<NewsDO> list(Map<String, Object> map){
 		return newsDao.list(map);
 	}
-	
+
 	@Override
 	public int count(Map<String, Object> map){
 		return newsDao.count(map);
@@ -52,5 +52,6 @@ public class NewsServiceImpl implements NewsService {
 	public int batchRemove(Integer[] ids){
 		return newsDao.batchRemove(ids);
 	}
+	
 	
 }

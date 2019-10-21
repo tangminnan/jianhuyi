@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.jianhuyi.common.domain.Tree;
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
-import com.jianhuyi.owneruser.domain.SetDO;
 
 
 public interface OwnerUserService {

@@ -27,7 +27,10 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.jianhuyi.common.annotation.Log;
 import com.jianhuyi.common.controller.BaseController;
+import com.jianhuyi.common.utils.MD5Utils;
 import com.jianhuyi.common.utils.ShiroUtils;
+import com.jianhuyi.information.domain.FunctionSetDO;
+import com.jianhuyi.information.service.FunctionSetService;
 import com.jianhuyi.owneruser.comment.GenerateCode;
 import com.jianhuyi.owneruser.dao.OwnerUserDao;
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
@@ -46,12 +49,15 @@ public class LoginController extends BaseController {
     OwnerUserService userService;
     @Autowired
     private ISMSService sMSService;
+    @Autowired
+	private FunctionSetService functionSetService;
 	
    
     @Log("密码登录")  
 	@PostMapping("/loginP")
     Map<String, Object> loginP(String phone, String password) {
  	    Map<String, Object> message = new HashMap<>();
+ 	    password = MD5Utils.encrypt(phone, password);
 	   	UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
 	   	Subject subject = SecurityUtils.getSubject();
 	   		try {
@@ -184,31 +190,48 @@ public class LoginController extends BaseController {
 
     @Log("微信登录")  
 	@PostMapping("/loginWechat")
-    Map<String, Object> loginWechat(String openId) {
+    Map<String, Object> loginWechat(String openId,String heardUrl,String nickname) {
  	    Map<String, Object> message = new HashMap<>();
+ 	   Subject subject = SecurityUtils.getSubject();
  	    	try{
- 	    		if(openId == null || "".equals(openId)){
- 	    			message.put("msg","该用户未注册,请先注册");
+ 	    		
+ 	    		OwnerUserDO  ownerUserDO = userService.getbyopenid(openId);
+ 	    		if(ownerUserDO != null){
+ 	    			String phone = ownerUserDO.getPhone();
+    	    		String password = ownerUserDO.getPassword();
+    	    			
+    	    		UsernamePasswordToken token = new UsernamePasswordToken(openId, openId);
+    	    			
+    	    		subject.getSession().setAttribute("token", token);
+    	    		subject.login(token);
+    	    			
+    	    		message.put("sessionId",subject.getSession().getId().toString());
+    	    		message.put("code", 0);
+        	    	message.put("msg", "微信登录成功");
+    	    		message.put("ownerUserDO", ownerUserDO);
  	    		}else{
- 	    			OwnerUserDO  ownerUserDO = userService.getbyopenid(openId);
- 	    			if(ownerUserDO != null){
- 	    				String phone = ownerUserDO.getPhone();
-    	    			String password = ownerUserDO.getPassword();
-    	    			
-    	    			UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
-    	    			Subject subject = SecurityUtils.getSubject();
-    	    			
-    	    			subject.getSession().setAttribute("token", token);
-    	    			subject.login(token);
-    	    			
-    	    			message.put("sessionId",subject.getSession().getId().toString());
-	    				
-    	    			message.put("ownerUserDO", ownerUserDO);
- 	    			}else{
- 	    				message.put("msg", "没有该用户,请注册");
- 	    			}
-	   			} 
+ 	    			OwnerUserDO users = new OwnerUserDO();
+ 	 	    		users.setDeleteFlag(1);
+ 	 	    		users.setRegisterTime(new Date());
+ 	 	    		Long userId = GenerateCode.gen16(8);
+ 	 	    		users.setUserId(userId);
+ 	 	    		users.setHeardUrl(heardUrl);
+ 	 	    		users.setNickname(nickname);
+ 	 	    		users.setOpenId(openId);
+ 	 	    		users.setUsername(openId);
+ 	 	    		users.setPassword(openId);
+ 	 	    		userService.save(users);
+ 	 	    		UsernamePasswordToken token = new UsernamePasswordToken(openId,openId);
+ 	 	    		
+ 	                subject.login(token);
+ 	 	    		System.out.println("==========users=========="+users);
+ 	 	    		message.put("code", 0);
+ 	    	   		message.put("msg", "微信登录成功");
+ 	    	   		message.put("data", users);
+ 	    		}
+	   			 
 	   		}catch (AuthenticationException e) {
+	   			message.put("code", 1);
 	   			message.put("msg", "异常！请重新登录尝试");
 	   		}
 	    	return message;
@@ -216,35 +239,49 @@ public class LoginController extends BaseController {
     
     @Log("qq登录")  
    	@PostMapping("/loginqq")
-       Map<String, Object> loginqq(String unionid) {
+       Map<String, Object> loginqq(String unionid,String heardUrl,String nickname) {
     	    Map<String, Object> message = new HashMap<>();
+    	    Subject subject = SecurityUtils.getSubject();
     	    	try{
-    	    		if(unionid == null || "".equals(unionid)){
-    	    			message.put("msg","该用户未注册,请先注册");
+    	    		
+    	    		OwnerUserDO  ownerUserDO = userService.getbyunionid(unionid);
+    	    		if(ownerUserDO != null){
+    	    				
+    	    			String phone = ownerUserDO.getPhone();
+        	    		String password = ownerUserDO.getPassword();
+        	    			
+        	    		UsernamePasswordToken token = new UsernamePasswordToken(unionid, unionid);
+        	    			
+        	    		subject.getSession().setAttribute("token", token);
+        	    		subject.login(token);
+        	    			
+        	    		message.put("sessionId",subject.getSession().getId().toString());
+        	    		message.put("code", 0);
+            	   		message.put("msg", "QQ登录成功");
+        	    		message.put("ownerUserDO", ownerUserDO);
     	    		}else{
-    	    			OwnerUserDO  ownerUserDO = userService.getbyunionid(unionid);
-    	    			if(ownerUserDO != null){
-    	    				
-    	    				String phone = ownerUserDO.getPhone();
-        	    			String password = ownerUserDO.getPassword();
-        	    			
-        	    			UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
-        	    			Subject subject = SecurityUtils.getSubject();
-        	    			
-        	    			subject.getSession().setAttribute("token", token);
-        	    			subject.login(token);
-        	    			
-        	    			message.put("sessionId",subject.getSession().getId().toString());
-    	    				
-        	    			message.put("ownerUserDO", ownerUserDO);
-    	    			}else{
-    	    				message.put("msg", "没有该用户,请注册");
-    	    			}
-    	    			
-    	    			
-    	    			
-   	   			} 
+    	    			OwnerUserDO users = new OwnerUserDO();
+         	   			users.setDeleteFlag(1);
+         	   			users.setRegisterTime(new Date());
+         	    		Long userId = GenerateCode.gen16(8);
+         	   			users.setUserId(userId);
+         	   			users.setHeardUrl(heardUrl);
+         	   			users.setNickname(nickname);
+         	   			users.setUnionid(unionid);
+         	   			users.setUsername(unionid);
+         	   			users.setPassword(unionid);
+         	   			userService.save(users);
+         	   			UsernamePasswordToken token = new UsernamePasswordToken(unionid,unionid);
+         	    			
+                        subject.login(token);
+         	   			System.out.println("==========users=========="+users);
+         	   			message.put("code", 0);
+           	    		message.put("msg", "QQ登录成功");
+           	    		message.put("data", users);
+    	    		}
+   	   		
    	   		}catch (AuthenticationException e) {
+   	   			message.put("code", 1);
    	   			message.put("msg", "异常！请重新登录尝试");
    	   		}
    	    	return message;
@@ -309,8 +346,68 @@ public class LoginController extends BaseController {
 	    }
 
  
-
-    @Log("用户注册")
+	   @Log("用户注册")
+	   @PostMapping("/register")
+	   Map<String, String> register(String phone, String codenum,String password,String secondPassword) {
+		   Map<String, String> message = new HashMap<>();
+		   if (StringUtils.isBlank(phone)) {
+	            message.put("msg", "手机号码不能为空");
+	        }else{
+	        	 Subject subject = SecurityUtils.getSubject();
+	             Object object = subject.getSession().getAttribute("sys.login.check.code");
+	             if (object != null) {
+	             	String captcha = object.toString();
+	             	//String captcha = "666666";
+	                 if (captcha == null || "".equals(captcha)) {
+	                     message.put("msg", "验证码已失效，请重新点击发送验证码");
+	                 } else {
+	                     // session中存放的验证码是手机号+验证码
+	                     if (!captcha.equalsIgnoreCase(phone + codenum)) {
+	                         message.put("msg", "手机验证码错误");
+	                     } else{
+	                    	 Map<String, Object> mapP = new HashMap<String, Object>();
+	                         
+	                         mapP.put("username", phone);
+	                         boolean flag = userService.exit(mapP);	//查手机号是否存在
+	                         if (flag) {
+	                             message.put("msg", "手机号码已存在");
+	                         } else {
+	                        	password = MD5Utils.encrypt(phone, password);
+	                        	secondPassword = MD5Utils.encrypt(phone, secondPassword);
+	                        	if(password.equals(secondPassword)){
+	                        		OwnerUserDO udo = new OwnerUserDO();
+	                        		Long userId = GenerateCode.gen16(8);
+	                        		udo.setUserId(userId);
+	                                udo.setUsername(phone);
+	                                udo.setPhone(phone);
+	                                udo.setPassword(password);
+	                                udo.setDeleteFlag(1);
+	                                udo.setRegisterTime(new Date());
+	                                if (userService.save(udo) > 0) {
+	                                	FunctionSetDO functionSet = new FunctionSetDO();
+	                                	functionSet.setUserId(udo.getId());
+	                                	functionSet.setFunctionSet(1);
+	                                	functionSetService.save(functionSet);
+	                                    message.put("msg", "注册成功");
+	                                } else {
+	                                    message.put("msg", "注册失败");
+	                                }
+	                        	}else{
+	                        		message.put("msg", "两次密码不一致");
+	                        	}
+	                         }
+	                     }
+	                 }
+	             }else {
+	                 message.put("msg", "手机验证码错误");
+	             }
+	        }
+		   return message;
+		   
+	   }
+	   
+	   
+    /*@Log("用户注册")
     @PostMapping("/register")
     Map<String, String> register(String phone, String codenum,String password,String unionid, String openId) {
     	 Map<String, String> message = new HashMap<>();
@@ -408,16 +505,16 @@ public class LoginController extends BaseController {
                      }
                  }
           return message;             
-    }
+    }*/
     
     @Log("忘记密码")
 	@PostMapping("/retpwd")
-    Map<String, String> retpwd(String username, String password,  String codenum) {
+    Map<String, String> retpwd(String phone, String password,  String codenum) {
         Map<String, String> message = new HashMap<>();
-		if (StringUtils.isBlank(username)) {
+		if (StringUtils.isBlank(phone)) {
 			message.put("msg","手机号码不能为空");
 		}else{
-			OwnerUserDO udo= userService.getbyname(username);
+			OwnerUserDO udo= userService.getbyname(phone);
 			Subject subject = SecurityUtils.getSubject();
 			Object object =subject.getSession().getAttribute("sys.login.check.code");
 			if (object != null) {
@@ -426,15 +523,16 @@ public class LoginController extends BaseController {
 	                message.put("msg", "验证码已失效，请重新点击发送验证码");
 	            } else {
 	                // session中存放的验证码是手机号+验证码
-	                if (!captcha.equalsIgnoreCase(username + codenum)) {
+	                if (!captcha.equalsIgnoreCase(phone + codenum)) {
 	                    message.put("msg", "手机验证码错误");
 	                } else {
 	                    Map<String, Object> mapP = new HashMap<String, Object>();
-	                    mapP.put("username", username);
+	                    mapP.put("username", phone);
 	                    boolean flag = userService.exit(mapP);
 	                    if (!flag) {
 	                        message.put("msg", "该手机号码未注册");
 	                    }else{
+	                    	password = MD5Utils.encrypt(phone, password);
 	                    	udo.setPassword(password);
 	            			if (userService.update(udo) > 0) {
 	            				message.put("msg","修改成功");

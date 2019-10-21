@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jianhuyi.common.utils.ShiroUtils;
 import com.jianhuyi.device.domain.DeviceDO;
 import com.jianhuyi.device.service.DeviceService;
+import com.jianhuyi.owneruser.service.OwnerUserService;
 
 
 /**
@@ -32,14 +33,16 @@ import com.jianhuyi.device.service.DeviceService;
 public class DeviceController {
 	@Autowired
 	private DeviceService deviceService;
+	@Autowired
+    OwnerUserService userService;
 	
 	/**
 	 * 设备列表接口
 	 */
 	@GetMapping("/list")
-	Map<String,Object> list(){
+	Map<String,Object> list(Long userId){
 	   Map<String,Object> params = new HashMap<String,Object>();
-	   params.put("account",ShiroUtils.getUser().getPhone());
+	   params.put("userId",userId);
 	   List<DeviceDO> list = deviceService.list(params);
 	   Map<String,Object> map =  new HashMap<String,Object>();
 	   map.put("data", list);
@@ -69,7 +72,7 @@ public class DeviceController {
 	}
 	
 	@PostMapping("/addByidentity")
-	Map<String,Object> addByidentity(String identity){
+	Map<String,Object> addByidentity(String identity,Long userId){
 		 Map<String,Object> map = new HashMap<String,Object>();
 		 Map<String,Object> params = new HashMap<String,Object>();
 		 params.put("identity",identity);
@@ -78,7 +81,11 @@ public class DeviceController {
 			 map.put("msg","设备不存在，添加失败");
 		 else{
 			 DeviceDO deviceDO = new DeviceDO();
-			 deviceDO.setAccount(ShiroUtils.getUser().getPhone());
+			 String phone = userService.get(userId).getPhone();
+			 if(phone != null){
+				 deviceDO.setAccount(phone);
+			 }
+			 deviceDO.setUserId(userId);
 			 deviceDO.setIdentity(identity);
 			 if(deviceService.updateByidentity(deviceDO)>0){
 				 map.put("msg","设备添加成功");
@@ -92,22 +99,16 @@ public class DeviceController {
 	
 	
 	@PostMapping("/delete")
-	Map<String,Object> delete(String mac){
+	Map<String,Object> delete(String identity){
 		Map<String,Object> map = new HashMap<String,Object>();
-		//Map<String,Object> params = new HashMap<String,Object>();
-		/*params.put("account",ShiroUtils.getUser().getPhone());
-		params.put("mac", mac);
-		params.put("defaultDevice", 0);
-		List<DeviceDO> list = deviceService.list(params);
-		if(list.size()>0)
-			map.put("msg","默认设备不可删除");
-		else{*/
+		
 			DeviceDO deviceDO= new DeviceDO();
 			deviceDO.setAccount("");
-			deviceDO.setMac(mac);
-			if(deviceService.update(deviceDO)>0)
+			deviceDO.setUserId(0l);
+			deviceDO.setIdentity(identity);
+			if(deviceService.updateByidentity(deviceDO)>0)
 			map.put("msg","操作成功");
-		//}
+		
 		return map;
 	}
 	

@@ -69,14 +69,12 @@ public class NewsController {
 	    return "information/news/add";
 	}
 
-	@GetMapping("/edit/{id}/{bb}")
+	@GetMapping("/edit/{id}")
 	@RequiresPermissions("information:news:edit")
-	String edit(@PathVariable("id") Integer id,Model model,@PathVariable("bb") Integer bb){
+	String edit(@PathVariable("id") Integer id,Model model){
 		NewsDO news = newsService.get(id);
 		model.addAttribute("news", news);
-		if(bb==0)
-			return "information/news/edit";
-		return "information/news/xiangqing";
+		return "information/news/edit";
 	}
 	
 	/**
@@ -157,19 +155,5 @@ public class NewsController {
 		return R.ok();
 	}
 	
-	/**
-	 * 更新审核状态
-	 */
-	@PostMapping( "/updateEnable")
-	@ResponseBody
-	@RequiresPermissions("information:news:remove")
-	public R updateEnable( Long id,Integer enable){
-		NewsDO newsDO = new NewsDO();
-		newsDO.setId(id);
-		newsDO.setCheckStatus(enable);
-		if(newsService.update(newsDO)>0){
-		return R.ok();
-		}
-		return R.error();
-	}
+	
 }

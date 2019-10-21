@@ -42,11 +42,17 @@ public class DeviceDO implements Serializable {
 	
 	//删除标志  0已删除   1未删除
 	private Integer deleted;
-	
-	
+	//用户id
+	private Long userId;	
 
 	
 	
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 	/**
 	 * 设置：
 	 */
@@ -155,6 +161,7 @@ public class DeviceDO implements Serializable {
 	public Integer getDeviceType() {
 		return deviceType;
 	}
+		
 	
 	public MultipartFile getExcelDevice() {
 		return excelDevice;
@@ -162,7 +169,6 @@ public class DeviceDO implements Serializable {
 	public void setExcelDevice(MultipartFile excelDevice) {
 		this.excelDevice = excelDevice;
 	}
-	
 	public MultipartFile getIconitems() {
 		return iconitems;
 	}

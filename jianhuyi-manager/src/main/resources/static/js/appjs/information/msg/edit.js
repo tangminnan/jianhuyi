@@ -9,6 +9,7 @@ $().ready(function() {
 		}
 	});
 	$('#content_sn').summernote('code', $("#forDetails").val());
+	$('.summernote').summernote('disable');
 	validateRule();
 });
 

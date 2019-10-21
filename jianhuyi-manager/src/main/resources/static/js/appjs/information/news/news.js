@@ -33,8 +33,10 @@ function load() {
 								//说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 								limit: params.limit,
 								offset:params.offset,
-								uId:$('#uId option:selected').val()
+							//	uId:$('#uId option:selected').val()
 					           // username:$('#searchName').val()
+								startTime:$('#startTime').val(),
+								endTime:$('#endTime').val(),
 							};
 						},
 						// //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -52,10 +54,10 @@ function load() {
 //									field : 'uId', 
 //									title : '专家ID' 
 //								},
-																{
+								/*								{
 									field : 'doctorName', 
 									title : '专家姓名' 
-								},
+								},*/
 																{
 									field : 'title', 
 									title : '标题' 
@@ -100,7 +102,7 @@ function load() {
 									field : 'updateTime', 
 									title : '修改时间' 
 								},
-								{
+								/*{
 									field : 'checkStatus', 
 									title : '审核状态  ',
 									formatter : function(value, row, index) {
@@ -122,7 +124,7 @@ function load() {
 										str +=' </div>';
 										return str;
 									} 
-								},
+								},*/
 																{
 									title : '操作',
 									field : 'id',
@@ -137,7 +139,7 @@ function load() {
 										var f = '<a class="btn btn-success btn-sm" href="#" title="详情"  mce_href="#" onclick="xiangqing(\''
 												+ row.id
 												+ '\')"><i class="fa fa-key"></i></a> ';
-										return e + d + f;
+										return e + d ;
 									}
 								} ]
 					});
@@ -158,14 +160,14 @@ function add() {
 	layer.full(addPage);
 }
 function edit(id) {
-	var bb=0;
+//	var bb=0;
 	var addPage=layer.open({
 		type : 2,
 		title : '编辑',
 		maxmin : true,
 		shadeClose : false, // 点击遮罩关闭层
 		area : [ '800px', '520px' ],
-		content : prefix + '/edit/' + id +"/"+bb// iframe的url
+		content : prefix + '/edit/' + id// iframe的url
 	});
 	layer.full(addPage);
 }

@@ -242,7 +242,7 @@ function showdetail(id) {
 		maxmin : true,
 		shadeClose : false, // 点击遮罩关闭层
 		area : [ '800px', '520px' ],
-		content : '/information/data/show/'+id // iframe的url
+		content : '/information/useJianhuyiLog/detail/'+id // iframe的url
 	});
 	layer.full(showpage);
 	

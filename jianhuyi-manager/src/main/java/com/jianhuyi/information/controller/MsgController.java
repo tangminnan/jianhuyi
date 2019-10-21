@@ -20,7 +20,11 @@ import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.information.domain.MsgDO;
+import com.jianhuyi.information.domain.MsgUserDO;
 import com.jianhuyi.information.service.MsgService;
+import com.jianhuyi.information.service.MsgUserService;
+import com.jianhuyi.users.domain.UserDO;
+import com.jianhuyi.users.service.UserService;
 
 /**
  * 消息表
@@ -35,6 +39,10 @@ import com.jianhuyi.information.service.MsgService;
 public class MsgController {
 	@Autowired
 	private MsgService msgService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private MsgUserService msgUserService;
 	
 	@GetMapping()
 	@RequiresPermissions("information:msg:msg")
@@ -56,7 +64,10 @@ public class MsgController {
 	
 	@GetMapping("/add")
 	@RequiresPermissions("information:msg:add")
-	String add(){
+	String add(Model model){
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<UserDO> list = userService.list(map);
+		model.addAttribute("list", list);
 		return "information/msg/add";
 	}
 
@@ -79,6 +90,16 @@ public class MsgController {
 		msg.setUpdateTime(new Date());
 		msg.setType(0);
 		if(msgService.save(msg)>0){
+			String[] split = msg.getForIds().split(",");
+			for (String string : split) {
+				MsgUserDO msgUser = new MsgUserDO();
+				msgUser.setUserId(Long.valueOf(string));
+				msgUser.setMsgId(msg.getId());
+				msgUser.setAddTime(new Date());
+				msgUser.setStatue(1);
+				msgUserService.save(msgUser);
+			}
+			
 			return R.ok();
 		}
 		return R.error();

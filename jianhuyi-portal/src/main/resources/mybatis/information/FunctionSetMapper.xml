@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.information.dao.FunctionSetDao">
+
+	<select id="get" resultType="com.jianhuyi.information.domain.FunctionSetDO">
+		select `id`,`user_id`,`function_set`,`outdoors_set`,`look_phone_set`,`look_tv_computer`,`shock_tips`,`sit_correct` from t_function_set where user_id = #{value}
+	</select>
+
+	
+	<update id="update" parameterType="com.jianhuyi.information.domain.FunctionSetDO">
+		update t_function_set 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="functionSet != null">`function_set` = #{functionSet}, </if>
+			<if test="outdoorsSet != null">`outdoors_set` = #{outdoorsSet}, </if>
+			<if test="lookPhoneSet != null">`look_phone_set` = #{lookPhoneSet}, </if>
+			<if test="lookTvComputer != null">`look_tv_computer` = #{lookTvComputer}, </if>
+			<if test="shockTips != null">`shock_tips` = #{shockTips}, </if>
+			<if test="sitCorrect != null">`sit_correct` = #{sitCorrect}</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+	
+	<insert id="save" parameterType="com.jianhuyi.information.domain.FunctionSetDO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_function_set
+		(
+			`user_id`, 
+			`function_set`, 
+			`outdoors_set`, 
+			`look_phone_set`, 
+			`look_tv_computer`, 
+			`shock_tips`, 
+			`sit_correct`
+		)
+		values
+		(
+			#{userId}, 
+			#{functionSet}, 
+			#{outdoorsSet}, 
+			#{lookPhoneSet}, 
+			#{lookTvComputer}, 
+			#{shockTips}, 
+			#{sitCorrect}
+		)
+	</insert>
+	
+
+</mapper>

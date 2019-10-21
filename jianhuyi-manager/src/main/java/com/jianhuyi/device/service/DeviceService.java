@@ -4,6 +4,9 @@ package com.jianhuyi.device.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.jianhuyi.common.utils.R;
 import com.jianhuyi.device.domain.DeviceDO;
 
 /**
@@ -28,4 +31,6 @@ public interface DeviceService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+	
+	R importMember(MultipartFile file);
 }

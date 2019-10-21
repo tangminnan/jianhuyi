@@ -16,23 +16,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MsgDao {
 
-	MsgDO get(Long id);
+	MsgDO get(Integer id);
 	
-	List<MsgDO> list(Map<String,Object> map);
+	List<MsgDO> queryMsgList(Long userId);
 	
-	int count(Map<String,Object> map);
-	
-	int save(MsgDO msg);
-	
-	int update(MsgDO msg);
-	
-	int remove(Integer id);
-	
-	int batchRemove(Integer[] ids);
-	
-	List<MsgDO> queryUserMsgList(Long userId);
-	List<MsgDO> queryUserMsgListNull(Map<String,Object> map);
-	
-	MsgDO queryUserMsgId(Long id);
+	int updateUserMsg(Integer id);
 
 }

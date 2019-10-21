@@ -18,57 +18,22 @@ public class MsgServiceImpl implements MsgService {
 	private MsgDao msgDao;
 	
 	@Override
-	public MsgDO get(Long id){
+	public MsgDO get(Integer id){
+		return msgDao.get(id);
+	}
+
+	@Override
+	public List<MsgDO> queryMsgList(Long userId) {
+		return msgDao.queryMsgList(userId);
+	}
+
+	@Override
+	public MsgDO queryMsgDetails(Integer id, Integer muId) {
+		msgDao.updateUserMsg(muId);
 		return msgDao.get(id);
 	}
 	
-	@Override
-	public List<MsgDO> list(Map<String, Object> map){
-		return msgDao.list(map);
-	}
 	
-	@Override
-	public int count(Map<String, Object> map){
-		return msgDao.count(map);
-	}
-	
-	@Override
-	public int save(MsgDO msg){
-		return msgDao.save(msg);
-	}
-	
-	@Override
-	public int update(MsgDO msg){
-		return msgDao.update(msg);
-	}
-	
-	@Override
-	public int remove(Integer id){
-		return msgDao.remove(id);
-	}
-	
-	@Override
-	public int batchRemove(Integer[] ids){
-		return msgDao.batchRemove(ids);
-	}
-
-	@Override
-	public List<MsgDO> queryUserMsgList(Long userId) {
-		List<MsgDO> queryUserMsgList = msgDao.queryUserMsgList(userId);
-		return queryUserMsgList;
-	}
-
-	@Override
-	public List<MsgDO> queryUserMsgListNull(Map<String, Object> map) {
-		List<MsgDO> userMsgListNull = msgDao.queryUserMsgListNull(map);
-		return userMsgListNull;
-	}
-
-	@Override
-	public MsgDO queryUserMsgId(Long id) {
-		return msgDao.queryUserMsgId(id);
-	}
-
 
 	
 }

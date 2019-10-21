@@ -20,7 +20,7 @@ public class MsgUserDO implements Serializable {
 	//用户ID
 	private Long userId;
 	//消息ID
-	private Long msgId;
+	private Integer msgId;
 	//状态
 	private Integer statue;
 	//添加时间
@@ -30,7 +30,7 @@ public class MsgUserDO implements Serializable {
 	
 	public MsgUserDO(){}
 	
-	public MsgUserDO(Long userId,Long msgId){
+	public MsgUserDO(Long userId,Integer msgId){
 		this.userId = userId;
 		this.msgId = msgId;
 		this.statue = 0;
@@ -65,13 +65,13 @@ public class MsgUserDO implements Serializable {
 	/**
 	 * 设置：消息ID
 	 */
-	public void setMsgId(Long msgId) {
+	public void setMsgId(Integer msgId) {
 		this.msgId = msgId;
 	}
 	/**
 	 * 获取：消息ID
 	 */
-	public Long getMsgId() {
+	public Integer getMsgId() {
 		return msgId;
 	}
 	/**

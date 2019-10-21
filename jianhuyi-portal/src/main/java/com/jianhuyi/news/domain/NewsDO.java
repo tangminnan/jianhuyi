@@ -19,7 +19,7 @@ public class NewsDO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//主键
-	private long id;
+	private Integer id;
 	//专家ID
 	private Long uId;
 	//专家姓名
@@ -73,13 +73,13 @@ public class NewsDO implements Serializable {
 	/**
 	 * 设置：主键
 	 */
-	public void setId(long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	/**
 	 * 获取：主键
 	 */
-	public long getId() {
+	public Integer getId() {
 		return id;
 	}
 	/**

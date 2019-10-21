@@ -4,11 +4,11 @@
 <mapper namespace="com.jianhuyi.device.dao.DeviceDao">
 
 	<select id="get" resultType="com.jianhuyi.device.domain.DeviceDO">
-		select `id`,`account`,`create_time`,`identity`,`icon`,`name`,`mac`,`default_device`,`device_type` from t_device where id = #{value} and deleted=0
+		select `id`,`account`,`create_time`,`identity`,`icon`,`name`,`mac`,`default_device`,`device_type`,user_id from t_device where id = #{value} and deleted=0
 	</select>
 
 	<select id="list" resultType="com.jianhuyi.device.domain.DeviceDO">
-		select `id`,`account`,`identity`,`icon`,`name`,`default_device`,`mac` from t_device
+		select `id`,`account`,`identity`,`icon`,`name`,`default_device`,`mac`,user_id from t_device
         where deleted=0  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="account != null and account != ''"> and account = #{account} </if>
@@ -17,6 +17,7 @@
 		  		  <if test="name != null and name != ''"> and name = #{name} </if>
 		  		  <if test="defaultDevice != null and defaultDevice != ''"> and default_device = #{defaultDevice} </if>
 		  		  <if test="mac != null and mac != ''"> and mac = #{mac} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
 		  		  
 	</select>
 	
@@ -32,6 +33,7 @@
 		  		  <if test="mac != null and mac != ''"> and mac = #{mac} </if>
 		  		  <if test="defaultDevice != null and defaultDevice != ''"> and default_device = #{defaultDevice} </if>
 		  		  <if test="deviceType != null and deviceType != ''"> and device_type = #{deviceType} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
 		  		
 	</select>
 	 
@@ -46,7 +48,8 @@
 			`mac`, 
 			`default_device`, 
 			`device_type`,
-			deleted
+			deleted,
+			user_id
 		)
 		values
 		(
@@ -58,7 +61,8 @@
 			#{mac}, 
 			#{defaultDevice}, 
 			#{deviceType},
-			#{deleted}
+			#{deleted},
+			#{userId}
 		)
 	</insert>
 	 
@@ -70,7 +74,8 @@
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="mac != null">`mac` = #{mac}, </if>
 			<if test="defaultDevice != null">`default_device` = #{defaultDevice}, </if>
-			<if test="deviceType != null">`device_type` = #{deviceType}</if>
+			<if test="deviceType != null">`device_type` = #{deviceType},</if>
+			<if test="userId != null">`user_id` = #{userId}</if>
 		</set>
 		where mac = #{mac}
 	</update>
@@ -83,7 +88,8 @@
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="mac != null">`identity` = #{identity}, </if>
 			<if test="defaultDevice != null">`default_device` = #{defaultDevice}, </if>
-			<if test="deviceType != null">`device_type` = #{deviceType}</if>
+			<if test="deviceType != null">`device_type` = #{deviceType},</if>
+			<if test="userId != null">`user_id` = #{userId}</if>
 		</set>
 		where identity = #{identity}
 	</update>

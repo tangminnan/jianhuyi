@@ -37,7 +37,24 @@ public class MsgDO implements Serializable {
 	private Integer deleteFlag;
 	//发送人
 	private Long createBy;
+	//读取状态（1:未读 0:已读）
+	private Integer statue;
+	//用户消息中间表Id
+	private Long muId;
 
+	
+	public Integer getStatue() {
+		return statue;
+	}
+	public void setStatue(Integer statue) {
+		this.statue = statue;
+	}
+	public Long getMuId() {
+		return muId;
+	}
+	public void setMuId(Long muId) {
+		this.muId = muId;
+	}
 	/**
 	 * 设置：id
 	 */

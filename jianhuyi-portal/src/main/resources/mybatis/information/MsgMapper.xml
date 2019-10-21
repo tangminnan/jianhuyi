@@ -4,127 +4,17 @@
 <mapper namespace="com.jianhuyi.information.dao.MsgDao">
 
 	<select id="get" resultType="com.jianhuyi.information.domain.MsgDO">
-		select `id`,`name`,`type`,`for_names`,`for_ids`,`for_type`,`for_details`,`add_time`,date_format(add_time, '%Y-%m-%d %H:%i:%s') as addTime1,`update_time`,`delete_flag`,`create_by` from t_msg where id = #{value}
+		select `id`,`name`,`type`,`for_names`,`for_ids`,`for_type`,`for_details`,add_time,`update_time`,`delete_flag`,`create_by` from t_msg where id = #{value}
 	</select>
 
-	<select id="queryUserMsgList" resultType="com.jianhuyi.information.domain.MsgDO">
-		SELECT tm.id, tm.`name`,date_format(tm.add_time, '%Y-%m-%d %H:%i:%s') as addTime,tm.for_details,tm.type,tm.for_ids,tm.delete_flag 
-		FROM t_msg tm 
-		LEFT JOIN t_user tu on tm.for_ids=tu.user_id
-		where tm.delete_flag=0  and tm.for_ids = #{value}
-		ORDER BY tm.add_time DESC
+	<select id="queryMsgList" resultType="com.jianhuyi.information.domain.MsgDO">
+		SELECT tm.id, tm.add_time ,tm.`name`,tm.for_details,tm.create_by,tmu.statue,tmu.id muId FROM `t_msg_user` tmu ,t_msg tm
+		where tmu.msg_id = tm.id and tmu.user_id = #{user_id}
+		ORDER BY tm.add_time desc
 	</select>
-	<select id="queryUserMsgListNull" resultType="com.jianhuyi.information.domain.MsgDO">
-		select id,name,date_format(add_time, '%Y-%m-%d %H:%i:%s') as addTime,for_details,type,for_ids,delete_flag 
-		from t_msg
-		where delete_flag=0 and for_ids is null 
-		ORDER BY add_time DESC
-	</select>
-	<select id="queryUserMsgId" resultType="com.jianhuyi.information.domain.MsgDO">
-		select id,name,date_format(add_time, '%Y-%m-%d %H:%i:%s') as addTime,for_details,type,for_ids,delete_flag 
-		from t_msg
-		where delete_flag=0 and id = #{value}
-	</select>
-	<select id="list" resultType="com.jianhuyi.information.domain.MsgDO">
-		select `id`,`name`,`type`,`for_names`,`for_ids`,`for_type`,`for_details`,`add_time`,`update_time`,`delete_flag`,`create_by` from t_msg
-        <where>  
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="name != null and name != ''"> and name = #{name} </if>
-		  		  <if test="type != null and type != ''"> and type = #{type} </if>
-		  		  <if test="forNames != null and forNames != ''"> and for_names = #{forNames} </if>
-		  		  <if test="forIds != null and forIds != ''"> and for_ids = #{forIds} </if>
-		  		  <if test="forType != null and forType != ''"> and for_type = #{forType} </if>
-		  		  <if test="forDetails != null and forDetails != ''"> and for_details = #{forDetails} </if>
-		  		  <if test="addTime != null and addTime != ''"> and add_time = #{addTime} </if>
-		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
-		  		  <if test="deleteFlag != null and deleteFlag != ''"> and delete_flag = #{deleteFlag} </if>
-		  		  <if test="createBy != null and createBy != ''"> and create_by = #{createBy} </if>
-		  		</where>
-        <choose>
-            <when test="sort != null and sort.trim() != ''">
-                order by ${sort} ${order}
-            </when>
-			<otherwise>
-                order by id desc
-			</otherwise>
-        </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-	
- 	<select id="count" resultType="int">
-		select count(*) from t_msg
-		 <where>  
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="name != null and name != ''"> and name = #{name} </if>
-		  		  <if test="type != null and type != ''"> and type = #{type} </if>
-		  		  <if test="forNames != null and forNames != ''"> and for_names = #{forNames} </if>
-		  		  <if test="forIds != null and forIds != ''"> and for_ids = #{forIds} </if>
-		  		  <if test="forType != null and forType != ''"> and for_type = #{forType} </if>
-		  		  <if test="forDetails != null and forDetails != ''"> and for_details = #{forDetails} </if>
-		  		  <if test="addTime != null and addTime != ''"> and add_time = #{addTime} </if>
-		  		  <if test="updateTime != null and updateTime != ''"> and update_time = #{updateTime} </if>
-		  		  <if test="deleteFlag != null and deleteFlag != ''"> and delete_flag = #{deleteFlag} </if>
-		  		  <if test="createBy != null and createBy != ''"> and create_by = #{createBy} </if>
-		  		</where>
-	</select>
-	 
-	<insert id="save" parameterType="com.jianhuyi.information.domain.MsgDO" useGeneratedKeys="true" keyProperty="id">
-		insert into t_msg
-		(
-			`name`, 
-			`type`, 
-			`for_names`, 
-			`for_ids`, 
-			`for_type`, 
-			`for_details`, 
-			`add_time`, 
-			`update_time`, 
-			`delete_flag`, 
-			`create_by`
-		)
-		values
-		(
-			#{name}, 
-			#{type}, 
-			#{forNames}, 
-			#{forIds}, 
-			#{forType}, 
-			#{forDetails}, 
-			#{addTime}, 
-			#{updateTime}, 
-			#{deleteFlag}, 
-			#{createBy}
-		)
-	</insert>
-	 
-	<update id="update" parameterType="com.jianhuyi.information.domain.MsgDO">
-		update t_msg 
-		<set>
-			<if test="name != null">`name` = #{name}, </if>
-			<if test="type != null">`type` = #{type}, </if>
-			<if test="forNames != null">`for_names` = #{forNames}, </if>
-			<if test="forIds != null">`for_ids` = #{forIds}, </if>
-			<if test="forType != null">`for_type` = #{forType}, </if>
-			<if test="forDetails != null">`for_details` = #{forDetails}, </if>
-			<if test="addTime != null">`add_time` = #{addTime}, </if>
-			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
-			<if test="deleteFlag != null">`delete_flag` = #{deleteFlag}, </if>
-			<if test="createBy != null">`create_by` = #{createBy}</if>
-		</set>
-		where id = #{id}
+	<update id="updateUserMsg" parameterType="com.jianhuyi.information.domain.MsgDO">
+		update t_msg_user  set statue = 0 where id = #{value}
 	</update>
 	
-	<delete id="remove">
-		delete from t_msg where id = #{value}
-	</delete>
-	
-	<delete id="batchRemove">
-		delete from t_msg where id in 
-		<foreach item="id" collection="array" open="(" separator="," close=")">
-			#{id}
-		</foreach>
-	</delete>
 
 </mapper>

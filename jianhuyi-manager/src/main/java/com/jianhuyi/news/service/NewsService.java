@@ -19,7 +19,7 @@ public interface NewsService {
 	
 	List<NewsDO> list(Map<String, Object> map);
 	
-	int count(Map<String, Object> map);
+	int count(Map<String,Object> map);
 	
 	int save(NewsDO news);
 	

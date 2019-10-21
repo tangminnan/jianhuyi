@@ -17,17 +17,8 @@ import com.jianhuyi.news.domain.NewsDO;
 @Mapper
 public interface NewsDao {
 
-	NewsDO get(Long id);
+	NewsDO get(Integer id);
 	
 	List<NewsDO> list(Map<String,Object> map);
 	
-	int count(Map<String,Object> map);
-	
-	int save(NewsDO news);
-	
-	int update(NewsDO news);
-	
-	int remove(Integer id);
-	
-	int batchRemove(Integer[] ids);
 }

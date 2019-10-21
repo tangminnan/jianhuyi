@@ -26,7 +26,7 @@ public class MsgDO implements Serializable {
 	//推送对象
 	private String forNames;
 	//接收人
-	private Long forIds;
+	private String forIds;
 	//0：系统；1：个人
 	private Integer forType;
 	//推送内容
@@ -99,13 +99,13 @@ public class MsgDO implements Serializable {
 	/**
 	 * 设置：接收人
 	 */
-	public void setForIds(Long forIds) {
+	public void setForIds(String forIds) {
 		this.forIds = forIds;
 	}
 	/**
 	 * 获取：接收人
 	 */
-	public Long getForIds() {
+	public String getForIds() {
 		return forIds;
 	}
 	/**

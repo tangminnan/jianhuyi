@@ -14,23 +14,10 @@ import java.util.Map;
  */
 public interface MsgService {
 	
-	MsgDO get(Long id);
-	
-	List<MsgDO> list(Map<String, Object> map);
-	
-	int count(Map<String, Object> map);
-	
-	int save(MsgDO msg);
-	
-	int update(MsgDO msg);
-	
-	int remove(Integer id);
-	
-	int batchRemove(Integer[] ids);
-	
-	List<MsgDO> queryUserMsgList(Long userId);
-	List<MsgDO> queryUserMsgListNull(Map<String,Object> map);
+	MsgDO get(Integer id);
 
-	MsgDO queryUserMsgId(Long id);
-
+	List<MsgDO> queryMsgList(Long userId);
+	
+	MsgDO queryMsgDetails(Integer id,Integer muId);
+	
 }
