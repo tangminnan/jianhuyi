@@ -54,9 +54,11 @@ public class UseJianhuyiLogController {
 		if(save>0){
 			map.put("msg", "操作成功");
 			map.put("code", 0);
+			map.put("data", "");
 		}else{
 			map.put("msg", "操作失败");
 			map.put("code", 1);
+			map.put("data", "");
 		}
 		return map;	
 	}

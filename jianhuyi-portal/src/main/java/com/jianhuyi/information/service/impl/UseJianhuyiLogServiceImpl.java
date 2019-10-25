@@ -131,6 +131,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 	@Override
 	public Map<String, Object> queryUserWeekHistory(Date start,Date end, Long userId){
 		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> mapP = new HashMap<String,Object>();
 		try {
 			Map<String, Collection<Double>> weekData = weekData(start,end,userId);
 			map.put("lineChart", weekData);
@@ -190,10 +191,11 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		map.put("totalAvgLookTvComputerDuration", df.format(lookTvComputerDuration/7));
 		map.put("totalAvgSitTilt", df.format(sitTilt/7));
 		map.put("totalAvgSportDuration", df.format(sportDuration/7));
-		map.put("msg", "");
-		map.put("code", 0);
+		mapP.put("data", map);
+		mapP.put("msg", "操作成功");
+		mapP.put("code", 0);
 		
-		return map;
+		return mapP;
 	}
 		
 	
@@ -302,6 +304,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		@Override
 		public Map<String, Object> queryUserMonthHistory(Date start,Date end, Long userId){
 			Map<String,Object> map = new HashMap<String,Object>();
+			Map<String,Object> mapP = new HashMap<String,Object>();
 			try {
 				Map<String, Collection<Double>> monthData = monthData(start,end,userId);
 				map.put("lineChart", monthData);
@@ -361,10 +364,11 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 			map.put("totalAvgLookTvComputerDuration", df.format(lookTvComputerDuration/30));
 			map.put("totalAvgSitTilt", df.format(sitTilt/30));
 			map.put("totalAvgSportDuration", df.format(sportDuration/30));
-			map.put("msg", "");
-			map.put("code", 0);
+			mapP.put("data", map);
+			mapP.put("msg", "操作成功");
+			mapP.put("code", 0);
 			
-			return map;
+			return mapP;
 		}
 			
 		
@@ -474,6 +478,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		@Override
 		public Map<String, Object> queryUserSeasonHistory(Date start, Date end, Long userId) {
 			Map<String,Object> map = new HashMap<String,Object>();
+			Map<String,Object> mapP = new HashMap<String,Object>();
 			try {
 				Map<String, Collection<Double>> seasonData = seasonData(start,end, userId);
 				map.put("lineChart", seasonData);
@@ -535,9 +540,11 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 			map.put("totalAvgSportDuration", df.format(sportDuration/12));
 			map.put("dayAvgUseJianhuyiDuration", df.format(useJianhuyiDuration/90));
 			map.put("dayAvgReadDuration", df.format(readDuration/90));
-			map.put("msg", "");
-			map.put("code", 0);
-			return map;
+			mapP.put("data", map);
+			mapP.put("msg", "操作成功");
+			mapP.put("code", 0);
+			
+			return mapP;
 		}
 		
 		private Map<String, Collection<Double>> seasonData(Date start,Date end, Long userId) throws ParseException{
@@ -702,6 +709,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 				@Override
 				public Map<String, Object> queryUserYearHistory(Date start, Date end, Long userId) {
 					Map<String,Object> map = new HashMap<String,Object>();
+					Map<String,Object> mapP = new HashMap<String,Object>();
 					try {
 						Map<String, Collection<Double>> yearData = yearData(start,end, userId);
 						map.put("lineChart", yearData);
@@ -763,9 +771,11 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 					map.put("totalAvgSportDuration", df.format(sportDuration/12));
 					map.put("dayAvgUseJianhuyiDuration", df.format(useJianhuyiDuration/365));
 					map.put("dayAvgReadDuration", df.format(readDuration/365));
-					map.put("msg", "");
-					map.put("code", 0);
-					return map;
+					mapP.put("data", map);
+					mapP.put("msg", "操作成功");
+					mapP.put("code", 0);
+					
+					return mapP;
 				}
 				
 				private Map<String, Collection<Double>> yearData(Date start,Date end, Long userId) throws ParseException{
