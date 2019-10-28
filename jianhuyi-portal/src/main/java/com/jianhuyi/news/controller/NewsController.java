@@ -43,7 +43,7 @@ public class NewsController {
 		List<NewsDO> list = newsService.list(map);
 		map.put("data", list);
 		map.put("msg", "");
-		map.put("code", 0);
+		map.put("code", "0");
 		return map;
 	}
 	
@@ -58,7 +58,7 @@ public class NewsController {
 		NewsDO newsDO = newsService.get(id);
 		map.put("data", newsDO);
 		map.put("msg", "");
-		map.put("code", 0);
+		map.put("code", "0");
 		return map;
 	}
 	
@@ -72,7 +72,7 @@ public class NewsController {
 		List<BannerDO> list = bannerService.list(map);
 		map.put("data", list);
 		map.put("msg", "");
-		map.put("code", 0);
+		map.put("code", "0");
 		return map;
 	}
 	

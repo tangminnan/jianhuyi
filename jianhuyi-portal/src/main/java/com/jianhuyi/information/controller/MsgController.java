@@ -41,7 +41,7 @@ public class MsgController extends BaseController{
 		List<MsgDO> msgList = msgService.queryMsgList(userId);
 		map.put("data", msgList);
 		map.put("msg", "");
-		map.put("code", 0);
+		map.put("code", "0");
 		return map;
 
 	}
@@ -55,7 +55,7 @@ public class MsgController extends BaseController{
 		MsgDO userMsg = msgService.queryMsgDetails(id,muId);
 		map.put("data", userMsg);
 		map.put("msg", "");
-		map.put("code", 0);
+		map.put("code", "0");
 		return map;
 	}
 	

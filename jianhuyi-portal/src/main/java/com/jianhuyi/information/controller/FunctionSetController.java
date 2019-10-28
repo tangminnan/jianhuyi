@@ -46,7 +46,7 @@ public class FunctionSetController {
 		FunctionSetDO setDO = functionSetService.get(userId);
 		map.put("data", setDO);
 		map.put("msg", "");
-		map.put("code", 0);
+		map.put("code", "0");
 		return map;
 	}
 	
@@ -61,11 +61,11 @@ public class FunctionSetController {
 		int update = functionSetService.update(functionSet);
 		if(update>0){
 			map.put("msg", "操作成功");
-			map.put("code", 0);
+			map.put("code", "0");
 			map.put("data", "");
 		}else{
 			map.put("msg", "操作失败");
-			map.put("code", 1);
+			map.put("code", "-1");
 			map.put("data", "");
 		}
 		return map;
@@ -90,11 +90,11 @@ public class FunctionSetController {
 		int update = functionSetService.update(functionSet);
 		if(update>0){
 			map.put("msg", "操作成功");
-			map.put("code", 0);
+			map.put("code", "0");
 			map.put("data", "");
 		}else{
 			map.put("msg", "操作失败");
-			map.put("code", 1);
+			map.put("code", "-1");
 			map.put("data", "");
 		}
 		return map;

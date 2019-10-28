@@ -63,7 +63,7 @@ public class OtherInterfaceController {
 			}
 			map.put("data", list);
 			map.put("msg", "");
-			map.put("code", 0);
+			map.put("code", "0");
 		} catch (ServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class OtherInterfaceController {
 			}
 			map.put("data", list);
 			map.put("msg", "");
-			map.put("code", 0);
+			map.put("code", "0");
 		}catch (ServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
