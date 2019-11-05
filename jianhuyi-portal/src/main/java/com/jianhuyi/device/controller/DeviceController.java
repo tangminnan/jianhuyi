@@ -46,8 +46,8 @@ public class DeviceController {
 	   List<DeviceDO> list = deviceService.list(params);
 	   Map<String,Object> map =  new HashMap<String,Object>();
 	   map.put("data", list);
-	   map.put("msg", "");
-	   map.put("code", "0");
+	   map.put("msg", "success");
+	   map.put("code", 0);
 	   return map;
 	}
 	
@@ -62,16 +62,16 @@ public class DeviceController {
 		 List<DeviceDO> list = deviceService.list(params);
 		 if(list.size()==0){
 			 map.put("msg","设备不存在，添加失败");
-			 map.put("code", "-1");
-			 map.put("data", "");
+			 map.put("code", -1);
+			 map.put("data", "error");
 		 }else{
 			 DeviceDO deviceDO = new DeviceDO();
 			 deviceDO.setAccount(ShiroUtils.getUser().getPhone());
 			 deviceDO.setMac(mac);
 			 if(deviceService.update(deviceDO)>0){
 				 map.put("msg","设备添加成功");
-				 map.put("code", "0");
-				 map.put("data", "");
+				 map.put("code", 0);
+				 map.put("data", "success");
 			 }
 		 }
 		 return map;
@@ -85,7 +85,7 @@ public class DeviceController {
 		 List<DeviceDO> list = deviceService.list(params);
 		 if(list.size()==0){
 			 map.put("msg","设备不存在，添加失败");
-			 map.put("code", "-1");
+			 map.put("code", -1);
 			 map.put("data", "");
 		 }else{
 			 DeviceDO deviceDO = new DeviceDO();
@@ -97,8 +97,8 @@ public class DeviceController {
 			 deviceDO.setIdentity(identity);
 			 if(deviceService.updateByidentity(deviceDO)>0){
 				 map.put("msg","设备添加成功");
-				 map.put("code", "0");
-				 map.put("data", "");
+				 map.put("code", 0);
+				 map.put("data", "success");
 			 }
 		 }
 		 return map;
@@ -118,8 +118,8 @@ public class DeviceController {
 			deviceDO.setIdentity(identity);
 			if(deviceService.updateByidentity(deviceDO)>0)
 			map.put("msg","操作成功");
-			map.put("code", "0");
-			map.put("data", "");
+			map.put("code", 0);
+			map.put("data", "success");
 		
 		return map;
 	}

@@ -40,8 +40,8 @@ public class MsgController extends BaseController{
 		Map<String, Object> map = new HashMap<>();
 		List<MsgDO> msgList = msgService.queryMsgList(userId);
 		map.put("data", msgList);
-		map.put("msg", "");
-		map.put("code", "0");
+		map.put("msg", "success");
+		map.put("code", 0);
 		return map;
 
 	}
@@ -54,8 +54,8 @@ public class MsgController extends BaseController{
 		Map<String, Object> map = new HashMap<>();
 		MsgDO userMsg = msgService.queryMsgDetails(id,muId);
 		map.put("data", userMsg);
-		map.put("msg", "");
-		map.put("code", "0");
+		map.put("msg", "success");
+		map.put("code", 0);
 		return map;
 	}
 	

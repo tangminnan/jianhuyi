@@ -124,7 +124,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		map.put("sportDuration", sportDuration);
 		mapP.put("data", map);
 		mapP.put("msg", "操作成功");
-		mapP.put("code", "0");
+		mapP.put("code", 0);
 		return mapP;
 	}
 	//周记录
@@ -193,7 +193,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		map.put("totalAvgSportDuration", df.format(sportDuration/7));
 		mapP.put("data", map);
 		mapP.put("msg", "操作成功");
-		mapP.put("code", "0");
+		mapP.put("code", 0);
 		
 		return mapP;
 	}
@@ -366,7 +366,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 			map.put("totalAvgSportDuration", df.format(sportDuration/30));
 			mapP.put("data", map);
 			mapP.put("msg", "操作成功");
-			mapP.put("code", "0");
+			mapP.put("code", 0);
 			
 			return mapP;
 		}
@@ -542,7 +542,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 			map.put("dayAvgReadDuration", df.format(readDuration/90));
 			mapP.put("data", map);
 			mapP.put("msg", "操作成功");
-			mapP.put("code", "0");
+			mapP.put("code", 0);
 			
 			return mapP;
 		}
@@ -773,7 +773,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 					map.put("dayAvgReadDuration", df.format(readDuration/365));
 					mapP.put("data", map);
 					mapP.put("msg", "操作成功");
-					mapP.put("code", "0");
+					mapP.put("code", 0);
 					
 					return mapP;
 				}

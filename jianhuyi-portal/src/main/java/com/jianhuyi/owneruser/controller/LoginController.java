@@ -63,7 +63,7 @@ public class LoginController extends BaseController {
 	   	Subject subject = SecurityUtils.getSubject();
 	   		try {
 	   			if (phone == null || "".equals(phone)) {
-	   				map.put("code", "-1");
+	   				map.put("code", -1);
 	                map.put("msg", "手机号码不能为空");
 	                map.put("data", "");
 	            }else {
@@ -71,13 +71,13 @@ public class LoginController extends BaseController {
 		   			mapP.put("username", phone);
 		   			boolean flag = userService.exit(mapP);
 		   			if (!flag) {
-		   				map.put("code","-1");
+		   				map.put("code",-1);
 		   				map.put("msg","该手机号码未注册");
 		   				map.put("data", "");
 		   			}else{
 		   				OwnerUserDO udo= userService.getbyname(phone);
 			   			if(udo.getDeleteFlag()==0){
-			   				map.put("code","-1");
+			   				map.put("code",-1);
 			   				map.put("msg","禁止登录，请联系客服");
 			   				map.put("data", "");
 			   			}else{
@@ -91,7 +91,7 @@ public class LoginController extends BaseController {
 			                message.put("loginTime", udo.getLoginTime());
 				   			
 				   			map.put("data", message);
-				   			map.put("code","0");
+				   			map.put("code",0);
 				   			map.put("msg","登录成功");
 			   			}
 		   			}
@@ -100,7 +100,7 @@ public class LoginController extends BaseController {
 	   		} catch (AuthenticationException e) {
 	   			map.put("msg","用户或密码错误");
 	   			map.put("data", "");
-	   			map.put("code","-1");
+	   			map.put("code",-1);
 	   		}
 	    	return map;
     }
@@ -161,7 +161,7 @@ public class LoginController extends BaseController {
     		Map<String, Object> map = new HashMap<>();
     		try { 
     			if (phone == null || "".equals(phone)) {
-    				map.put("code", "-1");
+    				map.put("code", -1);
 	                map.put("msg", "手机号码不能为空");
 	                map.put("data", "");
 	            }else {
@@ -199,7 +199,7 @@ public class LoginController extends BaseController {
 	                subject.getSession().setAttribute("sys.login.check.code", phone + templateParam);
 	                
 	                message.put("sessionId",subject.getSession().getId().toString());
-	                map.put("code", "0");
+	                map.put("code", 0);
 	                map.put("data", message);
 	                map.put("msg", "发送成功");
 	            } 
@@ -232,7 +232,7 @@ public class LoginController extends BaseController {
     	    			
     	    		message.put("sessionId",subject.getSession().getId().toString());
     	    		message.put("ownerUserDO", ownerUserDO);
-    	    		map.put("code", "0");
+    	    		map.put("code", 0);
     	    		map.put("msg", "微信登录成功");
     	    		map.put("data", message);
  	    		}else{
@@ -251,13 +251,13 @@ public class LoginController extends BaseController {
  	 	    		
  	                subject.login(token);
  	 	    		System.out.println("==========users=========="+users);
- 	 	    		map.put("code", "0");
+ 	 	    		map.put("code", 0);
  	 	    		map.put("msg", "微信登录成功");
  	 	    		map.put("data", users);
  	    		}
 	   			 
 	   		}catch (AuthenticationException e) {
-	   			map.put("code", "-1");
+	   			map.put("code", -1);
 	   			map.put("msg", "异常！请重新登录尝试");
 	   			map.put("data", "");
 	   		}
@@ -285,7 +285,7 @@ public class LoginController extends BaseController {
         	    			
         	    		message.put("sessionId",subject.getSession().getId().toString());
         	    		message.put("ownerUserDO", ownerUserDO);
-        	    		map.put("code", "0");
+        	    		map.put("code", 0);
         	    		map.put("msg", "QQ登录成功");
         	    		map.put("data", message);
     	    		}else{
@@ -304,13 +304,13 @@ public class LoginController extends BaseController {
          	    			
                         subject.login(token);
          	   			System.out.println("==========users=========="+users);
-         	   			map.put("code", "0");
+         	   			map.put("code", 0);
          	   			map.put("msg", "QQ登录成功");
          	   			map.put("data", users);
     	    		}
    	   		
    	   		}catch (AuthenticationException e) {
-   	   			map.put("code", "-1");
+   	   			map.put("code", -1);
    	   			map.put("msg", "异常！请重新登录尝试");
    	   			map.put("data", "");
    	   		}
@@ -333,13 +333,13 @@ public class LoginController extends BaseController {
 	                String captcha = object.toString();
 	                if (captcha == null || "".equals(captcha)) {
 	                    map.put("msg", "验证码已失效，请重新点击发送验证码");
-	                    map.put("code", "-1");
+	                    map.put("code", -1);
 	                    map.put("data", "");
 	                } else {
 	                    // session中存放的验证码是手机号+验证码
 	                    if (!captcha.equalsIgnoreCase(phone + codenum)) {
 	                        map.put("msg", "手机验证码错误");
-	                        map.put("code", "-1");
+	                        map.put("code", -1);
 		                    map.put("data", "");
 	                    } else {
 	                        Map<String, Object> mapP = new HashMap<String, Object>();
@@ -347,13 +347,13 @@ public class LoginController extends BaseController {
 	                        boolean flag = userService.exit(mapP);
 	                        if (!flag) {
 	                            map.put("msg", "该手机号码未注册");
-	                            map.put("code", "-1");
+	                            map.put("code", -1);
 			                    map.put("data", "");
 	                        } else {
 	                            OwnerUserDO udo = userService.getbyname(phone);
 	                            if (udo==null||udo.getDeleteFlag() == 0) {
 	                                map.put("msg", "禁止登录，请联系客服");
-	                                map.put("code", "-1");
+	                                map.put("code", -1);
 	    		                    map.put("data", "");
 	                            } else {
 	                            	
@@ -369,7 +369,7 @@ public class LoginController extends BaseController {
 	                                message.put("heardUrl", udo.getHeardUrl());
 	                                message.put("loginTime", udo.getLoginTime());
 	                                map.put("msg", "登录成功");
-	                                map.put("code", "0");
+	                                map.put("code", 0);
 	    		                    map.put("data", message);
 	                            	
 	                            }
@@ -378,12 +378,12 @@ public class LoginController extends BaseController {
 	                }
 	            } else {
 	                map.put("msg", "手机验证码错误");
-	                map.put("code", "-1");
+	                map.put("code", -1);
 	                map.put("data", "");
 	            }
 	        } catch (AuthenticationException e) {
 	        	map.put("msg", "手机号或验证码错误");
-	        	map.put("code", "-1");
+	        	map.put("code", -1);
 	        	map.put("data", "");
 	        }
 	        return map;
@@ -396,7 +396,7 @@ public class LoginController extends BaseController {
 		   Map<String, Object> message = new HashMap<>();
 		   if (StringUtils.isBlank(phone)) {
 	            message.put("msg", "手机号码不能为空");
-	            message.put("code", "-1");
+	            message.put("code", -1);
 		        message.put("data", "");
 	        }else{
 	        	 Subject subject = SecurityUtils.getSubject();
@@ -406,13 +406,13 @@ public class LoginController extends BaseController {
 	             	//String captcha = "666666";
 	                 if (captcha == null || "".equals(captcha)) {
 	                     message.put("msg", "验证码已失效，请重新点击发送验证码");
-	                     message.put("code", "-1");
+	                     message.put("code", -1);
          		         message.put("data", "");
 	                 } else {
 	                     // session中存放的验证码是手机号+验证码
 	                     if (!captcha.equalsIgnoreCase(phone + codenum)) {
 	                         message.put("msg", "手机验证码错误");
-	                         message.put("code", "-1");
+	                         message.put("code", -1);
 	            		     message.put("data", "");
 	                     } else{
 	                    	 Map<String, Object> mapP = new HashMap<String, Object>();
@@ -421,7 +421,7 @@ public class LoginController extends BaseController {
 	                         boolean flag = userService.exit(mapP);	//查手机号是否存在
 	                         if (flag) {
 	                             message.put("msg", "手机号码已存在");
-	                             message.put("code", "-1");
+	                             message.put("code", -1);
 		            		     message.put("data", "");
 	                         } else {
 	                        	password = MD5Utils.encrypt(phone, password);
@@ -441,16 +441,16 @@ public class LoginController extends BaseController {
 	                                	functionSet.setFunctionSet(1);
 	                                	functionSetService.save(functionSet);
 	                                    message.put("msg", "注册成功");
-	                                    message.put("code", "0");
+	                                    message.put("code", 0);
 	    	            		        message.put("data", "");
 	                                } else {
 	                                    message.put("msg", "注册失败");
-	                                    message.put("code", "-1");
+	                                    message.put("code", -1);
 	    	            		        message.put("data", "");
 	                                }
 	                        	}else{
 	                        		message.put("msg", "两次密码不一致");
-	                        		message.put("code", "-1");
+	                        		message.put("code", -1);
 		            		        message.put("data", "");
 	                        	}
 	                         }
@@ -458,7 +458,7 @@ public class LoginController extends BaseController {
 	                 }
 	             }else {
 	                 message.put("msg", "手机验证码错误");
-	                 message.put("code", "-1");
+	                 message.put("code", -1);
      		         message.put("data", "");
 	             }
 	        }
@@ -573,7 +573,7 @@ public class LoginController extends BaseController {
         Map<String, Object> message = new HashMap<>();
 		if (StringUtils.isBlank(phone)) {
 			message.put("msg","手机号码不能为空");
-			message.put("code", "-1");
+			message.put("code", -1);
 	        message.put("data", "");
 		}else{
 			OwnerUserDO udo= userService.getbyname(phone);
@@ -583,13 +583,13 @@ public class LoginController extends BaseController {
 	            String captcha = object.toString();
 	            if (captcha == null || "".equals(captcha)) {
 	                message.put("msg", "验证码已失效，请重新点击发送验证码");
-	                message.put("code", "-1");
+	                message.put("code", -1);
 	                message.put("data", "");
 	            } else {
 	                // session中存放的验证码是手机号+验证码
 	                if (!captcha.equalsIgnoreCase(phone + codenum)) {
 	                    message.put("msg", "手机验证码错误");
-	                    message.put("code", "-1");
+	                    message.put("code", -1);
 	                    message.put("data", "");
 	                } else {
 	                    Map<String, Object> mapP = new HashMap<String, Object>();
@@ -597,14 +597,14 @@ public class LoginController extends BaseController {
 	                    boolean flag = userService.exit(mapP);
 	                    if (!flag) {
 	                        message.put("msg", "该手机号码未注册");
-	                        message.put("code", "-1");
+	                        message.put("code", -1);
 	                        message.put("data", "");
 	                    }else{
 	                    	password = MD5Utils.encrypt(phone, password);
 	                    	udo.setPassword(password);
 	            			if (userService.update(udo) > 0) {
 	            				message.put("msg","修改成功");
-	            				message.put("code", "0");
+	            				message.put("code", 0);
 	            		        message.put("data", "");
 	            			}
 	                    }
@@ -612,7 +612,7 @@ public class LoginController extends BaseController {
 	            }
 	        } else {
 	            message.put("msg", "手机验证码错误");
-	            message.put("code", "-1");
+	            message.put("code", -1);
 	            message.put("data", "");
 	        }
 		}
@@ -625,7 +625,7 @@ public class LoginController extends BaseController {
         Map<String, Object> message = new HashMap<>();
         ShiroUtils.logout();
         message.put("msg", "登出成功");
-        message.put("code", "0");
+        message.put("code", 0);
         message.put("data", "");
         return message;
     }

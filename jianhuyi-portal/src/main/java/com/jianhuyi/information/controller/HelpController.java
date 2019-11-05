@@ -48,7 +48,7 @@ public class HelpController {
 		List<HelpDO> list = helpService.list(map);
 		map.put("data", list);
 		map.put("msg", "");
-		map.put("code", "0");
+		map.put("code", 0);
 		return map;
 	}
 	
@@ -63,7 +63,7 @@ public class HelpController {
 		HelpDO helpDO = helpService.get(id);
 		map.put("data", helpDO);
 		map.put("msg", "");
-		map.put("code", "0");
+		map.put("code", 0);
 		return map;
 	}
 	

@@ -35,7 +35,7 @@ public class OwnerUserController extends BaseController {
         OwnerUserDO udo = userService.get(getUserId());
         map.put("data", udo);
         map.put("msg", "success");
-        map.put("code", "0");
+        map.put("code", 0);
         return map;
     }
 
@@ -86,11 +86,11 @@ public class OwnerUserController extends BaseController {
              if (userService.update(userd) > 0) {
                  map.put("msg", "保存成功");
                  map.put("data", "");
-                 map.put("code", "0");
+                 map.put("code", 0);
              } else {
                  map.put("msg", "保存失败");
                  map.put("data", "");
-                 map.put("code", "-1");
+                 map.put("code", -1);
              }
        
         return map;
