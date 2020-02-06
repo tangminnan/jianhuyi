@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.DefaultAcsClient;
@@ -22,6 +23,7 @@ import com.aliyuncs.ivision.model.v20190308.CreateTrainDatasFromUrlsResponse;
 import com.aliyuncs.ivision.model.v20190308.PredictImageRequest;
 import com.aliyuncs.ivision.model.v20190308.PredictImageResponse;
 import com.aliyuncs.profile.DefaultProfile;
+import com.jianhuyi.common.utils.OBSUtils;
 
 @RestController
 @RequestMapping("/jianhuyi/wangyi")
@@ -48,13 +50,14 @@ public class OtherInterfaceController {
 	
 	// 将oss文件添加到训练集
 	@PostMapping("/createTrainDataFromUrls")
-	Map<String, Object> CreateTrainDataFromUrls(String dataUrls){
+	Map<String, Object> CreateTrainDataFromUrls(MultipartFile dataUrls){
+		String dataUrls2 = OBSUtils.uploadFile(dataUrls);
 		IAcsClient client = getAscClient();
 		Map<String, Object> map = new HashMap<>();
 		List<Object> list = new ArrayList<Object>();
 		CreateTrainDatasFromUrlsRequest request = new CreateTrainDatasFromUrlsRequest();
 		request.setProjectId(projectId);
-		request.setUrls(dataUrls);
+		request.setUrls(dataUrls2);
 		try {
 			CreateTrainDatasFromUrlsResponse response = client.getAcsResponse(request);
 			for (CreateTrainDatasFromUrlsResponse.TrainData trainData : response.getTrainDatas()) {
@@ -77,14 +80,15 @@ public class OtherInterfaceController {
 	
 	// 图片预测
 	@PostMapping("/predictImage")
-	Map<String, Object> PredictImage(String dataUrls) {
+	Map<String, Object> PredictImage(MultipartFile dataUrls) {
+		String dataUrls2 = OBSUtils.uploadFile(dataUrls);
 		Map<String, Object> map = new HashMap<>();
 		List<Object> list = new ArrayList<Object>();
 		IAcsClient client = getAscClient();
 		PredictImageRequest request = new PredictImageRequest();
 		request.setProjectId(projectId);
 		request.setIterationId(iterationId);
-		request.setDataUrls(dataUrls);
+		request.setDataUrls(dataUrls2);
 		request.setAcceptFormat(FormatType.JSON);
 
 		try {
@@ -115,8 +119,6 @@ public class OtherInterfaceController {
 		DescribeIterations(client);
 		PredictImage(client, dataUrls);*/
 	}
-
-	
 	
 
 }
