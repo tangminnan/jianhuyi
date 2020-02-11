@@ -80,47 +80,79 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		Double sportDuration = 0d;
 		if(byTime.size()>0){
 			for (UseJianhuyiLogDO useJianhuyiLogDO : byTime) {
-				if(useJianhuyiLogDO.getReadDuration() != null){
-					readDuration += useJianhuyiLogDO.getReadDuration();
+				if(useJianhuyiLogDO != null){
+					if(useJianhuyiLogDO.getReadDuration() != null){
+						readDuration += useJianhuyiLogDO.getReadDuration();
+					}
+					if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+						outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
+					}
+					if(useJianhuyiLogDO.getReadDistance() != null){
+						readDistance += useJianhuyiLogDO.getReadDistance();
+					}
+					if(useJianhuyiLogDO.getReadLight() != null){
+						readLight += useJianhuyiLogDO.getReadLight();
+					}
+					if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+						lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+					}
+					if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+						lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+					}
+					if(useJianhuyiLogDO.getSitTilt() != null){
+						sitTilt += useJianhuyiLogDO.getSitTilt();
+					}
+					if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+						useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
+					}
+					if(useJianhuyiLogDO.getSportDuration() != null){
+						sportDuration += useJianhuyiLogDO.getSportDuration();
+					}
 				}
-				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-					outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-				}
-				if(useJianhuyiLogDO.getReadDistance() != null){
-					readDistance += useJianhuyiLogDO.getReadDistance();
-				}
-				if(useJianhuyiLogDO.getReadLight() != null){
-					readLight += useJianhuyiLogDO.getReadLight();
-				}
-				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-					lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-				}
-				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-					lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-				}
-				if(useJianhuyiLogDO.getSitTilt() != null){
-					sitTilt += useJianhuyiLogDO.getSitTilt();
-				}
-				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-					useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-				}
-				if(useJianhuyiLogDO.getSportDuration() != null){
-					sportDuration += useJianhuyiLogDO.getSportDuration();
-				}
+				
+				
+				
 				
 			}
 		}
 		DecimalFormat df = new DecimalFormat("0.00");
-		map.put("useJianhuyiDuration", useJianhuyiDuration);
-		map.put("readDuration", readDuration);
+		map.put("useJianhuyiDuration", useJianhuyiDuration.toString());
+		map.put("readDuration", readDuration.toString());
 		map.put("num", byTime.size());
-		map.put("avgReadDuration", df.format(readDuration/byTime.size()));
-		map.put("outdoorsDuration", outdoorsDuration);
-		map.put("avgReadDistance", df.format(readDistance/byTime.size()));
-		map.put("avgReadLight", df.format(readLight/byTime.size()));
-		map.put("avgLookPhoneDuration", df.format(lookPhoneDuration/byTime.size()));
-		map.put("avgLookTvComputerDuration", df.format(lookTvComputerDuration/byTime.size()));
-		map.put("avgSitTilt", df.format(sitTilt/byTime.size()));
+		if(readDuration == 0){
+			map.put("avgReadDuration", "0.00");
+		}else{
+			map.put("avgReadDuration", df.format(readDuration/byTime.size()));
+		}
+		map.put("outdoorsDuration", outdoorsDuration.toString());
+		if(readDistance == 0){
+			map.put("avgReadDistance", "0.00");
+		}else{
+			map.put("avgReadDistance", df.format(readDistance/byTime.size()));	
+		}
+		if(readLight == 0){
+			map.put("avgReadLight", "0.00");
+		}else{
+			map.put("avgReadLight", df.format(readLight/byTime.size()));	
+		}
+		
+		if(lookPhoneDuration == 0){
+			map.put("avgLookPhoneDuration", "0.00");
+		}else{
+			map.put("avgLookPhoneDuration", df.format(lookPhoneDuration/byTime.size()));	
+		}
+		
+		if(lookTvComputerDuration == 0){
+			map.put("avgLookTvComputerDuration", "0.00");
+		}else{
+			map.put("avgLookTvComputerDuration", df.format(lookTvComputerDuration/byTime.size()));
+		}
+		
+		if(sitTilt == 0){
+			map.put("avgSitTilt", "0.00");
+		}else{
+			map.put("avgSitTilt", df.format(sitTilt/byTime.size()));
+		}
 		map.put("sportDuration", sportDuration);
 		mapP.put("data", map);
 		mapP.put("msg", "操作成功");
@@ -151,34 +183,40 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		Double sportDuration = 0d;//运动时长(小时)
 		if(recordBetween.size()>0){
 			for (UseJianhuyiLogDO useJianhuyiLogDO : recordBetween) {
-				if(useJianhuyiLogDO.getReadDuration() != null){
-					readDuration += useJianhuyiLogDO.getReadDuration();
-				}
-				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-					outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-				}
-				if(useJianhuyiLogDO.getReadDistance() != null){
-					readDistance += useJianhuyiLogDO.getReadDistance();
-				}
-				if(useJianhuyiLogDO.getReadLight() != null){
-					readLight += useJianhuyiLogDO.getReadLight();
-				}
-				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-					lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-				}
-				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-					lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-				}
-				if(useJianhuyiLogDO.getSitTilt() != null){
-					sitTilt += useJianhuyiLogDO.getSitTilt();
-				}
-				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-					useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-				}
-				if(useJianhuyiLogDO.getSportDuration() != null){
-					sportDuration += useJianhuyiLogDO.getSportDuration();
+				if(useJianhuyiLogDO  != null){
+					if(useJianhuyiLogDO.getReadDuration() != null){
+						readDuration += useJianhuyiLogDO.getReadDuration();
+					}
+					if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+						outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
+					}
+					if(useJianhuyiLogDO.getReadDistance() != null){
+						readDistance += useJianhuyiLogDO.getReadDistance();
+					}
+					if(useJianhuyiLogDO.getReadLight() != null){
+						readLight += useJianhuyiLogDO.getReadLight();
+					}
+					if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+						lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+					}
+					if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+						lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+					}
+					if(useJianhuyiLogDO.getSitTilt() != null){
+						sitTilt += useJianhuyiLogDO.getSitTilt();
+					}
+					if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+						useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
+					}
+					if(useJianhuyiLogDO.getSportDuration() != null){
+						sportDuration += useJianhuyiLogDO.getSportDuration();
+					}
+
+					
 				}
 				
+				
+								
 			}
 		}
 		DecimalFormat df = new DecimalFormat("0.00");
@@ -246,33 +284,39 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
             List<UseJianhuyiLogDO> weekRecord = useJianhuyiLogDao.queryUserWeekRecord(sdf.parse(string), userId);
             if(weekRecord.size()>0){
             	for (UseJianhuyiLogDO useJianhuyiLogDO : weekRecord) {
-            		if(useJianhuyiLogDO.getReadDuration() != null){
-            			readDurationT += useJianhuyiLogDO.getReadDuration();
-    				}
-    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-    					outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-    				}
-    				if(useJianhuyiLogDO.getReadDistance() != null){
-    					readDistanceT += useJianhuyiLogDO.getReadDistance();
-    				}
-    				if(useJianhuyiLogDO.getReadLight() != null){
-    					readLightT += useJianhuyiLogDO.getReadLight();
-    				}
-    				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-    					lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-    				}
-    				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-    					lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-    				}
-    				if(useJianhuyiLogDO.getSitTilt() != null){
-    					sitTiltT += useJianhuyiLogDO.getSitTilt();
-    				}
-    				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-    					useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-    				}
-    				if(useJianhuyiLogDO.getSportDuration() != null){
-    					sportDurationT += useJianhuyiLogDO.getSportDuration();
-    				}
+            		if(useJianhuyiLogDO != null){
+            			if(useJianhuyiLogDO.getReadDuration() != null){
+                			readDurationT += useJianhuyiLogDO.getReadDuration();
+        				}
+        				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+        					outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
+        				}
+        				if(useJianhuyiLogDO.getReadDistance() != null){
+        					readDistanceT += useJianhuyiLogDO.getReadDistance();
+        				}
+        				if(useJianhuyiLogDO.getReadLight() != null){
+        					readLightT += useJianhuyiLogDO.getReadLight();
+        				}
+        				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+        					lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
+        				}
+        				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+        					lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
+        				}
+        				if(useJianhuyiLogDO.getSitTilt() != null){
+        					sitTiltT += useJianhuyiLogDO.getSitTilt();
+        				}
+        				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+        					useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
+        				}
+        				if(useJianhuyiLogDO.getSportDuration() != null){
+        					sportDurationT += useJianhuyiLogDO.getSportDuration();
+        				}
+            			
+            		}
+            		
+            		
+            		
     			}
             	avgReadDuration.put(string, readDurationT/weekRecord.size());
             	outdoorsDuration.put(string, outdoorsDurationT);
@@ -324,33 +368,38 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 			Double sportDuration = 0d;//运动时长(小时)
 			if(recordBetween.size()>0){
 				for (UseJianhuyiLogDO useJianhuyiLogDO : recordBetween) {
-					if(useJianhuyiLogDO.getReadDuration() != null){
-						readDuration += useJianhuyiLogDO.getReadDuration();
+					if(useJianhuyiLogDO  != null){
+						if(useJianhuyiLogDO.getReadDuration() != null){
+							readDuration += useJianhuyiLogDO.getReadDuration();
+						}
+						if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+							outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
+						}
+						if(useJianhuyiLogDO.getReadDistance() != null){
+							readDistance += useJianhuyiLogDO.getReadDistance();
+						}
+						if(useJianhuyiLogDO.getReadLight() != null){
+							readLight += useJianhuyiLogDO.getReadLight();
+						}
+						if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+							lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+						}
+						if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+							lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+						}
+						if(useJianhuyiLogDO.getSitTilt() != null){
+							sitTilt += useJianhuyiLogDO.getSitTilt();
+						}
+						if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+							useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
+						}
+						if(useJianhuyiLogDO.getSportDuration() != null){
+							sportDuration += useJianhuyiLogDO.getSportDuration();
+						}
+						
 					}
-					if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-						outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-					}
-					if(useJianhuyiLogDO.getReadDistance() != null){
-						readDistance += useJianhuyiLogDO.getReadDistance();
-					}
-					if(useJianhuyiLogDO.getReadLight() != null){
-						readLight += useJianhuyiLogDO.getReadLight();
-					}
-					if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-						lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-					}
-					if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-						lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-					}
-					if(useJianhuyiLogDO.getSitTilt() != null){
-						sitTilt += useJianhuyiLogDO.getSitTilt();
-					}
-					if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-						useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-					}
-					if(useJianhuyiLogDO.getSportDuration() != null){
-						sportDuration += useJianhuyiLogDO.getSportDuration();
-					}
+					
+					
 					
 				}
 			}
@@ -419,33 +468,37 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 	            List<UseJianhuyiLogDO> weekRecord = useJianhuyiLogDao.queryUserWeekRecord(sdf.parse(string), userId);
 	            if(weekRecord.size()>0){
 	            	for (UseJianhuyiLogDO useJianhuyiLogDO : weekRecord) {
-	            		if(useJianhuyiLogDO.getReadDuration() != null){
-	            			readDurationT += useJianhuyiLogDO.getReadDuration();
-	    				}
-	    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-	    					outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-	    				}
-	    				if(useJianhuyiLogDO.getReadDistance() != null){
-	    					readDistanceT += useJianhuyiLogDO.getReadDistance();
-	    				}
-	    				if(useJianhuyiLogDO.getReadLight() != null){
-	    					readLightT += useJianhuyiLogDO.getReadLight();
-	    				}
-	    				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-	    					lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-	    				}
-	    				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-	    					lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-	    				}
-	    				if(useJianhuyiLogDO.getSitTilt() != null){
-	    					sitTiltT += useJianhuyiLogDO.getSitTilt();
-	    				}
-	    				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-	    					useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-	    				}
-	    				if(useJianhuyiLogDO.getSportDuration() != null){
-	    					sportDurationT += useJianhuyiLogDO.getSportDuration();
-	    				}
+	            		if(useJianhuyiLogDO != null){
+	            			if(useJianhuyiLogDO.getReadDuration() != null){
+		            			readDurationT += useJianhuyiLogDO.getReadDuration();
+		    				}
+		    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+		    					outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
+		    				}
+		    				if(useJianhuyiLogDO.getReadDistance() != null){
+		    					readDistanceT += useJianhuyiLogDO.getReadDistance();
+		    				}
+		    				if(useJianhuyiLogDO.getReadLight() != null){
+		    					readLightT += useJianhuyiLogDO.getReadLight();
+		    				}
+		    				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+		    					lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
+		    				}
+		    				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+		    					lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
+		    				}
+		    				if(useJianhuyiLogDO.getSitTilt() != null){
+		    					sitTiltT += useJianhuyiLogDO.getSitTilt();
+		    				}
+		    				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+		    					useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
+		    				}
+		    				if(useJianhuyiLogDO.getSportDuration() != null){
+		    					sportDurationT += useJianhuyiLogDO.getSportDuration();
+		    				}
+	            		}
+	            		
+	            		
 	    			}
 	            	avgReadDuration.put(string, readDurationT/weekRecord.size());
 	            	outdoorsDuration.put(string, outdoorsDurationT);
@@ -498,33 +551,37 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 			Double sportDuration = 0d;//运动时长(小时)
 			if(betweenSum.size()>0){
 				for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-					if(useJianhuyiLogDO.getReadDuration() != null){
-						readDuration += useJianhuyiLogDO.getReadDuration();
+					if(useJianhuyiLogDO  != null){
+						if(useJianhuyiLogDO.getReadDuration() != null){
+							readDuration += useJianhuyiLogDO.getReadDuration();
+						}
+						if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+							outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
+						}
+						if(useJianhuyiLogDO.getReadDistance() != null){
+							readDistance += useJianhuyiLogDO.getReadDistance();
+						}
+						if(useJianhuyiLogDO.getReadLight() != null){
+							readLight += useJianhuyiLogDO.getReadLight();
+						}
+						if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+							lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+						}
+						if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+							lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+						}
+						if(useJianhuyiLogDO.getSitTilt() != null){
+							sitTilt += useJianhuyiLogDO.getSitTilt();
+						}
+						if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+							useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
+						}
+						if(useJianhuyiLogDO.getSportDuration() != null){
+							sportDuration += useJianhuyiLogDO.getSportDuration();
+						}
 					}
-					if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-						outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-					}
-					if(useJianhuyiLogDO.getReadDistance() != null){
-						readDistance += useJianhuyiLogDO.getReadDistance();
-					}
-					if(useJianhuyiLogDO.getReadLight() != null){
-						readLight += useJianhuyiLogDO.getReadLight();
-					}
-					if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-						lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-					}
-					if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-						lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-					}
-					if(useJianhuyiLogDO.getSitTilt() != null){
-						sitTilt += useJianhuyiLogDO.getSitTilt();
-					}
-					if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-						useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-					}
-					if(useJianhuyiLogDO.getSportDuration() != null){
-						sportDuration += useJianhuyiLogDO.getSportDuration();
-					}
+					
+					
 				}
 			}
 			
@@ -598,33 +655,36 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		         List<UseJianhuyiLogDO> between = useJianhuyiLogDao.queryUserWeekRecordBetween(sdf.parse(list.get(i)), end, userId);
 		         if(between.size()>0){
 		        	 for (UseJianhuyiLogDO useJianhuyiLogDO : between) {
-			        	 if(useJianhuyiLogDO.getReadDuration() != null){
-		            			readDurationT += useJianhuyiLogDO.getReadDuration();
-		    				}
-		    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-		    					outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-		    				}
-		    				if(useJianhuyiLogDO.getReadDistance() != null){
-		    					readDistanceT += useJianhuyiLogDO.getReadDistance();
-		    				}
-		    				if(useJianhuyiLogDO.getReadLight() != null){
-		    					readLightT += useJianhuyiLogDO.getReadLight();
-		    				}
-		    				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-		    					lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-		    				}
-		    				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-		    					lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-		    				}
-		    				if(useJianhuyiLogDO.getSitTilt() != null){
-		    					sitTiltT += useJianhuyiLogDO.getSitTilt();
-		    				}
-		    				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-		    					useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-		    				}
-		    				if(useJianhuyiLogDO.getSportDuration() != null){
-		    					sportDurationT += useJianhuyiLogDO.getSportDuration();
-		    				}
+		        		 if(useJianhuyiLogDO != null){
+		        			 if(useJianhuyiLogDO.getReadDuration() != null){
+			            			readDurationT += useJianhuyiLogDO.getReadDuration();
+			    				}
+			    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+			    					outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
+			    				}
+			    				if(useJianhuyiLogDO.getReadDistance() != null){
+			    					readDistanceT += useJianhuyiLogDO.getReadDistance();
+			    				}
+			    				if(useJianhuyiLogDO.getReadLight() != null){
+			    					readLightT += useJianhuyiLogDO.getReadLight();
+			    				}
+			    				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+			    					lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
+			    				}
+			    				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+			    					lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
+			    				}
+			    				if(useJianhuyiLogDO.getSitTilt() != null){
+			    					sitTiltT += useJianhuyiLogDO.getSitTilt();
+			    				}
+			    				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+			    					useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
+			    				}
+			    				if(useJianhuyiLogDO.getSportDuration() != null){
+			    					sportDurationT += useJianhuyiLogDO.getSportDuration();
+			    				}
+		        		 }
+			        	 
 					}
 			         	avgReadDuration.put(i+1, readDurationT/between.size());
 		            	outdoorsDuration.put(i+1, outdoorsDurationT);
@@ -644,7 +704,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 	         	  List<UseJianhuyiLogDO> between = useJianhuyiLogDao.queryUserWeekRecordBetween(sdf.parse(list.get(i)), sdf.parse(list.get(i+1)), userId);
 	         	  if(between.size()>0){
 	         		 for (UseJianhuyiLogDO useJianhuyiLogDO : between) {
-		         		 if(useJianhuyiLogDO.getReadDuration() != null){
+	         			 if(useJianhuyiLogDO  != null){
+	         				if(useJianhuyiLogDO.getReadDuration() != null){
 		            			readDurationT += useJianhuyiLogDO.getReadDuration();
 		    				}
 		    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
@@ -671,6 +732,9 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 		    				if(useJianhuyiLogDO.getSportDuration() != null){
 		    					sportDurationT += useJianhuyiLogDO.getSportDuration();
 		    				}
+	         			 }
+	         			 
+		         		 
 						}
 	         		avgReadDuration.put(i+1, readDurationT/between.size());
 	            	outdoorsDuration.put(i+1, outdoorsDurationT);
@@ -729,33 +793,37 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 					Double sportDuration = 0d;//运动时长(小时)
 					if(betweenSum.size()>0){
 						for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-							if(useJianhuyiLogDO.getReadDuration() != null){
-								readDuration += useJianhuyiLogDO.getReadDuration();
+							if(useJianhuyiLogDO != null){
+								if(useJianhuyiLogDO.getReadDuration() != null){
+									readDuration += useJianhuyiLogDO.getReadDuration();
+								}
+								if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+									outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
+								}
+								if(useJianhuyiLogDO.getReadDistance() != null){
+									readDistance += useJianhuyiLogDO.getReadDistance();
+								}
+								if(useJianhuyiLogDO.getReadLight() != null){
+									readLight += useJianhuyiLogDO.getReadLight();
+								}
+								if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+									lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+								}
+								if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+									lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+								}
+								if(useJianhuyiLogDO.getSitTilt() != null){
+									sitTilt += useJianhuyiLogDO.getSitTilt();
+								}
+								if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+									useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
+								}
+								if(useJianhuyiLogDO.getSportDuration() != null){
+									sportDuration += useJianhuyiLogDO.getSportDuration();
+								}
+								
 							}
-							if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-								outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-							}
-							if(useJianhuyiLogDO.getReadDistance() != null){
-								readDistance += useJianhuyiLogDO.getReadDistance();
-							}
-							if(useJianhuyiLogDO.getReadLight() != null){
-								readLight += useJianhuyiLogDO.getReadLight();
-							}
-							if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-								lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-							}
-							if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-								lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-							}
-							if(useJianhuyiLogDO.getSitTilt() != null){
-								sitTilt += useJianhuyiLogDO.getSitTilt();
-							}
-							if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-								useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-							}
-							if(useJianhuyiLogDO.getSportDuration() != null){
-								sportDuration += useJianhuyiLogDO.getSportDuration();
-							}
+							
 						}
 					}
 					
@@ -829,33 +897,36 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 				         List<UseJianhuyiLogDO> between = useJianhuyiLogDao.queryUserWeekRecordBetween(sdf.parse(list.get(i)), end, userId);
 				         if(between.size()>0){
 				        	 for (UseJianhuyiLogDO useJianhuyiLogDO : between) {
-					        	 if(useJianhuyiLogDO.getReadDuration() != null){
-				            			readDurationT += useJianhuyiLogDO.getReadDuration();
-				    				}
-				    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-				    					outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-				    				}
-				    				if(useJianhuyiLogDO.getReadDistance() != null){
-				    					readDistanceT += useJianhuyiLogDO.getReadDistance();
-				    				}
-				    				if(useJianhuyiLogDO.getReadLight() != null){
-				    					readLightT += useJianhuyiLogDO.getReadLight();
-				    				}
-				    				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-				    					lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-				    				}
-				    				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-				    					lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-				    				}
-				    				if(useJianhuyiLogDO.getSitTilt() != null){
-				    					sitTiltT += useJianhuyiLogDO.getSitTilt();
-				    				}
-				    				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-				    					useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-				    				}
-				    				if(useJianhuyiLogDO.getSportDuration() != null){
-				    					sportDurationT += useJianhuyiLogDO.getSportDuration();
-				    				}
+				        		 if(useJianhuyiLogDO != null){
+				        			 if(useJianhuyiLogDO.getReadDuration() != null){
+					            			readDurationT += useJianhuyiLogDO.getReadDuration();
+					    				}
+					    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+					    					outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
+					    				}
+					    				if(useJianhuyiLogDO.getReadDistance() != null){
+					    					readDistanceT += useJianhuyiLogDO.getReadDistance();
+					    				}
+					    				if(useJianhuyiLogDO.getReadLight() != null){
+					    					readLightT += useJianhuyiLogDO.getReadLight();
+					    				}
+					    				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+					    					lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
+					    				}
+					    				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+					    					lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
+					    				}
+					    				if(useJianhuyiLogDO.getSitTilt() != null){
+					    					sitTiltT += useJianhuyiLogDO.getSitTilt();
+					    				}
+					    				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+					    					useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
+					    				}
+					    				if(useJianhuyiLogDO.getSportDuration() != null){
+					    					sportDurationT += useJianhuyiLogDO.getSportDuration();
+					    				}
+				        		 }
+					        	 
 							}
 					         	avgReadDuration.put(i+1, readDurationT/between.size());
 				            	outdoorsDuration.put(i+1, outdoorsDurationT);
@@ -875,7 +946,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 			         	  List<UseJianhuyiLogDO> between = useJianhuyiLogDao.queryUserWeekRecordBetween(sdf.parse(list.get(i)), sdf.parse(list.get(i+1)), userId);
 			         	  if(between.size()>0){
 			         		 for (UseJianhuyiLogDO useJianhuyiLogDO : between) {
-				         		 if(useJianhuyiLogDO.getReadDuration() != null){
+			         			 if(useJianhuyiLogDO != null){
+			         				if(useJianhuyiLogDO.getReadDuration() != null){
 				            			readDurationT += useJianhuyiLogDO.getReadDuration();
 				    				}
 				    				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
@@ -901,7 +973,10 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 				    				}
 				    				if(useJianhuyiLogDO.getSportDuration() != null){
 				    					sportDurationT += useJianhuyiLogDO.getSportDuration();
-				    				}
+				    				} 
+			         			 }
+			         			 
+				         		 
 								}
 			         		avgReadDuration.put(i+1, readDurationT/between.size());
 			            	outdoorsDuration.put(i+1, outdoorsDurationT);

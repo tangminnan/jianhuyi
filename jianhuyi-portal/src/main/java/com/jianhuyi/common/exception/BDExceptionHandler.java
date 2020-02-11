@@ -63,7 +63,8 @@ public class BDExceptionHandler {
         if (HttpServletUtils.jsAjax(request)) {
             return R.error(403, "未授权");
         }
-        return new ModelAndView("error/403");
+        //return new ModelAndView("error/403");
+        return R.error(403, "未授权");
     }
 
 
@@ -84,6 +85,7 @@ public class BDExceptionHandler {
         if (HttpServletUtils.jsAjax(request)) {
             return R.error(500, "服务器错误，请联系管理员");
         }
-        return new ModelAndView("error/500");
+        //return new ModelAndView("error/500");
+        return R.error(500, "服务器错误，请联系管理员");
     }
 }

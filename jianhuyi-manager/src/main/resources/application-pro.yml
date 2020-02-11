@@ -1,5 +1,5 @@
-dingshi:
-  uploadPath: /var/uploaded_files/
+jianhuyi:
+  uploadPath: /www/uploaded_files/
 logging:
   level:
     root: error
