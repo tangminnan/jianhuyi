@@ -70,7 +70,8 @@ public class OwnerUserController extends BaseController {
                  userd.setPhone(user.getPhone());
              }
              if(user.getFileImg() != null && user.getFileImg().getSize() > 0){
-     			MultipartFile sysFile = user.getFileImg();
+            	String fileName = OBSUtils.uploadFile(user.getFileImg());
+     			/*MultipartFile sysFile = user.getFileImg();
      			String fileName = sysFile.getOriginalFilename();
      			fileName = FileUtil.renameToUUID(fileName);
      			try {
@@ -79,8 +80,8 @@ public class OwnerUserController extends BaseController {
      				e.printStackTrace();
      			} catch (Exception e) {
      				e.printStackTrace();
-     			}
-     			userd.setHeardUrl("/files/" + fileName);
+     			}*/
+     			userd.setHeardUrl(fileName);
              }
              
              if (userService.update(userd) > 0) {

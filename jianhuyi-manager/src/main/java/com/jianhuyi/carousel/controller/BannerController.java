@@ -27,6 +27,7 @@ import com.jianhuyi.common.controller.BaseController;
 import com.jianhuyi.common.domain.FileDO;
 import com.jianhuyi.common.utils.FileType;
 import com.jianhuyi.common.utils.FileUtil;
+import com.jianhuyi.common.utils.OBSUtils;
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
@@ -112,18 +113,18 @@ public class BannerController extends BaseController {
 			return R.error("最多显示5张轮播图!");
 		}
 		
-		
-		String fileName = sysFile.getImgFile().getOriginalFilename();
+		String fileName = OBSUtils.uploadFile(sysFile.getImgFile());
+		/*String fileName = sysFile.getImgFile().getOriginalFilename();
 		fileName = FileUtil.renameToUUID(fileName);
 		try {
-			FileUtil.uploadFile(sysFile.getImgFile().getBytes(), bootdoConfig.getUploadPath(), fileName);
-			sysFile.setUrl("/files/" + fileName);
+			FileUtil.uploadFile(sysFile.getImgFile().getBytes(), bootdoConfig.getUploadPath(), fileName);*/
+			sysFile.setUrl(fileName);
 			sysFile.setAddTime(new Date());
 			sysFile.setUpdateTime(new Date());
 			sysFile.setUserId(this.getUserId());
-		} catch (Exception e) {
+		/*} catch (Exception e) {
 			return R.error();
-		}
+		}*/
 		
 		
 		if (bannerService.save(sysFile) > 0) {
@@ -163,14 +164,15 @@ public class BannerController extends BaseController {
 	public R update( BannerDO sysFile) {
 		System.out.println("================");
 		if(sysFile.getImgFile() != null && sysFile.getImgFile().getSize() > 0){
-			String fileName = sysFile.getImgFile().getOriginalFilename();
+			String fileName = OBSUtils.uploadFile(sysFile.getImgFile());
+			/*String fileName = sysFile.getImgFile().getOriginalFilename();
 			fileName = FileUtil.renameToUUID(fileName);
 			try {
-				FileUtil.uploadFile(sysFile.getImgFile().getBytes(), bootdoConfig.getUploadPath(), fileName);
-				sysFile.setUrl("/files/" + fileName);
-			} catch (Exception e) {
+				FileUtil.uploadFile(sysFile.getImgFile().getBytes(), bootdoConfig.getUploadPath(), fileName);*/
+				sysFile.setUrl(fileName);
+			/*} catch (Exception e) {
 				return R.error();
-			}
+			}*/
 			
 		}
 		sysFile.setUserId(this.getUserId());
