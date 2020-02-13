@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${useJianhuyiLog.id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">用户Id：</label>
+								<div class="col-sm-8">
+									<input id="userId" name="userId" th:value="${useJianhuyiLog.userId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">添加时间：</label>
+								<div class="col-sm-8">
+									<input id="addTime" name="addTime" th:value="${useJianhuyiLog.addTime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">阅读时长(分钟）：</label>
+								<div class="col-sm-8">
+									<input id="readDuration" name="readDuration" th:value="${useJianhuyiLog.readDuration}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">户外时长(小时）：</label>
+								<div class="col-sm-8">
+									<input id="outdoorsDuration" name="outdoorsDuration" th:value="${useJianhuyiLog.outdoorsDuration}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">阅读距离(厘米)：</label>
+								<div class="col-sm-8">
+									<input id="readDistance" name="readDistance" th:value="${useJianhuyiLog.readDistance}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">阅读光照(lux)：</label>
+								<div class="col-sm-8">
+									<input id="readLight" name="readLight" th:value="${useJianhuyiLog.readLight}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">看手机时长(分钟)：</label>
+								<div class="col-sm-8">
+									<input id="lookPhoneDuration" name="lookPhoneDuration" th:value="${useJianhuyiLog.lookPhoneDuration}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">看电脑电视时长(分钟）：</label>
+								<div class="col-sm-8">
+									<input id="lookTvComputerDuration" name="lookTvComputerDuration" th:value="${useJianhuyiLog.lookTvComputerDuration}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">坐姿倾斜度：</label>
+								<div class="col-sm-8">
+									<input id="sitTilt" name="sitTilt" th:value="${useJianhuyiLog.sitTilt}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">使用监护仪时长(小时）：</label>
+								<div class="col-sm-8">
+									<input id="useJianhuyiDuration" name="useJianhuyiDuration" th:value="${useJianhuyiLog.useJianhuyiDuration}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">运动时长(小时)：</label>
+								<div class="col-sm-8">
+									<input id="sportDuration" name="sportDuration" th:value="${useJianhuyiLog.sportDuration}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">删除标志(1:删除 0：未删除)：</label>
+								<div class="col-sm-8">
+									<input id="delFlag" name="delFlag" th:value="${useJianhuyiLog.delFlag}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/information/useJianhuyiLog/edit.js">
+	</script>
+</body>
+</html>

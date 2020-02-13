@@ -12,7 +12,7 @@
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
 		  		  <if test="openId != null and openId != ''"> and open_id = #{openId} </if>
-		  		  <if test="nickname != null and nickname != ''"> and nickname = #{nickname} </if>
+		  		  <if test="nickname != null and nickname != ''"> and nickname like concat('%',#{nickname},'%')  </if>
 		  		  <if test="password != null and password != ''"> and password = #{password} </if>
 		  		  <if test="phone != null and phone != ''"> and phone = #{phone} </if>
 		  		  <if test="heardUrl != null and heardUrl != ''"> and heard_url = #{heardUrl} </if>

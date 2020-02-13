@@ -33,14 +33,14 @@ public class VersionUpdateController {
 		Map<String,Object> list = new HashMap<String,Object>();
 		VersionUpdateDO version = versionUpdateService.versionCheck();
 		
-		if(code == version.getVersionNum()){
-			list.put("code", -1);
-			list.put("msg","已是最新版本");
-			list.put("data", "");
-		}else{
+		if(code < version.getVersionNum()){
 			list.put("code", 0);
 			list.put("msg","success");
 			list.put("data", version);
+		}else{
+			list.put("code", -1);
+			list.put("msg","已是最新版本");
+			list.put("data", "");
 		}
 		
 		return list;

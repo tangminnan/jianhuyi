@@ -57,6 +57,7 @@ public class NewsController {
 		//查询列表数据
         Query query = new Query(params);
         query.put("uId",params.get("uId"));
+        query.put("deleted","0");
 		List<NewsDO> newsList = newsService.list(query);
 		int total = newsService.count(query);
 		PageUtils pageUtils = new PageUtils(newsList, total);

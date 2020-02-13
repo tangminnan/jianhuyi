@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,7 @@ public class UseJianhuyiLogController {
 	@PostMapping("/save")
 	Map<String,Object> save( UseJianhuyiLogDO useJianhuyiLog){
 		Map<String,Object> map = new HashMap<String,Object>();
-		useJianhuyiLog.setAddTime(new Date());
+		useJianhuyiLog.setAddTime(new DateTime());
 		useJianhuyiLog.setDelFlag(0);
 		int save = useJianhuyiLogService.save(useJianhuyiLog);
 		if(save>0){

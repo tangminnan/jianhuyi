@@ -32,7 +32,7 @@
 									<select name="forIds" id="forIds" class="selectpicker show-tick form-control" multiple data-live-search="false" data-actions-box="false">
 										<!-- <option value="">请选择</option> -->
 										<option th:each="li:${list}"
-										 th:text="${li.name}"
+										 th:text="'id:' + ${li.id}  + '  &nbsp&nbsp&nbsp用户名：'+${li.nickname} +' &nbsp&nbsp&nbsp真实姓名：'+${li.name} "
 										 th:value="${li.id}"></option>
 									</select>
 								</div>

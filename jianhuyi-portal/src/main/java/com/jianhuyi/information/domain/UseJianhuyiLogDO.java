@@ -3,6 +3,8 @@ package com.jianhuyi.information.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 
 
 /**
@@ -20,7 +22,7 @@ public class UseJianhuyiLogDO implements Serializable {
 	//用户Id
 	private Integer userId;
 	//添加时间
-	private Date addTime;
+	private DateTime addTime;
 	//阅读时长(分钟）
 	private Double readDuration;
 	//户外时长(小时）
@@ -70,13 +72,13 @@ public class UseJianhuyiLogDO implements Serializable {
 	/**
 	 * 设置：添加时间
 	 */
-	public void setAddTime(Date addTime) {
-		this.addTime = addTime;
+	public void setAddTime(DateTime dateTime) {
+		this.addTime = dateTime;
 	}
 	/**
 	 * 获取：添加时间
 	 */
-	public Date getAddTime() {
+	public DateTime getAddTime() {
 		return addTime;
 	}
 	/**
