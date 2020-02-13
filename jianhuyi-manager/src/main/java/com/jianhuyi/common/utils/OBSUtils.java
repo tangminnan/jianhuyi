@@ -12,6 +12,7 @@ import com.obs.services.model.PutObjectResult;
 
 public class OBSUtils {
 	
+	
 	public static String uploadFile(MultipartFile multipartFile) {
 		String url = "";
 		try {	
