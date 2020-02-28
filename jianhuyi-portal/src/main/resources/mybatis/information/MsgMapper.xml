@@ -9,7 +9,7 @@
 
 	<select id="queryMsgList" resultType="com.jianhuyi.information.domain.MsgDO">
 		SELECT tm.id, tm.add_time ,tm.`name`,tm.for_details,tm.create_by,tmu.statue,tmu.id muId FROM `t_msg_user` tmu ,t_msg tm
-		where tmu.msg_id = tm.id and tmu.user_id = #{user_id}
+		where tmu.msg_id = tm.id and tmu.user_id = #{user_id} and delete_flag = 0
 		ORDER BY tm.add_time desc
 	</select>
 	<update id="updateUserMsg" parameterType="com.jianhuyi.information.domain.MsgDO">

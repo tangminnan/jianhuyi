@@ -25,6 +25,12 @@
 		  		  <if test="useJianhuyiDuration != null and useJianhuyiDuration != ''"> and use_jianhuyi_duration = #{useJianhuyiDuration} </if>
 		  		  <if test="sportDuration != null and sportDuration != ''"> and sport_duration = #{sportDuration} </if>
 		  		  <if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag} </if>
+		  		  
+		  		  <if test="week != null and week != ''"> and YEARWEEK(date_format(add_time,'%Y-%m-%d')) = YEARWEEK(now()) </if>
+		  		  <if test="month != null and month != ''"> and DATE_FORMAT( add_time, '%Y%m') = DATE_FORMAT( CURDATE( ) , '%Y%m' ) </if>
+		  		  <if test="quarter != null and quarter != ''"> and QUARTER(add_time)=QUARTER(now()) </if>
+		  		  <if test="year != null and year != ''"> and YEAR(add_time)=YEAR(NOW()) </if>
+		  		
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -121,4 +127,5 @@
 		</foreach>
 	</delete>
 
+	
 </mapper>

@@ -5,21 +5,23 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.service.UseJianhuyiLogService;
+import com.jianhuyi.users.domain.UserDO;
+import com.jianhuyi.users.service.UserService;
 
 
 /**
@@ -35,11 +37,18 @@ import com.jianhuyi.information.service.UseJianhuyiLogService;
 public class UseJianhuyiLogController {
 	@Autowired
 	private UseJianhuyiLogService useJianhuyiLogService;
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping()
 	@RequiresPermissions("information:useJianhuyiLog:useJianhuyiLog")
-	String UseJianhuyiLog(){
-	    return "information/useJianhuyiLog/useJianhuyiLog";
+	ModelAndView UseJianhuyiLog(@RequestParam Map<String, Object> params){
+		List<UserDO> userList = userService.list(null);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("userList",userList);
+		mav.setViewName("information/useJianhuyiLog/useJianhuyiLog");
+		
+	    return mav;
 	}
 	
 	@ResponseBody

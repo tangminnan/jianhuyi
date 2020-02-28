@@ -4,58 +4,53 @@
 <head th:include="include :: header"></head>
 <body class="gray-bg">
 	<div class="wrapper wrapper-content ">
-		<div class="col-sm-12">
-			<div class="ibox">
-				<div class="ibox-body">
-					<div class="fixed-table-toolbar">
-						<div class="columns pull-left">
-							<button shiro:hasPermission="information:useJianhuyiLog:add" type="button" class="btn  btn-primary" onclick="add()">
-								<i class="fa fa-plus" aria-hidden="true"></i>添加
-							</button>
-							<button shiro:hasPermission="information:useJianhuyiLog:batchRemove" type="button" class="btn  btn-danger"
-								onclick="batchRemove()">
-								<i class="fa fa-trash" aria-hidden="true"></i>删除
-							</button>
+		
+		
+		<div  class="col-sm-3" th:each="list:${userList}" th:onclick="'javascript:details('+${list.id}+')'">
+			<div th:classappend="${list.sex == 2} ? 'contact-boxwomen' : 'contact-boxmen'">
+				<div class="row">
+					<div class="col-sm-4">
+					<i th:if="${list.deleteFlag  == 0}" class="fa fa-ban" style="font-size: 24px; color: rgb(204, 204, 204);"></i>
+						<div class="text-center">
+							<img alt="image" th:if="${list.heardUrl == null}" src="/img/head.jpg" class="img-circle m-t-xs img-responsive" style="height: 100px;">
+							<img alt="image" th:if="${list.heardUrl != null && list.heardUrl !=''}" th:src="${list.heardUrl}" class="img-circle m-t-xs img-responsive" style="height: 100px;">
+							
 						</div>
-						<div class="columns pull-right">
-							<button class="btn btn-success" onclick="reLoad()">查询</button>
-						</div>
-						<div class="columns pull-right col-md-2 nopadding">
-							<input id="searchName" type="text" class="form-control"
-								placeholder="">
-						</div>
-					</div>
-					<table id="exampleTable" data-mobile-responsive="true">
-					</table>
-				</div>
-			</div>
+					</div> 
+					<div class="col-sm-6">
+						<h3><strong style="font-size: 18px" th:if="${list.nickname != null}" th:text="${list.nickname}">昵称
+						</strong>
+						<strong style="font-size: 18px" th:if="${list.nickname == null}" th:text="${'用户'+list.id}">昵称
+						</strong>
+						<i th:if="${list.sex == 2}" style="color:pink;font-weight: bold;width: 20px;height: 20px;margin-left: 10px;" class="fa-venus fa"></i>
+						<i th:if="${list.sex == 1 || list.sex == null}" style="font-weight: bold;width: 20px;height: 20px;margin-left: 10px;" class="fa-mars fa"></i>
+						
+						</h3> 
+						<br>
+						<span th:text="'用户id:'+${list.id}">积分点数: 0</span> <br> 
+						<span th:text="'手机号:'+${list.phone}">手机号: 15901484003</span> <br>
+						<span th:text="'注册时间：'+${#dates.format(list.registerTime, 'yyyy-MM-dd')}">注册时间：2020-02-25</span> 
+					</div> 
+				</div> 
+			</div> 
+			<div class="clearfix"></div>
 		</div>
 	</div>
-	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
-		<div>
-			<script type="text/javascript">
-				var s_edit_h = 'hidden';
-				var s_remove_h = 'hidden';
-				var s_resetPwd_h = 'hidden';
-			</script>
-		</div>
-		<div shiro:hasPermission="information:useJianhuyiLog:edit">
-			<script type="text/javascript">
-				s_edit_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="information:useJianhuyiLog:remove">
-			<script type="text/javascript">
-				var s_remove_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="information:useJianhuyiLog:resetPwd">
-			<script type="text/javascript">
-				var s_resetPwd_h = '';
-			</script>
-		</div>
-	</div>
-	<div th:include="include :: footer"></div>
-	<script type="text/javascript" src="/js/appjs/information/useJianhuyiLog/useJianhuyiLog.js"></script>
+	<div th:include="include :: footer"></div>	
 </body>
+
+<script type="text/javascript">
+function details(id) {
+	var showpage = layer.open({
+		type : 2,
+		title : '查看详情',
+		maxmin : true,
+		shadeClose : false, // 点击遮罩关闭层
+		area : [ '800px', '520px' ],
+		content : '/information/useJianhuyiLog/detail/'+id // iframe的url
+	});
+	layer.full(showpage);
+		
+}
+</script>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,30 +7,696 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
+<script src="/js/jquery.peity.min.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.contextMenu.min.js"></script>
+<script type="text/javascript" src="/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script type="text/javascript" src="/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/js/jquery.sparkline.min.js"></script>
+<script src="/js/echarts/echarts-all.js"></script>
+    <link href="/css/bootstrap-table/bootstrap-table.min.css" rel="stylesheet"/>
+    
+    
+	<link href="/css/animate.css" rel="stylesheet"/>
+	<link href="/css/style.css" rel="stylesheet"/>
+	<link href="/css/ry-ui.css" rel="stylesheet"/>
 <body>
 <div class="panel panel-default">
     <div class="panel-heading"> <h3>&nbsp;&nbsp;&nbsp;欢迎登录监护仪后台管理系统</h3></div>
- <!--     <div style="padding: 10px 0 20px 10px;">
-        <h3>&nbsp;&nbsp;&nbsp;项目介绍</h3>
-        <ul>
-            <li>面向学习型的开源框架，简洁高效，减少过渡封装，展现技术本质</li>
-            <li>Springboot作为基础框架，使用mybatis作为持久层框架</li>
-            <li>使用官方推荐的thymeleaf做为模板引擎，shiro作为安全框架,主流技术，“一网打尽”</li>
-            <li>极简配置，一键前后台代码生成</li>
-        </ul>
-
-        <h3>&nbsp;&nbsp;&nbsp;获取源码</h3>
-        <ul>
-            <li>Github地址：<a href="https://github.com/lcg0124/bootdo.git" th:href="@{https://github.com/lcg0124/bootdo.git}" target="_blank">https://github.com/lcg0124/bootdo.git</a></li>
-            <li>Oschina地址：<a href="https://gitee.com/lcg0124/bootdo.git" target="_blank">https://gitee.com/lcg0124/bootdo.git</a></li>
-        </ul>
-
-        <h3>&nbsp;&nbsp;&nbsp;官方QQ群</h3>
-        <ul>
-            <li>点击链接加入群【BootDo交流群】：<a href="https://jq.qq.com/?_wv=1027&k=5EYXfiZ">669039323(满)</a></li>
-            <li>点击链接加入群聊【BootDo交流二群】：<a href="https://jq.qq.com/?_wv=1027&k=5M659N4">614726589</a></li>
-        </ul>
-    </div>  -->
+        
+        <!--=============================总人数===================================================-->
+        <div class="col-sm-4" style="margin: 80px 40px 0 150px;">
+                <div class="ibox clear" >
+                    <div class="ibox-content">
+	                    <div style="float: left; height: 100px;">
+	                    	<span style="font-size:35px;" th:text="${num}"></span>
+	                    	<br>
+	                        <h2>总人数</h2>
+	                    </div>
+	                    <div style="float: right; height:100px;">
+	                        <img alt="" src="/img/员工.png" style="height: 100px;">
+	                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4" style="margin: 80px 40px 0 150px;">
+                <div class="ibox clear" >
+                    <div class="ibox-content">
+	                    <div style="float: left; height: 100px;">
+	                    	<span style="font-size:35px;" th:text="${yesterdayNum}"></span>
+	                    	<br>
+	                        <h2>昨日使用人数</h2>
+	                    </div>
+	                    <div style="float: right; height:100px;">
+	                        <img alt="" src="/img/人事.png" style="height: 100px;">
+	                    </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--=============================平均单次阅读时长柱形图===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--=============================户外总时长统计===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart1"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--=============================平均阅读距离===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart2"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--=============================平均阅读光照===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart3"></div>
+                    </div>
+                </div>
+            </div>
+            <!--=============================平均单次看手机时长===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart4"></div>
+                    </div>
+                </div>
+            </div>
+            <!--=============================平均单次看电脑电视时长(分钟)===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart5"></div>
+                    </div>
+                </div>
+            </div>
+            <!--=============================平均坐姿倾斜度===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart6"></div>
+                    </div>
+                </div>
+            </div>
+            <!--=============================有效使用监护仪总时长===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart7"></div>
+                    </div>
+                </div>
+            </div>
+            <!--=============================运动总时长===================================================-->
+            <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="echarts" id="echarts-bar-chart8"></div>
+                    </div>
+                </div>
+            </div>
+    </div> 
 </div>
 </body>
+<style>
+ .clear:after {
+2     clear: both;
+3     content: " ";
+4     display: block;
+5     height: 0;
+6     overflow: hidden;
+7     visibility: hidden;
+8 }
+</style>
+<script type="text/javascript">
+	   
+	    <!--=============================平均单次阅读时长柱形图===================================================-->
+	    var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+	    
+		barChart.showLoading();
+        $.ajax({
+        	url:'/getReadDuration',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart.hideLoading();
+            		barChart.setOption( {
+                		title: {
+                	        text: '平均单次阅读时长',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart.resize;
+        
+        <!--=============================户外总时长统计===================================================-->
+		var barChart1 = echarts.init(document.getElementById("echarts-bar-chart1"));
+	    
+		barChart1.showLoading();
+        $.ajax({
+        	url:'/getOutdoorsDuration',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart1.hideLoading();
+            		barChart1.setOption( {
+                		title: {
+                	        text: '户外总时长',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart1.resize;
+       
+        
+        
+        <!--=============================平均阅读距离===================================================-->
+		var barChart2 = echarts.init(document.getElementById("echarts-bar-chart2"));
+	    
+		barChart2.showLoading();
+        $.ajax({
+        	url:'/getReadDistance',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart2.hideLoading();
+            		barChart2.setOption( {
+                		title: {
+                	        text: '平均阅读距离',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart2.resize;
+        
+        <!--=============================平均阅读光照===================================================-->
+		var barChart3 = echarts.init(document.getElementById("echarts-bar-chart3"));
+	    
+		barChart3.showLoading();
+        $.ajax({
+        	url:'/getReadLight',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart3.hideLoading();
+            		barChart3.setOption( {
+                		title: {
+                	        text: '平均阅读光照',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart3.resize;
+        
+        
+        <!--=============================平均单次看手机时长===================================================-->
+		var barChart4 = echarts.init(document.getElementById("echarts-bar-chart4"));
+	    
+		barChart4.showLoading();
+        $.ajax({
+        	url:'/getLookPhoneDuration',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart4.hideLoading();
+            		barChart4.setOption( {
+                		title: {
+                	        text: '平均单次看手机时长',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart4.resize;
+        
+        
+        
+        <!--=============================平均单次看电脑电视时长(分钟)===================================================-->
+        
+        
+		var barChart5 = echarts.init(document.getElementById("echarts-bar-chart5"));
+	    
+		barChart5.showLoading();
+        $.ajax({
+        	url:'/getLookTvComputerDuration',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart5.hideLoading();
+            		barChart5.setOption( {
+                		title: {
+                	        text: '平均单次看电脑电视时长(分钟)',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart5.resize;
+        <!--=============================平均坐姿倾斜度===================================================-->
+		var barChart6 = echarts.init(document.getElementById("echarts-bar-chart6"));
+	    
+		barChart6.showLoading();
+        $.ajax({
+        	url:'/getSitTilt',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart6.hideLoading();
+            		barChart6.setOption( {
+                		title: {
+                	        text: '平均坐姿倾斜度',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart6.resize;
+        <!--=============================有效使用监护仪总时长===================================================-->
+		var barChart7 = echarts.init(document.getElementById("echarts-bar-chart7"));
+	    
+		barChart7.showLoading();
+        $.ajax({
+        	url:'/getUseJianhuyiDuration',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart7.hideLoading();
+            		barChart7.setOption( {
+                		title: {
+                	        text: '有效使用监护仪总时长',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart7.resize;
+        <!--=============================运动总时长===================================================-->
+        
+		var barChart8 = echarts.init(document.getElementById("echarts-bar-chart8"));
+	    
+		barChart8.showLoading();
+        $.ajax({
+        	url:'/getSportDuration',
+        	async:true,
+        	cache:false,
+        	dataType : "json",
+        	success:function(result){
+        		if(result){
+            		barChart8.hideLoading();
+            		barChart8.setOption( {
+                		title: {
+                	        text: '运动总时长',
+                	        left: 'center'
+                	    },
+                	    tooltip: {
+                	        trigger: 'item',
+                	        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                	    },
+                	    legend: {
+                	        orient: 'vertical',
+                	        left: 10,
+                	        data: ['优', '良', '标准', '差', '极差']
+                	    },
+                	    series: [
+                	        {
+                	            name: '历史记录各等级使用人数',
+                	            type: 'pie',
+                	            radius: ['50%', '70%'],
+                	            avoidLabelOverlap: false,
+                	            label: {
+                	                normal: {
+                	                    show: false,
+                	                    position: 'center'
+                	                },
+                	                emphasis: {
+                	                    show: true,
+                	                    textStyle: {
+                	                        fontSize: '30',
+                	                        fontWeight: 'bold'
+                	                    }
+                	                }
+                	            },
+                	            labelLine: {
+                	                normal: {
+                	                    show: false
+                	                }
+                	            },
+                	           data:result
+                	        }
+                	    ]
+                	})
+            	}
+        		}
+       			
+        })
+        
+        window.onresize = barChart8.resize;
+        
+    </script>
 </html>

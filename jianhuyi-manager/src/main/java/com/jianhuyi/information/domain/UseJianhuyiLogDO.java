@@ -44,7 +44,47 @@ public class UseJianhuyiLogDO implements Serializable {
 	//删除标志(1:删除 0：未删除)
 	private Integer delFlag;
 
+	private String week;
 	
+	private String month;
+	
+	private String quarter;
+	
+	private String year;
+	
+	private Integer num;
+	
+	
+	public Integer getNum() {
+		return num;
+	}
+	public void setNum(Integer num) {
+		this.num = num;
+	}
+	public String getWeek() {
+		return week;
+	}
+	public void setWeek(String week) {
+		this.week = week;
+	}
+	public String getMonth() {
+		return month;
+	}
+	public void setMonth(String month) {
+		this.month = month;
+	}
+	public String getQuarter() {
+		return quarter;
+	}
+	public void setQuarter(String quarter) {
+		this.quarter = quarter;
+	}
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
+	}
 	public Date getStartTime() {
 		return startTime;
 	}
@@ -213,4 +253,15 @@ public class UseJianhuyiLogDO implements Serializable {
 	public Integer getDelFlag() {
 		return delFlag;
 	}
+	@Override
+	public String toString() {
+		return "UseJianhuyiLogDO [id=" + id + ", userId=" + userId + ", addTime=" + addTime + ", startTime=" + startTime
+				+ ", endTime=" + endTime + ", readDuration=" + readDuration + ", outdoorsDuration=" + outdoorsDuration
+				+ ", readDistance=" + readDistance + ", readLight=" + readLight + ", lookPhoneDuration="
+				+ lookPhoneDuration + ", lookTvComputerDuration=" + lookTvComputerDuration + ", sitTilt=" + sitTilt
+				+ ", useJianhuyiDuration=" + useJianhuyiDuration + ", sportDuration=" + sportDuration + ", delFlag="
+				+ delFlag + ", week=" + week + ", month=" + month + ", quarter=" + quarter + ", year=" + year + "]";
+	}
+	
+	
 }

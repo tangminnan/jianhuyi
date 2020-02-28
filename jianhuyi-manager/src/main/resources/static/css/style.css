@@ -4323,9 +4323,15 @@ body.modal-open {
     margin-top: 5px;
 }
 /* CONTACTS */
-.contact-box {
+.contact-boxmen{
     background-color: #ffffff;
-    border: 1px solid #e7eaec;
+    border: 2px solid ;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.contact-boxwomen {
+    background-color: #ffffff;
+    border: 2px solid pink;
     padding: 20px;
     margin-bottom: 20px;
 }

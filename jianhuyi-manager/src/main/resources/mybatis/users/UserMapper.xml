@@ -45,6 +45,17 @@
 		</if>
 	</select>
 	
+	
+	<select id="selectNum" resultType="int">
+		SELECT
+			count(DISTINCT user_id) AS count
+		FROM
+			t_use_jianhuyi_log
+		WHERE
+			TO_DAYS(NOW()) - TO_DAYS(add_time) &lt;= 1
+	</select>
+	
+	
  	<select id="count" resultType="int">
 		select count(*) from t_user
 		 <where>  
@@ -176,4 +187,24 @@
 	    </where>
 	</select>
 
+	<select id="queryUserRecordBetweenSum" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+			`id`,
+			`user_id`,
+			`add_time`,
+			SUM(read_duration) readDuration,
+			SUM(outdoors_duration) outdoorsDuration,
+			SUM(read_distance) readDistance,
+			SUM(read_light) readLight,
+			SUM(look_phone_duration) lookPhoneDuration,
+			SUM(look_tv_computer_duration) lookTvComputerDuration,
+			SUM(sit_tilt) sitTilt,
+			SUM(use_jianhuyi_duration) useJianhuyiDuration,
+			SUM(sport_duration) sportDuration,
+			del_flag,
+  			count(*) num
+		FROM
+			t_use_jianhuyi_log
+		GROUP BY user_id
+	</select>
 </mapper>

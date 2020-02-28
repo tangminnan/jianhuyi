@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.users.domain.UserDO;
 
 /**
@@ -33,5 +34,9 @@ public interface UserDao {
 	int remove(Long id);
 	
 	int batchRemove(Long[] ids);
+
+	Integer selectNum();
+
+	List<UseJianhuyiLogDO> queryUserRecordBetweenSum();
 
 }

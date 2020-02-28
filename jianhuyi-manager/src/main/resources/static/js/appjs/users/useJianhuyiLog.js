@@ -35,7 +35,7 @@ function load() {
 								offset:params.offset,
 								userId:$('#uid').val(),
 								startTime:$('#startTime').val(),
-								endTime:$('#endTime').val(),
+								endTime:$('#endTime').val()
 					           // name:$('#searchName').val(),
 					           // username:$('#searchName').val()
 							};
@@ -124,6 +124,26 @@ function load() {
 function reLoad() {
 	$('#exampleTable').bootstrapTable('refresh');
 }
+
+function reLoadWeek() {
+	weekEchart();
+	$('#exampleTable').bootstrapTable('refresh',{ query: {week:'week'}});
+}
+function reLoadMonth() {
+	monthEchart();
+	$('#exampleTable').bootstrapTable('refresh',{ query: {month:'month'}});
+}
+function reLoadQuarter() {
+	quarterEchart();
+	$('#exampleTable').bootstrapTable('refresh',{ query: {quarter:'quarter'}});
+}
+function reLoadYear() {
+	yearEchart();
+	$('#exampleTable').bootstrapTable('refresh',{ query: {year:'year'}});
+}
+
+
+
 function add() {
 	layer.open({
 		type : 2,
