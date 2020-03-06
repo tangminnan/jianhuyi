@@ -1,10 +1,12 @@
 package com.jianhuyi.users.service;
 
-import java.util.List;
-import java.util.Map;
-
+import com.jianhuyi.common.utils.R;
 import com.jianhuyi.information.domain.EchartsDO;
 import com.jianhuyi.users.domain.UserDO;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户信息表
@@ -52,4 +54,5 @@ public interface UserService {
 
 	List<EchartsDO> getSportDuration();
 
+    R importMember(MultipartFile file);
 }

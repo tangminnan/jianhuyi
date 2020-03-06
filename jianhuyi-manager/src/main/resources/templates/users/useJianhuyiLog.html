@@ -3,1011 +3,1110 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-	<div class="wrapper wrapper-content ">
-		<div class="col-sm-12">
-			<div class="ibox">
-				<div class="ibox-body">
-					<div class="fixed-table-toolbar">
-						<div class="columns pull-left">
-							<button type="button" class="btn  btn-primary" id="week"  onclick="reLoadWeek()">
-								周
-							</button>
-							<button type="button" class="btn  btn-primary" id="month"  onclick="reLoadMonth()"
-								>
-								月
-							</button>
-							<button  type="button" class="btn  btn-primary" id="quarter" onclick="reLoadQuarter()">
-								季
-							</button>
-							<button  type="button" class="btn  btn-primary" id="year"  onclick="reLoadYear()"
-								>
-								年
-							</button>
-							
-						</div>
-						<input id="uid" th:value="${id}"  type="hidden">
-						<div class="columns pull-right">
-							<button class="btn btn-success" onclick="reLoad()">查询</button>
-						</div>
-						<div class="columns pull-right col-md-2 nopadding ">
-							<input id="endTime" name="endTime" class="form-control" placeholder="结束时间：" type="text">
-						</div>
-						<div class="columns pull-right col-md-2 nopadding">
-							<input id="startTime" name="startTime" class="form-control" placeholder="开始时间：" type="text">
-						</div>
-						
-						<!-- <div class="columns pull-right col-md-2 nopadding">
-							<input id="searchName" type="text" class="form-control"
-								placeholder="">
-						</div> -->
-					</div>
-					<table id="exampleTable" data-mobile-responsive="true">
-					</table>
-					<div id="weekEchart" style="display: none"> 
-						<div id="main" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 100px;"></div>
-						<div id="main1" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 50px;"></div>
-						
-						<div id="main2" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 100px;"></div>
-						<div id="main3" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 50px;"></div>
-						
-						<div id="main4" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 100px;"></div>
-						<div id="main5" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 50px;"></div>
-						
-						<div id="main6" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 100px;"></div>
-						<div id="main7" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 50px;"></div>
-						
-						<div id="main8" class="col-sm-5" style="width: 600px;height:400px;margin:100px 30px 50px 100px;"></div>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-		
-	</div>
-	
-	
-	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
-		<div>
-			<script type="text/javascript">
-				var s_edit_h = 'hidden';
-				var s_remove_h = 'hidden';
-				var s_resetPwd_h = 'hidden';
-			</script>
-		</div>
-		<div shiro:hasPermission="information:useJianhuyiLog:edit">
-			<script type="text/javascript">
-				s_edit_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="information:useJianhuyiLog:remove">
-			<script type="text/javascript">
-				var s_remove_h = '';
-			</script>
-		</div>
-		<div shiro:hasPermission="information:useJianhuyiLog:resetPwd">
-			<script type="text/javascript">
-				var s_resetPwd_h = '';
-			</script>
-		</div>
-	</div>
-	<div th:include="include :: footer"></div>
-	<script type="text/javascript" src="/js/appjs/users/useJianhuyiLog.js"></script>
-	<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
-	<script src="/js/echarts/echarts-all.js"></script>
-	<script type="text/javascript" src="/js/moment.js"></script>
-	<script type="text/javascript" src="/js/moment.min.js"></script>
-	<script type="text/javascript">
-	
-	laydate.render({
-		elem: '#startTime',
-		type: 'datetime'
-	});
-	laydate.render({
-		elem: '#endTime',
-		type: 'datetime'
-	});
-	
-	
-	//周折线统计图
-	function weekEchart(){
-		$('#weekEchart').show()
-		//获取本周一
-		const startDate = moment().week(moment().week()).startOf('week').format('YYYY-MM-DD');
-		const endDate = moment().week(moment().week()).endOf('week').format('YYYY-MM-DD');
-		
-		//初始化ECHART
-		 var myChart = echarts.init(document.getElementById('main')); 
-		 var myChart1 = echarts.init(document.getElementById('main1')); 
-		 var myChart2 = echarts.init(document.getElementById('main2')); 
-		 var myChart3 = echarts.init(document.getElementById('main3')); 
-		 var myChart4 = echarts.init(document.getElementById('main4')); 
-		 var myChart5 = echarts.init(document.getElementById('main5')); 
-		 var myChart6 = echarts.init(document.getElementById('main6')); 
-		 var myChart7 = echarts.init(document.getElementById('main7')); 
-		 var myChart8 = echarts.init(document.getElementById('main8')); 
-		 
-		 myChart.showLoading();
-		 myChart1.showLoading();
-		 
-		 console.log(myChart)
-	     $.ajax({
-	    	type:'get',
-	      	dataType : "json",
-	      	async:true,
-	    	cache:false,
-	     	url:'http://39.106.55.72:8090/jianhuyi/useJianhuyiLog/weekData',
-	     	data:{
-	     		userId:$('#uid').val(),
-	     		start:startDate,
-	     		end:endDate
-	     	},
-	     	success:function(result){
-	     		console.log(result)
-	     		if(result.code == 0){
-	     			myChart.hideLoading();
-	     			myChart.setOption({
-	         			title: {
-	        		        text: '日平均单次阅读时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadDuration,
-	        		        type: 'line'
-	        		    }]
-	             	});
-	     			
-	     			
-	     			myChart1.hideLoading();
-	     			myChart1.setOption({
-	         			title: {
-	        		        text: '户外总时间',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.outdoorsDuration,
-	        		        type: 'line'
-	        		    }]
-	             	});
-	     			
-	     			myChart2.hideLoading();
-	     			myChart2.setOption({
-	         			title: {
-	        		        text: '平均阅读距离',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadDistance,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart3.hideLoading();
-	     			myChart3.setOption({
-	         			title: {
-	        		        text: '平均阅读光照',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadLight,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart4.hideLoading();
-	     			myChart4.setOption({
-	         			title: {
-	        		        text: '平均单次看手机时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgLookPhoneDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart5.hideLoading();
-	     			myChart5.setOption({
-	         			title: {
-	        		        text: '平均单次看电脑电视时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgLookTvComputerDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart6.hideLoading();
-	     			myChart6.setOption({
-	         			title: {
-	        		        text: '平均坐姿倾斜角度',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgSitTilt,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart7.hideLoading();
-	     			myChart7.setOption({
-	         			title: {
-	        		        text: '平均有效使用监护仪时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgUseJianhuyiDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart8.hideLoading();
-	     			myChart8.setOption({
-	         			title: {
-	        		        text: '运动时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.sportDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	
-	             	
-	         	}
-	     		}
-	    			
-	     })	
-	}
-	
-	
-	
-	//月折线统计图
-	function monthEchart(){
-		$('#weekEchart').show()
-		
-		const startDate = moment(moment().month(moment().month()).startOf('month').valueOf()).format('YYYY-MM-DD');
+<div class="wrapper wrapper-content ">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div class="fixed-table-toolbar">
+                    <div class="columns pull-left">
+                        <button type="button" class="btn  btn-primary" id="week" onclick="reLoadWeek()">
+                            周
+                        </button>
+                        <button type="button" class="btn  btn-primary" id="month" onclick="reLoadMonth()"
+                        >
+                            月
+                        </button>
+                        <button type="button" class="btn  btn-primary" id="quarter" onclick="reLoadQuarter()">
+                            季
+                        </button>
+                        <button type="button" class="btn  btn-primary" id="year" onclick="reLoadYear()"
+                        >
+                            年
+                        </button>
 
-  		const endDate = moment(moment().month(moment().month()).endOf('month').valueOf()).format('YYYY-MM-DD');
-		
-		//初始化ECHART
-		 var myChart = echarts.init(document.getElementById('main')); 
-		 var myChart1 = echarts.init(document.getElementById('main1')); 
-		 var myChart2 = echarts.init(document.getElementById('main2')); 
-		 var myChart3 = echarts.init(document.getElementById('main3')); 
-		 var myChart4 = echarts.init(document.getElementById('main4')); 
-		 var myChart5 = echarts.init(document.getElementById('main5')); 
-		 var myChart6 = echarts.init(document.getElementById('main6')); 
-		 var myChart7 = echarts.init(document.getElementById('main7')); 
-		 var myChart8 = echarts.init(document.getElementById('main8')); 
-		 
-		 
-		 console.log(myChart)
-	     $.ajax({
-	    	type:'get',
-	      	dataType : "json",
-	      	async:true,
-	    	cache:false,
-	     	url:'http://39.106.55.72:8090/jianhuyi/useJianhuyiLog/monthData',
-	     	data:{
-	     		userId:$('#uid').val(),
-	     		start:startDate,
-	     		end:endDate
-	     	},
-	     	success:function(result){
-	     		console.log(result)
-	     		if(result.code == 0){
-	     			myChart.hideLoading();
-	     			myChart.setOption({
-	         			title: {
-	        		        text: '日平均单次阅读时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadDuration,
-	        		        type: 'line'
-	        		    }]
-	             	});
-	     			
-	     			
-	     			myChart1.hideLoading();
-	     			myChart1.setOption({
-	         			title: {
-	        		        text: '户外总时间',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.outdoorsDuration,
-	        		        type: 'line'
-	        		    }]
-	             	});
-	     			
-	     			myChart2.hideLoading();
-	     			myChart2.setOption({
-	         			title: {
-	        		        text: '平均阅读距离',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadDistance,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart3.hideLoading();
-	     			myChart3.setOption({
-	         			title: {
-	        		        text: '平均阅读光照',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadLight,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart4.hideLoading();
-	     			myChart4.setOption({
-	         			title: {
-	        		        text: '平均单次看手机时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgLookPhoneDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart5.hideLoading();
-	     			myChart5.setOption({
-	         			title: {
-	        		        text: '平均单次看电脑电视时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgLookTvComputerDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart6.hideLoading();
-	     			myChart6.setOption({
-	         			title: {
-	        		        text: '平均坐姿倾斜角度',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgSitTilt,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart7.hideLoading();
-	     			myChart7.setOption({
-	         			title: {
-	        		        text: '平均有效使用监护仪时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgUseJianhuyiDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart8.hideLoading();
-	     			myChart8.setOption({
-	         			title: {
-	        		        text: '运动时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-	        		               '13', '14', '15', '16', '17', '18', '19', '20', '21',
-	        		               '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.sportDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	
-	             	
-	         	}
-	     		}
-	    			
-	     })	
-	}
-	
-	
-	
-	
-	//季折线统计图
-	function quarterEchart(){
-		$('#weekEchart').show()
-		
-		let start = moment().startOf('quarter').format('YYYY-MM-DD')
-		let end = moment().endOf('quarter').format('YYYY-MM-DD')
-		
-		//初始化ECHART
-		 var myChart = echarts.init(document.getElementById('main')); 
-		 var myChart1 = echarts.init(document.getElementById('main1')); 
-		 var myChart2 = echarts.init(document.getElementById('main2')); 
-		 var myChart3 = echarts.init(document.getElementById('main3')); 
-		 var myChart4 = echarts.init(document.getElementById('main4')); 
-		 var myChart5 = echarts.init(document.getElementById('main5')); 
-		 var myChart6 = echarts.init(document.getElementById('main6')); 
-		 var myChart7 = echarts.init(document.getElementById('main7')); 
-		 var myChart8 = echarts.init(document.getElementById('main8')); 
-		 
-		 
-		 console.log(myChart)
-	     $.ajax({
-	    	type:'get',
-	      	dataType : "json",
-	      	async:true,
-	    	cache:false,
-	     	url:'http://39.106.55.72:8090/jianhuyi/useJianhuyiLog/seasonData',
-	     	data:{
-	     		userId:$('#uid').val(),
-	     		start:start,
-	     		end:end
-	     	},
-	     	success:function(result){
-	     		console.log(result)
-	     		if(result.code == 0){
-	     			myChart.hideLoading();
-	     			myChart.setOption({
-	         			title: {
-	        		        text: '日平均单次阅读时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadDuration,
-	        		        type: 'line'
-	        		    }]
-	             	});
-	     			
-	     			
-	     			myChart1.hideLoading();
-	     			myChart1.setOption({
-	         			title: {
-	        		        text: '户外总时间',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.outdoorsDuration,
-	        		        type: 'line'
-	        		    }]
-	             	});
-	     			
-	     			myChart2.hideLoading();
-	     			myChart2.setOption({
-	         			title: {
-	        		        text: '平均阅读距离',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadDistance,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart3.hideLoading();
-	     			myChart3.setOption({
-	         			title: {
-	        		        text: '平均阅读光照',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadLight,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart4.hideLoading();
-	     			myChart4.setOption({
-	         			title: {
-	        		        text: '平均单次看手机时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgLookPhoneDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart5.hideLoading();
-	     			myChart5.setOption({
-	         			title: {
-	        		        text: '平均单次看电脑电视时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgLookTvComputerDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart6.hideLoading();
-	     			myChart6.setOption({
-	         			title: {
-	        		        text: '平均坐姿倾斜角度',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgSitTilt,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart7.hideLoading();
-	     			myChart7.setOption({
-	         			title: {
-	        		        text: '平均有效使用监护仪时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgUseJianhuyiDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart8.hideLoading();
-	     			myChart8.setOption({
-	         			title: {
-	        		        text: '运动时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.sportDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	
-	             	
-	         	}
-	     		}
-	    			
-	     })	
-	}
-	
-	
-	
+                    </div>
+                    <input id="uid" th:value="${id}" type="hidden">
+                    <div class="columns pull-right">
+                        <button class="btn btn-success" onclick="reLoad()">查询</button>
+                    </div>
+                    <div class="columns pull-right col-md-2 nopadding ">
+                        <input id="endTime" name="endTime" class="form-control" placeholder="结束时间：" type="text">
+                    </div>
+                    <div class="columns pull-right col-md-2 nopadding">
+                        <input id="startTime" name="startTime" class="form-control" placeholder="开始时间：" type="text">
+                    </div>
 
-	//年折线统计图
-	function yearEchart(){
-		$('#weekEchart').show()
-		//格式化日期
-		function formatDate(date) {
-			var myyear = date.getFullYear();
-			var mymonth = date.getMonth()+1;
-			var myweekday = date.getDate();
-		
-		if(mymonth < 10){
-			mymonth = "0" + mymonth;
-		}
-		if(myweekday < 10){
-			myweekday = "0" + myweekday;
-		}
-		return (myyear+"-"+mymonth + "-" + myweekday);
-		}
-		
-		const startDate = moment(moment().year(moment().year()).startOf('year').valueOf()).format('YYYY-MM-DD');
- 		const endDate = moment(moment().year(moment().year()).endOf('year').valueOf()).format('YYYY-MM-DD');
-		
-		//初始化ECHART
-		 var myChart = echarts.init(document.getElementById('main')); 
-		 var myChart1 = echarts.init(document.getElementById('main1')); 
-		 var myChart2 = echarts.init(document.getElementById('main2')); 
-		 var myChart3 = echarts.init(document.getElementById('main3')); 
-		 var myChart4 = echarts.init(document.getElementById('main4')); 
-		 var myChart5 = echarts.init(document.getElementById('main5')); 
-		 var myChart6 = echarts.init(document.getElementById('main6')); 
-		 var myChart7 = echarts.init(document.getElementById('main7')); 
-		 var myChart8 = echarts.init(document.getElementById('main8')); 
-		 
-		 
-		 console.log(myChart)
-	     $.ajax({
-	    	type:'get',
-	      	dataType : "json",
-	      	async:true,
-	    	cache:false,
-	     	url:'http://39.106.55.72:8090/jianhuyi/useJianhuyiLog/yearData',
-	     	data:{
-	     		userId:$('#uid').val(),
-	     		start:startDate,
-	     		end:endDate
-	     	},
-	     	success:function(result){
-	     		console.log(result)
-	     		if(result.code == 0){
-	     			myChart.hideLoading();
-	     			myChart.setOption({
-	         			title: {
-	        		        text: '日平均单次阅读时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadDuration,
-	        		        type: 'line'
-	        		    }]
-	             	});
-	     			
-	     			
-	     			myChart1.hideLoading();
-	     			myChart1.setOption({
-	         			title: {
-	        		        text: '户外总时间',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.outdoorsDuration,
-	        		        type: 'line'
-	        		    }]
-	             	});
-	     			
-	     			myChart2.hideLoading();
-	     			myChart2.setOption({
-	         			title: {
-	        		        text: '平均阅读距离',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadDistance,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart3.hideLoading();
-	     			myChart3.setOption({
-	         			title: {
-	        		        text: '平均阅读光照',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgReadLight,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart4.hideLoading();
-	     			myChart4.setOption({
-	         			title: {
-	        		        text: '平均单次看手机时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgLookPhoneDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart5.hideLoading();
-	     			myChart5.setOption({
-	         			title: {
-	        		        text: '平均单次看电脑电视时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgLookTvComputerDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart6.hideLoading();
-	     			myChart6.setOption({
-	         			title: {
-	        		        text: '平均坐姿倾斜角度',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgSitTilt,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart7.hideLoading();
-	     			myChart7.setOption({
-	         			title: {
-	        		        text: '平均有效使用监护仪时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.avgUseJianhuyiDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	myChart8.hideLoading();
-	     			myChart8.setOption({
-	         			title: {
-	        		        text: '运动时长',
-	        		        left: 'center'
-	        		    },
-	        		    xAxis: {
-	        		        type: 'category',
-	        		        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-	        		    },
-	        		    yAxis: {
-	        		        type: 'value'
-	        		    },
-	        		    series: [{
-	        		        data: result.data.lineChart.sportDuration,
-	        		        type: 'line'
-	        		    }]
-	             	})
-	             	
-	             	
-	             	
-	         	}
-	     		}
-	    			
-	     })	
-	}
-	
-	</script>
-	
+                    <!-- <div class="columns pull-right col-md-2 nopadding">
+                        <input id="searchName" type="text" class="form-control"
+                            placeholder="">
+                    </div> -->
+                </div>
+                <table id="exampleTable" data-mobile-responsive="true">
+                </table>
+                <div id="weekEchart" style="display: none">
+                    <div id="main" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+                    <div id="main1" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+                    <div id="main2" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+
+                    <div id="main3" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+                    <div id="main4" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+                    <div id="main5" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+
+                    <div id="main6" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+                    <div id="main7" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+
+                    <div id="main8" class="col-sm-3"
+                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+<div>
+    <script type="text/javascript">
+        var s_edit_h = 'hidden';
+        var s_remove_h = 'hidden';
+        var s_resetPwd_h = 'hidden';
+    </script>
+</div>
+<div shiro:hasPermission="information:useJianhuyiLog:edit">
+    <script type="text/javascript">
+        s_edit_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="information:useJianhuyiLog:remove">
+    <script type="text/javascript">
+        var s_remove_h = '';
+    </script>
+</div>
+<div shiro:hasPermission="information:useJianhuyiLog:resetPwd">
+    <script type="text/javascript">
+        var s_resetPwd_h = '';
+    </script>
+</div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" src="/js/appjs/users/useJianhuyiLog.js"></script>
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+<script src="/js/echarts/echarts-all.js"></script>
+<script type="text/javascript" src="/js/moment.js"></script>
+<script type="text/javascript" src="/js/moment.min.js"></script>
+<script type="text/javascript">
+
+    laydate.render({
+        elem: '#startTime',
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#endTime',
+        type: 'datetime'
+    });
+
+
+    //周折线统计图
+    function weekEchart() {
+        $('#weekEchart').show()
+        //获取本周一
+        const startDate = moment().week(moment().week()).startOf('week').format('YYYY-MM-DD');
+        const endDate = moment().week(moment().week()).endOf('week').format('YYYY-MM-DD');
+
+        //初始化ECHART
+        var myChart = echarts.init(document.getElementById('main'));
+        var myChart1 = echarts.init(document.getElementById('main1'));
+        var myChart2 = echarts.init(document.getElementById('main2'));
+        var myChart3 = echarts.init(document.getElementById('main3'));
+        var myChart4 = echarts.init(document.getElementById('main4'));
+        var myChart5 = echarts.init(document.getElementById('main5'));
+        var myChart6 = echarts.init(document.getElementById('main6'));
+        var myChart7 = echarts.init(document.getElementById('main7'));
+        var myChart8 = echarts.init(document.getElementById('main8'));
+
+        myChart.showLoading();
+        myChart1.showLoading();
+
+        console.log(myChart)
+        $.ajax({
+            type: 'get',
+            dataType: "json",
+            async: true,
+            cache: false,
+            url: 'http://39.106.55.72:8090/jianhuyi/useJianhuyiLog/weekData',
+            data: {
+                userId: $('#uid').val(),
+                start: startDate,
+                end: endDate
+            },
+            success: function (result) {
+                console.log(result)
+                if (result.code == 0) {
+                    myChart.hideLoading();
+                    myChart.setOption({
+                        title: {
+                            text: '日平均单次阅读时长',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 120,
+                            splitNumber : 4
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadDuration,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:20}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    });
+
+
+                    myChart1.hideLoading();
+                    myChart1.setOption({
+                        title: {
+                            text: '户外总时间',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 150,
+                            splitNumber : 3
+                        },
+                        series: [{
+                            data: result.data.lineChart.outdoorsDuration,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:2}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    });
+
+                    myChart2.hideLoading();
+                    myChart2.setOption({
+                        title: {
+                            text: '平均阅读距离',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 50,
+                            splitNumber : 5
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadDistance,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:33}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart3.hideLoading();
+                    myChart3.setOption({
+                        title: {
+                            text: '平均阅读光照',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 500,
+                            splitNumber : 5
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadLight,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:300}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart4.hideLoading();
+                    myChart4.setOption({
+                        title: {
+                            text: '平均单次看手机时长',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 50,
+                            splitNumber : 5
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgLookPhoneDuration,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:10}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart5.hideLoading();
+                    myChart5.setOption({
+                        title: {
+                            text: '平均单次看电脑电视时长',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 80,
+                            splitNumber : 8
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgLookTvComputerDuration,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:20}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart6.hideLoading();
+                    myChart6.setOption({
+                        title: {
+                            text: '平均坐姿倾斜角度',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 100,
+                            splitNumber : 5
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgSitTilt,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:5}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart7.hideLoading();
+                    myChart7.setOption({
+                        title: {
+                            text: '平均有效使用监护仪时长',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 30,
+                            splitNumber : 5
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgUseJianhuyiDuration,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:10}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart8.hideLoading();
+                    myChart8.setOption({
+                        title: {
+                            text: '运动时长',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        },
+                        yAxis: {
+                            type: 'value',
+                            max : 10,
+                            splitNumber : 5
+                        },
+                        series: [{
+                            data: result.data.lineChart.sportDuration,
+                            markLine: {
+                                label:'标准线',
+                                data: [
+                                    {xAxis:0, yAxis:2}
+                                ]
+                            },
+                            type: 'line'
+                        }]
+                    })
+
+
+                }
+            }
+
+        })
+    }
+
+
+    //月折线统计图
+    function monthEchart() {
+        $('#weekEchart').show()
+
+        const startDate = moment(moment().month(moment().month()).startOf('month').valueOf()).format('YYYY-MM-DD');
+
+        const endDate = moment(moment().month(moment().month()).endOf('month').valueOf()).format('YYYY-MM-DD');
+
+        //初始化ECHART
+        var myChart = echarts.init(document.getElementById('main'));
+        var myChart1 = echarts.init(document.getElementById('main1'));
+        var myChart2 = echarts.init(document.getElementById('main2'));
+        var myChart3 = echarts.init(document.getElementById('main3'));
+        var myChart4 = echarts.init(document.getElementById('main4'));
+        var myChart5 = echarts.init(document.getElementById('main5'));
+        var myChart6 = echarts.init(document.getElementById('main6'));
+        var myChart7 = echarts.init(document.getElementById('main7'));
+        var myChart8 = echarts.init(document.getElementById('main8'));
+
+
+        console.log(myChart)
+        $.ajax({
+            type: 'get',
+            dataType: "json",
+            async: true,
+            cache: false,
+            url: 'http://39.106.55.72:8090/jianhuyi/useJianhuyiLog/monthData',
+            data: {
+                userId: $('#uid').val(),
+                start: startDate,
+                end: endDate
+            },
+            success: function (result) {
+                console.log(result)
+                if (result.code == 0) {
+                    myChart.hideLoading();
+                    myChart.setOption({
+                        title: {
+                            text: '日平均单次阅读时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadDuration,
+                            type: 'line'
+                        }]
+                    });
+
+
+                    myChart1.hideLoading();
+                    myChart1.setOption({
+                        title: {
+                            text: '户外总时间',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.outdoorsDuration,
+                            type: 'line'
+                        }]
+                    });
+
+                    myChart2.hideLoading();
+                    myChart2.setOption({
+                        title: {
+                            text: '平均阅读距离',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadDistance,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart3.hideLoading();
+                    myChart3.setOption({
+                        title: {
+                            text: '平均阅读光照',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadLight,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart4.hideLoading();
+                    myChart4.setOption({
+                        title: {
+                            text: '平均单次看手机时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgLookPhoneDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart5.hideLoading();
+                    myChart5.setOption({
+                        title: {
+                            text: '平均单次看电脑电视时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgLookTvComputerDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart6.hideLoading();
+                    myChart6.setOption({
+                        title: {
+                            text: '平均坐姿倾斜角度',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgSitTilt,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart7.hideLoading();
+                    myChart7.setOption({
+                        title: {
+                            text: '平均有效使用监护仪时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgUseJianhuyiDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart8.hideLoading();
+                    myChart8.setOption({
+                        title: {
+                            text: '运动时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+                                '13', '14', '15', '16', '17', '18', '19', '20', '21',
+                                '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.sportDuration,
+                            type: 'line'
+                        }]
+                    })
+
+
+                }
+            }
+
+        })
+    }
+
+
+    //季折线统计图
+    function quarterEchart() {
+        $('#weekEchart').show()
+
+        let start = moment().startOf('quarter').format('YYYY-MM-DD')
+        let end = moment().endOf('quarter').format('YYYY-MM-DD')
+
+        //初始化ECHART
+        var myChart = echarts.init(document.getElementById('main'));
+        var myChart1 = echarts.init(document.getElementById('main1'));
+        var myChart2 = echarts.init(document.getElementById('main2'));
+        var myChart3 = echarts.init(document.getElementById('main3'));
+        var myChart4 = echarts.init(document.getElementById('main4'));
+        var myChart5 = echarts.init(document.getElementById('main5'));
+        var myChart6 = echarts.init(document.getElementById('main6'));
+        var myChart7 = echarts.init(document.getElementById('main7'));
+        var myChart8 = echarts.init(document.getElementById('main8'));
+
+
+        console.log(myChart)
+        $.ajax({
+            type: 'get',
+            dataType: "json",
+            async: true,
+            cache: false,
+            url: 'http://39.106.55.72:8090/jianhuyi/useJianhuyiLog/seasonData',
+            data: {
+                userId: $('#uid').val(),
+                start: start,
+                end: end
+            },
+            success: function (result) {
+                console.log(result)
+                if (result.code == 0) {
+                    myChart.hideLoading();
+                    myChart.setOption({
+                        title: {
+                            text: '日平均单次阅读时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadDuration,
+                            type: 'line'
+                        }]
+                    });
+
+
+                    myChart1.hideLoading();
+                    myChart1.setOption({
+                        title: {
+                            text: '户外总时间',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.outdoorsDuration,
+                            type: 'line'
+                        }]
+                    });
+
+                    myChart2.hideLoading();
+                    myChart2.setOption({
+                        title: {
+                            text: '平均阅读距离',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadDistance,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart3.hideLoading();
+                    myChart3.setOption({
+                        title: {
+                            text: '平均阅读光照',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadLight,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart4.hideLoading();
+                    myChart4.setOption({
+                        title: {
+                            text: '平均单次看手机时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgLookPhoneDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart5.hideLoading();
+                    myChart5.setOption({
+                        title: {
+                            text: '平均单次看电脑电视时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgLookTvComputerDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart6.hideLoading();
+                    myChart6.setOption({
+                        title: {
+                            text: '平均坐姿倾斜角度',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgSitTilt,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart7.hideLoading();
+                    myChart7.setOption({
+                        title: {
+                            text: '平均有效使用监护仪时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgUseJianhuyiDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart8.hideLoading();
+                    myChart8.setOption({
+                        title: {
+                            text: '运动时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.sportDuration,
+                            type: 'line'
+                        }]
+                    })
+
+
+                }
+            }
+
+        })
+    }
+
+
+    //年折线统计图
+    function yearEchart() {
+        $('#weekEchart').show()
+
+        //格式化日期
+        function formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth() + 1;
+            var myweekday = date.getDate();
+
+            if (mymonth < 10) {
+                mymonth = "0" + mymonth;
+            }
+            if (myweekday < 10) {
+                myweekday = "0" + myweekday;
+            }
+            return (myyear + "-" + mymonth + "-" + myweekday);
+        }
+
+        const startDate = moment(moment().year(moment().year()).startOf('year').valueOf()).format('YYYY-MM-DD');
+        const endDate = moment(moment().year(moment().year()).endOf('year').valueOf()).format('YYYY-MM-DD');
+
+        //初始化ECHART
+        var myChart = echarts.init(document.getElementById('main'));
+        var myChart1 = echarts.init(document.getElementById('main1'));
+        var myChart2 = echarts.init(document.getElementById('main2'));
+        var myChart3 = echarts.init(document.getElementById('main3'));
+        var myChart4 = echarts.init(document.getElementById('main4'));
+        var myChart5 = echarts.init(document.getElementById('main5'));
+        var myChart6 = echarts.init(document.getElementById('main6'));
+        var myChart7 = echarts.init(document.getElementById('main7'));
+        var myChart8 = echarts.init(document.getElementById('main8'));
+
+
+        console.log(myChart)
+        $.ajax({
+            type: 'get',
+            dataType: "json",
+            async: true,
+            cache: false,
+            url: 'http://39.106.55.72:8090/jianhuyi/useJianhuyiLog/yearData',
+            data: {
+                userId: $('#uid').val(),
+                start: startDate,
+                end: endDate
+            },
+            success: function (result) {
+                console.log(result)
+                if (result.code == 0) {
+                    myChart.hideLoading();
+                    myChart.setOption({
+                        title: {
+                            text: '日平均单次阅读时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadDuration,
+                            type: 'line'
+                        }]
+                    });
+
+
+                    myChart1.hideLoading();
+                    myChart1.setOption({
+                        title: {
+                            text: '户外总时间',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.outdoorsDuration,
+                            type: 'line'
+                        }]
+                    });
+
+                    myChart2.hideLoading();
+                    myChart2.setOption({
+                        title: {
+                            text: '平均阅读距离',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadDistance,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart3.hideLoading();
+                    myChart3.setOption({
+                        title: {
+                            text: '平均阅读光照',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgReadLight,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart4.hideLoading();
+                    myChart4.setOption({
+                        title: {
+                            text: '平均单次看手机时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgLookPhoneDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart5.hideLoading();
+                    myChart5.setOption({
+                        title: {
+                            text: '平均单次看电脑电视时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgLookTvComputerDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart6.hideLoading();
+                    myChart6.setOption({
+                        title: {
+                            text: '平均坐姿倾斜角度',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgSitTilt,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart7.hideLoading();
+                    myChart7.setOption({
+                        title: {
+                            text: '平均有效使用监护仪时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.avgUseJianhuyiDuration,
+                            type: 'line'
+                        }]
+                    })
+
+                    myChart8.hideLoading();
+                    myChart8.setOption({
+                        title: {
+                            text: '运动时长',
+                            left: 'center'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.data.lineChart.sportDuration,
+                            type: 'line'
+                        }]
+                    })
+
+
+                }
+            }
+
+        })
+    }
+
+</script>
+
 </body>
 </html>

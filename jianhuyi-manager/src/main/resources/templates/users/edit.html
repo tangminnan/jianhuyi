@@ -64,6 +64,12 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-sm-3 control-label">身份证号：</label>
+								<div class="col-sm-8">
+									<input id="identityCard" name="identityCard" th:value="${user.identityCard}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-sm-3 control-label">性别：</label>
 								<div class="col-sm-8">
 									<label class="radio-inline"> <input type="radio" th:field="*{user.sex}" 
@@ -76,10 +82,69 @@
 								
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">生日：</label>
+								<label class="col-sm-3 control-label">年龄：</label>
 								<div class="col-sm-8">
-									<input id="birthday" name="birthday" th:value="${user.birthday1}"
-										class="form-control" type="text">
+									<input id="age" name="age" th:value="${user.age}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">学校：</label>
+								<div class="col-sm-8">
+									<input id="school" name="school" th:value="${user.school}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">班级：</label>
+								<div class="col-sm-8">
+									<input id="grade" name="grade" th:value="${user.grade}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">左视力：</label>
+								<div class="col-sm-8">
+									<input id="lVision" name="lVision" th:value="${user.lVision}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">右视力：</label>
+								<div class="col-sm-8">
+									<input id="rVision" name="rVision" th:value="${user.rVision}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">左眼球径：</label>
+								<div class="col-sm-8">
+									<input id="lEyeBallDiameter" name="lEyeBallDiameter" th:value="${user.lEyeBallDiameter}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">：</label>
+								<div class="col-sm-8">
+									<input id="rEyeBallDiameter" name="rEyeBallDiameter" th:value="${user.rEyeBallDiameter}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">左眼柱径：</label>
+								<div class="col-sm-8">
+									<input id="lColumnDiameter" name="lColumnDiameter" th:value="${user.lColumnDiameter}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">右眼柱径：</label>
+								<div class="col-sm-8">
+									<input id="rColumnDiameter" name="rColumnDiameter" th:value="${user.rColumnDiameter}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">左眼轴：</label>
+								<div class="col-sm-8">
+									<input id="lEyeAxis" name="lEyeAxis" th:value="${user.lEyeAxis}" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">右眼轴：</label>
+								<div class="col-sm-8">
+									<input id="rEyeAxis" name="rEyeAxis" th:value="${user.rEyeAxis}" class="form-control" type="text">
 								</div>
 							</div>
 							<!-- 

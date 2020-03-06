@@ -1,28 +1,24 @@
 package com.jianhuyi.users.controller;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.users.domain.UserDO;
 import com.jianhuyi.users.service.UserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -72,18 +68,53 @@ public class UserController{
 		model.addAttribute("user", user);
 	    return "users/edit";
 	}
-	
+	@GetMapping("/importtemplate")
+	String importtemplate(){
+		return "users/importtemplate";
+	}
+
 	/**
 	 * 保存
 	 */
 	@ResponseBody
 	@PostMapping("/save")
 	@RequiresPermissions("information:user:add")
-	public R save( UserDO user){	
+	public R save( UserDO user) throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		// 15位需要补年份
+		if (user.getIdentityCard().length() == 15) {
+			user.setBirthday(substringBir("19" + user.getIdentityCard().substring(6, 12)));
+			user.setAge(Integer.parseInt(sdf.format(new Date()))
+					- (substringAge("19" + user.getIdentityCard().substring(6, 12))));
+			// 18位直接截取7到14位
+		} else if (user.getIdentityCard().length() == 18) {
+			user.setBirthday(substringBir(user.getIdentityCard().substring(6, 14)));
+			user.setAge(
+					Integer.parseInt(sdf.format(new Date())) - (substringAge(user.getIdentityCard().substring(6, 14))));
+		}
+		user.setRegisterTime(new Date());
+		user.setDeleteFlag(1);
 		if(userService.save(user)>0){
 			return R.ok();
 		}
 		return R.error();
+	}
+
+	public Date substringBir(String day) throws ParseException {
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		String yyyy = day.substring(0, 4);
+		String mm = day.substring(4, 6);
+		String dd = day.substring(6);
+		String date1 = yyyy+"-"+mm+"-"+dd;
+		//不抛出异常会报错
+		date = format.parse(date1);
+		return date;
+	}
+
+	public Integer substringAge(String day) {
+		Integer yyyy = Integer.parseInt(day.substring(0, 4));
+		return yyyy;
 	}
 	/**
 	 * 修改
@@ -129,5 +160,13 @@ public class UserController{
 		return R.ok();
 	}
 
-
+	/**
+	 * 批量导入会员
+	 * */
+	@ResponseBody
+	@PostMapping("/importMember")
+	@RequiresPermissions("information:member:member")
+	public R importMember(MultipartFile file){
+		return userService.importMember(file);
+	}
 }
