@@ -55,4 +55,24 @@ public interface UserService {
 	List<EchartsDO> getSportDuration();
 
     R importMember(MultipartFile file);
+
+	Double avgOutdoorsDuration();
+
+	Double avgReadDistance();
+
+	Double avgReadDuration();
+
+	Double avgLookPhoneDuration();
+
+	Double avgReadLight();
+
+	Double avgLookTvComputerDuration();
+
+	Double avgSitTilt();
+
+	Double avgUseJianhuyiDuration();
+
+	Double avgSportDuration();
+
+	boolean exit(Map<String, Object> params);
 }

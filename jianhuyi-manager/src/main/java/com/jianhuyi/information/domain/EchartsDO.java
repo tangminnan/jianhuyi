@@ -13,7 +13,7 @@ public class EchartsDO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	String name;
-	Integer value;
+	Object value;
 
 	public EchartsDO(String name, Integer value) {
 		this.name = name;
@@ -28,17 +28,20 @@ public class EchartsDO implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getValue() {
+
+	public Object getValue() {
 		return value;
 	}
 
-	public void setValue(Integer value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 
 	@Override
 	public String toString() {
-		return "EchartsDO [name=" + name + ", value=" + value + "]";
+		return "EchartsDO{" +
+				"name='" + name + '\'' +
+				", value=" + value +
+				'}';
 	}
-
 }

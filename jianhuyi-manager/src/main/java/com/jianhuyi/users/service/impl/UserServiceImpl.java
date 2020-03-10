@@ -19,10 +19,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService {
@@ -74,7 +71,15 @@ public class UserServiceImpl implements UserService {
 		return userDao.selectNum();
 	}
 
+	@Override
+	public boolean exit(Map<String, Object> params) {
+			boolean exit;
+			exit = userDao.list(params).size() > 0;
+			return exit;
+
+	}
 	// 单次平均阅读时长
+
 	@Override
 	public List<EchartsDO> selectGrade() {
 		List<EchartsDO> list = new ArrayList<EchartsDO>();
@@ -88,6 +93,7 @@ public class UserServiceImpl implements UserService {
 		Integer c = 0;
 		Integer d = 0;
 		Integer e = 0;
+		Double avgReadDuration = 0.0;
 
 		if (betweenSum.size() > 0) {
 			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
@@ -107,7 +113,7 @@ public class UserServiceImpl implements UserService {
 						} else if (useJianhuyiLogDO.getReadDuration() / useJianhuyiLogDO.getNum() > 90) {
 							e++;
 						}
-
+						avgReadDuration+=useJianhuyiLogDO.getReadDuration();
 					}
 				}
 
@@ -553,11 +559,13 @@ public class UserServiceImpl implements UserService {
 							user.setIdentityCard(identityCard);
 						}
 						if(sex != null && !"".equals(sex)){
-							if(sex=="男"){
+							System.out.println("======sex==================="+sex instanceof String);
+							if(sex.equals("男")){
 								user.setSex(1);
-							}
-							if(sex=="女"){
+							}else if(sex.equals("女")){
 								user.setSex(2);
+							}else{
+								user.setSex(0);
 							}
 						}
 						if(school != null && school != ""){
@@ -605,8 +613,19 @@ public class UserServiceImpl implements UserService {
 							user.setAge(
 									Integer.parseInt(sdf.format(new Date())) - (substringAge(user.getIdentityCard().substring(6, 14))));
 						}
-
-						userDao.save(user);
+						Map<String,Object> params =  new HashMap<>();
+						params.put("identityCard",identityCard);
+						if(!exit(params)){
+							params.remove("identityCard");
+							params.put("phone",phone);
+							if(!exit(params)){
+								userDao.save(user);
+							}else{
+								continue;
+							}
+						}else{
+							continue;
+						}
 						num++;
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -637,6 +656,135 @@ public class UserServiceImpl implements UserService {
 		}
 		return R.error();
     }
+
+	@Override
+	public Double avgReadDuration() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgReadDuration = 0.0;
+		if (betweenSum.size() > 0) {
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getReadDuration() != null){
+					avgReadDuration+=useJianhuyiLogDO.getReadDuration();
+				}
+			}
+		}
+		return avgReadDuration/betweenSum.size();
+	}
+
+	@Override
+	public Double avgReadDistance() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgReadDistance = 0.0;
+		if (betweenSum.size() > 0) {
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getReadDistance() != null){
+					avgReadDistance+=useJianhuyiLogDO.getReadDistance();
+				}
+			}
+		}
+		return avgReadDistance/betweenSum.size();
+	}
+
+	@Override
+	public Double avgOutdoorsDuration() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgOutdoorsDuration = 0.0;
+		if (betweenSum.size() > 0) {
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
+					avgOutdoorsDuration+=useJianhuyiLogDO.getOutdoorsDuration();
+				}
+			}
+		}
+		return avgOutdoorsDuration;
+	}
+
+	@Override
+	public Double avgLookPhoneDuration() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgLookPhoneDuration = 0.0;
+		if (betweenSum.size() > 0) {
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
+					avgLookPhoneDuration+=useJianhuyiLogDO.getLookPhoneDuration();
+				}
+			}
+		}
+		return avgLookPhoneDuration/betweenSum.size();
+	}
+
+	@Override
+	public Double avgReadLight() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgReadLight = 0.0;
+		if (betweenSum.size() > 0) {
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getReadLight() != null){
+					avgReadLight+=useJianhuyiLogDO.getReadLight();
+				}
+			}
+		}
+		return avgReadLight/betweenSum.size();
+	}
+
+	@Override
+	public Double avgLookTvComputerDuration() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgLookTvComputerDuration = 0.0;
+		if (betweenSum.size() > 0) {
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
+					avgLookTvComputerDuration+=useJianhuyiLogDO.getLookTvComputerDuration();
+				}
+			}
+		}
+		return avgLookTvComputerDuration/betweenSum.size();
+	}
+
+	@Override
+	public Double avgSitTilt() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgSitTilt = 0.0;
+		if (betweenSum.size() > 0) {
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getSitTilt() != null){
+					avgSitTilt+=useJianhuyiLogDO.getSitTilt();
+				}
+			}
+		}
+		return avgSitTilt/betweenSum.size();
+	}
+
+	@Override
+	public Double avgUseJianhuyiDuration() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgUseJianhuyiDuration = 0.0;
+		if (betweenSum.size() > 0) {
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
+					avgUseJianhuyiDuration+=useJianhuyiLogDO.getUseJianhuyiDuration();
+				}
+			}
+		}
+		return avgUseJianhuyiDuration;
+	}
+
+	@Override
+	public Double avgSportDuration() {
+		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
+		Double avgSportDuration = 0.0;
+		if (betweenSum.size() > 0) {
+
+			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
+				if(useJianhuyiLogDO.getSportDuration() != null){
+					avgSportDuration+=useJianhuyiLogDO.getSportDuration();
+				}
+			}
+		}
+		return avgSportDuration;
+	}
+
+
 
 	public Date substringBir(String day) throws ParseException {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");

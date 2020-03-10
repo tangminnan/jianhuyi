@@ -42,7 +42,20 @@ function validateRule() {
             identityCard:{
                 required : true,
                 isIdCardNo:true
-			}
+			},
+            phone:{
+                required : true,
+                remote : {
+                    url : "/information/users/exit", // 后台处理程序
+                    type : "post", // 数据发送方式
+                    dataType : "json", // 接受数据格式
+                    data : { // 要传递的数据
+                        phone : function() {
+                            return $("#phone").val();
+                        }
+                    }
+                }
+            }
 		},
 		messages : {
 			name : {
@@ -51,6 +64,10 @@ function validateRule() {
             identityCard:{
                 required : icon + "请输入身份证号",
                 isIdCardNo:"请输入正确身份证号"
+            },
+            phone:{
+                required : icon + "请输入手机号",
+                remote:icon + "手机号已存在"
             }
 		}
 	})

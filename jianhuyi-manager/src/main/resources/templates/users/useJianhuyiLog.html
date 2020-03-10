@@ -44,59 +44,101 @@
                 <table id="exampleTable" data-mobile-responsive="true">
                 </table>
                 <div id="weekEchart" style="display: none">
-                    <div id="main" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
-                    <div id="main1" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
-                    <div id="main2" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div1"></span><br>
+                            <span id="span1" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main" style="width: 600px;height:400px;"></div>
+                    </div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div2"></span><br>
+                            <span id="span2" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main1" style="width: 600px;height:400px;"></div>
+                    </div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div3"></span><br>
+                            <span id="span3" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main2" style="width: 600px;height:400px;"></div>
+                    </div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div4"></span><br>
+                            <span id="span4" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main3" style="width: 600px;height:400px;"></div>
+                    </div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div5"></span><br>
+                            <span id="span5" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main4" style="width: 600px;height:400px;"></div>
+                    </div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div6"></span><br>
+                            <span id="span6" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main5" style="width: 600px;height:400px;"></div>
+                    </div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div7"></span><br>
+                            <span id="span7" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main6" style="width: 600px;height:400px;"></div>
+                    </div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div8"></span><br>
+                            <span id="span8" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main7" style="width: 600px;height:400px;"></div>
+                    </div>
 
-                    <div id="main3" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
-                    <div id="main4" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
-                    <div id="main5" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
+                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
+                        <div style="float: right">
+                            <span id="div9"></span><br>
+                            <span id="span9" style="float: right;padding-right: 50px;color: red">优</span>
+                        </div>
+                        <div class="echarts" id="main8" style="width: 600px;height:400px;"></div>
+                    </div>
 
-                    <div id="main6" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
-                    <div id="main7" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
-
-                    <div id="main8" class="col-sm-3"
-                         style="width: 600px;height:400px;margin:100px 10px 50px 40px;"></div>
                 </div>
-
             </div>
         </div>
+
     </div>
 
-</div>
 
-
-<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
-<div>
-    <script type="text/javascript">
-        var s_edit_h = 'hidden';
-        var s_remove_h = 'hidden';
-        var s_resetPwd_h = 'hidden';
-    </script>
-</div>
-<div shiro:hasPermission="information:useJianhuyiLog:edit">
-    <script type="text/javascript">
-        s_edit_h = '';
-    </script>
-</div>
-<div shiro:hasPermission="information:useJianhuyiLog:remove">
-    <script type="text/javascript">
-        var s_remove_h = '';
-    </script>
-</div>
-<div shiro:hasPermission="information:useJianhuyiLog:resetPwd">
-    <script type="text/javascript">
-        var s_resetPwd_h = '';
-    </script>
-</div>
+    <!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+    <div>
+        <script type="text/javascript">
+            var s_edit_h = 'hidden';
+            var s_remove_h = 'hidden';
+            var s_resetPwd_h = 'hidden';
+        </script>
+    </div>
+    <div shiro:hasPermission="information:useJianhuyiLog:edit">
+        <script type="text/javascript">
+            s_edit_h = '';
+        </script>
+    </div>
+    <div shiro:hasPermission="information:useJianhuyiLog:remove">
+        <script type="text/javascript">
+            var s_remove_h = '';
+        </script>
+    </div>
+    <div shiro:hasPermission="information:useJianhuyiLog:resetPwd">
+        <script type="text/javascript">
+            var s_resetPwd_h = '';
+        </script>
+    </div>
 </div>
 <div th:include="include :: footer"></div>
 <script type="text/javascript" src="/js/appjs/users/useJianhuyiLog.js"></script>
@@ -152,6 +194,97 @@
             success: function (result) {
                 console.log(result)
                 if (result.code == 0) {
+                    $('#div1')[0].innerText = '总平均' + result.data.totalAvgReadDuration + '分钟';
+                    if (result.data.totalAvgReadDuration >= 20) {
+                        $('#span1')[0].innerText = '优';
+                    } else if (result.data.totalAvgReadDuration > 20 && result.data.totalAvgReadDuration <= 40) {
+                        $('#span1')[0].innerText = '良';
+                    } else if (result.data.totalAvgReadDuration > 40 && result.data.totalAvgReadDuration <= 90) {
+                        $('#span1')[0].innerText = '差';
+                    } else if(result.data.totalAvgReadDuration >90){
+                        $('#span1')[0].innerText = '极差';
+                    }
+                    $('#div2')[0].innerText = '总平均' + result.data.totalAvgOutdoorsDuration + '小时';
+                    if (result.data.totalAvgOutdoorsDuration >= 2) {
+                        $('#span2')[0].innerText = '优';
+                    } else if (result.data.totalAvgOutdoorsDuration >= 1 && result.data.totalAvgOutdoorsDuration < 2) {
+                        $('#span2')[0].innerText = '良';
+                    } else if (result.data.totalAvgOutdoorsDuration >= 0.5 && result.data.totalAvgOutdoorsDuration < 1) {
+                        $('#span2')[0].innerText = '差';
+                    } else if(result.data.totalAvgOutdoorsDuration <0.5){
+                        $('#span2')[0].innerText = '极差';
+                    }
+                    $('#div3')[0].innerText = '总平均' + result.data.totalAvgReadDistance + '厘米';
+                    if (result.data.totalAvgReadDistance >= 33) {
+                        $('#span3')[0].innerText = '优';
+                    } else if (result.data.totalAvgReadDistance >= 30 && result.data.totalAvgReadDistance < 33) {
+                        $('#span3')[0].innerText = '良';
+                    } else if (result.data.totalAvgReadDistance > 20 && result.data.totalAvgReadDistance <= 30) {
+                        $('#span3')[0].innerText = '差';
+                    } else if(result.data.totalAvgReadDistance <20){
+                        $('#span3')[0].innerText = '极差';
+                    }
+                    $('#div4')[0].innerText = '总平均' + result.data.totalAvgReadLight + 'lux';
+                    if (result.data.totalAvgReadLight >= 300) {
+                        $('#span4')[0].innerText = '优';
+                    } else if (result.data.totalAvgReadLight >= 250 && result.data.totalAvgReadLight < 300) {
+                        $('#span4')[0].innerText = '良';
+                    } else if (result.data.totalAvgReadLight >= 200 && result.data.totalAvgReadLight < 250) {
+                        $('#span4')[0].innerText = '差';
+                    } else if(result.data.totalAvgReadLight <200){
+                        $('#span4')[0].innerText = '极差';
+                    }
+                    $('#div5')[0].innerText = '总平均' + result.data.totalAvgLookPhoneDuration + '分钟';
+                    if (result.data.totalAvgLookPhoneDuration >= 10) {
+                        $('#span5')[0].innerText = '优';
+                    } else if (result.data.totalAvgLookPhoneDuration > 10 && result.data.totalAvgLookPhoneDuration <= 20) {
+                        $('#span5')[0].innerText = '良';
+                    } else if (result.data.totalAvgLookPhoneDuration > 20 && result.data.totalAvgLookPhoneDuration <= 40) {
+                        $('#span5')[0].innerText = '差';
+                    } else if(result.data.totalAvgLookPhoneDuration >40){
+                        $('#span5')[0].innerText = '极差';
+                    }
+                    $('#div6')[0].innerText = '总平均' + result.data.totalAvgLookTvComputerDuration + '分钟';
+                    if (result.data.totalAvgLookTvComputerDuration >= 20) {
+                        $('#span6')[0].innerText = '优';
+                    } else if (result.data.totalAvgLookTvComputerDuration > 20 && result.data.totalAvgLookTvComputerDuration <= 40) {
+                        $('#span6')[0].innerText = '良';
+                    } else if (result.data.totalAvgLookTvComputerDuration > 40 && result.data.totalAvgLookTvComputerDuration <= 60) {
+                        $('#span6')[0].innerText = '差';
+                    } else if(result.data.totalAvgLookTvComputerDuration >60){
+                        $('#span6')[0].innerText = '极差';
+                    }
+                    $('#div7')[0].innerText = '总平均' + result.data.totalAvgSitTilt + '°';
+                    if (result.data.totalAvgSitTilt >= 5) {
+                        $('#span7')[0].innerText = '优';
+                    } else if (result.data.totalAvgSitTilt > 5 && result.data.totalAvgSitTilt <= 10) {
+                        $('#span7')[0].innerText = '良';
+                    } else if (result.data.totalAvgSitTilt > 10 && result.data.totalAvgSitTilt <= 15) {
+                        $('#span7')[0].innerText = '差';
+                    } else if(result.data.totalAvgSitTilt > 15){
+                        $('#span7')[0].innerText = '极差';
+                    }
+                    $('#div8')[0].innerText = '总平均' + result.data.totalAvgUseJianhuyiDuration + '小时';
+                    if (result.data.totalAvgUseJianhuyiDuration >= 10) {
+                        $('#span8')[0].innerText = '优';
+                    } else if (result.data.totalAvgUseJianhuyiDuration >= 8 && result.data.totalAvgUseJianhuyiDuration < 10) {
+                        $('#span8')[0].innerText = '良';
+                    } else if (result.data.totalAvgUseJianhuyiDuration >= 5 && result.data.totalAvgUseJianhuyiDuration < 8) {
+                        $('#span8')[0].innerText = '差';
+                    } else if(result.data.totalAvgUseJianhuyiDuration < 5){
+                        $('#span8')[0].innerText = '极差';
+                    }
+                    $('#div9')[0].innerText = '总平均' + result.data.totalAvgSportDuration + '小时';
+                    if (result.data.totalAvgSportDuration >= 2) {
+                        $('#span9')[0].innerText = '优';
+                    } else if (result.data.totalAvgSportDuration >= 1 && result.data.totalAvgSportDuration < 2) {
+                        $('#span9')[0].innerText = '良';
+                    } else if (result.data.totalAvgSportDuration >= 0.5 && result.data.totalAvgSportDuration < 1) {
+                        $('#span9')[0].innerText = '差';
+                    } else if(result.data.totalAvgSportDuration < 0.5){
+                        $('#span9')[0].innerText = '极差';
+                    }
+
                     myChart.hideLoading();
                     myChart.setOption({
                         title: {
@@ -167,15 +300,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 120,
-                            splitNumber : 4
+                            name: '分钟',
+                            max: 120,
+                            splitNumber: 4
                         },
                         series: [{
                             data: result.data.lineChart.avgReadDuration,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:20}
+                                    {xAxis: 0, yAxis: 20}
                                 ]
                             },
                             type: 'line'
@@ -188,6 +322,7 @@
                         title: {
                             text: '户外总时间',
                             left: 'center'
+
                         },
                         tooltip: {
                             trigger: 'axis'
@@ -198,15 +333,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 150,
-                            splitNumber : 3
+                            max: 150,
+                            name: '小时',
+                            splitNumber: 3
                         },
                         series: [{
                             data: result.data.lineChart.outdoorsDuration,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:2}
+                                    {xAxis: 0, yAxis: 2}
                                 ]
                             },
                             type: 'line'
@@ -228,15 +364,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 50,
-                            splitNumber : 5
+                            max: 50,
+                            name: '厘米',
+                            splitNumber: 5
                         },
                         series: [{
                             data: result.data.lineChart.avgReadDistance,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:33}
+                                    {xAxis: 0, yAxis: 33}
                                 ]
                             },
                             type: 'line'
@@ -258,15 +395,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 500,
-                            splitNumber : 5
+                            max: 500,
+                            name: 'lux',
+                            splitNumber: 5
                         },
                         series: [{
                             data: result.data.lineChart.avgReadLight,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:300}
+                                    {xAxis: 0, yAxis: 300}
                                 ]
                             },
                             type: 'line'
@@ -288,15 +426,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 50,
-                            splitNumber : 5
+                            max: 50,
+                            name: '分钟',
+                            splitNumber: 5
                         },
                         series: [{
                             data: result.data.lineChart.avgLookPhoneDuration,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:10}
+                                    {xAxis: 0, yAxis: 10}
                                 ]
                             },
                             type: 'line'
@@ -318,15 +457,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 80,
-                            splitNumber : 8
+                            max: 80,
+                            name: '分钟',
+                            splitNumber: 8
                         },
                         series: [{
                             data: result.data.lineChart.avgLookTvComputerDuration,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:20}
+                                    {xAxis: 0, yAxis: 20}
                                 ]
                             },
                             type: 'line'
@@ -348,15 +488,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 100,
-                            splitNumber : 5
+                            max: 100,
+                            name: '°',
+                            splitNumber: 5
                         },
                         series: [{
                             data: result.data.lineChart.avgSitTilt,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:5}
+                                    {xAxis: 0, yAxis: 5}
                                 ]
                             },
                             type: 'line'
@@ -378,15 +519,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 30,
-                            splitNumber : 5
+                            max: 30,
+                            name: '小时',
+                            splitNumber: 5
                         },
                         series: [{
                             data: result.data.lineChart.avgUseJianhuyiDuration,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:10}
+                                    {xAxis: 0, yAxis: 10}
                                 ]
                             },
                             type: 'line'
@@ -408,15 +550,16 @@
                         },
                         yAxis: {
                             type: 'value',
-                            max : 10,
-                            splitNumber : 5
+                            max: 10,
+                            name: '小时',
+                            splitNumber: 5
                         },
                         series: [{
                             data: result.data.lineChart.sportDuration,
                             markLine: {
-                                label:'标准线',
+                                label: '标准线',
                                 data: [
-                                    {xAxis:0, yAxis:2}
+                                    {xAxis: 0, yAxis: 2}
                                 ]
                             },
                             type: 'line'

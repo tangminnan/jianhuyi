@@ -54,6 +54,12 @@ public class UserController{
 		PageUtils pageUtils = new PageUtils(userList, total);
 		return pageUtils;
 	}
+	@PostMapping("/exit")
+	@ResponseBody
+	boolean exit(@RequestParam Map<String, Object> params) {
+		// 存在，不通过，false
+		return !userService.exit(params);
+	}
 	
 	@GetMapping("/add")
 	@RequiresPermissions("information:user:add")
@@ -165,7 +171,6 @@ public class UserController{
 	 * */
 	@ResponseBody
 	@PostMapping("/importMember")
-	@RequiresPermissions("information:member:member")
 	public R importMember(MultipartFile file){
 		return userService.importMember(file);
 	}

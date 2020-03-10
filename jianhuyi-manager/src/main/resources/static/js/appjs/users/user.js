@@ -212,26 +212,39 @@ function load() {
                         }
                     },
 
-                    {
-                        title: '操作',
-                        field: 'id',
-                        align: 'center',
-                        formatter: function (value, row, index) {
 
-                            var e = '<a class="btn btn-primary btn-sm ' + s_edit_h + '" href="#" mce_href="#" title="编辑" onclick="edit(\''
-                                + row.id
-                                + '\')"><i class="fa fa-edit"></i></a> ';
-                            var d = '<a class="btn btn-warning btn-sm ' + s_remove_h + '" href="#" title="状态"  mce_href="#" onclick="remove(\''
-                                + row.id
-                                + '\')"><i class="fa fa-remove"></i></a> ';
-                            var f = '<a class="btn btn-success btn-sm" title="详情"  mce_href="#" onclick="showdetail(\''
-                                + row.id
-                                + '\')"><i class="fa fa-list"></i></a> ';
-                            return e + d + f;
 
-                        }
-                    }]
-            });
+
+
+    {
+        title: '操作',
+            field
+    :
+        'id',
+            align
+    :
+        'center',
+            formatter
+    :
+
+        function (value, row, index) {
+
+            var e = '<a class="btn btn-primary btn-sm ' + s_edit_h + '" href="#" mce_href="#" title="编辑" onclick="edit(\''
+                + row.id
+                + '\')"><i class="fa fa-edit"></i></a> ';
+            var d = '<a class="btn btn-warning btn-sm ' + s_remove_h + '" href="#" title="状态"  mce_href="#" onclick="remove(\''
+                + row.id
+                + '\')"><i class="fa fa-remove"></i></a> ';
+            var f = '<a class="btn btn-success btn-sm" title="详情"  mce_href="#" onclick="showdetail(\''
+                + row.id
+                + '\')"><i class="fa fa-list"></i></a> ';
+            return e + d + f;
+
+        }
+    }
+]
+})
+    ;
 }
 
 function reLoad() {
@@ -249,7 +262,7 @@ function add() {
     });
 }
 
-function batchAdd(){
+function batchAdd() {
     layer.open({
         type: 2,
         title: '批量导入',
@@ -259,6 +272,7 @@ function batchAdd(){
         content: prefix + '/importtemplate' // iframe的url
     });
 }
+
 function details(id) {
     layer.open({
         type: 2,
@@ -279,6 +293,33 @@ function edit(id) {
         shadeClose: false, // 点击遮罩关闭层
         area: ['800px', '520px'],
         content: prefix + '/edit/' + id // iframe的url
+    });
+}
+
+function daoru() {
+    var formData = new FormData(document.getElementById("signupForm"));
+    $.ajax({
+        cache: true,
+        type: "POST",
+        url: prefix + "/importMember",
+        data: formData,// 你的formid
+        processData: false,
+        contentType: false,
+        async: false,
+        error: function (request) {
+            parent.layer.alert("网络超时");
+        },
+        success: function (data) {
+            if (data.code == 0) {
+                parent.layer.msg(data.msg);
+                parent.reLoad();
+                var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                parent.layer.close(index);
+            } else {
+                parent.layer.alert(data.msg)
+            }
+
+        }
     });
 }
 
