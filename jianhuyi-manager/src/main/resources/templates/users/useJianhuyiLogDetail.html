@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div class="fixed-table-toolbar">
+                    <div class="columns pull-right">
+                        <button class="btn btn-success" onclick="reLoad()">查询</button>
+                    </div>
+                    <div class="columns pull-right col-md-2 nopadding ">
+                        <input id="endTime" name="endTime" class="form-control" placeholder="结束时间：" type="text">
+                    </div>
+                    <div class="columns pull-right col-md-2 nopadding">
+                        <input id="startTime" name="startTime" class="form-control" placeholder="开始时间：" type="text">
+                    </div>
+
+
+                        <input id="userId" type="hidden" class="form-control" th:value="${userId}"
+                            placeholder="">
+                        <input id="saveTime" type="hidden" class="form-control" th:value="${saveTime}"
+                           placeholder="">
+
+                </div>
+                <table id="exampleTable" data-mobile-responsive="true">
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+    <div>
+        <script type="text/javascript">
+            var s_edit_h = 'hidden';
+            var s_remove_h = 'hidden';
+            var s_resetPwd_h = 'hidden';
+        </script>
+    </div>
+    <div shiro:hasPermission="information:useJianhuyiLog:edit">
+        <script type="text/javascript">
+            s_edit_h = '';
+        </script>
+    </div>
+    <div shiro:hasPermission="information:useJianhuyiLog:remove">
+        <script type="text/javascript">
+            var s_remove_h = '';
+        </script>
+    </div>
+    <div shiro:hasPermission="information:useJianhuyiLog:resetPwd">
+        <script type="text/javascript">
+            var s_resetPwd_h = '';
+        </script>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script type="text/javascript" src="/js/appjs/users/useJianhuyiLogDetail.js"></script>
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+<script src="/js/echarts/echarts-all.js"></script>
+<script type="text/javascript" src="/js/moment.js"></script>
+<script type="text/javascript" src="/js/moment.min.js"></script>
+<script type="text/javascript">
+
+    laydate.render({
+        elem: '#startTime',
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#endTime',
+        type: 'datetime'
+    });
+
+
+
+</script>
+
+</body>
+</html>

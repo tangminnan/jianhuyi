@@ -17,18 +17,18 @@ import com.jianhuyi.information.domain.VersionUpdateDO;
 public interface VersionUpdateDao {
 
 	VersionUpdateDO get(Long id);
-	
-	List<VersionUpdateDO> list(Map<String,Object> map);
-	
-	int count(Map<String,Object> map);
-	
+
+	List<VersionUpdateDO> list(Map<String, Object> map);
+
+	int count(Map<String, Object> map);
+
 	int save(VersionUpdateDO versionUpdate);
-	
+
 	int update(VersionUpdateDO versionUpdate);
-	
+
 	int remove(Long id);
-	
+
 	int batchRemove(Long[] ids);
 
-	VersionUpdateDO versionCheck();
+	VersionUpdateDO versionCheck(Integer type);
 }

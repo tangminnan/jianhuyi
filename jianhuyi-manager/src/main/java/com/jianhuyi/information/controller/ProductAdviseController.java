@@ -1,25 +1,19 @@
 package com.jianhuyi.information.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.information.domain.ProductAdviseDO;
 import com.jianhuyi.information.service.ProductAdviseService;
+import com.jianhuyi.users.service.UserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -35,6 +29,8 @@ import com.jianhuyi.information.service.ProductAdviseService;
 public class ProductAdviseController {
 	@Autowired
 	private ProductAdviseService productAdviseService;
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping()
 	@RequiresPermissions("information:productAdvise:productAdvise")
@@ -49,6 +45,13 @@ public class ProductAdviseController {
 		//查询列表数据
         Query query = new Query(params);
 		List<ProductAdviseDO> productAdviseList = productAdviseService.list(query);
+
+		for (ProductAdviseDO productAdviseDO : productAdviseList) {
+			if(productAdviseDO.getUserId() != null ){
+				productAdviseDO.setUsersname(userService.get(productAdviseDO.getUserId()).getName());
+			}
+		}
+		System.out.println("==========productAdviseList======================="+productAdviseList);
 		int total = productAdviseService.count(query);
 		PageUtils pageUtils = new PageUtils(productAdviseList, total);
 		return pageUtils;

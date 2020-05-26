@@ -1,9 +1,9 @@
 package com.jianhuyi.owneruser.domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户信息表
@@ -353,6 +353,35 @@ public class OwnerUserDO implements Serializable {
 	public void setFileImg(MultipartFile fileImg) {
 		this.fileImg = fileImg;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "OwnerUserDO{" +
+				"id=" + id +
+				", userId=" + userId +
+				", openId='" + openId + '\'' +
+				", nickname='" + nickname + '\'' +
+				", password='" + password + '\'' +
+				", phone='" + phone + '\'' +
+				", heardUrl='" + heardUrl + '\'' +
+				", fileImg=" + fileImg +
+				", name='" + name + '\'' +
+				", identityCard='" + identityCard + '\'' +
+				", registerTime=" + registerTime +
+				", payNum=" + payNum +
+				", serveNum=" + serveNum +
+				", balance=" + balance +
+				", restitution=" + restitution +
+				", payTime=" + payTime +
+				", loginTime=" + loginTime +
+				", addTime=" + addTime +
+				", updateTime=" + updateTime +
+				", deleteFlag=" + deleteFlag +
+				", username='" + username + '\'' +
+				", sex=" + sex +
+				", birthday=" + birthday +
+				", flag=" + flag +
+				", unionid='" + unionid + '\'' +
+				'}';
+	}
 }

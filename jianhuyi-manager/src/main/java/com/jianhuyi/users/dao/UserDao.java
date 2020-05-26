@@ -1,13 +1,13 @@
 package com.jianhuyi.users.dao;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
-
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.users.domain.UserDO;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户信息表
@@ -39,4 +39,7 @@ public interface UserDao {
 
 	List<UseJianhuyiLogDO> queryUserRecordBetweenSum();
 
+    List<UseJianhuyiLogDO> selectLastUse();
+
+	UseJianhuyiLogDO getUseDay(@Param("saveTime") String saveTime, @Param("userId") Integer userId);
 }

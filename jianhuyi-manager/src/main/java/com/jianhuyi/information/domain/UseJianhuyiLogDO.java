@@ -21,6 +21,11 @@ public class UseJianhuyiLogDO implements Serializable {
 	private Integer userId;
 	//添加时间
 	private Date addTime;
+	//开始时间
+	private String saveTime;
+	//设备号
+	private String equipmentId;
+
 	private Date startTime;
 	private Date endTime;
 	//阅读时长(分钟）
@@ -33,8 +38,12 @@ public class UseJianhuyiLogDO implements Serializable {
 	private Double readLight;
 	//看手机时长(分钟)
 	private Double lookPhoneDuration;
+	//看手机次数
+	private Integer lookPhoneCount;
 	//看电脑电视时长(分钟）
 	private Double lookTvComputerDuration;
+	//看电脑电视次数
+	private Integer lookTvComputerCount;
 	//坐姿倾斜度
 	private Double sitTilt;
 	//使用监护仪时长(小时）
@@ -53,8 +62,59 @@ public class UseJianhuyiLogDO implements Serializable {
 	private String year;
 	
 	private Integer num;
-	
-	
+
+	private String day;
+
+	private Integer status;
+
+	public Integer getLookPhoneCount() {
+		return lookPhoneCount;
+	}
+
+	public void setLookPhoneCount(Integer lookPhoneCount) {
+		this.lookPhoneCount = lookPhoneCount;
+	}
+
+	public Integer getLookTvComputerCount() {
+		return lookTvComputerCount;
+	}
+
+	public void setLookTvComputerCount(Integer lookTvComputerCount) {
+		this.lookTvComputerCount = lookTvComputerCount;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getEquipmentId() {
+		return equipmentId;
+	}
+
+	public void setEquipmentId(String equipmentId) {
+		this.equipmentId = equipmentId;
+	}
+
+	public String getSaveTime() {
+		return saveTime;
+	}
+
+	public void setSaveTime(String saveTime) {
+		this.saveTime = saveTime;
+	}
+
 	public Integer getNum() {
 		return num;
 	}

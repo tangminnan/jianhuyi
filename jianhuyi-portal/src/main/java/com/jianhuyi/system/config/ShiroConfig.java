@@ -87,6 +87,7 @@ public class ShiroConfig {
 		filterChainDefinitionMap.put("/wangjimima", "anon");
 		filterChainDefinitionMap.put("/jiaofei/wuye/notifycallback", "anon");
 		filterChainDefinitionMap.put("/", "anon");
+        filterChainDefinitionMap.put("/common/generator", "anon");
 		filterChainDefinitionMap.put("/blog", "anon");
 		filterChainDefinitionMap.put("/blog/open/**", "anon");
 		filterChainDefinitionMap.put("/**", "anon");

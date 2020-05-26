@@ -21,8 +21,8 @@
 							<button class="btn btn-success" onclick="reLoad()">查询</button>
 						</div>
 						<div class="columns pull-right col-md-2 nopadding">
-							<input id="searchName" type="text" class="form-control"
-								placeholder="">
+							<input id="addTime" type="text" class="form-control"
+								placeholder="添加日期">
 						</div>
 					</div>
 					<table id="exampleTable" data-mobile-responsive="true">
@@ -57,5 +57,12 @@
 	</div>
 	<div th:include="include :: footer"></div>
 	<script type="text/javascript" src="/js/appjs/information/productAdvise/productAdvise.js"></script>
+
+	<script type="text/javascript">
+        laydate.render({
+            elem: '#addTime',
+            type: 'date'
+        });
+	</script>
 </body>
 </html>

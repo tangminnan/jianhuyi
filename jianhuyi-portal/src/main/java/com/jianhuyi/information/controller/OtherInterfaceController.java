@@ -1,35 +1,13 @@
 package com.jianhuyi.information.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.alibaba.fastjson.JSON;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
-import com.aliyuncs.http.FormatType;
-import com.aliyuncs.ivision.model.v20190308.CreateTrainDatasFromUrlsRequest;
-import com.aliyuncs.ivision.model.v20190308.CreateTrainDatasFromUrlsResponse;
-import com.aliyuncs.ivision.model.v20190308.PredictImageRequest;
-import com.aliyuncs.ivision.model.v20190308.PredictImageResponse;
-import com.aliyuncs.profile.DefaultProfile;
-import com.jianhuyi.common.utils.OBSUtils;
 
 @RestController
 @RequestMapping("/jianhuyi/wangyi")
 public class OtherInterfaceController {
 	
-	static String accessKeyId = "LTAI4FwreKXfeqwD5rxv4dX5";
+	/*static String accessKeyId = "LTAI4FwreKXfeqwD5rxv4dX5";
 	static String accessKeySecret = "ki6wo7qTsQVrBtARp2wUWzdl9Kob05";
 
 	static String projectId = "db6d679ba50b4a898631b2a081ad694f";
@@ -51,7 +29,7 @@ public class OtherInterfaceController {
 	// 将oss文件添加到训练集
 	@PostMapping("/createTrainDataFromUrls")
 	Map<String, Object> CreateTrainDataFromUrls(MultipartFile dataUrls){
-		String dataUrls2 = OBSUtils.uploadFile(dataUrls);
+		String dataUrls2 = OBSUtils.uploadFile(dataUrls,"");
 		IAcsClient client = getAscClient();
 		Map<String, Object> map = new HashMap<>();
 		List<Object> list = new ArrayList<Object>();
@@ -112,13 +90,13 @@ public class OtherInterfaceController {
 	
 	
 	public static void main(String[] args) {
-		/*IAcsClient client = getAscClient();
+		*//*IAcsClient client = getAscClient();
 		DescribeProjects(client);
 		CreateTrainDataFromUrls(client);
 		DescribeTrainDatas(client);
 		DescribeIterations(client);
-		PredictImage(client, dataUrls);*/
-	}
+		PredictImage(client, dataUrls);*//*
+	}*/
 	
 
 }

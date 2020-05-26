@@ -1,33 +1,22 @@
 package com.jianhuyi.carousel.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.jianhuyi.carousel.domain.BannerDO;
 import com.jianhuyi.carousel.service.BannerService;
 import com.jianhuyi.common.config.BootdoConfig;
 import com.jianhuyi.common.controller.BaseController;
-import com.jianhuyi.common.utils.FileUtil;
-import com.jianhuyi.common.utils.OBSUtils;
-import com.jianhuyi.common.utils.PageUtils;
-import com.jianhuyi.common.utils.Query;
-import com.jianhuyi.common.utils.R;
+import com.jianhuyi.common.utils.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 轮播图
@@ -110,7 +99,7 @@ public class BannerController extends BaseController {
 			return R.error("最多显示5张轮播图!");
 		}
 		
-		String fileName = OBSUtils.uploadFile(sysFile.getImgFile());
+		String fileName = OBSUtils.uploadFile(sysFile.getImgFile(),"jianhuyi/banner/");
 		/*String fileName = sysFile.getImgFile().getOriginalFilename();
 		fileName = FileUtil.renameToUUID(fileName);
 		try {
@@ -161,7 +150,7 @@ public class BannerController extends BaseController {
 	public R update( BannerDO sysFile) {
 		System.out.println("================");
 		if(sysFile.getImgFile() != null && sysFile.getImgFile().getSize() > 0){
-			String fileName = OBSUtils.uploadFile(sysFile.getImgFile());
+			String fileName = OBSUtils.uploadFile(sysFile.getImgFile(),"jianhuyi/banner/");
 			/*String fileName = sysFile.getImgFile().getOriginalFilename();
 			fileName = FileUtil.renameToUUID(fileName);
 			try {

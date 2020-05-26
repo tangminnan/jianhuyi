@@ -54,8 +54,11 @@
         </div>
     </div>
 
+    <div class="col-sm-12">
+        <h1 style="text-align: center;margin: 40px auto">用户最后一日使用监护仪平均统计数据</h1>
+    </div>
     <!--=============================平均单次阅读时长柱形图===================================================-->
-    <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+    <div class="col-sm-4" style="margin: 0px 40px 40px 150px;">
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div style="margin: 0 auto;float: right">
@@ -67,7 +70,7 @@
     </div>
 
     <!--=============================户外总时长===================================================-->
-    <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
+    <div class="col-sm-4" style="margin: 0px 40px 40px 180px;">
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div style="margin: 0 auto;float: right">
@@ -95,7 +98,7 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div style="margin: 0 auto;float: right">
-                    <span th:text="'平均阅读光照: '+${#numbers.formatDecimal(avgReadLight,1,'COMMA',2,'POINT')}"></span>
+                    <span th:text="'平均阅读光照: '+${#numbers.formatDecimal(avgReadLight,1,'COMMA',2,'POINT')+'lux'}"></span>
                 </div>
                 <div class="echarts" id="echarts-bar-chart3"></div>
             </div>
@@ -128,7 +131,7 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div style="margin: 0 auto;float: right">
-                    <span th:text="'平均坐姿倾斜度: '+${#numbers.formatDecimal(avgSitTilt,1,'COMMA',2,'POINT')}"></span>
+                    <span th:text="'平均坐姿倾斜度: '+${#numbers.formatDecimal(avgSitTilt,1,'COMMA',2,'POINT')+'°'}"></span>
                 </div>
                 <div class="echarts" id="echarts-bar-chart6"></div>
             </div>
@@ -156,6 +159,8 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="useJianhuyiLogDOList" th:value="${useJianhuyiLogDOList}">
+
 </div>
 </div>
 </body>
@@ -177,11 +182,15 @@
 
     barChart.showLoading();
     $.ajax({
+        type:'post',
         url: '/getReadDuration',
-        async: true,
+        async: false,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
+            console.log(result)
             if (result) {
                 barChart.hideLoading();
                 barChart.setOption({
@@ -200,7 +209,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
@@ -239,9 +248,12 @@
 
     barChart1.showLoading();
     $.ajax({
+        type:'post',
         url: '/getOutdoorsDuration',
-        async: true,
+        async: false,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
             if (result) {
@@ -262,7 +274,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
@@ -301,9 +313,12 @@
 
     barChart2.showLoading();
     $.ajax({
+        type:'post',
         url: '/getReadDistance',
         async: true,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
             if (result) {
@@ -324,7 +339,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
@@ -363,8 +378,11 @@
     barChart3.showLoading();
     $.ajax({
         url: '/getReadLight',
+        type:'post',
         async: true,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
             if (result) {
@@ -385,7 +403,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
@@ -425,15 +443,18 @@
     barChart4.showLoading();
     $.ajax({
         url: '/getLookPhoneDuration',
+        type:'post',
         async: true,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
             if (result) {
                 barChart4.hideLoading();
                 barChart4.setOption({
                     title: {
-                        text: '平均单次看手机时长',
+                        text: '平均看手机时长',
                         left: 'center'
                     },
                     tooltip: {
@@ -447,7 +468,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
@@ -489,8 +510,11 @@
     barChart5.showLoading();
     $.ajax({
         url: '/getLookTvComputerDuration',
+        type:'post',
         async: true,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
             if (result) {
@@ -511,7 +535,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
@@ -549,8 +573,11 @@
     barChart6.showLoading();
     $.ajax({
         url: '/getSitTilt',
+        type:'post',
         async: true,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
             if (result) {
@@ -571,7 +598,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
@@ -609,8 +636,11 @@
     barChart7.showLoading();
     $.ajax({
         url: '/getUseJianhuyiDuration',
+        type:'post',
         async: true,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
             if (result) {
@@ -631,7 +661,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,
@@ -670,8 +700,11 @@
     barChart8.showLoading();
     $.ajax({
         url: '/getSportDuration',
+        type:'post',
         async: true,
         cache: false,
+        contentType : 'application/json; charset=UTF-8',
+        data:$('#useJianhuyiLogDOList').val(),
         dataType: "json",
         success: function (result) {
             if (result) {
@@ -692,7 +725,7 @@
                     },
                     series: [
                         {
-                            name: '历史记录各等级使用人数',
+                            name: '用户上次使用各等级人数',
                             type: 'pie',
                             radius: ['50%', '70%'],
                             avoidLabelOverlap: false,

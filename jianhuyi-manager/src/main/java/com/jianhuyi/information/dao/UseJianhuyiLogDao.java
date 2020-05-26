@@ -1,11 +1,12 @@
 package com.jianhuyi.information.dao;
 
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Mapper;
-
-import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 
 /**
  * 检测记录表
@@ -19,7 +20,8 @@ public interface UseJianhuyiLogDao {
 	UseJianhuyiLogDO get(Integer id);
 	
 	List<UseJianhuyiLogDO> list(Map<String,Object> map);
-	
+	List<UseJianhuyiLogDO> list1(Map<String,Object> map);
+	List<UseJianhuyiLogDO> listDetail(Map<String,Object> map);
 	int count(Map<String,Object> map);
 	
 	int save(UseJianhuyiLogDO useJianhuyiLog);
@@ -29,4 +31,11 @@ public interface UseJianhuyiLogDao {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	int counts(Map<String,Object> map);
+
+	List<UseJianhuyiLogDO> queryUserWeekRecord(@Param("saveTime") String saveTime, @Param("userId") Long userId);
+
+	List<UseJianhuyiLogDO> queryUserWeekRecordBetween(@Param("start") Date startTime, @Param("end") Date endTime,
+													  @Param("userId") Long userId);
 }

@@ -1,17 +1,18 @@
 package com.jianhuyi.owneruser.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.jianhuyi.common.annotation.Log;
 import com.jianhuyi.common.config.BootdoConfig;
 import com.jianhuyi.common.controller.BaseController;
-import com.jianhuyi.common.utils.*;
+import com.jianhuyi.common.utils.OBSUtils;
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
 import com.jianhuyi.owneruser.service.OwnerUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,20 +71,11 @@ public class OwnerUserController extends BaseController {
                  userd.setPhone(user.getPhone());
              }
              if(user.getFileImg() != null && user.getFileImg().getSize() > 0){
-            	String fileName = OBSUtils.uploadFile(user.getFileImg());
-     			/*MultipartFile sysFile = user.getFileImg();
-     			String fileName = sysFile.getOriginalFilename();
-     			fileName = FileUtil.renameToUUID(fileName);
-     			try {
-     				FileUtil.uploadFile(sysFile.getBytes(), bootdoConfig.getUploadPath(), fileName);
-     			} catch (IOException e) {
-     				e.printStackTrace();
-     			} catch (Exception e) {
-     				e.printStackTrace();
-     			}*/
+            	String fileName = OBSUtils.uploadFile(user.getFileImg(),"jianhuyi/headUrl/");
      			userd.setHeardUrl(fileName);
              }
-             
+
+             userd.setUpdateTime(new Date());
              if (userService.update(userd) > 0) {
                  map.put("msg", "保存成功");
                  map.put("data", "");

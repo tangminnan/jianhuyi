@@ -19,7 +19,7 @@
 				FROM
 					t_version_update
 				WHERE
-					type = 1
+					type = #{value}
 			)
 		
 	</select>

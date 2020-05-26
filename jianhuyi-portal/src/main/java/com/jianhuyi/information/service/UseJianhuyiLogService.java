@@ -1,12 +1,10 @@
 package com.jianhuyi.information.service;
 
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
-
-import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 
 /**
  * 检测记录表
@@ -26,7 +24,7 @@ public interface UseJianhuyiLogService {
 	int save(UseJianhuyiLogDO useJianhuyiLog);
 	
 	int update(UseJianhuyiLogDO useJianhuyiLog);
-	
+
 	Map<String, Object> getByDayTime(Long userId);
 	
 	Map<String, Object> queryUserWeekHistory(Date start,Date end, Long userId);

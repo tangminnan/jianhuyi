@@ -23,811 +23,661 @@ import java.util.*;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService {
-	@Autowired
-	private UserDao userDao;
-
-	@Override
-	public UserDO get(Integer id) {
-		return userDao.get(id);
-	}
-
-	@Override
-	public UserDO getidbyphone(String phone) {
-		return userDao.getidbyphone(phone);
-	}
-
-	@Override
-	public List<UserDO> list(Map<String, Object> map) {
-		return userDao.list(map);
-	}
-
-	@Override
-	public int count(Map<String, Object> map) {
-		return userDao.count(map);
-	}
-
-	@Override
-	public int save(UserDO user) {
-		return userDao.save(user);
-	}
-
-	@Override
-	public int update(UserDO user) {
-		return userDao.update(user);
-	}
-
-	@Override
-	public int remove(Long id) {
-		return userDao.remove(id);
-	}
-
-	@Override
-	public int batchRemove(Long[] ids) {
-		return userDao.batchRemove(ids);
-	}
-
-	@Override
-	public Integer selectNum() {
-		return userDao.selectNum();
-	}
-
-	@Override
-	public boolean exit(Map<String, Object> params) {
-			boolean exit;
-			exit = userDao.list(params).size() > 0;
-			return exit;
-
-	}
-	// 单次平均阅读时长
-
-	@Override
-	public List<EchartsDO> selectGrade() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-		Double avgReadDuration = 0.0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					// 平均单次阅读时长
-					if (useJianhuyiLogDO.getReadDuration() != null) {
-						if (useJianhuyiLogDO.getReadDuration() / useJianhuyiLogDO.getNum() < 20) {
-							a++;
-						} else if (useJianhuyiLogDO.getReadDuration() / useJianhuyiLogDO.getNum() > 20
-								&& useJianhuyiLogDO.getReadDuration() / useJianhuyiLogDO.getNum() <= 40) {
-							b++;
-						} else if (useJianhuyiLogDO.getReadDuration() / useJianhuyiLogDO.getNum() == 20) {
-							c++;
-						} else if (useJianhuyiLogDO.getReadDuration() / useJianhuyiLogDO.getNum() > 40
-								&& useJianhuyiLogDO.getReadDuration() / useJianhuyiLogDO.getNum() <= 90) {
-							d++;
-						} else if (useJianhuyiLogDO.getReadDuration() / useJianhuyiLogDO.getNum() > 90) {
-							e++;
-						}
-						avgReadDuration+=useJianhuyiLogDO.getReadDuration();
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-
-	}
-
-	// 户外阅读时长
-	@Override
-	public List<EchartsDO> getOutdoorsDuration() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					// 平均单次阅读时长
-					if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-						if (useJianhuyiLogDO.getOutdoorsDuration() > 2) {
-							a++;
-						} else if (useJianhuyiLogDO.getOutdoorsDuration() >= 1
-								&& useJianhuyiLogDO.getOutdoorsDuration() < 2) {
-							b++;
-						} else if (useJianhuyiLogDO.getOutdoorsDuration() == 2) {
-							c++;
-						} else if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5
-								&& useJianhuyiLogDO.getOutdoorsDuration() < 1) {
-							d++;
-						} else if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
-							e++;
-						}
-
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-	}
-
-	// 平均阅读距离
-	@Override
-	public List<EchartsDO> getReadDistance() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					// 平均单次阅读时长
-					if (useJianhuyiLogDO.getReadDistance() != null) {
-						if (useJianhuyiLogDO.getReadDistance() / useJianhuyiLogDO.getNum() > 33) {
-							a++;
-						} else if (useJianhuyiLogDO.getReadDistance() / useJianhuyiLogDO.getNum() >= 30
-								&& useJianhuyiLogDO.getReadDistance() / useJianhuyiLogDO.getNum() < 33) {
-							b++;
-						} else if (useJianhuyiLogDO.getReadDistance() / useJianhuyiLogDO.getNum() == 33) {
-							c++;
-						} else if (useJianhuyiLogDO.getReadDistance() / useJianhuyiLogDO.getNum() >= 20
-								&& useJianhuyiLogDO.getReadDistance() / useJianhuyiLogDO.getNum() < 30) {
-							d++;
-						} else if (useJianhuyiLogDO.getReadDistance() / useJianhuyiLogDO.getNum() < 20) {
-							e++;
-						}
-
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-	}
-
-	// 平均阅读光照
-	@Override
-	public List<EchartsDO> getReadLight() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					// 平均单次阅读时长
-					if (useJianhuyiLogDO.getReadLight() != null) {
-						if (useJianhuyiLogDO.getReadLight() / useJianhuyiLogDO.getNum() > 300) {
-							a++;
-						} else if (useJianhuyiLogDO.getReadLight() / useJianhuyiLogDO.getNum() >= 250
-								&& useJianhuyiLogDO.getReadLight() / useJianhuyiLogDO.getNum() < 300) {
-							b++;
-						} else if (useJianhuyiLogDO.getReadLight() / useJianhuyiLogDO.getNum() == 300) {
-							c++;
-						} else if (useJianhuyiLogDO.getReadLight() / useJianhuyiLogDO.getNum() >= 200
-								&& useJianhuyiLogDO.getReadLight() / useJianhuyiLogDO.getNum() < 250) {
-							d++;
-						} else if (useJianhuyiLogDO.getReadLight() / useJianhuyiLogDO.getNum() < 200) {
-							e++;
-						}
-
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-	}
-
-	// 平均单次看手机时长
-	@Override
-	public List<EchartsDO> getLookPhoneDuration() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					// 平均单次阅读时长
-					if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-						if (useJianhuyiLogDO.getLookPhoneDuration() / useJianhuyiLogDO.getNum() < 10) {
-							a++;
-						} else if (useJianhuyiLogDO.getLookPhoneDuration() / useJianhuyiLogDO.getNum() > 10
-								&& useJianhuyiLogDO.getLookPhoneDuration() / useJianhuyiLogDO.getNum() <= 20) {
-							b++;
-						} else if (useJianhuyiLogDO.getLookPhoneDuration() / useJianhuyiLogDO.getNum() == 10) {
-							c++;
-						} else if (useJianhuyiLogDO.getLookPhoneDuration() / useJianhuyiLogDO.getNum() > 20
-								&& useJianhuyiLogDO.getLookPhoneDuration() / useJianhuyiLogDO.getNum() <= 40) {
-							d++;
-						} else if (useJianhuyiLogDO.getLookPhoneDuration() / useJianhuyiLogDO.getNum() > 40) {
-							e++;
-						}
-
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-	}
-
-	// 平均单次看电脑电视时长(分钟)
-	@Override
-	public List<EchartsDO> getLookTvComputerDuration() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					// 平均单次阅读时长
-					if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-						if (useJianhuyiLogDO.getLookTvComputerDuration() / useJianhuyiLogDO.getNum() < 20) {
-							a++;
-						} else if (useJianhuyiLogDO.getLookTvComputerDuration() / useJianhuyiLogDO.getNum() > 20
-								&& useJianhuyiLogDO.getLookTvComputerDuration() / useJianhuyiLogDO.getNum() <= 40) {
-							b++;
-						} else if (useJianhuyiLogDO.getLookTvComputerDuration() / useJianhuyiLogDO.getNum() == 20) {
-							c++;
-						} else if (useJianhuyiLogDO.getLookTvComputerDuration() / useJianhuyiLogDO.getNum() > 40
-								&& useJianhuyiLogDO.getLookTvComputerDuration() / useJianhuyiLogDO.getNum() <= 60) {
-							d++;
-						} else if (useJianhuyiLogDO.getLookTvComputerDuration() / useJianhuyiLogDO.getNum() > 60) {
-							e++;
-						}
-
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-	}
-
-	// 平均坐姿倾斜度
-	@Override
-	public List<EchartsDO> getSitTilt() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					// 平均单次阅读时长
-					if (useJianhuyiLogDO.getSitTilt() != null) {
-						if (useJianhuyiLogDO.getSitTilt() / useJianhuyiLogDO.getNum() < 5) {
-							a++;
-						} else if (useJianhuyiLogDO.getSitTilt() / useJianhuyiLogDO.getNum() > 5
-								&& useJianhuyiLogDO.getSitTilt() / useJianhuyiLogDO.getNum() <= 10) {
-							b++;
-						} else if (useJianhuyiLogDO.getSitTilt() / useJianhuyiLogDO.getNum() == 5) {
-							c++;
-						} else if (useJianhuyiLogDO.getSitTilt() / useJianhuyiLogDO.getNum() > 10
-								&& useJianhuyiLogDO.getSitTilt() / useJianhuyiLogDO.getNum() <= 15) {
-							d++;
-						} else if (useJianhuyiLogDO.getSitTilt() / useJianhuyiLogDO.getNum() > 15) {
-							e++;
-						}
-
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-	}
-
-	// 有效使用监护仪总时长
-	@Override
-	public List<EchartsDO> getUseJianhuyiDuration() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					// 平均单次阅读时长
-					if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-						if (useJianhuyiLogDO.getUseJianhuyiDuration() > 10) {
-							a++;
-						} else if (useJianhuyiLogDO.getUseJianhuyiDuration() >= 8
-								&& useJianhuyiLogDO.getUseJianhuyiDuration() < 10) {
-							b++;
-						} else if (useJianhuyiLogDO.getUseJianhuyiDuration() == 10) {
-							c++;
-						} else if (useJianhuyiLogDO.getUseJianhuyiDuration() >= 5
-								&& useJianhuyiLogDO.getUseJianhuyiDuration() < 8) {
-							d++;
-						} else if (useJianhuyiLogDO.getUseJianhuyiDuration() < 5) {
-							e++;
-						}
-
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-	}
-
-	// 运动总时长
-	@Override
-	public List<EchartsDO> getSportDuration() {
-		List<EchartsDO> list = new ArrayList<EchartsDO>();
-
-		// 查询各用户使用总数据
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-
-		// a 优 ，b 良，c 标准，d 差，e 极差
-		Integer a = 0;
-		Integer b = 0;
-		Integer c = 0;
-		Integer d = 0;
-		Integer e = 0;
-
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-				if (useJianhuyiLogDO != null) {
-					if (useJianhuyiLogDO.getSportDuration() != null) {
-						if (useJianhuyiLogDO.getSportDuration() > 2) {
-							a++;
-						} else if (useJianhuyiLogDO.getSportDuration() >= 1
-								&& useJianhuyiLogDO.getSportDuration() < 2) {
-							b++;
-						} else if (useJianhuyiLogDO.getSportDuration() == 2) {
-							c++;
-						} else if (useJianhuyiLogDO.getSportDuration() >= 0.5
-								&& useJianhuyiLogDO.getSportDuration() < 1) {
-							d++;
-						} else if (useJianhuyiLogDO.getSportDuration() < 0.5) {
-							e++;
-						}
-
-					}
-				}
-
-			}
-		}
-		list.add(new EchartsDO("优", a));
-		list.add(new EchartsDO("良", b));
-		list.add(new EchartsDO("标准", c));
-		list.add(new EchartsDO("差", d));
-		list.add(new EchartsDO("极差", e));
-
-		return list;
-	}
+    @Autowired
+    private UserDao userDao;
+
+    @Override
+    public UserDO get(Integer id) {
+        return userDao.get(id);
+    }
+
+    @Override
+    public UserDO getidbyphone(String phone) {
+        return userDao.getidbyphone(phone);
+    }
+
+    @Override
+    public List<UserDO> list(Map<String, Object> map) {
+        return userDao.list(map);
+    }
+
+    @Override
+    public int count(Map<String, Object> map) {
+        return userDao.count(map);
+    }
+
+    @Override
+    public int save(UserDO user) {
+        return userDao.save(user);
+    }
+
+    @Override
+    public int update(UserDO user) {
+        return userDao.update(user);
+    }
+
+    @Override
+    public int remove(Long id) {
+        return userDao.remove(id);
+    }
+
+    @Override
+    public int batchRemove(Long[] ids) {
+        return userDao.batchRemove(ids);
+    }
+
+    @Override
+    public Integer selectNum() {
+        return userDao.selectNum();
+    }
+
+    @Override
+    public boolean exit(Map<String, Object> params) {
+        boolean exit;
+        exit = userDao.list(params).size() > 0;
+        return exit;
+
+    }
+
+    @Override
+    public List<UseJianhuyiLogDO> selectLastUse() {
+        return userDao.selectLastUse();
+    }
+
+    @Override
+    public UseJianhuyiLogDO getUseDay(String saveTime, Integer userId) {
+        return userDao.getUseDay(saveTime, userId);
+    }
+    // 单次平均阅读时长
+
+    @Override
+    public List<EchartsDO> selectGrade(List<UseJianhuyiLogDO> avgReadDuration) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+
+
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgReadDuration) {
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getReadDuration() != null) {
+                    if (useJianhuyiLogDO.getReadDuration() < 20) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getReadDuration() > 20
+                            && useJianhuyiLogDO.getReadDuration() <= 40) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getReadDuration() == 20) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getReadDuration() > 40
+                            && useJianhuyiLogDO.getReadDuration() <= 90) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getReadDuration() > 90) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+        }
+
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+
+    }
+
+    // 户外阅读时长
+    @Override
+    public List<EchartsDO> getOutdoorsDuration(List<UseJianhuyiLogDO> avgOutdoorsDuration) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgOutdoorsDuration) {
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
+                    if (useJianhuyiLogDO.getOutdoorsDuration() > 2) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getOutdoorsDuration() >= 1
+                            && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getOutdoorsDuration() == 2) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5
+                            && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+        }
+
+
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+    }
+
+    // 平均阅读距离
+    @Override
+    public List<EchartsDO> getReadDistance(List<UseJianhuyiLogDO> avgReadDistance) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgReadDistance) {
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getReadDistance() != null) {
+                    if (useJianhuyiLogDO.getReadDistance() > 33) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getReadDistance() >= 30
+                            && useJianhuyiLogDO.getReadDistance() < 33) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getReadDistance() == 33) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getReadDistance() >= 20
+                            && useJianhuyiLogDO.getReadDistance() < 30) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getReadDistance() < 20) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+        }
+
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+    }
+
+    // 平均阅读光照
+    @Override
+    public List<EchartsDO> getReadLight(List<UseJianhuyiLogDO> avgReadLight) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgReadLight) {
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getReadLight() != null) {
+                    if (useJianhuyiLogDO.getReadLight() > 300) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getReadLight() >= 250
+                            && useJianhuyiLogDO.getReadLight() < 300) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getReadLight() == 300) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getReadLight() >= 200
+                            && useJianhuyiLogDO.getReadLight() < 250) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getReadLight() < 200) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+        }
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+    }
+
+    // 平均单次看手机时长
+    @Override
+    public List<EchartsDO> getLookPhoneDuration(List<UseJianhuyiLogDO> avgLookPhoneDuration) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgLookPhoneDuration) {
+
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
+
+                    if (useJianhuyiLogDO.getLookPhoneDuration() < 10) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getLookPhoneDuration() > 10
+                            && useJianhuyiLogDO.getLookPhoneDuration() <= 20) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getLookPhoneDuration() == 10) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getLookPhoneDuration() > 20
+                            && useJianhuyiLogDO.getLookPhoneDuration() <= 40) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getLookPhoneDuration() > 40) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+        }
+
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+    }
+
+    // 平均单次看电脑电视时长(分钟)
+    @Override
+    public List<EchartsDO> getLookTvComputerDuration(List<UseJianhuyiLogDO> avgLookTvComputerDuration) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgLookTvComputerDuration) {
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
+                    if (useJianhuyiLogDO.getLookTvComputerDuration() < 20) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getLookTvComputerDuration() > 20
+                            && useJianhuyiLogDO.getLookTvComputerDuration() <= 40) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getLookTvComputerDuration() == 20) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getLookTvComputerDuration() > 40
+                            && useJianhuyiLogDO.getLookTvComputerDuration() <= 60) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getLookTvComputerDuration() > 60) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+        }
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+    }
+
+    // 平均坐姿倾斜度
+    @Override
+    public List<EchartsDO> getSitTilt(List<UseJianhuyiLogDO> avgSitTilt) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+
+
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgSitTilt) {
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getSitTilt() != null) {
+                    if (useJianhuyiLogDO.getSitTilt() < 5) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getSitTilt() > 5
+                            && useJianhuyiLogDO.getSitTilt() <= 10) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getSitTilt() == 5) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getSitTilt() > 10
+                            && useJianhuyiLogDO.getSitTilt() <= 15) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getSitTilt() > 15) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+        }
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+    }
+
+    // 有效使用监护仪总时长
+    @Override
+    public List<EchartsDO> getUseJianhuyiDuration(List<UseJianhuyiLogDO> avgUseJianhuyiDuration) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+
+
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgUseJianhuyiDuration) {
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
+                    if (useJianhuyiLogDO.getUseJianhuyiDuration() > 10) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getUseJianhuyiDuration() >= 8
+                            && useJianhuyiLogDO.getUseJianhuyiDuration() < 10) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getUseJianhuyiDuration() == 10) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getUseJianhuyiDuration() >= 5
+                            && useJianhuyiLogDO.getUseJianhuyiDuration() < 8) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getUseJianhuyiDuration() < 5) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+        }
+
+
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+    }
+
+    // 运动总时长
+    @Override
+    public List<EchartsDO> getSportDuration(List<UseJianhuyiLogDO> avgSportDuration) {
+        List<EchartsDO> list = new ArrayList<EchartsDO>();
+
+        // a 优 ，b 良，c 标准，d 差，e 极差
+        Integer a = 0;
+        Integer b = 0;
+        Integer c = 0;
+        Integer d = 0;
+        Integer e = 0;
+
+        for (UseJianhuyiLogDO useJianhuyiLogDO : avgSportDuration) {
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getSportDuration() != null) {
+                    if (useJianhuyiLogDO.getSportDuration() > 2) {
+                        a++;
+                    } else if (useJianhuyiLogDO.getSportDuration() >= 1
+                            && useJianhuyiLogDO.getSportDuration() < 2) {
+                        b++;
+                    } else if (useJianhuyiLogDO.getSportDuration() == 2) {
+                        c++;
+                    } else if (useJianhuyiLogDO.getSportDuration() >= 0.5
+                            && useJianhuyiLogDO.getSportDuration() < 1) {
+                        d++;
+                    } else if (useJianhuyiLogDO.getSportDuration() < 0.5) {
+                        e++;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+        }
+
+
+        list.add(new EchartsDO("优", a));
+        list.add(new EchartsDO("良", b));
+        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("差", d));
+        list.add(new EchartsDO("极差", e));
+
+        return list;
+    }
 
     @Override
     public R importMember(MultipartFile file) {
-		int num = 0;
-		InputStream in=null;
-		Workbook book=null;
-		List<Integer> errnum = new ArrayList<>();
-		try {
-			if(file != null){
-				in = file.getInputStream();
-				book = ExcelUtils.getBook(in);
-				Sheet sheet = book.getSheetAt(0);
-				Row row=null;
-				for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
-					try {
-						row = sheet.getRow(rowNum);
-						String phone = ExcelUtils.getCellFormatValue(row.getCell((short)0));			//手机号
-						String name = ExcelUtils.getCellFormatValue(row.getCell((short)1));		//姓名
-						String identityCard = ExcelUtils.getCellFormatValue(row.getCell((short)2));		//身份证号
-						String sex = ExcelUtils.getCellFormatValue(row.getCell((short)3));			//性别
-						String school = ExcelUtils.getCellFormatValue(row.getCell((short)4));			//学校
-						String grade = ExcelUtils.getCellFormatValue(row.getCell((short)5));		//年级
-						String lVision = ExcelUtils.getCellFormatValue(row.getCell((short)6));		//左眼视力
-						String rVision = ExcelUtils.getCellFormatValue(row.getCell((short)7));		//右眼视力
-						String lEyeBallDiameter = ExcelUtils.getCellFormatValue(row.getCell((short)8));		//左眼球径
-						String rEyeBallDiameter = ExcelUtils.getCellFormatValue(row.getCell((short)9));		//右眼球径
-						String lColumnDiameter = ExcelUtils.getCellFormatValue(row.getCell((short)10));		//左眼柱径
-						String rColumnDiameter = ExcelUtils.getCellFormatValue(row.getCell((short)11));		//右眼柱径
-						String lEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short)12));		//左眼轴
-						String rEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short)13));		//右眼轴
-						UserDO user = new UserDO();
+        int num = 0;
+        InputStream in = null;
+        Workbook book = null;
+        List<Integer> errnum = new ArrayList<>();
+        try {
+            if (file != null) {
+                in = file.getInputStream();
+                book = ExcelUtils.getBook(in);
+                Sheet sheet = book.getSheetAt(0);
+                Row row = null;
+                for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+                    try {
+                        row = sheet.getRow(rowNum);
+                        String phone = ExcelUtils.getCellFormatValue(row.getCell((short) 0));            //手机号
+                        String name = ExcelUtils.getCellFormatValue(row.getCell((short) 1));        //姓名
+                        String identityCard = ExcelUtils.getCellFormatValue(row.getCell((short) 2));        //身份证号
+                        String sex = ExcelUtils.getCellFormatValue(row.getCell((short) 3));            //性别
+                        String school = ExcelUtils.getCellFormatValue(row.getCell((short) 4));            //学校
+                        String grade = ExcelUtils.getCellFormatValue(row.getCell((short) 5));        //年级
+                        String lVision = ExcelUtils.getCellFormatValue(row.getCell((short) 6));        //左眼视力
+                        String rVision = ExcelUtils.getCellFormatValue(row.getCell((short) 7));        //右眼视力
+                        String lEyeBallDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 8));        //左眼球径
+                        String rEyeBallDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 9));        //右眼球径
+                        String lColumnDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 10));        //左眼柱径
+                        String rColumnDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 11));        //右眼柱径
+                        String lEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short) 12));        //左眼轴
+                        String rEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short) 13));        //右眼轴
+                        UserDO user = new UserDO();
 
-						if(phone != null && phone != ""){
-							user.setPhone(phone);
-						}else{
-							errnum.add(rowNum);
-							continue;
-						}
-						if(name != null && name !=""){
-							user.setName(name);
-						}else{
-							errnum.add(rowNum);
-							continue;
-						}
-						if(identityCard != null && identityCard != ""){
-							user.setIdentityCard(identityCard);
-						}
-						if(sex != null && !"".equals(sex)){
-							System.out.println("======sex==================="+sex instanceof String);
-							if(sex.equals("男")){
-								user.setSex(1);
-							}else if(sex.equals("女")){
-								user.setSex(2);
-							}else{
-								user.setSex(0);
-							}
-						}
-						if(school != null && school != ""){
-							user.setSchool(school);
-						}
-						if(grade != null && grade != ""){
-							user.setGrade(grade);
-						}
-						if(lVision != null && lVision != ""){
-							user.setlVision(Double.parseDouble(lVision));
-						}
-						if(rVision != null && rVision != ""){
-							user.setrVision(Double.parseDouble(rVision));
-						}
-						if(lEyeBallDiameter != null && lEyeBallDiameter != ""){
-							user.setlEyeBallDiameter(Double.parseDouble(lEyeBallDiameter));
-						}
-						if(rEyeBallDiameter != null && rEyeBallDiameter != ""){
-							user.setrEyeBallDiameter(Double.parseDouble(rEyeBallDiameter));
-						}
-						if(lColumnDiameter != null && lColumnDiameter != ""){
-							user.setlColumnDiameter(Double.parseDouble(lColumnDiameter));
-						}
-						if(rColumnDiameter != null && rColumnDiameter != ""){
-							user.setrColumnDiameter(Double.parseDouble(rColumnDiameter));
-						}
-						if(lEyeAxis != null && lEyeAxis != ""){
-							user.setlEyeAxis(Double.parseDouble(lEyeAxis));
-						}
-						if(rEyeAxis != null && rEyeAxis != ""){
-							user.setrEyeAxis(Double.parseDouble(rEyeAxis));
-						}
-						user.setDeleteFlag(1);
-						user.setRegisterTime(new Date());
+                        if (phone != null && phone != "") {
+                            user.setPhone(phone);
+                        } else {
+                            errnum.add(rowNum);
+                            continue;
+                        }
+                        if (name != null && name != "") {
+                            user.setName(name);
+                        } else {
+                            errnum.add(rowNum);
+                            continue;
+                        }
+                        if (identityCard != null && identityCard != "") {
+                            user.setIdentityCard(identityCard);
+                        }
+                        if (sex != null && !"".equals(sex)) {
+                            System.out.println("======sex===================" + sex instanceof String);
+                            if (sex.equals("男")) {
+                                user.setSex(1);
+                            } else if (sex.equals("女")) {
+                                user.setSex(2);
+                            } else {
+                                user.setSex(0);
+                            }
+                        }
+                        if (school != null && school != "") {
+                            user.setSchool(school);
+                        }
+                        if (grade != null && grade != "") {
+                            user.setGrade(grade);
+                        }
+                        if (lVision != null && lVision != "") {
+                            user.setlVision(Double.parseDouble(lVision));
+                        }
+                        if (rVision != null && rVision != "") {
+                            user.setrVision(Double.parseDouble(rVision));
+                        }
+                        if (lEyeBallDiameter != null && lEyeBallDiameter != "") {
+                            user.setlEyeBallDiameter(Double.parseDouble(lEyeBallDiameter));
+                        }
+                        if (rEyeBallDiameter != null && rEyeBallDiameter != "") {
+                            user.setrEyeBallDiameter(Double.parseDouble(rEyeBallDiameter));
+                        }
+                        if (lColumnDiameter != null && lColumnDiameter != "") {
+                            user.setlColumnDiameter(Double.parseDouble(lColumnDiameter));
+                        }
+                        if (rColumnDiameter != null && rColumnDiameter != "") {
+                            user.setrColumnDiameter(Double.parseDouble(rColumnDiameter));
+                        }
+                        if (lEyeAxis != null && lEyeAxis != "") {
+                            user.setlEyeAxis(Double.parseDouble(lEyeAxis));
+                        }
+                        if (rEyeAxis != null && rEyeAxis != "") {
+                            user.setrEyeAxis(Double.parseDouble(rEyeAxis));
+                        }
+                        user.setDeleteFlag(1);
+                        user.setRegisterTime(new Date());
 
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-						// 15位需要补年份
-						if (user.getIdentityCard().length() == 15) {
-							user.setBirthday(substringBir("19" + user.getIdentityCard().substring(6, 12)));
-							user.setAge(Integer.parseInt(sdf.format(new Date()))
-									- (substringAge("19" + user.getIdentityCard().substring(6, 12))));
-							// 18位直接截取7到14位
-						} else if (user.getIdentityCard().length() == 18) {
-							user.setBirthday(substringBir(user.getIdentityCard().substring(6, 14)));
-							user.setAge(
-									Integer.parseInt(sdf.format(new Date())) - (substringAge(user.getIdentityCard().substring(6, 14))));
-						}
-						Map<String,Object> params =  new HashMap<>();
-						params.put("identityCard",identityCard);
-						if(!exit(params)){
-							params.remove("identityCard");
-							params.put("phone",phone);
-							if(!exit(params)){
-								userDao.save(user);
-							}else{
-								continue;
-							}
-						}else{
-							continue;
-						}
-						num++;
-					} catch (Exception e) {
-						e.printStackTrace();
-						return R.error("导入失败！第"+rowNum+"条");
-					}
-				}
-				if(errnum.size()>0){
-					return R.ok("上传成功,共增加["+num+"]条,第"+errnum+"条上传失败，姓名或者手机号为空或手机号已存在");
-				}else{
-					return R.ok("上传成功,共增加["+num+"]条");
-				}
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+                        // 15位需要补年份
+                        if (user.getIdentityCard().length() == 15) {
+                            user.setBirthday(substringBir("19" + user.getIdentityCard().substring(6, 12)));
+                            user.setAge(Integer.parseInt(sdf.format(new Date()))
+                                    - (substringAge("19" + user.getIdentityCard().substring(6, 12))));
+                            // 18位直接截取7到14位
+                        } else if (user.getIdentityCard().length() == 18) {
+                            user.setBirthday(substringBir(user.getIdentityCard().substring(6, 14)));
+                            user.setAge(
+                                    Integer.parseInt(sdf.format(new Date())) - (substringAge(user.getIdentityCard().substring(6, 14))));
+                        }
+                        Map<String, Object> params = new HashMap<>();
+                        params.put("identityCard", identityCard);
+                        if (!exit(params)) {
+                            params.remove("identityCard");
+                            params.put("phone", phone);
+                            if (!exit(params)) {
+                                userDao.save(user);
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            continue;
+                        }
+                        num++;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return R.error("导入失败！第" + rowNum + "条");
+                    }
+                }
+                if (errnum.size() > 0) {
+                    return R.ok("上传成功,共增加[" + num + "]条,第" + errnum + "条上传失败，姓名或者手机号为空或手机号已存在");
+                } else {
+                    return R.ok("上传成功,共增加[" + num + "]条");
+                }
 
-			}else{
-				return R.error("请选择导入的文件!");
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally{
-			try {
-				if(book!=null)
-					book.close();
-				if(book!=null)
-					in.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return R.error();
+            } else {
+                return R.error("请选择导入的文件!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (book != null)
+                    book.close();
+                if (book != null)
+                    in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return R.error();
     }
 
-	@Override
-	public Double avgReadDuration() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgReadDuration = 0.0;
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getReadDuration() != null){
-					avgReadDuration+=useJianhuyiLogDO.getReadDuration();
-				}
-			}
-		}
-		return avgReadDuration/betweenSum.size();
-	}
 
-	@Override
-	public Double avgReadDistance() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgReadDistance = 0.0;
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getReadDistance() != null){
-					avgReadDistance+=useJianhuyiLogDO.getReadDistance();
-				}
-			}
-		}
-		return avgReadDistance/betweenSum.size();
-	}
+    public Date substringBir(String day) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        String yyyy = day.substring(0, 4);
+        String mm = day.substring(4, 6);
+        String dd = day.substring(6);
+        String date1 = yyyy + "-" + mm + "-" + dd;
+        //不抛出异常会报错
+        date = format.parse(date1);
+        return date;
+    }
 
-	@Override
-	public Double avgOutdoorsDuration() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgOutdoorsDuration = 0.0;
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getOutdoorsDuration() != null){
-					avgOutdoorsDuration+=useJianhuyiLogDO.getOutdoorsDuration();
-				}
-			}
-		}
-		return avgOutdoorsDuration;
-	}
-
-	@Override
-	public Double avgLookPhoneDuration() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgLookPhoneDuration = 0.0;
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getLookPhoneDuration() != null){
-					avgLookPhoneDuration+=useJianhuyiLogDO.getLookPhoneDuration();
-				}
-			}
-		}
-		return avgLookPhoneDuration/betweenSum.size();
-	}
-
-	@Override
-	public Double avgReadLight() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgReadLight = 0.0;
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getReadLight() != null){
-					avgReadLight+=useJianhuyiLogDO.getReadLight();
-				}
-			}
-		}
-		return avgReadLight/betweenSum.size();
-	}
-
-	@Override
-	public Double avgLookTvComputerDuration() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgLookTvComputerDuration = 0.0;
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getLookTvComputerDuration() != null){
-					avgLookTvComputerDuration+=useJianhuyiLogDO.getLookTvComputerDuration();
-				}
-			}
-		}
-		return avgLookTvComputerDuration/betweenSum.size();
-	}
-
-	@Override
-	public Double avgSitTilt() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgSitTilt = 0.0;
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getSitTilt() != null){
-					avgSitTilt+=useJianhuyiLogDO.getSitTilt();
-				}
-			}
-		}
-		return avgSitTilt/betweenSum.size();
-	}
-
-	@Override
-	public Double avgUseJianhuyiDuration() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgUseJianhuyiDuration = 0.0;
-		if (betweenSum.size() > 0) {
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getUseJianhuyiDuration() != null){
-					avgUseJianhuyiDuration+=useJianhuyiLogDO.getUseJianhuyiDuration();
-				}
-			}
-		}
-		return avgUseJianhuyiDuration;
-	}
-
-	@Override
-	public Double avgSportDuration() {
-		List<UseJianhuyiLogDO> betweenSum = userDao.queryUserRecordBetweenSum();
-		Double avgSportDuration = 0.0;
-		if (betweenSum.size() > 0) {
-
-			for (UseJianhuyiLogDO useJianhuyiLogDO:betweenSum) {
-				if(useJianhuyiLogDO.getSportDuration() != null){
-					avgSportDuration+=useJianhuyiLogDO.getSportDuration();
-				}
-			}
-		}
-		return avgSportDuration;
-	}
-
-
-
-	public Date substringBir(String day) throws ParseException {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = null;
-		String yyyy = day.substring(0, 4);
-		String mm = day.substring(4, 6);
-		String dd = day.substring(6);
-		String date1 = yyyy+"-"+mm+"-"+dd;
-		//不抛出异常会报错
-		date = format.parse(date1);
-		return date;
-	}
-
-	public Integer substringAge(String day) {
-		Integer yyyy = Integer.parseInt(day.substring(0, 4));
-		return yyyy;
-	}
+    public Integer substringAge(String day) {
+        Integer yyyy = Integer.parseInt(day.substring(0, 4));
+        return yyyy;
+    }
 
     /*
-	 * if(useJianhuyiLogDO.getOutdoorsDuration()!=null)
-	 * 
-	 * { outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration(); }
-	 * if(useJianhuyiLogDO.getReadDistance()!=null)
-	 * 
-	 * { readDistance += useJianhuyiLogDO.getReadDistance(); }
-	 * if(useJianhuyiLogDO.getReadLight()!=null)
-	 * 
-	 * { readLight += useJianhuyiLogDO.getReadLight(); }
-	 * if(useJianhuyiLogDO.getLookPhoneDuration()!=null)
-	 * 
-	 * { lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration(); }
-	 * if(useJianhuyiLogDO.getLookTvComputerDuration()!=null)
-	 * 
-	 * { lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-	 * } if(useJianhuyiLogDO.getSitTilt()!=null)
-	 * 
-	 * { sitTilt += useJianhuyiLogDO.getSitTilt(); }
-	 * if(useJianhuyiLogDO.getUseJianhuyiDuration()!=null)
-	 * 
-	 * { useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration(); }
-	 * if(useJianhuyiLogDO.getSportDuration()!=null)
-	 * 
-	 * { sportDuration += useJianhuyiLogDO.getSportDuration(); }
-	 */
+     * if(useJianhuyiLogDO.getOutdoorsDuration()!=null)
+     *
+     * { outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration(); }
+     * if(useJianhuyiLogDO.getReadDistance()!=null)
+     *
+     * { readDistance += useJianhuyiLogDO.getReadDistance(); }
+     * if(useJianhuyiLogDO.getReadLight()!=null)
+     *
+     * { readLight += useJianhuyiLogDO.getReadLight(); }
+     * if(useJianhuyiLogDO.getLookPhoneDuration()!=null)
+     *
+     * { lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration(); }
+     * if(useJianhuyiLogDO.getLookTvComputerDuration()!=null)
+     *
+     * { lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+     * } if(useJianhuyiLogDO.getSitTilt()!=null)
+     *
+     * { sitTilt += useJianhuyiLogDO.getSitTilt(); }
+     * if(useJianhuyiLogDO.getUseJianhuyiDuration()!=null)
+     *
+     * { useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration(); }
+     * if(useJianhuyiLogDO.getSportDuration()!=null)
+     *
+     * { sportDuration += useJianhuyiLogDO.getSportDuration(); }
+     */
 
 }

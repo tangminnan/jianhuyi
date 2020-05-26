@@ -21,10 +21,21 @@ public class ProductAdviseDO implements Serializable {
 	private String adviseContent;
 	//建议用户id
 	private Integer userId;
+
+	private String usersname;
 	//添加时间
 	private Date addTime;
 	//删除标志(1:删除 0：未删除)
 	private Integer delFlag;
+
+
+	public String getUsersname() {
+		return usersname;
+	}
+
+	public void setUsersname(String usersname) {
+		this.usersname = usersname;
+	}
 
 	/**
 	 * 设置：id
@@ -85,5 +96,17 @@ public class ProductAdviseDO implements Serializable {
 	 */
 	public Integer getDelFlag() {
 		return delFlag;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductAdviseDO{" +
+				"id=" + id +
+				", adviseContent='" + adviseContent + '\'' +
+				", userId=" + userId +
+				", usersname='" + usersname + '\'' +
+				", addTime=" + addTime +
+				", delFlag=" + delFlag +
+				'}';
 	}
 }

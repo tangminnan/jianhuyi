@@ -32,7 +32,8 @@ function load() {
                         //说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
                         limit: params.limit,
                         offset: params.offset,
-                        nickname: $('#searchName').val()
+                        name: $('#name').val(),
+                        phone:$('#phone').val()
                     };
                 },
                 // //请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
@@ -45,18 +46,18 @@ function load() {
                     /* {
                          checkbox: true
                      },*/
-                    /*								{
+                   							{
                         field : 'id',
                         title : 'id'
                     },
-                                                    {
-                        field : 'userId',
-                        title : '用户ID'
-                    },					{
-                        field : 'openId',
-                        title : '微信id'
-                    },
-                    */      /*                          {
+                    /*	                            {
+                   field : 'userId',
+                   title : '用户ID'
+               },					{
+                   field : 'openId',
+                   title : '微信id'
+               },
+               */      /*                          {
                         field: 'nickname',
                         title: '昵称',
                         align:'center'
@@ -235,7 +236,7 @@ function load() {
             var d = '<a class="btn btn-warning btn-sm ' + s_remove_h + '" href="#" title="状态"  mce_href="#" onclick="remove(\''
                 + row.id
                 + '\')"><i class="fa fa-remove"></i></a> ';
-            var f = '<a class="btn btn-success btn-sm" title="详情"  mce_href="#" onclick="showdetail(\''
+            var f = '<a class="btn btn-success btn-sm" title="历史记录详情"  mce_href="#" onclick="showdetail(\''
                 + row.id
                 + '\')"><i class="fa fa-list"></i></a> ';
             return e + d + f;

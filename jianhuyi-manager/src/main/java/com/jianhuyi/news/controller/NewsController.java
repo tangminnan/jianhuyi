@@ -1,28 +1,19 @@
 package com.jianhuyi.news.controller;
 
+import com.jianhuyi.common.config.BootdoConfig;
+import com.jianhuyi.common.utils.*;
+import com.jianhuyi.news.domain.NewsDO;
+import com.jianhuyi.news.service.NewsService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.jianhuyi.common.config.BootdoConfig;
-import com.jianhuyi.common.utils.FileUtil;
-import com.jianhuyi.common.utils.PageUtils;
-import com.jianhuyi.common.utils.Query;
-import com.jianhuyi.common.utils.R;
-import com.jianhuyi.news.domain.NewsDO;
-import com.jianhuyi.news.service.NewsService;
 
 
 
@@ -88,10 +79,8 @@ public class NewsController {
 		
 		try {
 			if(news.getPicItems()!= null && news.getPicItems().getSize() > 0){
-				String fileName = news.getPicItems().getOriginalFilename();
-				fileName = FileUtil.renameToUUID(fileName);
-				FileUtil.uploadFile(news.getPicItems().getBytes(), bootdoConfig.getUploadPath()+"news/", fileName);
-				news.setTupianurl("/files/news/" + fileName);
+				String fileName = OBSUtils.uploadFile(news.getPicItems(),"jianhuyi/news/");
+				news.setTupianurl(fileName);
 			}
 			news.setDeleted(0);
 			news.setCheckStatus(0);
@@ -114,11 +103,9 @@ public class NewsController {
 	@RequiresPermissions("information:news:edit")
 	public R update( NewsDO news){
 		if(news.getPicItems()!= null && news.getPicItems().getSize() > 0){
-			String fileName = news.getPicItems().getOriginalFilename(); 
-			fileName = FileUtil.renameToUUID(fileName);
 			try {
-				FileUtil.uploadFile(news.getPicItems().getBytes(), bootdoConfig.getUploadPath()+"news/", fileName);
-				news.setTupianurl("/files/news/" + fileName);
+				String fileName1 = OBSUtils.uploadFile(news.getPicItems(),"jianhuyi/news/");
+				news.setTupianurl(fileName1);
 				news.setUpdateTime(new Date());
 			} catch (Exception e) {
 				return R.error();

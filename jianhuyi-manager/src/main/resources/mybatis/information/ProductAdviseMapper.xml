@@ -13,7 +13,7 @@
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="adviseContent != null and adviseContent != ''"> and advise_content = #{adviseContent} </if>
 		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
-		  		  <if test="addTime != null and addTime != ''"> and add_time = #{addTime} </if>
+		  		  <if test="addTime != null and addTime != ''"> and add_time like CONCAT ('%',#{addTime},'%') </if>
 		  		  <if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag} </if>
 		  		</where>
         <choose>

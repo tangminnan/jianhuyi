@@ -1,9 +1,11 @@
 package com.jianhuyi.information.service;
 
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 
 /**
  * 检测记录表
@@ -27,4 +29,14 @@ public interface UseJianhuyiLogService {
 	int remove(Integer id);
 	
 	int batchRemove(Integer[] ids);
+
+	Map<String, Collection<Double>>  getlineData(Date start, Date end, Long userId);
+
+    List<UseJianhuyiLogDO> listDetail(Map<String, Object> params);
+
+	int counts(Map<String, Object> map);
+
+	Map<String, Collection<Double>> seasonData(Date start, Date end, Long userId) throws Exception;
+
+	Map<String, Collection<Double>> yearData(Date start, Date end, Long userId) throws Exception;
 }

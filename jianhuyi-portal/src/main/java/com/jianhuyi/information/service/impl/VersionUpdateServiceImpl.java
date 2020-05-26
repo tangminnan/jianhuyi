@@ -10,51 +10,49 @@ import com.jianhuyi.information.dao.VersionUpdateDao;
 import com.jianhuyi.information.domain.VersionUpdateDO;
 import com.jianhuyi.information.service.VersionUpdateService;
 
-
-
 @Service
 public class VersionUpdateServiceImpl implements VersionUpdateService {
 	@Autowired
 	private VersionUpdateDao versionUpdateDao;
-	
+
 	@Override
-	public VersionUpdateDO get(Long id){
+	public VersionUpdateDO get(Long id) {
 		return versionUpdateDao.get(id);
 	}
-	
+
 	@Override
-	public List<VersionUpdateDO> list(Map<String, Object> map){
+	public List<VersionUpdateDO> list(Map<String, Object> map) {
 		return versionUpdateDao.list(map);
 	}
-	
+
 	@Override
-	public int count(Map<String, Object> map){
+	public int count(Map<String, Object> map) {
 		return versionUpdateDao.count(map);
 	}
-	
+
 	@Override
-	public int save(VersionUpdateDO versionUpdate){
+	public int save(VersionUpdateDO versionUpdate) {
 		return versionUpdateDao.save(versionUpdate);
 	}
-	
+
 	@Override
-	public int update(VersionUpdateDO versionUpdate){
+	public int update(VersionUpdateDO versionUpdate) {
 		return versionUpdateDao.update(versionUpdate);
 	}
-	
+
 	@Override
-	public int remove(Long id){
+	public int remove(Long id) {
 		return versionUpdateDao.remove(id);
 	}
-	
+
 	@Override
-	public int batchRemove(Long[] ids){
+	public int batchRemove(Long[] ids) {
 		return versionUpdateDao.batchRemove(ids);
 	}
 
 	@Override
-	public VersionUpdateDO versionCheck() {
-		return versionUpdateDao.versionCheck();
+	public VersionUpdateDO versionCheck(Integer type) {
+		return versionUpdateDao.versionCheck(type);
 	}
-	
+
 }

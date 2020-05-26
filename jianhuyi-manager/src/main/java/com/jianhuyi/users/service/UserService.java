@@ -2,6 +2,7 @@ package com.jianhuyi.users.service;
 
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.information.domain.EchartsDO;
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.users.domain.UserDO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,43 +37,29 @@ public interface UserService {
 
 	Integer selectNum();
 
-	List<EchartsDO> selectGrade();
+	List<EchartsDO> selectGrade(List<UseJianhuyiLogDO> avgReadDuration);
 
-	List<EchartsDO> getOutdoorsDuration();
+	List<EchartsDO> getOutdoorsDuration(List<UseJianhuyiLogDO> avgOutdoorsDuration);
 
-	List<EchartsDO> getReadDistance();
+	List<EchartsDO> getReadDistance(List<UseJianhuyiLogDO> avgReadDistance);
 
-	List<EchartsDO> getReadLight();
+	List<EchartsDO> getReadLight(List<UseJianhuyiLogDO> avgReadLight);
 
-	List<EchartsDO> getLookPhoneDuration();
+	List<EchartsDO> getLookPhoneDuration(List<UseJianhuyiLogDO> avgLookPhoneDuration);
 
-	List<EchartsDO> getLookTvComputerDuration();
+	List<EchartsDO> getLookTvComputerDuration(List<UseJianhuyiLogDO> avgLookTvComputerDuration);
 
-	List<EchartsDO> getSitTilt();
+	List<EchartsDO> getSitTilt(List<UseJianhuyiLogDO> avgSitTilt);
 
-	List<EchartsDO> getUseJianhuyiDuration();
+	List<EchartsDO> getUseJianhuyiDuration(List<UseJianhuyiLogDO> avgUseJianhuyiDuration);
 
-	List<EchartsDO> getSportDuration();
+	List<EchartsDO> getSportDuration(List<UseJianhuyiLogDO> avgSportDuration);
 
     R importMember(MultipartFile file);
 
-	Double avgOutdoorsDuration();
-
-	Double avgReadDistance();
-
-	Double avgReadDuration();
-
-	Double avgLookPhoneDuration();
-
-	Double avgReadLight();
-
-	Double avgLookTvComputerDuration();
-
-	Double avgSitTilt();
-
-	Double avgUseJianhuyiDuration();
-
-	Double avgSportDuration();
-
 	boolean exit(Map<String, Object> params);
+
+    List<UseJianhuyiLogDO> selectLastUse();
+
+	UseJianhuyiLogDO getUseDay(String saveTime, Integer userId);
 }

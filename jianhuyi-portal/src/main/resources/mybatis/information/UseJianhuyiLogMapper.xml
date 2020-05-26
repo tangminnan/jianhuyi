@@ -3,82 +3,183 @@
 
 <mapper namespace="com.jianhuyi.information.dao.UseJianhuyiLogDao">
 
-	<select id="get" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		select `id`,`user_id`,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log where id = #{value}
-	</select>
-	
-	<select id="getByTime" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		select `id`,`user_id`,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log 
-		where TO_DAYS(add_time) = TO_DAYS(NOW()) and user_id= #{userId}
-	</select>
-	
-	<select id="queryUserWeekRecord" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		select `id`,`user_id`,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log 
-		where add_time = #{addTime} and user_id= #{userId}	
-	</select>
-	
-	<select id="queryUserWeekRecordBetween" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		select `id`,`user_id`,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log 
-		where add_time between #{start} and #{end} and user_id= #{userId}	
-	</select>
-	
-	<select id="queryUserRecordBetweenSum" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		select `id`,`user_id`,`add_time`,SUM(read_duration) readDuration,SUM(outdoors_duration) outdoorsDuration,SUM(read_distance) readDistance,SUM(read_light) readLight,SUM(look_phone_duration) lookPhoneDuration,
-		SUM(look_tv_computer_duration) lookTvComputerDuration,SUM(sit_tilt) sitTilt,SUM(use_jianhuyi_duration) useJianhuyiDuration,SUM(sport_duration) sportDuration, del_flag
-		from t_use_jianhuyi_log 
-		where add_time between #{start} and #{end} and user_id= #{userId}	
+    <select id="get" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		select `id`,`user_id`,status,save_time,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_phone_count`,`look_tv_computer_count`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		select `id`,`user_id`,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log
-        <where>  
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
-		  		  <if test="addTime != null and addTime != ''"> and add_time = #{addTime} </if>
-		  		  <if test="readDuration != null and readDuration != ''"> and read_duration = #{readDuration} </if>
-		  		  <if test="outdoorsDuration != null and outdoorsDuration != ''"> and outdoors_duration = #{outdoorsDuration} </if>
-		  		  <if test="readDistance != null and readDistance != ''"> and read_distance = #{readDistance} </if>
-		  		  <if test="readLight != null and readLight != ''"> and read_light = #{readLight} </if>
-		  		  <if test="lookPhoneDuration != null and lookPhoneDuration != ''"> and look_phone_duration = #{lookPhoneDuration} </if>
-		  		  <if test="lookTvComputerDuration != null and lookTvComputerDuration != ''"> and look_tv_computer_duration = #{lookTvComputerDuration} </if>
-		  		  <if test="sitTilt != null and sitTilt != ''"> and sit_tilt = #{sitTilt} </if>
-		  		  <if test="useJianhuyiDuration != null and useJianhuyiDuration != ''"> and use_jianhuyi_duration = #{useJianhuyiDuration} </if>
-		  		  <if test="sportDuration != null and sportDuration != ''"> and sport_duration = #{sportDuration} </if>
-		  		  <if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag} </if>
-		  		</where>
+    <select id="getReadDuration" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+			SUM(read_duration) allreadDuration,COUNT(*) num
+		FROM
+			t_use_jianhuyi_log
+		WHERE
+			TO_DAYS(save_time) = TO_DAYS(NOW())
+		AND user_id = #{userId} and status = 1
+		GROUP BY
+			date_format(save_time, '%Y-%m-%d')
+	</select>
+
+    <select id="getByTime" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+			id,
+			user_id,
+			add_time,
+			equipment_id,
+			save_time,
+			SUM(read_duration) allreadDuration,
+			SUM(read_duration) / count(*) read_duration,
+			SUM(read_distance) / count(*) read_distance,
+			SUM(read_light) / count(*) read_light,
+			SUM(look_phone_duration) / SUM(look_phone_count) look_phone_duration,
+			SUM(look_tv_computer_duration)/SUM(look_tv_computer_count)  look_tv_computer_duration,
+			SUM(look_tv_computer_count) / count(*) look_tv_computer_count,
+			SUM(sit_tilt) / count(*) sit_tilt,
+			SUM(use_jianhuyi_duration) use_jianhuyi_duration,
+			SUM(sport_duration) / count(*) sport_duration,
+			`del_flag`
+		FROM
+			t_use_jianhuyi_log
+		WHERE
+			TO_DAYS(save_time) = TO_DAYS(NOW()) and `status` = 1
+		and user_id= #{userId}
+		GROUP BY
+			date_format(save_time, '%Y-%m-%d')
+	</select>
+
+    <select id="getOutduration" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+			SELECT
+				SUM(outdoors_duration) outdoors_duration
+			FROM
+				t_use_jianhuyi_log
+			WHERE
+				TO_DAYS(save_time) = TO_DAYS(NOW()) and `status` = 2
+			AND user_id= #{userId}
+			GROUP BY
+				date_format(save_time, '%Y-%m-%d')
+	</select>
+
+    <select id="queryUserWeekRecord" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+			`id`,
+			`user_id`,
+			status,
+			save_time,
+			`add_time`,
+			`read_duration`,
+			`outdoors_duration`,
+			`read_distance`,
+			`read_light`,
+			`look_phone_duration`,
+			`look_tv_computer_duration`,
+			`sit_tilt`,
+			`use_jianhuyi_duration`,
+			`sport_duration`,
+			`del_flag`
+		FROM
+			t_use_jianhuyi_log
+		where
+		save_time like CONCAT('%',#{saveTime},'%')  and user_id=  #{userId}
+	</select>
+
+    <select id="queryUserWeekRecordBetween" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		select `id`,status,`user_id`,save_time,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_phone_count`,`look_tv_computer_count`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log
+		where save_time between #{start} and #{end} and user_id= #{userId}
+	</select>
+
+    <select id="queryUserRecordBetweenSum" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+			id,
+			user_id,
+			add_time,
+			equipment_id,
+			save_time,
+			SUM(read_duration) / count(*) read_duration,
+			SUM(outdoors_duration) / count(*) outdoors_duration,
+			SUM(read_distance) / count(*) read_distance,
+			SUM(read_light) / count(*) read_light,
+			SUM(look_phone_duration) / count(*) look_phone_duration,
+			SUM(look_phone_count) / count(*) look_phone_count,
+			SUM(look_tv_computer_count) / count(*) look_tv_computer_count,
+			SUM(look_tv_computer_duration) / count(*) look_tv_computer_duration,
+			SUM(sit_tilt) / count(*) sit_tilt,
+			SUM(use_jianhuyi_duration) / count(*) use_jianhuyi_duration,
+			SUM(sport_duration) / count(*) sport_duration,
+			`del_flag`
+		FROM
+			t_use_jianhuyi_log
+		WHERE
+			save_time BETWEEN #{start} and #{end} and user_id = #{userId}
+		GROUP BY
+			date_format(save_time, '%Y-%m-%d')
+	</select>
+
+    <select id="list" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        select
+        `id`,`user_id`,save_time,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_phone_count`,`look_tv_computer_count`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag`
+        from t_use_jianhuyi_log
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
+            <if test="readDuration != null and readDuration != ''">and read_duration = #{readDuration}</if>
+            <if test="outdoorsDuration != null and outdoorsDuration != ''">and outdoors_duration = #{outdoorsDuration}
+            </if>
+            <if test="readDistance != null and readDistance != ''">and read_distance = #{readDistance}</if>
+            <if test="readLight != null and readLight != ''">and read_light = #{readLight}</if>
+            <if test="lookPhoneDuration != null and lookPhoneDuration != ''">and look_phone_duration =
+                #{lookPhoneDuration}
+            </if>
+            <if test="lookTvComputerDuration != null and lookTvComputerDuration != ''">and look_tv_computer_duration =
+                #{lookTvComputerDuration}
+            </if>
+            <if test="sitTilt != null and sitTilt != ''">and sit_tilt = #{sitTilt}</if>
+            <if test="useJianhuyiDuration != null and useJianhuyiDuration != ''">and use_jianhuyi_duration =
+                #{useJianhuyiDuration}
+            </if>
+            <if test="sportDuration != null and sportDuration != ''">and sport_duration = #{sportDuration}</if>
+            <if test="delFlag != null and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
                 order by ${sort} ${order}
             </when>
-			<otherwise>
+            <otherwise>
                 order by id desc
-			</otherwise>
+            </otherwise>
         </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-	
- 	<select id="count" resultType="int">
-		select count(*) from t_use_jianhuyi_log
-		 <where>  
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
-		  		  <if test="addTime != null and addTime != ''"> and add_time = #{addTime} </if>
-		  		  <if test="readDuration != null and readDuration != ''"> and read_duration = #{readDuration} </if>
-		  		  <if test="outdoorsDuration != null and outdoorsDuration != ''"> and outdoors_duration = #{outdoorsDuration} </if>
-		  		  <if test="readDistance != null and readDistance != ''"> and read_distance = #{readDistance} </if>
-		  		  <if test="readLight != null and readLight != ''"> and read_light = #{readLight} </if>
-		  		  <if test="lookPhoneDuration != null and lookPhoneDuration != ''"> and look_phone_duration = #{lookPhoneDuration} </if>
-		  		  <if test="lookTvComputerDuration != null and lookTvComputerDuration != ''"> and look_tv_computer_duration = #{lookTvComputerDuration} </if>
-		  		  <if test="sitTilt != null and sitTilt != ''"> and sit_tilt = #{sitTilt} </if>
-		  		  <if test="useJianhuyiDuration != null and useJianhuyiDuration != ''"> and use_jianhuyi_duration = #{useJianhuyiDuration} </if>
-		  		  <if test="sportDuration != null and sportDuration != ''"> and sport_duration = #{sportDuration} </if>
-		  		  <if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag} </if>
-		  		</where>
-	</select>
-	 
-	<insert id="save" parameterType="com.jianhuyi.information.domain.UseJianhuyiLogDO" useGeneratedKeys="true" keyProperty="id">
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from t_use_jianhuyi_log
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
+            <if test="readDuration != null and readDuration != ''">and read_duration = #{readDuration}</if>
+            <if test="outdoorsDuration != null and outdoorsDuration != ''">and outdoors_duration = #{outdoorsDuration}
+            </if>
+            <if test="readDistance != null and readDistance != ''">and read_distance = #{readDistance}</if>
+            <if test="readLight != null and readLight != ''">and read_light = #{readLight}</if>
+            <if test="lookPhoneDuration != null and lookPhoneDuration != ''">and look_phone_duration =
+                #{lookPhoneDuration}
+            </if>
+            <if test="lookTvComputerDuration != null and lookTvComputerDuration != ''">and look_tv_computer_duration =
+                #{lookTvComputerDuration}
+            </if>
+            <if test="sitTilt != null and sitTilt != ''">and sit_tilt = #{sitTilt}</if>
+            <if test="useJianhuyiDuration != null and useJianhuyiDuration != ''">and use_jianhuyi_duration =
+                #{useJianhuyiDuration}
+            </if>
+            <if test="sportDuration != null and sportDuration != ''">and sport_duration = #{sportDuration}</if>
+            <if test="delFlag != null and delFlag != ''">and del_flag = #{delFlag}</if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.jianhuyi.information.domain.UseJianhuyiLogDO" useGeneratedKeys="true"
+            keyProperty="id">
 		insert into t_use_jianhuyi_log
 		(
 			`user_id`, 
@@ -87,12 +188,18 @@
 			`outdoors_duration`, 
 			`read_distance`, 
 			`read_light`, 
-			`look_phone_duration`, 
-			`look_tv_computer_duration`, 
+			`look_phone_duration`,
+			`look_phone_count`,
+			`look_tv_computer_duration`,
+			`look_tv_computer_count`,
 			`sit_tilt`, 
 			`use_jianhuyi_duration`, 
-			`sport_duration`, 
-			`del_flag`
+			`sport_duration`,
+
+			`del_flag`,
+			save_time,
+			equipment_id,
+			status
 		)
 		values
 		(
@@ -102,34 +209,38 @@
 			#{outdoorsDuration}, 
 			#{readDistance}, 
 			#{readLight}, 
-			#{lookPhoneDuration}, 
-			#{lookTvComputerDuration}, 
+			#{lookPhoneDuration},
+			#{lookPhoneCount},
+			#{lookTvComputerDuration},
+			#{lookTvComputerCount},
 			#{sitTilt}, 
 			#{useJianhuyiDuration}, 
 			#{sportDuration}, 
-			#{delFlag}
+			#{delFlag},
+			#{saveTime},
+			#{equipmentId},
+			#{status}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		update t_use_jianhuyi_log 
-		<set>
-			<if test="userId != null">`user_id` = #{userId}, </if>
-			<if test="addTime != null">`add_time` = #{addTime}, </if>
-			<if test="readDuration != null">`read_duration` = #{readDuration}, </if>
-			<if test="outdoorsDuration != null">`outdoors_duration` = #{outdoorsDuration}, </if>
-			<if test="readDistance != null">`read_distance` = #{readDistance}, </if>
-			<if test="readLight != null">`read_light` = #{readLight}, </if>
-			<if test="lookPhoneDuration != null">`look_phone_duration` = #{lookPhoneDuration}, </if>
-			<if test="lookTvComputerDuration != null">`look_tv_computer_duration` = #{lookTvComputerDuration}, </if>
-			<if test="sitTilt != null">`sit_tilt` = #{sitTilt}, </if>
-			<if test="useJianhuyiDuration != null">`use_jianhuyi_duration` = #{useJianhuyiDuration}, </if>
-			<if test="sportDuration != null">`sport_duration` = #{sportDuration}, </if>
-			<if test="delFlag != null">`del_flag` = #{delFlag}</if>
-		</set>
-		where id = #{id}
-	</update>
-	
-	
+
+    <update id="update" parameterType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        update t_use_jianhuyi_log
+        <set>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="addTime != null">`add_time` = #{addTime},</if>
+            <if test="readDuration != null">`read_duration` = #{readDuration},</if>
+            <if test="outdoorsDuration != null">`outdoors_duration` = #{outdoorsDuration},</if>
+            <if test="readDistance != null">`read_distance` = #{readDistance},</if>
+            <if test="readLight != null">`read_light` = #{readLight},</if>
+            <if test="lookPhoneDuration != null">`look_phone_duration` = #{lookPhoneDuration},</if>
+            <if test="lookTvComputerDuration != null">`look_tv_computer_duration` = #{lookTvComputerDuration},</if>
+            <if test="sitTilt != null">`sit_tilt` = #{sitTilt},</if>
+            <if test="useJianhuyiDuration != null">`use_jianhuyi_duration` = #{useJianhuyiDuration},</if>
+            <if test="sportDuration != null">`sport_duration` = #{sportDuration},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag}</if>
+        </set>
+        where id = #{id}
+    </update>
+
 
 </mapper>
