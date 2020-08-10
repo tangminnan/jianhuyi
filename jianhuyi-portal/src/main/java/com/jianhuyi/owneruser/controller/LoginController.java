@@ -1,22 +1,5 @@
 package com.jianhuyi.owneruser.controller;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
@@ -36,6 +19,21 @@ import com.jianhuyi.owneruser.dao.OwnerUserDao;
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
 import com.jianhuyi.owneruser.service.OwnerUserService;
 import com.jianhuyi.smsservice.service.ISMSService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -165,7 +163,7 @@ public class LoginController extends BaseController {
                 map.put("msg", "手机号码不能为空");
                 map.put("data", "");
             } else {
-                DefaultProfile profile = DefaultProfile.getProfile("default", "LTAIAkQWYVSC6h4A", "WIOQfNmfV5p0rGF6ovgcmwIDdzRzfI");
+                DefaultProfile profile = DefaultProfile.getProfile("default", "LTAI4G6bVPTi1kdS9DVzD4Us", "8UzvN8UI0iHxIbC5DTc15Zg4TlZRmU");
                 IAcsClient client = new DefaultAcsClient(profile);
 
                 Integer templateParam = (int) ((Math.random() * 9 + 1) * 100000);
@@ -424,10 +422,10 @@ public class LoginController extends BaseController {
                                 secondPassword = MD5Utils.encrypt(phone, secondPassword);
                                 if (password.equals(secondPassword)) {
                                     Map<String, Object> params = new HashMap<String, Object>();
-                                    params.put("phone",phone);
-                                   OwnerUserDO user =  userService.list(params).get(0);
-                                    System.out.println("=======phone==============="+phone);
-                                    System.out.println("=======user==============="+user);
+                                    params.put("phone", phone);
+                                    OwnerUserDO user = userService.list(params).get(0);
+                                    System.out.println("=======phone===============" + phone);
+                                    System.out.println("=======user===============" + user);
                                     Long userId = GenerateCode.gen16(8);
                                     user.setUserId(userId);
                                     user.setUsername(phone);

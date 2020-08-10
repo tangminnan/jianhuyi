@@ -37,13 +37,14 @@ public class VersionUpdateController {
         } else {
             list.put("code", -1);
             list.put("msg", "已是最新版本");
-            list.put("data", "");
+            list.put("data", null);
         }
 
         return list;
 
     }
 
+    //设备更新
     @ResponseBody
     @GetMapping("/listTest")
     public Map<String, Object> listTest() {

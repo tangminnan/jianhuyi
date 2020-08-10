@@ -248,6 +248,11 @@
             <artifactId>esdk-obs-java</artifactId>
             <version>3.19.7</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
 
         <!--war包部署需要-->
         <!--&lt;!&ndash; 移除嵌入式tomcat插件 &ndash;&gt;-->

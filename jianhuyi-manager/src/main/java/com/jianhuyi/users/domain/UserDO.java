@@ -85,6 +85,16 @@ public class UserDO implements Serializable {
     //右眼轴
     private Double rEyeAxis;
 
+    private String studentNum;
+
+    public String getStudentNum() {
+        return studentNum;
+    }
+
+    public void setStudentNum(String studentNum) {
+        this.studentNum = studentNum;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -366,7 +376,45 @@ public class UserDO implements Serializable {
     }
 
 
-
-
-
+    @Override
+    public String toString() {
+        return "UserDO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", openId='" + openId + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", heardUrl='" + heardUrl + '\'' +
+                ", name='" + name + '\'' +
+                ", identityCard='" + identityCard + '\'' +
+                ", unionid='" + unionid + '\'' +
+                ", registerTime=" + registerTime +
+                ", payNum=" + payNum +
+                ", serveNum=" + serveNum +
+                ", balance=" + balance +
+                ", restitution=" + restitution +
+                ", payTime=" + payTime +
+                ", loginTime=" + loginTime +
+                ", addTime=" + addTime +
+                ", updateTime=" + updateTime +
+                ", deleteFlag=" + deleteFlag +
+                ", username='" + username + '\'' +
+                ", sex=" + sex +
+                ", birthday=" + birthday +
+                ", flag=" + flag +
+                ", age=" + age +
+                ", school='" + school + '\'' +
+                ", grade='" + grade + '\'' +
+                ", lVision=" + lVision +
+                ", rVision=" + rVision +
+                ", lEyeBallDiameter=" + lEyeBallDiameter +
+                ", rEyeBallDiameter=" + rEyeBallDiameter +
+                ", lColumnDiameter=" + lColumnDiameter +
+                ", rColumnDiameter=" + rColumnDiameter +
+                ", lEyeAxis=" + lEyeAxis +
+                ", rEyeAxis=" + rEyeAxis +
+                ", studentNum='" + studentNum + '\'' +
+                '}';
+    }
 }

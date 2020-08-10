@@ -1,9 +1,12 @@
 package com.jianhuyi.information.service.impl;
 
-import com.jianhuyi.common.utils.DateUtils;
 import com.jianhuyi.information.dao.UseJianhuyiLogDao;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import com.jianhuyi.information.domain.UseRemindsDO;
+import com.jianhuyi.information.domain.UseTimeDO;
 import com.jianhuyi.information.service.UseJianhuyiLogService;
+import com.jianhuyi.information.service.UseRemindsService;
+import com.jianhuyi.information.service.UseTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +15,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.jianhuyi.common.utils.DateUtils.format;
+
 
 @Service
 public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
     @Autowired
     private UseJianhuyiLogDao useJianhuyiLogDao;
+    @Autowired
+    private UseRemindsService useRemindsService;
+    @Autowired
+    private UseTimeService useTimeService;
 
     @Override
     public UseJianhuyiLogDO get(Integer id) {
@@ -43,58 +52,66 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         return useJianhuyiLogDao.update(useJianhuyiLog);
     }
 
+    //今日的数据
     @Override
     public Map<String, Object> getByDayTime(Long userId) {
         Map<String, Object> mapP = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<String, Object>();
         UseJianhuyiLogDO useJianhuyiLogDO = new UseJianhuyiLogDO();
-        Double avgreadDuration = 0.0;
-        Double readDuration = 0.0;
-
-        UseJianhuyiLogDO useJianhuyiLogDOs = useJianhuyiLogDao.getReadDuration(userId);
+        //非阅读状态 户外
         UseJianhuyiLogDO outduration = useJianhuyiLogDao.getOutduration(userId);
-        System.out.println("============useJianhuyiLogDOs=================" + useJianhuyiLogDOs);
-        if (useJianhuyiLogDOs != null) {
-            if (useJianhuyiLogDOs.getAllreadDuration() != null && useJianhuyiLogDOs.getNum() != null && !useJianhuyiLogDOs.getNum().equals(0)) {
-                avgreadDuration = useJianhuyiLogDOs.getAllreadDuration() / useJianhuyiLogDOs.getNum();
-            } else {
-                avgreadDuration = 0.0;
-            }
-            if (useJianhuyiLogDOs.getAllreadDuration() != null) {
-                readDuration = useJianhuyiLogDOs.getAllreadDuration();
-            }
-        }
-
+        //阅读状态
         UseJianhuyiLogDO useJianhuyiLogDO1 = useJianhuyiLogDao.getByTime(userId);
 
-
         if (useJianhuyiLogDO1 != null) {
-            useJianhuyiLogDO1.setAllreadDuration(readDuration);
-            useJianhuyiLogDO1.setReadDuration(avgreadDuration);
             if (outduration != null) {
                 useJianhuyiLogDO1.setOutdoorsDuration(outduration.getOutdoorsDuration());
             } else {
                 useJianhuyiLogDO1.setOutdoorsDuration(0.0);
             }
+            params.put("userId", userId);
+            if (useRemindsService.list(params).size() > 0) {
+                useJianhuyiLogDO1.setRemind(useRemindsService.list(params).get(0).getRemindsNum());
+            } else {
+                useJianhuyiLogDO1.setRemind(0);
+            }
+
+            if (useTimeService.list(params).size() > 0) {
+                useJianhuyiLogDO1.setUseJianhuyiDuration(useTimeService.list(params).get(0).getUserDurtion() * 180);
+            } else {
+                useJianhuyiLogDO1.setUseJianhuyiDuration(0);
+            }
             mapP.put("data", useJianhuyiLogDO1);
         } else {
+            params.put("userId", userId);
+            if (useRemindsService.list(params).size() > 0) {
+                useJianhuyiLogDO.setRemind(useRemindsService.list(params).get(0).getRemindsNum());
+            } else {
+                useJianhuyiLogDO.setRemind(0);
+            }
+
+            if (useTimeService.list(params).size() > 0) {
+                useJianhuyiLogDO.setUseJianhuyiDuration(useTimeService.list(params).get(0).getUserDurtion() * 180);
+            } else {
+                useJianhuyiLogDO.setUseJianhuyiDuration(0);
+            }
+
             useJianhuyiLogDO.setOutdoorsDuration(0.0);
             useJianhuyiLogDO.setReadDistance(0.0);
             useJianhuyiLogDO.setReadLight(0.0);
             useJianhuyiLogDO.setLookPhoneDuration(0.0);
             useJianhuyiLogDO.setLookTvComputerDuration(0.0);
             useJianhuyiLogDO.setSitTilt(0.0);
-            useJianhuyiLogDO.setUseJianhuyiDuration(0.0);
             useJianhuyiLogDO.setSportDuration(0.0);
             useJianhuyiLogDO.setAllreadDuration(0.0);
-            useJianhuyiLogDO.setAllreadDuration(0.0);
 
-            useJianhuyiLogDO.setReadDuration(avgreadDuration);
-            useJianhuyiLogDO.setAllreadDuration(readDuration);
+            useJianhuyiLogDO.setReadDuration(0.0);
             if (outduration != null) {
                 useJianhuyiLogDO.setOutdoorsDuration(outduration.getOutdoorsDuration());
             } else {
                 useJianhuyiLogDO.setOutdoorsDuration(0.0);
             }
+
 
             mapP.put("data", useJianhuyiLogDO);
         }
@@ -111,95 +128,13 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> mapP = new HashMap<String, Object>();
         try {
-            Map<String, Collection<Double>> weekData = getlineData(start, end, userId);
+            Object weekData = getlineData(start, end, userId);
             map.put("lineChart", weekData);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        List<UseJianhuyiLogDO> recordBetween = useJianhuyiLogDao.queryUserWeekRecordBetween(start, end, userId);
-        Double readDuration = 0d;//阅读时长(分钟）
-        Double outdoorsDuration = 0d;//户外时长(小时）
-        Double readDistance = 0d;//阅读距离(厘米)
-        Double readLight = 0d;//阅读光照(lux)
-        Double lookPhoneDuration = 0d;//看手机时长(分钟)
-        Double lookTvComputerDuration = 0d;//看电脑电视时长(分钟）
-        Double sitTilt = 0d;//坐姿倾斜度
-        Double useJianhuyiDuration = 0d;//使用监护仪时长(小时）
-        Double sportDuration = 0d;//运动时长(小时)
 
-        if (recordBetween.size() > 0) {
-            for (UseJianhuyiLogDO useJianhuyiLogDO : recordBetween) {
-                if (useJianhuyiLogDO != null) {
-                    if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                        useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-                    }
-                    if (useJianhuyiLogDO.getSportDuration() != null) {
-                        sportDuration += useJianhuyiLogDO.getSportDuration();
-                    }
-
-                    if (useJianhuyiLogDO.getStatus() != null) {
-                        if (useJianhuyiLogDO.getStatus() == 1) {
-                            if (useJianhuyiLogDO.getReadDuration() != null) {
-                                readDuration += useJianhuyiLogDO.getReadDuration();
-                            }
-                            if (useJianhuyiLogDO.getReadDistance() != null) {
-                                readDistance += useJianhuyiLogDO.getReadDistance();
-                            }
-                            if (useJianhuyiLogDO.getReadLight() != null) {
-                                readLight += useJianhuyiLogDO.getReadLight();
-                            }
-                            if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                                lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-                            }
-                            if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                                lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-                            }
-                            if (useJianhuyiLogDO.getSitTilt() != null) {
-                                sitTilt += useJianhuyiLogDO.getSitTilt();
-                            }
-
-                        } else {
-                            if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                                outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-                            }
-                        }
-                    } else {
-                        if (useJianhuyiLogDO.getReadDuration() != null) {
-                            readDuration += useJianhuyiLogDO.getReadDuration();
-                        }
-                        if (useJianhuyiLogDO.getReadDistance() != null) {
-                            readDistance += useJianhuyiLogDO.getReadDistance();
-                        }
-                        if (useJianhuyiLogDO.getReadLight() != null) {
-                            readLight += useJianhuyiLogDO.getReadLight();
-                        }
-                        if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                            lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-                        }
-                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                            lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-                        }
-                        if (useJianhuyiLogDO.getSitTilt() != null) {
-                            sitTilt += useJianhuyiLogDO.getSitTilt();
-                        }
-                        if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                            outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-                        }
-                    }
-                }
-            }
-        }
-        DecimalFormat df = new DecimalFormat("0.00");
-        map.put("totalAvgUseJianhuyiDuration", df.format(useJianhuyiDuration / 7));
-        map.put("totalAvgReadDuration", df.format(readDuration / 7));
-        map.put("totalAvgOutdoorsDuration", df.format(outdoorsDuration / 7));
-        map.put("totalAvgReadDistance", df.format(readDistance / 7));
-        map.put("totalAvgReadLight", df.format(readLight / 7));
-        map.put("totalAvgLookPhoneDuration", df.format(lookPhoneDuration / 7));
-        map.put("totalAvgLookTvComputerDuration", df.format(lookTvComputerDuration / 7));
-        map.put("totalAvgSitTilt", df.format(sitTilt / 7));
-        map.put("totalAvgSportDuration", df.format(sportDuration / 7));
         mapP.put("data", map);
         mapP.put("msg", "操作成功");
         mapP.put("code", 0);
@@ -212,72 +147,25 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
     public Map<String, Object> queryUserMonthHistory(Date start, Date end, Long userId) {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> mapP = new HashMap<String, Object>();
+        //提醒
+        Integer avgRemind = 0;
+        Integer remindCount = 0;
+        //户外
+        Double avgOutduration = 0.0;
+        Integer outdurationCount = 0;
+        //平均日阅读时长
+        Double avgReadDuration = 0.0;
+        Integer readDurationCount = 0;
+
+        Map<String, Object> mapData = null;
         try {
-            Map<String, Collection<Double>> monthData = getlineData(start, end, userId);
-            map.put("lineChart", monthData);
+            mapData = getlineData(start, end, userId);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        List<UseJianhuyiLogDO> recordBetween = useJianhuyiLogDao.queryUserWeekRecordBetween(start, end, userId);
-        Double readDuration = 0d;//阅读时长(分钟）
-        Double outdoorsDuration = 0d;//户外时长(小时）
-        Double readDistance = 0d;//阅读距离(厘米)
-        Double readLight = 0d;//阅读光照(lux)
-        Double lookPhoneDuration = 0d;//看手机时长(分钟)
-        Double lookTvComputerDuration = 0d;//看电脑电视时长(分钟）
-        Double sitTilt = 0d;//坐姿倾斜度
-        Double useJianhuyiDuration = 0d;//使用监护仪时长(小时）
-        Double sportDuration = 0d;//运动时长(小时)
-        if (recordBetween.size() > 0) {
-            for (UseJianhuyiLogDO useJianhuyiLogDO : recordBetween) {
-                if (useJianhuyiLogDO != null) {
+        System.out.println("============mapData==========================" + mapData);
 
-
-                    if (useJianhuyiLogDO.getReadDuration() != null) {
-                        readDuration += useJianhuyiLogDO.getReadDuration();
-                    }
-                    if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                        outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-                    }
-                    if (useJianhuyiLogDO.getReadDistance() != null) {
-                        readDistance += useJianhuyiLogDO.getReadDistance();
-                    }
-                    if (useJianhuyiLogDO.getReadLight() != null) {
-                        readLight += useJianhuyiLogDO.getReadLight();
-                    }
-                    if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                        lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-                    }
-                    if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                        lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-                    }
-                    if (useJianhuyiLogDO.getSitTilt() != null) {
-                        sitTilt += useJianhuyiLogDO.getSitTilt();
-                    }
-                    if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                        useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-                    }
-                    if (useJianhuyiLogDO.getSportDuration() != null) {
-                        sportDuration += useJianhuyiLogDO.getSportDuration();
-                    }
-
-                }
-
-
-            }
-        }
-        DecimalFormat df = new DecimalFormat("0.00");
-        map.put("totalAvgUseJianhuyiDuration", df.format(useJianhuyiDuration / 30));
-        map.put("totalAvgReadDuration", df.format(readDuration / 30));
-        map.put("totalAvgOutdoorsDuration", df.format(outdoorsDuration / 30));
-        map.put("totalAvgReadDistance", df.format(readDistance / 30));
-        map.put("totalAvgReadLight", df.format(readLight / 30));
-        map.put("totalAvgLookPhoneDuration", df.format(lookPhoneDuration / 30));
-        map.put("totalAvgLookTvComputerDuration", df.format(lookTvComputerDuration / 30));
-        map.put("totalAvgSitTilt", df.format(sitTilt / 30));
-        map.put("totalAvgSportDuration", df.format(sportDuration / 30));
-        mapP.put("data", map);
+        mapP.put("data", mapData);
         mapP.put("msg", "操作成功");
         mapP.put("code", 0);
 
@@ -285,7 +173,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
     }
 
 
-    private Map<String, Collection<Double>> getlineData(Date start, Date end, Long userId) throws ParseException {
+    private Map<String, Object> getlineData(Date start, Date end, Long userId) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Double> avgReadDuration = new LinkedHashMap<String, Double>();
         Map<String, Double> outdoorsDuration = new LinkedHashMap<String, Double>();
@@ -294,18 +182,35 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         Map<String, Double> avgLookPhoneDuration = new LinkedHashMap<String, Double>();
         Map<String, Double> avgLookTvComputerDuration = new LinkedHashMap<String, Double>();
         Map<String, Double> avgSitTilt = new LinkedHashMap<String, Double>();
-        Map<String, Double> avgUseJianhuyiDuration = new LinkedHashMap<String, Double>();
+        Map<String, Integer> avgUseJianhuyiDuration = new LinkedHashMap<String, Integer>();
         Map<String, Double> sportDuration = new LinkedHashMap<String, Double>();
+        Map<String, Integer> remind = new LinkedHashMap<String, Integer>();
+        Map<String, Double> map = new LinkedHashMap<String, Double>();
+
+        //有数据的天数
+        Integer readDurationCount = 0;
+        Integer outdoorsDurationCount = 0;
+        Integer readDistanceCount = 0;
+        Integer readLightCount = 0;
+        Integer lookPhoneDurationCount = 0;
+        Integer lookTvComputerDurationCount = 0;
+        Integer sitTiltCount = 0;
+        Integer useJianhuyiDurationCount = 0;
+        Integer remindCount = 0;
+
+        //总平均
+        Double AllreadDuration = 0.0;
+        Double AlloutdoorsDuration = 0.0;
+        Double AllreadDistance = 0.0;
+        Double AllreadLight = 0.0;
+        Double AlllookPhoneDuration = 0.0;
+        Double AlllookTvComputerDuration = 0.0;
+        Double AllsitTilt = 0.0;
+        Integer AlluseJianhuyiDuration = 0;
+        Integer Allremind = 0;
+
         while (start.compareTo(end) <= 0) {
-            avgReadDuration.put(DateUtils.format(start), 0.0);
-            outdoorsDuration.put(DateUtils.format(start), 0.0);
-            avgReadDistance.put(DateUtils.format(start), 0.0);
-            avgReadLight.put(DateUtils.format(start), 0.0);
-            avgLookPhoneDuration.put(DateUtils.format(start), 0.0);
-            avgLookTvComputerDuration.put(DateUtils.format(start), 0.0);
-            avgSitTilt.put(DateUtils.format(start), 0.0);
-            avgUseJianhuyiDuration.put(DateUtils.format(start), 0.0);
-            sportDuration.put(DateUtils.format(start), 0.0);
+            map.put(format(start), 0.0);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(start);
             calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -313,117 +218,166 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         }
         List<String> list = new ArrayList<String>();
 
-        Set<String> keySet = avgReadDuration.keySet();
+        Set<String> keySet = map.keySet();
         Iterator<String> iterator = keySet.iterator();
         while (iterator.hasNext()) {
             list.add(iterator.next());
         }
         for (String string : list) {
-            //	System.out.println(string);
-            Double readDurationT = 0d;//阅读时长(分钟）
-            Double outdoorsDurationT = 0d;//户外时长(小时）
-            Double readDistanceT = 0d;//阅读距离(厘米)
-            Double readLightT = 0d;//阅读光照(lux)
-            Double lookPhoneDurationT = 0d;//看手机时长(分钟)
-            Integer lookPhoneCount = 0;//看手机次数
-            Double lookTvComputerDurationT = 0d;//看电脑电视时长(分钟）
-            Integer lookTvComputerCuont = 0;//看电脑电视次数
-            Double sitTiltT = 0d;//坐姿倾斜度
-            Double useJianhuyiDurationT = 0d;//使用监护仪时长(小时）
-            Double sportDurationT = 0d;//运动时长(小时)
 
-            List<UseJianhuyiLogDO> weekRecord = useJianhuyiLogDao.queryUserWeekRecord(string, userId);
-
-            Integer readSize = 0;
-            Integer other = 0;
-            if (weekRecord.size() > 0) {
-                for (UseJianhuyiLogDO useJianhuyiLogDO : weekRecord) {
-                    useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-                    sportDurationT += useJianhuyiLogDO.getSportDuration();
-                    if (useJianhuyiLogDO.getLookPhoneCount() != null) {
-                        lookPhoneCount += useJianhuyiLogDO.getLookPhoneCount();
-                    }
-                    if (useJianhuyiLogDO.getLookTvComputerCount() != null) {
-                        lookTvComputerCuont += useJianhuyiLogDO.getLookTvComputerCount();
-                    }
-                    if (useJianhuyiLogDO.getStatus() != null) {
-                        if (useJianhuyiLogDO.getStatus() == 1) {
-                            readDurationT += useJianhuyiLogDO.getReadDuration();
-                            readDistanceT += useJianhuyiLogDO.getReadDistance();
-                            readLightT += useJianhuyiLogDO.getReadLight();
-                            lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-                            lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-                            sitTiltT += useJianhuyiLogDO.getSitTilt();
-
-                            readSize++;
-
-                        } else if (useJianhuyiLogDO.getStatus() == 2) {
-                            outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-                        } else {
-                            other++;
-                        }
-                    } else {
-                        readDurationT += useJianhuyiLogDO.getReadDuration();
-                        readDistanceT += useJianhuyiLogDO.getReadDistance();
-                        readLightT += useJianhuyiLogDO.getReadLight();
-                        lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-                        lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-                        sitTiltT += useJianhuyiLogDO.getSitTilt();
-                    }
-
-                }
-
-                DecimalFormat df = new DecimalFormat("0.00");
-                if (readSize > 0) {
-                    if (lookPhoneCount > 0) {
-                        avgLookPhoneDuration.put(string, Double.parseDouble(df.format(lookPhoneDurationT / lookPhoneCount)));
-                    } else {
-                        avgLookPhoneDuration.put(string, 0.0);
-                    }
-
-                    if (lookTvComputerCuont > 0) {
-                        avgLookTvComputerDuration.put(string, Double.parseDouble(df.format(lookTvComputerDurationT / lookTvComputerCuont)));
-                    } else {
-                        avgLookTvComputerDuration.put(string, 0.0);
-                    }
-                    avgReadDuration.put(string, Double.parseDouble(df.format(readDurationT / readSize)));
-                    avgSitTilt.put(string, Double.parseDouble(df.format(sitTiltT / readSize)));
-                    avgReadLight.put(string, Double.parseDouble(df.format(readLightT / readSize)));
-                    avgReadDistance.put(string, Double.parseDouble(df.format(readDistanceT / readSize)));
+            //阅读状态
+            UseJianhuyiLogDO useJianhuyiLogDO = useJianhuyiLogDao.queryUserWeekRecord(string, userId);
+            if (useJianhuyiLogDO != null) {
+                if (useJianhuyiLogDO.getReadDuration() != null && useJianhuyiLogDO.getReadDuration() > 0) {
+                    readDurationCount++;
+                    avgReadDuration.put(string, useJianhuyiLogDO.getReadDuration());
+                    AllreadDuration += useJianhuyiLogDO.getReadDuration();
                 } else {
-                    if (lookPhoneCount > 0) {
-                        avgLookPhoneDuration.put(string, Double.parseDouble(df.format(lookPhoneDurationT / lookPhoneCount)));
-                    } else {
-                        avgLookPhoneDuration.put(string, 0.0);
-                    }
-
-                    if (lookTvComputerCuont > 0) {
-                        avgLookTvComputerDuration.put(string, Double.parseDouble(df.format(lookTvComputerDurationT / lookTvComputerCuont)));
-                    } else {
-                        avgLookTvComputerDuration.put(string, 0.0);
-                    }
-                    avgReadDuration.put(string, Double.parseDouble(df.format(readDurationT / weekRecord.size())));
-                    avgSitTilt.put(string, Double.parseDouble(df.format(sitTiltT / weekRecord.size())));
-                    avgReadLight.put(string, Double.parseDouble(df.format(readLightT / weekRecord.size())));
-                    avgReadDistance.put(string, Double.parseDouble(df.format(readDistanceT / weekRecord.size())));
+                    avgReadDuration.put(string, 0.0);
                 }
-                avgUseJianhuyiDuration.put(string, Double.parseDouble(df.format(useJianhuyiDurationT / weekRecord.size())));
-                outdoorsDuration.put(string, Double.parseDouble(df.format(outdoorsDurationT)));
-                sportDuration.put(string, Double.parseDouble(df.format(sportDurationT)));
+                if (useJianhuyiLogDO.getReadDistance() != null && useJianhuyiLogDO.getReadDistance() > 0) {
+                    readDistanceCount++;
+                    avgReadDistance.put(string, useJianhuyiLogDO.getReadDistance());
+                    AllreadDistance += useJianhuyiLogDO.getReadDistance();
+                } else {
+                    avgReadDistance.put(string, 0.0);
+                }
+                if (useJianhuyiLogDO.getReadLight() != null && useJianhuyiLogDO.getReadLight() > 0) {
+                    readLightCount++;
+                    avgReadLight.put(string, useJianhuyiLogDO.getReadLight());
+                    AllreadLight += useJianhuyiLogDO.getReadLight();
+                } else {
+                    avgReadLight.put(string, 0.0);
+                }
+                if (useJianhuyiLogDO.getLookPhoneDuration() != null && useJianhuyiLogDO.getLookPhoneDuration() > 0) {
+                    lookPhoneDurationCount++;
+                    avgLookPhoneDuration.put(string, useJianhuyiLogDO.getLookPhoneDuration());
+                    AlllookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+                } else {
+                    avgLookPhoneDuration.put(string, 0.0);
+                }
+                if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0) {
+                    lookTvComputerDurationCount++;
+                    avgLookTvComputerDuration.put(string, useJianhuyiLogDO.getLookTvComputerDuration());
+                    AlllookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+                } else {
+                    avgLookTvComputerDuration.put(string, 0.0);
+                }
+                if (useJianhuyiLogDO.getSitTilt() != null && useJianhuyiLogDO.getSitTilt() > 0) {
+                    sitTiltCount++;
+                    avgSitTilt.put(string, useJianhuyiLogDO.getSitTilt());
+                    AllsitTilt += useJianhuyiLogDO.getSitTilt();
+                } else {
+                    avgSitTilt.put(string, 0.0);
+                }
+            } else {
+                avgReadDuration.put(string, 0.0);
+                avgReadDistance.put(string, 0.0);
+                avgReadLight.put(string, 0.0);
+                avgLookPhoneDuration.put(string, 0.0);
+                avgLookTvComputerDuration.put(string, 0.0);
+                avgSitTilt.put(string, 0.0);
+            }
+
+            //户外非阅读
+            UseJianhuyiLogDO useJianhuyiLogDO1 = useJianhuyiLogDao.queryOutdoorsDuration(string, userId);
+            if (useJianhuyiLogDO1 != null) {
+                if (useJianhuyiLogDO1.getOutdoorsDuration() != null && useJianhuyiLogDO1.getOutdoorsDuration() > 0) {
+                    outdoorsDurationCount++;
+                    outdoorsDuration.put(string, useJianhuyiLogDO1.getOutdoorsDuration());
+                    AlloutdoorsDuration += useJianhuyiLogDO1.getOutdoorsDuration();
+                }
+            } else {
+                outdoorsDuration.put(string, 0.0);
+            }
+
+            //震动提醒
+            UseRemindsDO useRemindsDO = useJianhuyiLogDao.queryRemind(string, userId);
+            if (useRemindsDO != null && useRemindsDO.getRemindsNum() > 0) {
+                remind.put(string, useRemindsDO.getRemindsNum());
+                remindCount++;
+                Allremind += useRemindsDO.getRemindsNum();
+            } else {
+                remind.put(string, 0);
+            }
+
+            //使用时长
+            UseTimeDO useTimeDO = useJianhuyiLogDao.queryUseTime(string, userId);
+            if (useTimeDO != null && useTimeDO.getUserDurtion() > 0) {
+                avgUseJianhuyiDuration.put(string, useTimeDO.getUserDurtion());
+                useJianhuyiDurationCount++;
+                AlluseJianhuyiDuration += useTimeDO.getUserDurtion();
+            } else {
+                avgUseJianhuyiDuration.put(string, 0);
             }
         }
-        Map<String, Collection<Double>> map = new HashMap<String, Collection<Double>>();
-        map.put("avgReadDuration", avgReadDuration.values());
-        map.put("outdoorsDuration", outdoorsDuration.values());
-        map.put("avgReadDistance", avgReadDistance.values());
-        map.put("avgReadLight", avgReadLight.values());
-        map.put("avgLookPhoneDuration", avgLookPhoneDuration.values());
-        map.put("avgLookTvComputerDuration", avgLookTvComputerDuration.values());
-        map.put("avgSitTilt", avgSitTilt.values());
-        map.put("avgUseJianhuyiDuration", avgUseJianhuyiDuration.values());
-        map.put("sportDuration", sportDuration.values());
+        Map<String, Object> mapP = new HashMap<String, Object>();
+        mapP.put("avgReadDuration", avgReadDuration.values());
+        mapP.put("outdoorsDuration", outdoorsDuration.values());
+        mapP.put("avgReadDistance", avgReadDistance.values());
+        mapP.put("avgReadLight", avgReadLight.values());
+        mapP.put("avgLookPhoneDuration", avgLookPhoneDuration.values());
+        mapP.put("avgLookTvComputerDuration", avgLookTvComputerDuration.values());
+        mapP.put("avgSitTilt", avgSitTilt.values());
+        mapP.put("avgUseJianhuyiDuration", avgUseJianhuyiDuration.values());
+        mapP.put("remind", remind.values());
 
-        return map;
+        Map<String, Object> map2 = new HashMap<>();
+        if (readDurationCount > 0) {
+            map2.put("AllreadDuration", AllreadDuration / readDurationCount);
+        } else {
+            map2.put("AllreadDuration", 0.0);
+        }
+        if (outdoorsDurationCount > 0) {
+            map2.put("AlloutdoorsDuration", AlloutdoorsDuration / outdoorsDurationCount);
+        } else {
+            map2.put("AlloutdoorsDuration", 0.0);
+        }
+        if (readDistanceCount > 0) {
+            map2.put("AllreadDistance", AllreadDistance / readDistanceCount);
+        } else {
+            map2.put("AllreadDistance", 0.0);
+        }
+
+        if (readLightCount > 0) {
+            map2.put("AllreadLight", AllreadLight / readLightCount);
+        } else {
+            map2.put("AllreadLight", 0.0);
+        }
+        if (lookPhoneDurationCount > 0) {
+            map2.put("AlllookPhoneDuration", AlllookPhoneDuration / lookPhoneDurationCount);
+        } else {
+            map2.put("AlllookPhoneDuration", 0.0);
+        }
+
+        if (lookTvComputerDurationCount > 0) {
+            map2.put("AlllookTvComputerDuration", AlllookTvComputerDuration / lookTvComputerDurationCount);
+        } else {
+            map2.put("AlllookTvComputerDuration", 0.0);
+        }
+        if (sitTiltCount > 0) {
+            map2.put("AllsitTilt", AllsitTilt / sitTiltCount);
+        } else {
+            map2.put("AllsitTilt", 0.0);
+        }
+
+        if (useJianhuyiDurationCount > 0) {
+            map2.put("AlluseJianhuyiDuration", AlluseJianhuyiDuration / useJianhuyiDurationCount);
+        } else {
+            map2.put("AlluseJianhuyiDuration", 0.0);
+        }
+        if (remindCount > 0) {
+            map2.put("Allremind", Allremind / remindCount);
+        } else {
+            map2.put("Allremind", 0.0);
+        }
+
+
+        Map<String, Object> result = new HashMap<>();
+        //数据集合
+        result.put("mapP", mapP);
+        result.put("map2", map2);
+        return result;
 
     }
 
@@ -434,70 +388,12 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> mapP = new HashMap<String, Object>();
         try {
-            Map<String, Collection<Double>> seasonData = seasonData(start, end, userId);
+            Map<String, Object> seasonData = seasonData(start, end, userId);
             map.put("lineChart", seasonData);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        List<UseJianhuyiLogDO> betweenSum = useJianhuyiLogDao.queryUserRecordBetweenSum(start, end, userId);
-        Double readDuration = 0d;//阅读时长(分钟）
-        Double outdoorsDuration = 0d;//户外时长(小时）
-        Double readDistance = 0d;//阅读距离(厘米)
-        Double readLight = 0d;//阅读光照(lux)
-        Double lookPhoneDuration = 0d;//看手机时长(分钟)
-        Double lookTvComputerDuration = 0d;//看电脑电视时长(分钟）
-        Double sitTilt = 0d;//坐姿倾斜度
-        Double useJianhuyiDuration = 0d;//使用监护仪时长(小时）
-        Double sportDuration = 0d;//运动时长(小时)
-        if (betweenSum.size() > 0) {
-            for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-                if (useJianhuyiLogDO != null) {
-                    if (useJianhuyiLogDO.getReadDuration() != null) {
-                        readDuration += useJianhuyiLogDO.getReadDuration();
-                    }
-                    if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                        outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-                    }
-                    if (useJianhuyiLogDO.getReadDistance() != null) {
-                        readDistance += useJianhuyiLogDO.getReadDistance();
-                    }
-                    if (useJianhuyiLogDO.getReadLight() != null) {
-                        readLight += useJianhuyiLogDO.getReadLight();
-                    }
-                    if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                        lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-                    }
-                    if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                        lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-                    }
-                    if (useJianhuyiLogDO.getSitTilt() != null) {
-                        sitTilt += useJianhuyiLogDO.getSitTilt();
-                    }
-                    if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                        useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-                    }
-                    if (useJianhuyiLogDO.getSportDuration() != null) {
-                        sportDuration += useJianhuyiLogDO.getSportDuration();
-                    }
-                }
-
-
-            }
-        }
-
-        DecimalFormat df = new DecimalFormat("0.00");
-        map.put("totalAvgUseJianhuyiDuration", df.format(useJianhuyiDuration / 12));
-        map.put("totalAvgReadDuration", df.format(readDuration / 12));
-        map.put("totalAvgOutdoorsDuration", df.format(outdoorsDuration / 12));
-        map.put("totalAvgReadDistance", df.format(readDistance / 12));
-        map.put("totalAvgReadLight", df.format(readLight / 12));
-        map.put("totalAvgLookPhoneDuration", df.format(lookPhoneDuration / 12));
-        map.put("totalAvgLookTvComputerDuration", df.format(lookTvComputerDuration / 12));
-        map.put("totalAvgSitTilt", df.format(sitTilt / 12));
-        map.put("totalAvgSportDuration", df.format(sportDuration / 12));
-        map.put("dayAvgUseJianhuyiDuration", df.format(useJianhuyiDuration / 90 / 60));
-        map.put("dayAvgReadDuration", df.format(readDuration / 90 / 60));
         mapP.put("data", map);
         mapP.put("msg", "操作成功");
         mapP.put("code", 0);
@@ -505,8 +401,9 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         return mapP;
     }
 
-    private Map<String, Collection<Double>> seasonData(Date start, Date end, Long userId) throws ParseException {
+    private Map<String, Object> seasonData(Date start, Date end, Long userId) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
         Map<String, Double> map = new LinkedHashMap<String, Double>();
         Map<Integer, Double> avgReadDuration = new LinkedHashMap<Integer, Double>();
         Map<Integer, Double> outdoorsDuration = new LinkedHashMap<Integer, Double>();
@@ -515,10 +412,34 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         Map<Integer, Double> avgLookPhoneDuration = new LinkedHashMap<Integer, Double>();
         Map<Integer, Double> avgLookTvComputerDuration = new LinkedHashMap<Integer, Double>();
         Map<Integer, Double> avgSitTilt = new LinkedHashMap<Integer, Double>();
-        Map<Integer, Double> avgUseJianhuyiDuration = new LinkedHashMap<Integer, Double>();
+        Map<Integer, Integer> avgUseJianhuyiDuration = new LinkedHashMap<Integer, Integer>();
         Map<Integer, Double> sportDuration = new LinkedHashMap<Integer, Double>();
+        Map<Integer, Integer> remindCount = new LinkedHashMap<>();
+
+        //有数据的天数
+        Integer readDurationCount = 0;
+        Integer outdoorsDurationCount = 0;
+        Integer readDistanceCount = 0;
+        Integer readLightCount = 0;
+        Integer lookPhoneDurationCount = 0;
+        Integer lookTvComputerDurationCount = 0;
+        Integer sitTiltCount = 0;
+        Integer useJianhuyiDurationCount = 0;
+        Integer remindCounts = 0;
+
+        //总平均
+        Double AllreadDuration = 0.0;
+        Double AlloutdoorsDuration = 0.0;
+        Double AllreadDistance = 0.0;
+        Double AllreadLight = 0.0;
+        Double AlllookPhoneDuration = 0.0;
+        Double AlllookTvComputerDuration = 0.0;
+        Double AllsitTilt = 0.0;
+        Integer AlluseJianhuyiDuration = 0;
+        Integer Allremind = 0;
+
         while (start.compareTo(end) < 0) {
-            map.put(DateUtils.format(start), 0.0);
+            map.put(format(start), 0.0);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(start);
             calendar.add(Calendar.DAY_OF_MONTH, 7);
@@ -539,156 +460,159 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
             avgLookPhoneDuration.put(i + 1, 0.0);
             avgLookTvComputerDuration.put(i + 1, 0.0);
             avgSitTilt.put(i + 1, 0.0);
-            avgUseJianhuyiDuration.put(i + 1, 0.0);
+            avgUseJianhuyiDuration.put(i + 1, 0);
             sportDuration.put(i + 1, 0.0);
             Double readDurationT = 0d;//阅读时长(分钟）
             Double outdoorsDurationT = 0d;//户外时长(小时）
             Double readDistanceT = 0d;//阅读距离(厘米)
             Double readLightT = 0d;//阅读光照(lux)
             Double lookPhoneDurationT = 0d;//看手机时长(分钟)
-            Integer lookPhoneCount = 0;//看手机次数
             Double lookTvComputerDurationT = 0d;//看电脑电视时长(分钟）
-            Integer lookTvComputerCount = 0;//看电脑电视次数
             Double sitTiltT = 0d;//坐姿倾斜度
-            Double useJianhuyiDurationT = 0d;//使用监护仪时长(小时）
-            Double sportDurationT = 0d;//运动时长(小时)
+            Integer useJianhuyiDurationT = 0;//使用监护仪时长(小时）
+            Integer remindCountT = 0; //震动次数
 
             Integer readSize = 0;
             Integer other = 0;
             if (i == 11) {
-	     		   /*System.out.println(list.get(i));
-	     		   System.out.println(format.format(sdf.parse(list.get(i+1))));*/
+
+                /*每月阅读状态统计*/
                 List<UseJianhuyiLogDO> between = useJianhuyiLogDao.queryUserWeekRecordBetween(sdf.parse(list.get(i)), end, userId);
                 if (between.size() > 0) {
                     for (UseJianhuyiLogDO useJianhuyiLogDO : between) {
-                        lookPhoneCount += useJianhuyiLogDO.getLookPhoneCount();
-                        lookTvComputerCount += useJianhuyiLogDO.getLookTvComputerCount();
-
-                        if (useJianhuyiLogDO != null) {
-                            if (useJianhuyiLogDO.getReadDuration() != null) {
-                                readDurationT += useJianhuyiLogDO.getReadDuration();
-                            }
-                            if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                                outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-                            }
-                            if (useJianhuyiLogDO.getReadDistance() != null) {
-                                readDistanceT += useJianhuyiLogDO.getReadDistance();
-                            }
-                            if (useJianhuyiLogDO.getReadLight() != null) {
-                                readLightT += useJianhuyiLogDO.getReadLight();
-                            }
-                            if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                                lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-                            }
-                            if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                                lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-                            }
-                            if (useJianhuyiLogDO.getSitTilt() != null) {
-                                sitTiltT += useJianhuyiLogDO.getSitTilt();
-                            }
-                            if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                                useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-                            }
-                            if (useJianhuyiLogDO.getSportDuration() != null) {
-                                sportDurationT += useJianhuyiLogDO.getSportDuration();
-                            }
+                        readDurationT += useJianhuyiLogDO.getReadDuration();
+                        readDistanceT += useJianhuyiLogDO.getReadDistance();
+                        readLightT += useJianhuyiLogDO.getReadLight();
+                        if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
+                            lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
                         }
+                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
+                            lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
+                        }
+                        sitTiltT += useJianhuyiLogDO.getSitTilt();
 
-                    }
-                    DecimalFormat df = new DecimalFormat("0.00");
-
-                    avgReadDuration.put(i + 1, Double.parseDouble(df.format(readDurationT / between.size())));
-                    outdoorsDuration.put(i + 1, Double.parseDouble(df.format(outdoorsDurationT)));
-                    avgReadDistance.put(i + 1, Double.parseDouble(df.format(readDistanceT / between.size())));
-                    avgReadLight.put(i + 1, Double.parseDouble(df.format(readLightT / between.size())));
-
-                    if (lookPhoneCount > 0) {
-                        avgLookPhoneDuration.put(i + 1, Double.parseDouble(df.format(lookPhoneDurationT / lookPhoneCount)));
-                    } else {
-                        avgLookPhoneDuration.put(i + 1, 0.0);
+                        avgReadDuration.put(i + 1, readDurationT / between.size());
+                        avgReadDistance.put(i + 1, readDistanceT / between.size());
+                        avgReadLight.put(i + 1, readLightT / between.size());
+                        avgLookPhoneDuration.put(i + 1, lookPhoneDurationT / between.size());
+                        avgLookTvComputerDuration.put(i + 1, lookTvComputerDurationT / between.size());
+                        avgSitTilt.put(i + 1, sitTiltT / between.size());
                     }
 
-                    if (lookTvComputerCount > 0) {
-                        avgLookTvComputerDuration.put(i + 1, Double.parseDouble(df.format(lookTvComputerDurationT / lookTvComputerCount)));
-                    } else {
-                        avgLookTvComputerDuration.put(i + 1, 0.0);
-                    }
-                    avgSitTilt.put(i + 1, Double.parseDouble(df.format(sitTiltT / between.size())));
-                    avgUseJianhuyiDuration.put(i + 1, Double.parseDouble(df.format(useJianhuyiDurationT / between.size())));
-                    sportDuration.put(i + 1, Double.parseDouble(df.format(sportDurationT)));
-
+                } else {
+                    avgReadDuration.put(i + 1, 0.0);
+                    avgReadDistance.put(i + 1, 0.0);
+                    avgReadLight.put(i + 1, 0.0);
+                    avgLookPhoneDuration.put(i + 1, 0.0);
+                    avgLookTvComputerDuration.put(i + 1, 0.0);
+                    avgSitTilt.put(i + 1, 0.0);
                 }
 
+                /*每月户外非阅读状态数据统计*/
+                List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogDao.getOutdurationYear(sdf.parse(list.get(i)), end, userId);
+                if (useJianhuyiLogDOList.size() > 0) {
+                    for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
+                        outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
+
+                        outdoorsDuration.put(i + 1, outdoorsDurationT / useJianhuyiLogDOList.size());
+                    }
+                } else {
+                    outdoorsDuration.put(i + 1, 0.0);
+                }
+                /*每月使用监护仪时长数据统计*/
+                List<UseTimeDO> useTimeDOList = useJianhuyiLogDao.getUseJianhuyiTimeYear(sdf.parse(list.get(i)), end, userId);
+                if (useTimeDOList.size() > 0) {
+                    for (UseTimeDO useTimeDO : useTimeDOList) {
+                        useJianhuyiDurationT += useTimeDO.getUserDurtion() * 180;
+
+                        avgUseJianhuyiDuration.put(i + 1, useJianhuyiDurationT / useTimeDOList.size());
+                    }
+                } else {
+                    avgUseJianhuyiDuration.put(i + 1, 0);
+                }
+                /*每月震动次数数据统计*/
+                List<UseRemindsDO> useRemindsDOList = useJianhuyiLogDao.getRemindYear(sdf.parse(list.get(i)), end, userId);
+                if (useRemindsDOList.size() > 0) {
+                    for (UseRemindsDO useRemindsDO : useRemindsDOList) {
+                        remindCountT += useRemindsDO.getRemindsNum();
+
+                        remindCount.put(i + 1, remindCountT / useRemindsDOList.size());
+                    }
+                } else {
+                    remindCount.put(i + 1, 0);
+                }
             } else {
-	     		   /*System.out.println(list.get(i));
-	         	   System.out.println(list.get(i+1));
-	         	   System.out.println("============"+i);*/
+                /*每月阅读状态统计*/
                 List<UseJianhuyiLogDO> between = useJianhuyiLogDao.queryUserWeekRecordBetween(sdf.parse(list.get(i)), sdf.parse(list.get(i + 1)), userId);
                 if (between.size() > 0) {
                     for (UseJianhuyiLogDO useJianhuyiLogDO : between) {
-                        if (useJianhuyiLogDO.getLookPhoneCount() != null) {
-                            lookPhoneCount += useJianhuyiLogDO.getLookPhoneCount();
+                        readDurationT += useJianhuyiLogDO.getReadDuration();
+                        readDistanceT += useJianhuyiLogDO.getReadDistance();
+                        readLightT += useJianhuyiLogDO.getReadLight();
+                        if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
+                            lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
                         }
-                        if (useJianhuyiLogDO.getLookTvComputerCount() != null) {
-                            lookTvComputerCount += useJianhuyiLogDO.getLookTvComputerCount();
-                        }
-                        if (useJianhuyiLogDO != null) {
-                            if (useJianhuyiLogDO.getReadDuration() != null) {
-                                readDurationT += useJianhuyiLogDO.getReadDuration();
-                            }
-                            if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                                outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-                            }
-                            if (useJianhuyiLogDO.getReadDistance() != null) {
-                                readDistanceT += useJianhuyiLogDO.getReadDistance();
-                            }
-                            if (useJianhuyiLogDO.getReadLight() != null) {
-                                readLightT += useJianhuyiLogDO.getReadLight();
-                            }
-                            if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                                lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-                            }
-                            if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                                lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-                            }
-                            if (useJianhuyiLogDO.getSitTilt() != null) {
-                                sitTiltT += useJianhuyiLogDO.getSitTilt();
-                            }
-                            if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                                useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-                            }
-                            if (useJianhuyiLogDO.getSportDuration() != null) {
-                                sportDurationT += useJianhuyiLogDO.getSportDuration();
-                            }
+                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
+                            lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
                         }
 
+                        sitTiltT += useJianhuyiLogDO.getSitTilt();
 
-                    }
-                    DecimalFormat df = new DecimalFormat("0.00");
-
-                    avgReadDuration.put(i + 1, Double.parseDouble(df.format(readDurationT / between.size())));
-                    outdoorsDuration.put(i + 1, Double.parseDouble(df.format(outdoorsDurationT)));
-                    avgReadDistance.put(i + 1, Double.parseDouble(df.format(readDistanceT / between.size())));
-                    avgReadLight.put(i + 1, Double.parseDouble(df.format(readLightT / between.size())));
-                    if (lookPhoneCount > 0) {
-                        avgLookPhoneDuration.put(i + 1, Double.parseDouble(df.format(lookPhoneDurationT / lookPhoneCount)));
-                    } else {
-                        avgLookPhoneDuration.put(i + 1, 0.0);
+                        avgReadDuration.put(i + 1, readDurationT / between.size());
+                        avgReadDistance.put(i + 1, readDistanceT / between.size());
+                        avgReadLight.put(i + 1, readLightT / between.size());
+                        avgLookPhoneDuration.put(i + 1, lookPhoneDurationT / between.size());
+                        avgLookTvComputerDuration.put(i + 1, lookTvComputerDurationT / between.size());
+                        avgSitTilt.put(i + 1, sitTiltT / between.size());
                     }
 
-                    if (lookTvComputerCount > 0) {
-                        avgLookTvComputerDuration.put(i + 1, Double.parseDouble(df.format(lookTvComputerDurationT / lookTvComputerCount)));
-                    } else {
-                        avgLookTvComputerDuration.put(i + 1, 0.0);
+                } else {
+                    avgReadDuration.put(i + 1, 0.0);
+                    avgReadDistance.put(i + 1, 0.0);
+                    avgReadLight.put(i + 1, 0.0);
+                    avgLookPhoneDuration.put(i + 1, 0.0);
+                    avgLookTvComputerDuration.put(i + 1, 0.0);
+                    avgSitTilt.put(i + 1, 0.0);
+                }
+
+                /*每月户外非阅读状态数据统计*/
+                List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogDao.getOutdurationYear(sdf.parse(list.get(i)), sdf.parse(list.get(i + 1)), userId);
+                if (useJianhuyiLogDOList.size() > 0) {
+                    for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
+                        outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
+
+                        outdoorsDuration.put(i + 1, outdoorsDurationT / useJianhuyiLogDOList.size());
                     }
-                    avgSitTilt.put(i + 1, Double.parseDouble(df.format(sitTiltT / between.size())));
-                    avgUseJianhuyiDuration.put(i + 1, Double.parseDouble(df.format(useJianhuyiDurationT / between.size())));
-                    sportDuration.put(i + 1, Double.parseDouble(df.format(sportDurationT)));
+                } else {
+                    outdoorsDuration.put(i + 1, 0.0);
+                }
+                /*每月使用监护仪时长数据统计*/
+                List<UseTimeDO> useTimeDOList = useJianhuyiLogDao.getUseJianhuyiTimeYear(sdf.parse(list.get(i)), sdf.parse(list.get(i + 1)), userId);
+                if (useTimeDOList.size() > 0) {
+                    for (UseTimeDO useTimeDO : useTimeDOList) {
+                        useJianhuyiDurationT += useTimeDO.getUserDurtion() * 180;
+
+                        avgUseJianhuyiDuration.put(i + 1, useJianhuyiDurationT / useTimeDOList.size());
+                    }
+                } else {
+                    avgUseJianhuyiDuration.put(i + 1, 0);
+                }
+                /*每月震动次数数据统计*/
+                List<UseRemindsDO> useRemindsDOList = useJianhuyiLogDao.getRemindYear(sdf.parse(list.get(i)), sdf.parse(list.get(i + 1)), userId);
+                if (useRemindsDOList.size() > 0) {
+                    for (UseRemindsDO useRemindsDO : useRemindsDOList) {
+                        remindCountT += useRemindsDO.getRemindsNum();
+
+                        remindCount.put(i + 1, remindCountT / useRemindsDOList.size());
+                    }
+                } else {
+                    remindCount.put(i + 1, 0);
                 }
             }
         }
 
-        Map<String, Collection<Double>> mapP = new LinkedHashMap<String, Collection<Double>>();
+        Map<String, Object> mapP = new LinkedHashMap<String, Object>();
+        /*每月平均使用*/
         mapP.put("avgReadDuration", avgReadDuration.values());
         mapP.put("outdoorsDuration", outdoorsDuration.values());
         mapP.put("avgReadDistance", avgReadDistance.values());
@@ -697,11 +621,121 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         mapP.put("avgLookTvComputerDuration", avgLookTvComputerDuration.values());
         mapP.put("avgSitTilt", avgSitTilt.values());
         mapP.put("avgUseJianhuyiDuration", avgUseJianhuyiDuration.values());
-        mapP.put("sportDuration", sportDuration.values());
+        mapP.put("remind", remindCount.values());
 
-        return mapP;
+        for (Double read : avgReadDuration.values()) {
+            if (read > 0) {
+                readDurationCount++;
+            }
+            AllreadDuration += read;
+        }
+
+        for (Double value : outdoorsDuration.values()) {
+            if (value > 0) {
+                outdoorsDurationCount++;
+            }
+            AlloutdoorsDuration += value;
+        }
+        for (Double value : avgReadDistance.values()) {
+            if (value > 0) {
+                readDistanceCount++;
+            }
+            AllreadDistance += value;
+        }
+
+        for (Double value : avgReadLight.values()) {
+            if (value > 0) {
+                readLightCount++;
+            }
+            AllreadLight += value;
+        }
+        for (Double value : avgLookPhoneDuration.values()) {
+            if (value > 0) {
+                lookPhoneDurationCount++;
+            }
+            AlllookPhoneDuration += value;
+        }
+        for (Double value : avgLookTvComputerDuration.values()) {
+            if (value > 0) {
+                lookTvComputerDurationCount++;
+            }
+            AlllookTvComputerDuration += value;
+        }
+        for (Double value : avgSitTilt.values()) {
+            if (value > 0) {
+                sitTiltCount++;
+            }
+            AllsitTilt += value;
+        }
+
+        for (Integer value : avgUseJianhuyiDuration.values()) {
+            if (value > 0) {
+                useJianhuyiDurationCount++;
+            }
+            AlluseJianhuyiDuration += value;
+        }
+
+        for (Integer value : remindCount.values()) {
+            if (value > 0) {
+                remindCounts++;
+            }
+            Allremind += value;
+        }
+        Map<String, Object> map2 = new LinkedHashMap<String, Object>();
+        if (readDurationCount > 0) {
+            map2.put("AllreadDuration", AllreadDuration / readDurationCount);
+        } else {
+            map2.put("AllreadDuration", 0.0);
+        }
+        if (outdoorsDurationCount > 0) {
+            map2.put("AlloutdoorsDuration", AlloutdoorsDuration / outdoorsDurationCount);
+        } else {
+            map2.put("AlloutdoorsDuration", 0.0);
+        }
+        if (readDistanceCount > 0) {
+            map2.put("AllreadDistance", AllreadDistance / readDistanceCount);
+        } else {
+            map2.put("AllreadDistance", 0.0);
+        }
+
+        if (readLightCount > 0) {
+            map2.put("AllreadLight", AllreadLight / readLightCount);
+        } else {
+            map2.put("AllreadLight", 0.0);
+        }
+        if (lookPhoneDurationCount > 0) {
+            map2.put("AlllookPhoneDuration", AlllookPhoneDuration / lookPhoneDurationCount);
+        } else {
+            map2.put("AlllookPhoneDuration", 0.0);
+        }
+
+        if (lookTvComputerDurationCount > 0) {
+            map2.put("AlllookTvComputerDuration", AlllookTvComputerDuration / lookTvComputerDurationCount);
+        } else {
+            map2.put("AlllookTvComputerDuration", 0.0);
+        }
+        if (sitTiltCount > 0) {
+            map2.put("AllsitTilt", AllsitTilt / sitTiltCount);
+        } else {
+            map2.put("AllsitTilt", 0.0);
+        }
+
+        if (useJianhuyiDurationCount > 0) {
+            map2.put("AlluseJianhuyiDuration", AlluseJianhuyiDuration / useJianhuyiDurationCount);
+        } else {
+            map2.put("AlluseJianhuyiDuration", 0.0);
+        }
+        if (remindCounts > 0) {
+            map2.put("Allremind", Allremind / remindCounts);
+        } else {
+            map2.put("Allremind", 0.0);
+        }
+
+        Map<String, Object> result = new LinkedHashMap<String, Object>();
+        result.put("mapP", mapP);
+        result.put("map2", map2);
+        return result;
     }
-
 
     //年记录
     @Override
@@ -709,70 +743,12 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> mapP = new HashMap<String, Object>();
         try {
-            Map<String, Collection<Double>> yearData = yearData(start, end, userId);
+            Map<String, Object> yearData = yearData(start, end, userId);
             map.put("lineChart", yearData);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        List<UseJianhuyiLogDO> betweenSum = useJianhuyiLogDao.queryUserRecordBetweenSum(start, end, userId);
-        Double readDuration = 0d;//阅读时长(分钟）
-        Double outdoorsDuration = 0d;//户外时长(小时）
-        Double readDistance = 0d;//阅读距离(厘米)
-        Double readLight = 0d;//阅读光照(lux)
-        Double lookPhoneDuration = 0d;//看手机时长(分钟)
-        Double lookTvComputerDuration = 0d;//看电脑电视时长(分钟）
-        Double sitTilt = 0d;//坐姿倾斜度
-        Double useJianhuyiDuration = 0d;//使用监护仪时长(小时）
-        Double sportDuration = 0d;//运动时长(小时)
-        if (betweenSum.size() > 0) {
-            for (UseJianhuyiLogDO useJianhuyiLogDO : betweenSum) {
-                if (useJianhuyiLogDO != null) {
-                    if (useJianhuyiLogDO.getReadDuration() != null) {
-                        readDuration += useJianhuyiLogDO.getReadDuration();
-                    }
-                    if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                        outdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
-                    }
-                    if (useJianhuyiLogDO.getReadDistance() != null) {
-                        readDistance += useJianhuyiLogDO.getReadDistance();
-                    }
-                    if (useJianhuyiLogDO.getReadLight() != null) {
-                        readLight += useJianhuyiLogDO.getReadLight();
-                    }
-                    if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                        lookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-                    }
-                    if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                        lookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-                    }
-                    if (useJianhuyiLogDO.getSitTilt() != null) {
-                        sitTilt += useJianhuyiLogDO.getSitTilt();
-                    }
-                    if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                        useJianhuyiDuration += useJianhuyiLogDO.getUseJianhuyiDuration();
-                    }
-                    if (useJianhuyiLogDO.getSportDuration() != null) {
-                        sportDuration += useJianhuyiLogDO.getSportDuration();
-                    }
-
-                }
-
-            }
-        }
-
-        DecimalFormat df = new DecimalFormat("0.00");
-        map.put("totalAvgUseJianhuyiDuration", df.format(useJianhuyiDuration / 365));
-        map.put("totalAvgReadDuration", df.format(readDuration / 365));
-        map.put("totalAvgOutdoorsDuration", df.format(outdoorsDuration / 365));
-        map.put("totalAvgReadDistance", df.format(readDistance / 365));
-        map.put("totalAvgReadLight", df.format(readLight / 365));
-        map.put("totalAvgLookPhoneDuration", df.format(lookPhoneDuration / 365));
-        map.put("totalAvgLookTvComputerDuration", df.format(lookTvComputerDuration / 365));
-        map.put("totalAvgSitTilt", df.format(sitTilt / 365));
-        map.put("totalAvgSportDuration", df.format(sportDuration / 365));
-        map.put("dayAvgUseJianhuyiDuration", df.format(useJianhuyiDuration / 365 / 60));
-        map.put("dayAvgReadDuration", df.format(readDuration / 365 / 60));
         mapP.put("data", map);
         mapP.put("msg", "操作成功");
         mapP.put("code", 0);
@@ -780,7 +756,12 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         return mapP;
     }
 
-    private Map<String, Collection<Double>> yearData(Date start, Date end, Long userId) throws
+    @Override
+    public void saveList(List<UseJianhuyiLogDO> useJianhuyiLogDOList) {
+        useJianhuyiLogDao.saveList(useJianhuyiLogDOList);
+    }
+
+    private Map<String, Object> yearData(Date start, Date end, Long userId) throws
             ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         DecimalFormat df = new DecimalFormat("0.00");
@@ -793,10 +774,32 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         Map<Integer, Double> avgLookPhoneDuration = new LinkedHashMap<Integer, Double>();
         Map<Integer, Double> avgLookTvComputerDuration = new LinkedHashMap<Integer, Double>();
         Map<Integer, Double> avgSitTilt = new LinkedHashMap<Integer, Double>();
-        Map<Integer, Double> avgUseJianhuyiDuration = new LinkedHashMap<Integer, Double>();
-        Map<Integer, Double> sportDuration = new LinkedHashMap<Integer, Double>();
+        Map<Integer, Integer> avgUseJianhuyiDuration = new LinkedHashMap<Integer, Integer>();
+        Map<Integer, Integer> remindCount = new LinkedHashMap<>();
+
+        //有数据的天数
+        Integer readDurationCount = 0;
+        Integer outdoorsDurationCount = 0;
+        Integer readDistanceCount = 0;
+        Integer readLightCount = 0;
+        Integer lookPhoneDurationCount = 0;
+        Integer lookTvComputerDurationCount = 0;
+        Integer sitTiltCount = 0;
+        Integer useJianhuyiDurationCount = 0;
+        Integer remindCounts = 0;
+
+        //总平均
+        Double AllreadDuration = 0.0;
+        Double AlloutdoorsDuration = 0.0;
+        Double AllreadDistance = 0.0;
+        Double AllreadLight = 0.0;
+        Double AlllookPhoneDuration = 0.0;
+        Double AlllookTvComputerDuration = 0.0;
+        Double AllsitTilt = 0.0;
+        Integer AlluseJianhuyiDuration = 0;
+        Integer Allremind = 0;
         while (start.compareTo(end) < 0) {
-            map.put(DateUtils.format(start), 0.0);
+            map.put(format(start), 0.0);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(start);
             calendar.add(Calendar.MONTH, 1);
@@ -817,8 +820,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
             avgLookPhoneDuration.put(i + 1, 0.0);
             avgLookTvComputerDuration.put(i + 1, 0.0);
             avgSitTilt.put(i + 1, 0.0);
-            avgUseJianhuyiDuration.put(i + 1, 0.0);
-            sportDuration.put(i + 1, 0.0);
+            avgUseJianhuyiDuration.put(i + 1, 0);
+
             Double readDurationT = 0d;//阅读时长(分钟）
             Double outdoorsDurationT = 0d;//户外时长(小时）
             Double readDistanceT = 0d;//阅读距离(厘米)
@@ -828,147 +831,148 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
             Integer lookTvComputerCount = 0;//看电脑电视次数
             Double lookTvComputerDurationT = 0d;//看电脑电视时长(分钟）
             Double sitTiltT = 0d;//坐姿倾斜度
-            Double useJianhuyiDurationT = 0d;//使用监护仪时长(小时）
-            Double sportDurationT = 0d;//运动时长(小时)
+            Integer useJianhuyiDurationT = 0;//使用监护仪时长(小时）
+            Integer remindCountT = 0; //震动次数
             if (i == 11) {
-			     		   /*System.out.println(list.get(i));
-			     		   System.out.println(format.format(sdf.parse(list.get(i+1))));*/
+
+                /*每月阅读状态统计*/
                 List<UseJianhuyiLogDO> between = useJianhuyiLogDao.queryUserWeekRecordBetween(sdf.parse(list.get(i)), end, userId);
                 if (between.size() > 0) {
                     for (UseJianhuyiLogDO useJianhuyiLogDO : between) {
-                        if (useJianhuyiLogDO.getLookPhoneCount() != null) {
-                            lookPhoneCount += useJianhuyiLogDO.getLookPhoneCount();
+                        readDurationT += useJianhuyiLogDO.getReadDuration();
+                        readDistanceT += useJianhuyiLogDO.getReadDistance();
+                        readLightT += useJianhuyiLogDO.getReadLight();
+                        if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
+                            lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
                         }
-                        if (useJianhuyiLogDO.getLookTvComputerCount() != null) {
-                            lookTvComputerCount += useJianhuyiLogDO.getLookTvComputerCount();
+                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
+                            lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
                         }
+                        sitTiltT += useJianhuyiLogDO.getSitTilt();
 
-                        if (useJianhuyiLogDO != null) {
-                            if (useJianhuyiLogDO.getReadDuration() != null) {
-                                readDurationT += useJianhuyiLogDO.getReadDuration();
-                            }
-                            if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                                outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-                            }
-                            if (useJianhuyiLogDO.getReadDistance() != null) {
-                                readDistanceT += useJianhuyiLogDO.getReadDistance();
-                            }
-                            if (useJianhuyiLogDO.getReadLight() != null) {
-                                readLightT += useJianhuyiLogDO.getReadLight();
-                            }
-                            if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                                lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-                            }
-                            if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                                lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-                            }
-                            if (useJianhuyiLogDO.getSitTilt() != null) {
-                                sitTiltT += useJianhuyiLogDO.getSitTilt();
-                            }
-                            if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                                useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-                            }
-                            if (useJianhuyiLogDO.getSportDuration() != null) {
-                                sportDurationT += useJianhuyiLogDO.getSportDuration();
-                            }
-                        }
-
-                    }
-                    avgReadDuration.put(i + 1, readDurationT / between.size());
-                    outdoorsDuration.put(i + 1, outdoorsDurationT);
-                    avgReadDistance.put(i + 1, readDistanceT / between.size());
-                    avgReadLight.put(i + 1, readLightT / between.size());
-                    if (lookPhoneCount > 0) {
-                        avgLookPhoneDuration.put(i + 1, Double.parseDouble(df.format(lookPhoneDurationT / lookPhoneCount)));
-                    } else {
-                        avgLookPhoneDuration.put(i + 1, 0.0);
+                        avgReadDuration.put(i + 1, readDurationT / between.size());
+                        avgReadDistance.put(i + 1, readDistanceT / between.size());
+                        avgReadLight.put(i + 1, readLightT / between.size());
+                        avgLookPhoneDuration.put(i + 1, lookPhoneDurationT / between.size());
+                        avgLookTvComputerDuration.put(i + 1, lookTvComputerDurationT / between.size());
+                        avgSitTilt.put(i + 1, sitTiltT / between.size());
                     }
 
-                    if (lookTvComputerCount > 0) {
-                        avgLookTvComputerDuration.put(i + 1, Double.parseDouble(df.format(lookTvComputerDurationT / lookTvComputerCount)));
-                    } else {
-                        avgLookTvComputerDuration.put(i + 1, 0.0);
-                    }
-                    avgSitTilt.put(i + 1, sitTiltT / between.size());
-                    avgUseJianhuyiDuration.put(i + 1, useJianhuyiDurationT / between.size());
-                    sportDuration.put(i + 1, sportDurationT);
+                } else {
+                    avgReadDuration.put(i + 1, 0.0);
+                    avgReadDistance.put(i + 1, 0.0);
+                    avgReadLight.put(i + 1, 0.0);
+                    avgLookPhoneDuration.put(i + 1, 0.0);
+                    avgLookTvComputerDuration.put(i + 1, 0.0);
+                    avgSitTilt.put(i + 1, 0.0);
                 }
 
+                /*每月户外非阅读状态数据统计*/
+                List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogDao.getOutdurationYear(sdf.parse(list.get(i)), end, userId);
+                if (useJianhuyiLogDOList.size() > 0) {
+                    for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
+                        outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
+
+                        outdoorsDuration.put(i + 1, outdoorsDurationT / useJianhuyiLogDOList.size());
+                    }
+                } else {
+                    outdoorsDuration.put(i + 1, 0.0);
+                }
+                /*每月使用监护仪时长数据统计*/
+                List<UseTimeDO> useTimeDOList = useJianhuyiLogDao.getUseJianhuyiTimeYear(sdf.parse(list.get(i)), end, userId);
+                if (useTimeDOList.size() > 0) {
+                    for (UseTimeDO useTimeDO : useTimeDOList) {
+                        useJianhuyiDurationT += useTimeDO.getUserDurtion() * 180;
+
+                        avgUseJianhuyiDuration.put(i + 1, useJianhuyiDurationT / useTimeDOList.size());
+                    }
+                } else {
+                    avgUseJianhuyiDuration.put(i + 1, 0);
+                }
+                /*每月震动次数数据统计*/
+                List<UseRemindsDO> useRemindsDOList = useJianhuyiLogDao.getRemindYear(sdf.parse(list.get(i)), end, userId);
+                if (useRemindsDOList.size() > 0) {
+                    for (UseRemindsDO useRemindsDO : useRemindsDOList) {
+                        remindCountT += useRemindsDO.getRemindsNum();
+
+                        remindCount.put(i + 1, remindCountT / useRemindsDOList.size());
+                    }
+                } else {
+                    remindCount.put(i + 1, 0);
+                }
             } else {
-			     		   /*System.out.println(list.get(i));
-			         	   System.out.println(list.get(i+1));
-			         	   System.out.println("============"+i);*/
+                /*每月阅读状态统计*/
                 List<UseJianhuyiLogDO> between = useJianhuyiLogDao.queryUserWeekRecordBetween(sdf.parse(list.get(i)), sdf.parse(list.get(i + 1)), userId);
                 if (between.size() > 0) {
                     for (UseJianhuyiLogDO useJianhuyiLogDO : between) {
-
-                        if (useJianhuyiLogDO.getLookPhoneCount() != null) {
-                            lookPhoneCount += useJianhuyiLogDO.getLookPhoneCount();
+                        readDurationT += useJianhuyiLogDO.getReadDuration();
+                        readDistanceT += useJianhuyiLogDO.getReadDistance();
+                        readLightT += useJianhuyiLogDO.getReadLight();
+                        if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
+                            lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
                         }
-                        if (useJianhuyiLogDO.getLookTvComputerCount() != null) {
-                            lookTvComputerCount += useJianhuyiLogDO.getLookTvComputerCount();
-                        }
-
-                        if (useJianhuyiLogDO != null) {
-                            if (useJianhuyiLogDO.getReadDuration() != null) {
-                                readDurationT += useJianhuyiLogDO.getReadDuration();
-                            }
-                            if (useJianhuyiLogDO.getOutdoorsDuration() != null) {
-                                outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-                            }
-                            if (useJianhuyiLogDO.getReadDistance() != null) {
-                                readDistanceT += useJianhuyiLogDO.getReadDistance();
-                            }
-                            if (useJianhuyiLogDO.getReadLight() != null) {
-                                readLightT += useJianhuyiLogDO.getReadLight();
-                            }
-                            if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                                lookPhoneDurationT += useJianhuyiLogDO.getLookPhoneDuration();
-                            }
-                            if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                                lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
-                            }
-                            if (useJianhuyiLogDO.getSitTilt() != null) {
-                                sitTiltT += useJianhuyiLogDO.getSitTilt();
-                            }
-                            if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                                useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-                            }
-                            if (useJianhuyiLogDO.getSportDuration() != null) {
-                                sportDurationT += useJianhuyiLogDO.getSportDuration();
-                            }
+                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
+                            lookTvComputerDurationT += useJianhuyiLogDO.getLookTvComputerDuration();
                         }
 
+                        sitTiltT += useJianhuyiLogDO.getSitTilt();
 
+                        avgReadDuration.put(i + 1, readDurationT / between.size());
+                        avgReadDistance.put(i + 1, readDistanceT / between.size());
+                        avgReadLight.put(i + 1, readLightT / between.size());
+                        avgLookPhoneDuration.put(i + 1, lookPhoneDurationT / between.size());
+                        avgLookTvComputerDuration.put(i + 1, lookTvComputerDurationT / between.size());
+                        avgSitTilt.put(i + 1, sitTiltT / between.size());
                     }
 
-
-                    avgReadDuration.put(i + 1, Double.parseDouble(df.format(readDurationT / between.size())));
-                    outdoorsDuration.put(i + 1, Double.parseDouble(df.format(outdoorsDurationT)));
-                    avgReadDistance.put(i + 1, Double.parseDouble(df.format(readDistanceT / between.size())));
-                    avgReadLight.put(i + 1, Double.parseDouble(df.format(readLightT / between.size())));
-                    if (lookPhoneCount > 0) {
-                        avgLookPhoneDuration.put(i + 1, Double.parseDouble(df.format(lookPhoneDurationT / lookPhoneCount)));
-                    } else {
-                        avgLookPhoneDuration.put(i + 1, 0.0);
-                    }
-
-                    if (lookTvComputerCount > 0) {
-                        avgLookTvComputerDuration.put(i + 1, Double.parseDouble(df.format(lookTvComputerDurationT / lookTvComputerCount)));
-                    } else {
-                        avgLookTvComputerDuration.put(i + 1, 0.0);
-                    }
-                    avgSitTilt.put(i + 1, Double.parseDouble(df.format(sitTiltT / between.size())));
-                    avgUseJianhuyiDuration.put(i + 1, Double.parseDouble(df.format(useJianhuyiDurationT / between.size())));
-                    sportDuration.put(i + 1, Double.parseDouble(df.format(sportDurationT)));
+                } else {
+                    avgReadDuration.put(i + 1, 0.0);
+                    avgReadDistance.put(i + 1, 0.0);
+                    avgReadLight.put(i + 1, 0.0);
+                    avgLookPhoneDuration.put(i + 1, 0.0);
+                    avgLookTvComputerDuration.put(i + 1, 0.0);
+                    avgSitTilt.put(i + 1, 0.0);
                 }
 
+                /*每月户外非阅读状态数据统计*/
+                List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogDao.getOutdurationYear(sdf.parse(list.get(i)), sdf.parse(list.get(i + 1)), userId);
+                if (useJianhuyiLogDOList.size() > 0) {
+                    for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
+                        outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
 
+                        outdoorsDuration.put(i + 1, outdoorsDurationT / useJianhuyiLogDOList.size());
+                    }
+                } else {
+                    outdoorsDuration.put(i + 1, 0.0);
+                }
+                /*每月使用监护仪时长数据统计*/
+                List<UseTimeDO> useTimeDOList = useJianhuyiLogDao.getUseJianhuyiTimeYear(sdf.parse(list.get(i)), sdf.parse(list.get(i + 1)), userId);
+                if (useTimeDOList.size() > 0) {
+                    for (UseTimeDO useTimeDO : useTimeDOList) {
+                        useJianhuyiDurationT += useTimeDO.getUserDurtion() * 180;
+
+                        avgUseJianhuyiDuration.put(i + 1, useJianhuyiDurationT / useTimeDOList.size());
+                    }
+                } else {
+                    avgUseJianhuyiDuration.put(i + 1, 0);
+                }
+                /*每月震动次数数据统计*/
+                List<UseRemindsDO> useRemindsDOList = useJianhuyiLogDao.getRemindYear(sdf.parse(list.get(i)), sdf.parse(list.get(i + 1)), userId);
+                if (useRemindsDOList.size() > 0) {
+                    for (UseRemindsDO useRemindsDO : useRemindsDOList) {
+                        remindCountT += useRemindsDO.getRemindsNum();
+
+                        remindCount.put(i + 1, remindCountT / useRemindsDOList.size());
+                    }
+                } else {
+                    remindCount.put(i + 1, 0);
+                }
             }
 
         }
-
-        Map<String, Collection<Double>> mapP = new LinkedHashMap<String, Collection<Double>>();
+        /*}*/
+        Map<String, Object> mapP = new LinkedHashMap<String, Object>();
+        /*每月平均使用*/
         mapP.put("avgReadDuration", avgReadDuration.values());
         mapP.put("outdoorsDuration", outdoorsDuration.values());
         mapP.put("avgReadDistance", avgReadDistance.values());
@@ -977,11 +981,120 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         mapP.put("avgLookTvComputerDuration", avgLookTvComputerDuration.values());
         mapP.put("avgSitTilt", avgSitTilt.values());
         mapP.put("avgUseJianhuyiDuration", avgUseJianhuyiDuration.values());
-        mapP.put("sportDuration", sportDuration.values());
+        mapP.put("remind", remindCount.values());
 
+        for (Double read : avgReadDuration.values()) {
+            if (read > 0) {
+                readDurationCount++;
+            }
+            AllreadDuration += read;
+        }
 
-        return mapP;
+        for (Double value : outdoorsDuration.values()) {
+            if (value > 0) {
+                outdoorsDurationCount++;
+            }
+            AlloutdoorsDuration += value;
+        }
+        for (Double value : avgReadDistance.values()) {
+            if (value > 0) {
+                readDistanceCount++;
+            }
+            AllreadDistance += value;
+        }
 
+        for (Double value : avgReadLight.values()) {
+            if (value > 0) {
+                readLightCount++;
+            }
+            AllreadLight += value;
+        }
+        for (Double value : avgLookPhoneDuration.values()) {
+            if (value > 0) {
+                lookPhoneDurationCount++;
+            }
+            AlllookPhoneDuration += value;
+        }
+        for (Double value : avgLookTvComputerDuration.values()) {
+            if (value > 0) {
+                lookTvComputerDurationCount++;
+            }
+            AlllookTvComputerDuration += value;
+        }
+        for (Double value : avgSitTilt.values()) {
+            if (value > 0) {
+                sitTiltCount++;
+            }
+            AllsitTilt += value;
+        }
+
+        for (Integer value : avgUseJianhuyiDuration.values()) {
+            if (value > 0) {
+                useJianhuyiDurationCount++;
+            }
+            AlluseJianhuyiDuration += value;
+        }
+
+        for (Integer value : remindCount.values()) {
+            if (value > 0) {
+                remindCounts++;
+            }
+            Allremind += value;
+        }
+        Map<String, Object> map2 = new LinkedHashMap<String, Object>();
+        if (readDurationCount > 0) {
+            map2.put("AllreadDuration", AllreadDuration / readDurationCount);
+        } else {
+            map2.put("AllreadDuration", 0.0);
+        }
+        if (outdoorsDurationCount > 0) {
+            map2.put("AlloutdoorsDuration", AlloutdoorsDuration / outdoorsDurationCount);
+        } else {
+            map2.put("AlloutdoorsDuration", 0.0);
+        }
+        if (readDistanceCount > 0) {
+            map2.put("AllreadDistance", AllreadDistance / readDistanceCount);
+        } else {
+            map2.put("AllreadDistance", 0.0);
+        }
+
+        if (readLightCount > 0) {
+            map2.put("AllreadLight", AllreadLight / readLightCount);
+        } else {
+            map2.put("AllreadLight", 0.0);
+        }
+        if (lookPhoneDurationCount > 0) {
+            map2.put("AlllookPhoneDuration", AlllookPhoneDuration / lookPhoneDurationCount);
+        } else {
+            map2.put("AlllookPhoneDuration", 0.0);
+        }
+
+        if (lookTvComputerDurationCount > 0) {
+            map2.put("AlllookTvComputerDuration", AlllookTvComputerDuration / lookTvComputerDurationCount);
+        } else {
+            map2.put("AlllookTvComputerDuration", 0.0);
+        }
+        if (sitTiltCount > 0) {
+            map2.put("AllsitTilt", AllsitTilt / sitTiltCount);
+        } else {
+            map2.put("AllsitTilt", 0.0);
+        }
+
+        if (useJianhuyiDurationCount > 0) {
+            map2.put("AlluseJianhuyiDuration", AlluseJianhuyiDuration / useJianhuyiDurationCount);
+        } else {
+            map2.put("AlluseJianhuyiDuration", 0.0);
+        }
+        if (remindCounts > 0) {
+            map2.put("Allremind", Allremind / remindCounts);
+        } else {
+            map2.put("Allremind", 0.0);
+        }
+
+        Map<String, Object> result = new LinkedHashMap<String, Object>();
+        result.put("mapP", mapP);
+        result.put("map2", map2);
+        return result;
     }
 
 }

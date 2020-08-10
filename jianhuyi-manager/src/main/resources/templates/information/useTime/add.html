@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+																																			<div class="form-group">	
+								<label class="col-sm-3 control-label">上传者id：</label>
+								<div class="col-sm-8">
+									<input id="uploadId" name="uploadId" class="form-control" type="text">
+								</div>
+							</div>
+																												<div class="form-group">	
+								<label class="col-sm-3 control-label">使用时间点（每节点乘以5s等于使用时长）：</label>
+								<div class="col-sm-8">
+									<input id="useTime" name="useTime" class="form-control" type="text">
+								</div>
+							</div>
+																												<div class="form-group">	
+								<label class="col-sm-3 control-label">保存时间：</label>
+								<div class="col-sm-8">
+									<input id="saveTime" name="saveTime" class="form-control" type="text">
+								</div>
+							</div>
+																												<div class="form-group">	
+								<label class="col-sm-3 control-label">用户id：</label>
+								<div class="col-sm-8">
+									<input id="userId" name="userId" class="form-control" type="text">
+								</div>
+							</div>
+																												<div class="form-group">	
+								<label class="col-sm-3 control-label">设备id：</label>
+								<div class="col-sm-8">
+									<input id="equipmentId" name="equipmentId" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/information/useTime/add.js">
+	</script>
+</body>
+</html>

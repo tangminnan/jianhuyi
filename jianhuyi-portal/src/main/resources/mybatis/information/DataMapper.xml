@@ -3,47 +3,49 @@
 
 <mapper namespace="com.jianhuyi.information.dao.DataDao">
 
-	<select id="get" resultType="com.jianhuyi.information.domain.DataDO">
+    <select id="get" resultType="com.jianhuyi.information.domain.DataDO">
 		select `id`,`start_time`,`status`,`base_data`,`remaind`,equipment_id from t_data where id = #{value}
 	</select>
 
-	<select id="list" resultType="com.jianhuyi.information.domain.DataDO">
-		select `id`,user_id,`start_time`,`status`,`angles`,`lights`,`distances`,`energys`,`remaind`,`errors`,equipment_id from t_data
+    <select id="list" resultType="com.jianhuyi.information.domain.DataDO">
+        select
+        `id`,user_id,`start_time`,`status`,`angles`,`lights`,`distances`,`energys`,`remaind`,`errors`,equipment_id from
+        t_data
         <where>
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="startTime != null and startTime != ''"> and start_time = #{startTime} </if>
-		  		  <if test="status != null and status != ''"> and status = #{status} </if>
-		  		  <if test="baseDatasDB != null and baseDatasDB != ''"> and base_data = #{baseDatasDB} </if>
-		  		  <if test="remaindDB != null and remaindDB != ''"> and remaind = #{remaindDB} </if>
-			      <if test="equipmentId != null and equipmentId != ''"> and equipment_id = #{equipmentId} </if>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="startTime != null and startTime != ''">and start_time = #{startTime}</if>
+            <if test="status != null and status != ''">and status = #{status}</if>
+            <if test="baseDatasDB != null and baseDatasDB != ''">and base_data = #{baseDatasDB}</if>
+            <if test="remaindDB != null and remaindDB != ''">and remaind = #{remaindDB}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
 
-		  		</where>
+        </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
                 order by ${sort} ${order}
             </when>
-			<otherwise>
+            <otherwise>
                 order by id desc
-			</otherwise>
+            </otherwise>
         </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
 
- 	<select id="count" resultType="int">
-		select count(*) from t_data
-		 <where>
-		  		  <if test="id != null and id != ''"> and id = #{id} </if>
-		  		  <if test="startTime != null and startTime != ''"> and start_time = #{startTime} </if>
-		  		  <if test="status != null and status != ''"> and status = #{status} </if>
-		  		  <if test="baseDatasDB != null and baseDatasDB != ''"> and base_data = #{baseDatasDB} </if>
-		  		  <if test="remaindDB != null and remaindDB != ''"> and remaind = #{remaindDB} </if>
-			 	  <if test="equipmentId != null and equipmentId != ''"> and equipment_id = #{equipmentId} </if>
-		  		</where>
-	</select>
+    <select id="count" resultType="int">
+        select count(*) from t_data
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="startTime != null and startTime != ''">and start_time = #{startTime}</if>
+            <if test="status != null and status != ''">and status = #{status}</if>
+            <if test="baseDatasDB != null and baseDatasDB != ''">and base_data = #{baseDatasDB}</if>
+            <if test="remaindDB != null and remaindDB != ''">and remaind = #{remaindDB}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
+        </where>
+    </select>
 
-	<insert id="save" parameterType="com.jianhuyi.information.domain.DataDO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.jianhuyi.information.domain.DataDO" useGeneratedKeys="true" keyProperty="id">
 		insert into t_data
 		(
 			`start_time`,
@@ -66,27 +68,53 @@
 		)
 	</insert>
 
-	<update id="update" parameterType="com.jianhuyi.information.domain.DataDO">
-		update t_data
-		<set>
-			<if test="startTime != null">`start_time` = #{startTime}, </if>
-			<if test="status != null">`status` = #{status}, </if>
-			<if test="baseDatasDB != null">`base_data` = #{baseDatasDB}, </if>
-			<if test="remaindDB != null">`remaind` = #{remaindDB}, </if>
-			<if test="equipmentId != null"> equipment_id = #{equipmentId} </if>
-		</set>
-		where id = #{id}
-	</update>
+    <insert id="saveList">
+        insert into t_data
+        (
+        `start_time`,
+        `status`,
+        user_id,
+        update_time,
+        `base_data`,
+        `remaind`,
+        equipment_id,imgs
+        )
+        values
+        <foreach collection="dataDOList" item="item" separator=",">
+            (
+            #{item.startTime},
+            #{item.status},
+            #{item.userId},
+            #{item.updateTime},
+            #{item.baseDatasDB},
+            #{item.remaindDB},
+            #{item.equipmentId},#{item.imgs}
+            )
+        </foreach>
 
-	<delete id="remove">
+    </insert>
+
+    <update id="update" parameterType="com.jianhuyi.information.domain.DataDO">
+        update t_data
+        <set>
+            <if test="startTime != null">`start_time` = #{startTime},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="baseDatasDB != null">`base_data` = #{baseDatasDB},</if>
+            <if test="remaindDB != null">`remaind` = #{remaindDB},</if>
+            <if test="equipmentId != null">equipment_id = #{equipmentId}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="remove">
 		delete from t_data where id = #{value}
 	</delete>
 
-	<delete id="batchRemove">
-		delete from t_data where id in
-		<foreach item="id" collection="array" open="(" separator="," close=")">
-			#{id}
-		</foreach>
-	</delete>
+    <delete id="batchRemove">
+        delete from t_data where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>

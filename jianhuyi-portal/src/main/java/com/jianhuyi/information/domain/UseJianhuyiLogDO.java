@@ -17,6 +17,8 @@ public class UseJianhuyiLogDO implements Serializable {
     private Integer id;
     // 用户Id
     private Integer userId;
+    // 用户Id
+    private Integer uploadId;
     //数据测试时间
     private String saveTime;
     //设备号
@@ -42,7 +44,7 @@ public class UseJianhuyiLogDO implements Serializable {
     // 坐姿倾斜度
     private Double sitTilt;
     // 使用监护仪时长(小时）
-    private Double useJianhuyiDuration;
+    private Integer useJianhuyiDuration;
     // 运动时长(小时)
     private Double sportDuration;
     // 删除标志(1:删除 0：未删除)
@@ -53,7 +55,25 @@ public class UseJianhuyiLogDO implements Serializable {
     private Integer num;
 
     private Double allreadDuration;
+    //治疗提醒
+    private Integer remind;
 
+
+    public Integer getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(Integer uploadId) {
+        this.uploadId = uploadId;
+    }
+
+    public Integer getRemind() {
+        return remind;
+    }
+
+    public void setRemind(Integer remind) {
+        this.remind = remind;
+    }
 
     public Double getAllreadDuration() {
         return allreadDuration;
@@ -252,14 +272,14 @@ public class UseJianhuyiLogDO implements Serializable {
     /**
      * 设置：使用监护仪时长(小时）
      */
-    public void setUseJianhuyiDuration(Double useJianhuyiDuration) {
+    public void setUseJianhuyiDuration(Integer useJianhuyiDuration) {
         this.useJianhuyiDuration = useJianhuyiDuration;
     }
 
     /**
      * 获取：使用监护仪时长(小时）
      */
-    public Double getUseJianhuyiDuration() {
+    public Integer getUseJianhuyiDuration() {
         return useJianhuyiDuration;
     }
 
@@ -314,6 +334,7 @@ public class UseJianhuyiLogDO implements Serializable {
                 ", status=" + status +
                 ", num=" + num +
                 ", allreadDuration=" + allreadDuration +
+                ", remind=" + remind +
                 '}';
     }
 }

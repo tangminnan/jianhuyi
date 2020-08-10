@@ -1,5 +1,6 @@
 package com.jianhuyi.information.controller;
 
+import com.jianhuyi.common.utils.ExcelExportUtil4DIY;
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
@@ -8,12 +9,18 @@ import com.jianhuyi.information.service.UseJianhuyiLogService;
 import com.jianhuyi.users.domain.UserDO;
 import com.jianhuyi.users.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -34,13 +41,16 @@ public class UseJianhuyiLogController {
     @Autowired
     private UserService userService;
 
+    private static Logger logger = LoggerFactory.getLogger(UseJianhuyiLogController.class);
+
     @GetMapping()
     @RequiresPermissions("information:useJianhuyiLog:useJianhuyiLog")
     ModelAndView UseJianhuyiLog(@RequestParam Map<String, Object> params) {
         List<UserDO> userList = userService.list(null);
         ModelAndView mav = new ModelAndView();
+
         mav.addObject("userList", userList);
-        mav.setViewName("information/useJianhuyiLog/useJianhuyiLog");
+        mav.setViewName("information/useJianhuyiLog/useJianhuyiLog1");
 
         return mav;
     }
@@ -48,15 +58,80 @@ public class UseJianhuyiLogController {
     @ResponseBody
     @GetMapping("/list")
     @RequiresPermissions("information:useJianhuyiLog:useJianhuyiLog")
-    public PageUtils list(@RequestParam Map<String, Object> params) {
+    public PageUtils list(@RequestParam Map<String, Object> params) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date start = null;
+        Date end = null;
+        Long uploadId = null;
+        Long userId = null;
         //查询列表数据
-        Query query = new Query(params);
-        List<UseJianhuyiLogDO> useJianhuyiLogList = useJianhuyiLogService.list(query);
-        int total = useJianhuyiLogService.count(query);
-        PageUtils pageUtils = new PageUtils(useJianhuyiLogList, total);
-        return pageUtils;
+        if (params.get("startTime") != null && !params.get("startTime").equals("")) {
+            start = sdf.parse((String) params.get("startTime"));
+        }
+        if (params.get("endTime") != null && !params.get("endTime").equals("")) {
+            end = sdf.parse((String) params.get("endTime"));
+        }
+        if (params.get("uploadId") != null && !params.get("uploadId").equals("")) {
+            uploadId = Long.parseLong(params.get("uploadId").toString());
+        }
+        if (params.get("userId") != null && !params.get("userId").equals("")) {
+            userId = Long.parseLong(params.get("userId").toString());
+        }
+
+        if (!params.get("startTime").equals("") || !params.get("endTime").equals("") ||
+                !params.get("uploadId").equals("") || !params.get("userId").equals("")) {
+            List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.selectData(start, end, params);
+            List<UseJianhuyiLogDO> useJianhuyiLogDOList11 = new ArrayList<>();
+            //分页
+
+            if ((Integer.parseInt(params.get("offset").toString())) + Integer.parseInt(params.get("limit").toString()) > useJianhuyiLogDOList.size()) {
+                useJianhuyiLogDOList11 = useJianhuyiLogDOList.subList(
+                        Integer.parseInt(params.get("offset").toString()),
+                        useJianhuyiLogDOList.size());
+            } else {
+                useJianhuyiLogDOList11 = useJianhuyiLogDOList.subList(
+                        Integer.parseInt(params.get("offset").toString()),
+                        (Integer.parseInt(params.get("offset").toString())) + Integer.parseInt(params.get("limit").toString()));
+            }
+
+            PageUtils pageUtils = new PageUtils(useJianhuyiLogDOList11, useJianhuyiLogDOList.size());
+
+            return pageUtils;
+        } else {
+            Query query = new Query(params);
+            List<UseJianhuyiLogDO> useJianhuyiLogList = useJianhuyiLogService.list(query);
+            int total = useJianhuyiLogService.count(query);
+            PageUtils pageUtils = new PageUtils(useJianhuyiLogList, total);
+
+            return pageUtils;
+        }
+
+
     }
 
+
+    @RequestMapping(value = "/exportExcel")
+    public void exportExcel(@RequestParam Map<String, Object> params, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String filename = "监护仪数据列表" + format.format(new Date().getTime()) + ".xls";
+        response.setContentType("application/ms-excel;charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes(), "iso-8859-1"));
+        OutputStream out = response.getOutputStream();
+        try {
+            Query query = new Query(params);
+            String type = request.getParameter("type");
+            //导出全部数据
+            if (type.equals("2")) {
+                List<Map<String, Object>> XxxDOs = useJianhuyiLogService.exeList(params);
+                ExcelExportUtil4DIY.exportToFile(XxxDOs, out);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.info("exportExcel出错" + e.getMessage());
+        } finally {
+            out.close();
+        }
+    }
 
     @ResponseBody
     @GetMapping("useJianhuyiLogDetail")

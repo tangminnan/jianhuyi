@@ -1,6 +1,8 @@
 package com.jianhuyi.users.service.impl;
 
 import com.jianhuyi.common.utils.R;
+import com.jianhuyi.device.dao.DeviceDao;
+import com.jianhuyi.device.domain.DeviceDO;
 import com.jianhuyi.information.domain.EchartsDO;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.system.config.ExcelUtils;
@@ -25,6 +27,8 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private DeviceDao deviceDao;
 
     @Override
     public UserDO get(Integer id) {
@@ -493,6 +497,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public R importMember(MultipartFile file) {
+        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params1 = new HashMap<>();
         int num = 0;
         InputStream in = null;
         Workbook book = null;
@@ -506,28 +512,30 @@ public class UserServiceImpl implements UserService {
                 for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
                     try {
                         row = sheet.getRow(rowNum);
-                        String phone = ExcelUtils.getCellFormatValue(row.getCell((short) 0));            //手机号
-                        String name = ExcelUtils.getCellFormatValue(row.getCell((short) 1));        //姓名
-                        String identityCard = ExcelUtils.getCellFormatValue(row.getCell((short) 2));        //身份证号
-                        String sex = ExcelUtils.getCellFormatValue(row.getCell((short) 3));            //性别
-                        String school = ExcelUtils.getCellFormatValue(row.getCell((short) 4));            //学校
-                        String grade = ExcelUtils.getCellFormatValue(row.getCell((short) 5));        //年级
-                        String lVision = ExcelUtils.getCellFormatValue(row.getCell((short) 6));        //左眼视力
-                        String rVision = ExcelUtils.getCellFormatValue(row.getCell((short) 7));        //右眼视力
-                        String lEyeBallDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 8));        //左眼球径
-                        String rEyeBallDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 9));        //右眼球径
-                        String lColumnDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 10));        //左眼柱径
-                        String rColumnDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 11));        //右眼柱径
-                        String lEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short) 12));        //左眼轴
-                        String rEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short) 13));        //右眼轴
+                        String phone = ExcelUtils.getCellFormatValue(row.getCell((short) 1));            //手机号
+                        String name = ExcelUtils.getCellFormatValue(row.getCell((short) 2));        //姓名
+                        String identityCard = ExcelUtils.getCellFormatValue(row.getCell((short) 3));        //身份证号
+                        String sex = ExcelUtils.getCellFormatValue(row.getCell((short) 4));            //性别
+                        String school = ExcelUtils.getCellFormatValue(row.getCell((short) 5));            //学校
+                        String grade = ExcelUtils.getCellFormatValue(row.getCell((short) 6));        //年级
+                        String studentNum = ExcelUtils.getCellFormatValue(row.getCell((short) 7));        //学号
+                        String lVision = ExcelUtils.getCellFormatValue(row.getCell((short) 8));        //左眼视力
+                        String rVision = ExcelUtils.getCellFormatValue(row.getCell((short) 9));        //右眼视力
+                        String lEyeBallDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 10));        //左眼球径
+                        String rEyeBallDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 11));        //右眼球径
+                        String lColumnDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 12));        //左眼柱径
+                        String rColumnDiameter = ExcelUtils.getCellFormatValue(row.getCell((short) 13));        //右眼柱径
+                        String lEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short) 14));        //左眼轴
+                        String rEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short) 15));        //右眼轴
+                        String identity = ExcelUtils.getCellFormatValue(row.getCell((short) 16));        //设备号
+
                         UserDO user = new UserDO();
+                        DeviceDO deviceDO = new DeviceDO();
 
                         if (phone != null && phone != "") {
                             user.setPhone(phone);
-                        } else {
-                            errnum.add(rowNum);
-                            continue;
                         }
+
                         if (name != null && name != "") {
                             user.setName(name);
                         } else {
@@ -546,16 +554,34 @@ public class UserServiceImpl implements UserService {
                             } else {
                                 user.setSex(0);
                             }
+                        } else {
+                            errnum.add(rowNum);
+                            continue;
                         }
+
                         if (school != null && school != "") {
                             user.setSchool(school);
+                        } else {
+                            errnum.add(rowNum);
+                            continue;
                         }
                         if (grade != null && grade != "") {
                             user.setGrade(grade);
+                        } else {
+                            errnum.add(rowNum);
+                            continue;
+                        }
+
+                        if (studentNum != null && studentNum != "") {
+                            user.setStudentNum(studentNum);
+                        } else {
+                            errnum.add(rowNum);
+                            continue;
                         }
                         if (lVision != null && lVision != "") {
                             user.setlVision(Double.parseDouble(lVision));
                         }
+
                         if (rVision != null && rVision != "") {
                             user.setrVision(Double.parseDouble(rVision));
                         }
@@ -577,42 +603,140 @@ public class UserServiceImpl implements UserService {
                         if (rEyeAxis != null && rEyeAxis != "") {
                             user.setrEyeAxis(Double.parseDouble(rEyeAxis));
                         }
+                        if (identity != null && identity != "") {
+                            deviceDO.setIdentity(identity);
+                        }
                         user.setDeleteFlag(1);
                         user.setRegisterTime(new Date());
 
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-                        // 15位需要补年份
-                        if (user.getIdentityCard().length() == 15) {
-                            user.setBirthday(substringBir("19" + user.getIdentityCard().substring(6, 12)));
-                            user.setAge(Integer.parseInt(sdf.format(new Date()))
-                                    - (substringAge("19" + user.getIdentityCard().substring(6, 12))));
-                            // 18位直接截取7到14位
-                        } else if (user.getIdentityCard().length() == 18) {
-                            user.setBirthday(substringBir(user.getIdentityCard().substring(6, 14)));
-                            user.setAge(
-                                    Integer.parseInt(sdf.format(new Date())) - (substringAge(user.getIdentityCard().substring(6, 14))));
-                        }
-                        Map<String, Object> params = new HashMap<>();
-                        params.put("identityCard", identityCard);
-                        if (!exit(params)) {
-                            params.remove("identityCard");
-                            params.put("phone", phone);
-                            if (!exit(params)) {
-                                userDao.save(user);
-                            } else {
-                                continue;
+
+
+                        if (user.getIdentityCard() != null) {
+                            // 15位需要补年份
+                            if (user.getIdentityCard().length() == 15) {
+                                user.setBirthday(substringBir("19" + user.getIdentityCard().substring(6, 12)));
+                                user.setAge(Integer.parseInt(sdf.format(new Date()))
+                                        - (substringAge("19" + user.getIdentityCard().substring(6, 12))));
+                                // 18位直接截取7到14位
+                            } else if (user.getIdentityCard().length() == 18) {
+                                user.setBirthday(substringBir(user.getIdentityCard().substring(6, 14)));
+                                user.setAge(
+                                        Integer.parseInt(sdf.format(new Date())) - (substringAge(user.getIdentityCard().substring(6, 14))));
                             }
-                        } else {
-                            continue;
+
+                            //身份证号查重
+                            params.put("identityCard", identityCard);
+                            if (!exit(params)) {
+                                //不存在的话查手机
+                                params.remove("identityCard");
+                                if (phone != null && phone != "") {
+                                    params.put("phone", phone);
+                                    //如果不存在，保存用户
+                                    if (!exit(params)) {
+                                        save(user);
+                                        //查询设备号是否存在
+                                        params1.put("identity", identity);
+                                        //如果设备号已存在，查是否绑定用户
+                                        if (deviceDao.list(params1).size() > 0) {
+                                            //如果设备已经绑定，则提示设备已绑定
+                                            if (deviceDao.list(params1).get(0).getUserId() != null) {
+                                                errnum.add(rowNum);
+                                            } else {
+                                                deviceDO.setUserId(list(params).get(0).getId());
+                                                deviceDO.setId(deviceDao.list(params1).get(0).getId());
+                                                deviceDO.setAccount(name);
+
+                                                deviceDao.update(deviceDO);
+                                            }
+                                        } else {
+                                            deviceDO.setUserId(list(params).get(0).getId());
+                                            deviceDO.setDeleted(0);
+                                            deviceDO.setDeviceType(0);
+                                            deviceDO.setDefaultDevice(1);
+                                            deviceDO.setAccount(name);
+                                            deviceDao.save(deviceDO);
+                                        }
+                                        num++;
+                                    } else {
+                                        continue;
+                                    }
+                                } else {
+                                    save(user);
+
+                                    //查询设备号是否存在
+                                    params1.put("identity", identity);
+                                    //如果设备号已存在，查是否绑定用户
+                                    if (deviceDao.list(params1).size() > 0) {
+                                        //如果设备已经绑定，则提示设备已绑定
+                                        if (deviceDao.list(params1).get(0).getUserId() != null) {
+                                            errnum.add(rowNum);
+                                        } else {
+                                            deviceDO.setUserId(list(params).get(0).getId());
+                                            deviceDO.setId(deviceDao.list(params1).get(0).getId());
+                                            deviceDO.setAccount(name);
+                                            deviceDao.update(deviceDO);
+                                        }
+                                    } else {
+                                        deviceDO.setUserId(list(params).get(0).getId());
+                                        deviceDO.setDeleted(0);
+                                        deviceDO.setDeviceType(0);
+                                        deviceDO.setDefaultDevice(1);
+                                        deviceDO.setAccount(name);
+                                        deviceDao.save(deviceDO);
+                                    }
+                                    num++;
+                                }
+                            } else {
+                                params1.put("userId", list(params).get(0).getId());
+                                //如果用户已绑定设备号，就继续走
+                                if (deviceDao.list(params1).size() > 0) {
+                                    errnum.add(rowNum);
+                                    continue;
+                                } else {
+                                    params1.remove("userId");
+                                    params1.put("identity", identity);
+                                    //如果设备号存在
+                                    if (deviceDao.list(params1).size() > 0) {
+                                        //如果设备已绑定用户
+                                        if (deviceDao.list(params1).get(0).getUserId() != null && !deviceDao.list(params1).get(0).getUserId().equals("")) {
+                                            errnum.add(rowNum);
+                                            continue;
+                                        } else {
+                                            deviceDO.setUserId(list(params).get(0).getId());
+                                            deviceDO.setId(deviceDao.list(params1).get(0).getId());
+                                            deviceDO.setAccount(name);
+                                            deviceDao.update(deviceDO);
+
+                                            num++;
+                                            continue;
+                                        }
+                                    } else {
+                                        deviceDO.setUserId(list(params).get(0).getId());
+                                        deviceDO.setDeleted(0);
+                                        deviceDO.setDeviceType(0);
+                                        deviceDO.setDefaultDevice(1);
+                                        deviceDO.setAccount(name);
+                                        deviceDao.save(deviceDO);
+
+                                        num++;
+                                        continue;
+                                    }
+                                }
+
+
+                            }
+
                         }
-                        num++;
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         return R.error("导入失败！第" + rowNum + "条");
                     }
                 }
                 if (errnum.size() > 0) {
-                    return R.ok("上传成功,共增加[" + num + "]条,第" + errnum + "条上传失败，姓名或者手机号为空或手机号已存在");
+                    return R.ok("上传成功,共增加[" + num + "]条,第" + errnum + "条上传失败，用户已存在或设备已绑定");
                 } else {
                     return R.ok("上传成功,共增加[" + num + "]条");
                 }

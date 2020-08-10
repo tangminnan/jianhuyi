@@ -1,6 +1,8 @@
 package com.jianhuyi.information.dao;
 
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import com.jianhuyi.information.domain.UseRemindsDO;
+import com.jianhuyi.information.domain.UseTimeDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,16 +32,39 @@ public interface UseJianhuyiLogDao {
 
     UseJianhuyiLogDO getByTime(Long userId);
 
-    UseJianhuyiLogDO getReadDuration(Long userId);
+    UseJianhuyiLogDO getDayRemind(Long userId);
+
+    List<UseJianhuyiLogDO> getMonthAndWeekByTime(@Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
+
+    List<UseJianhuyiLogDO> getMonthAndWeekOutduration(@Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
+
+    List<UseJianhuyiLogDO> getMonthAndWeekRemind(@Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
 
     UseJianhuyiLogDO getOutduration(Long userId);
 
 
-    List<UseJianhuyiLogDO> queryUserWeekRecord(@Param("saveTime") String saveTime, @Param("userId") Long userId);
+    UseJianhuyiLogDO queryUserWeekRecord(@Param("saveTime") String saveTime, @Param("userId") Long userId);
 
     List<UseJianhuyiLogDO> queryUserWeekRecordBetween(@Param("start") Date startTime, @Param("end") Date endTime,
                                                       @Param("userId") Long userId);
 
     List<UseJianhuyiLogDO> queryUserRecordBetweenSum(@Param("start") Date startTime, @Param("end") Date endTime,
                                                      @Param("userId") Long userId);
+
+    UseJianhuyiLogDO queryOutdoorsDuration(@Param("saveTime") String saveTime, @Param("userId") Long userId);
+
+    UseRemindsDO queryRemind(@Param("remindsTime") String string, @Param("userId") Long userId);
+
+    UseTimeDO queryUseTime(@Param("use_time") String string, @Param("userId") Long userId);
+
+    List<UseJianhuyiLogDO> getOutdurationYear(@Param("start") Date startTime, @Param("end") Date endTime,
+                                              @Param("userId") Long userId);
+
+    List<UseTimeDO> getUseJianhuyiTimeYear(@Param("start") Date startTime, @Param("end") Date endTime,
+                                           @Param("userId") Long userId);
+
+    List<UseRemindsDO> getRemindYear(@Param("start") Date startTime, @Param("end") Date endTime,
+                                     @Param("userId") Long userId);
+
+    void saveList(@Param("useJianhuyiLogDOList") List<UseJianhuyiLogDO> useJianhuyiLogDOList);
 }

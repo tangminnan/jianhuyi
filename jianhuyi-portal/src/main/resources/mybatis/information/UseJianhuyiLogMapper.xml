@@ -7,45 +7,8 @@
 		select `id`,`user_id`,status,save_time,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_phone_count`,`look_tv_computer_count`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log where id = #{value}
 	</select>
 
-    <select id="getReadDuration" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		SELECT
-			SUM(read_duration) allreadDuration,COUNT(*) num
-		FROM
-			t_use_jianhuyi_log
-		WHERE
-			TO_DAYS(save_time) = TO_DAYS(NOW())
-		AND user_id = #{userId} and status = 1
-		GROUP BY
-			date_format(save_time, '%Y-%m-%d')
-	</select>
 
-    <select id="getByTime" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		SELECT
-			id,
-			user_id,
-			add_time,
-			equipment_id,
-			save_time,
-			SUM(read_duration) allreadDuration,
-			SUM(read_duration) / count(*) read_duration,
-			SUM(read_distance) / count(*) read_distance,
-			SUM(read_light) / count(*) read_light,
-			SUM(look_phone_duration) / SUM(look_phone_count) look_phone_duration,
-			SUM(look_tv_computer_duration)/SUM(look_tv_computer_count)  look_tv_computer_duration,
-			SUM(look_tv_computer_count) / count(*) look_tv_computer_count,
-			SUM(sit_tilt) / count(*) sit_tilt,
-			SUM(use_jianhuyi_duration) use_jianhuyi_duration,
-			SUM(sport_duration) / count(*) sport_duration,
-			`del_flag`
-		FROM
-			t_use_jianhuyi_log
-		WHERE
-			TO_DAYS(save_time) = TO_DAYS(NOW()) and `status` = 1
-		and user_id= #{userId}
-		GROUP BY
-			date_format(save_time, '%Y-%m-%d')
-	</select>
-
+    <!--今日户外非阅读数据统计-->
     <select id="getOutduration" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
 			SELECT
 				SUM(outdoors_duration) outdoors_duration
@@ -58,32 +21,124 @@
 				date_format(save_time, '%Y-%m-%d')
 	</select>
 
-    <select id="queryUserWeekRecord" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+    <!--今日阅读状态数据统计-->
+    <select id="getByTime" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
 		SELECT
-			`id`,
-			`user_id`,
-			status,
+			id,
+			user_id,
+			add_time,
+			equipment_id,
 			save_time,
-			`add_time`,
-			`read_duration`,
-			`outdoors_duration`,
-			`read_distance`,
-			`read_light`,
-			`look_phone_duration`,
-			`look_tv_computer_duration`,
-			`sit_tilt`,
-			`use_jianhuyi_duration`,
-			`sport_duration`,
+			SUM(read_duration) allreadDuration,
+			SUM(read_duration) / count(*) readDuration,
+			SUM(read_distance) / count(*) read_distance,
+			SUM(read_light) / count(*) read_light,
+			SUM(look_phone_duration) / SUM(look_phone_count) look_phone_duration,
+			SUM(look_tv_computer_duration)/SUM(look_tv_computer_count)  look_tv_computer_duration,
+			SUM(look_tv_computer_count) / count(*) look_tv_computer_count,
+			SUM(sit_tilt) / count(*) sit_tilt,
+			SUM(use_jianhuyi_duration) use_jianhuyi_duration,
+			SUM(sport_duration) / count(*) sport_duration,
+			SUM(remind) remind,
 			`del_flag`
 		FROM
 			t_use_jianhuyi_log
-		where
-		save_time like CONCAT('%',#{saveTime},'%')  and user_id=  #{userId}
+		WHERE
+			TO_DAYS(save_time) = TO_DAYS(NOW()) and `status` = 1
+		and user_id= #{userId}
+		GROUP BY
+			date_format(save_time, '%Y-%m-%d')
 	</select>
 
+
+    <!--当日阅读状态数据统计-->
+    <select id="queryUserWeekRecord" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+			id,
+			user_id,
+			date_format(add_time, '%Y-%m-%d') add_time,
+			equipment_id,
+			date_format(save_time, '%Y-%m-%d') save_time,
+			SUM(IFNULL(read_duration,0.0)) / count(*) read_duration,
+			SUM(IFNULL(read_duration,0.0)) / count(*) read_distance,
+			SUM(IFNULL(read_light,0.0)) / count(*) read_light,
+			SUM(IFNULL(look_phone_duration,0.0)) / SUM(look_phone_count) look_phone_duration,
+			SUM(IFNULL(look_tv_computer_duration,0.0)) / SUM(look_tv_computer_count) look_tv_computer_duration,
+			SUM(IFNULL(sit_tilt,0.0)) / count(*) sit_tilt
+
+		FROM
+			t_use_jianhuyi_log
+		where
+		save_time like CONCAT('%',#{saveTime},'%')  and user_id=  #{userId} AND `status` = 1
+	</select>
+
+    <!--户外总时长-->
+    <select id="queryOutdoorsDuration" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+			SUM(outdoors_duration) outdoors_duration
+		FROM
+			t_use_jianhuyi_log
+		where
+		save_time like CONCAT('%',#{saveTime},'%')  and user_id=  #{userId} AND `status` = 2
+	</select>
+
+    <!--每日震动提醒次数-->
+    <select id="queryRemind" resultType="com.jianhuyi.information.domain.UseRemindsDO">
+		SELECT
+		 `id`,`reminds_time`,`save_time`,COUNT(*) remindsNum from t_use_reminds
+		where
+		reminds_time like CONCAT('%',#{remindsTime},'%')  and user_id=  #{userId}
+	</select>
+
+    <!--每日使用监护仪时长-->
+    <select id="queryUseTime" resultType="com.jianhuyi.information.domain.UseTimeDO">
+		SELECT
+		 `id`,`use_time`,`save_time`,COUNT(*) userDurtion from t_use_time
+		where
+		use_time like CONCAT('%',#{use_time},'%')  and user_id=  #{userId}
+	</select>
+
+
+    <!--周月用户获取每日阅读时长-->
+    <select id="getUserReadDuration" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT user_id,date_format(save_time, '%Y-%m-%d') save_time,SUM(read_duration) allreadDuration,SUM(read_duration) / count(*) read_duration
+        FROM t_use_jianhuyi_log
+        WHERE
+        save_time BETWEEN  #{start} and #{end} AND `status` = 1 AND user_id = #{userId}
+        GROUP BY date_format(save_time, '%Y-%m-%d')
+        HAVING  read_duration &lt;&gt;  0
+    </select>
+
+    <!--周月用户获取每日阅读距离-->
+    <select id="getUserReaddistance" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT user_id,date_format(save_time, '%Y-%m-%d') save_time,SUM(read_duration) / count(*) read_duration
+        FROM t_use_jianhuyi_log
+        WHERE
+        save_time BETWEEN  #{start} and #{end} AND `status` = 1 AND user_id = #{userId}
+        GROUP BY date_format(save_time, '%Y-%m-%d')
+        HAVING  read_duration &lt;&gt;  0
+    </select>
+
+    <!--年数据阅读状态的某月每一天的数据-->
     <select id="queryUserWeekRecordBetween" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		select `id`,status,`user_id`,save_time,`add_time`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_phone_count`,`look_tv_computer_count`,`look_tv_computer_duration`,`sit_tilt`,`use_jianhuyi_duration`,`sport_duration`,`del_flag` from t_use_jianhuyi_log
-		where save_time between #{start} and #{end} and user_id= #{userId}
+		SELECT
+			`id`,
+			`user_id`,
+			save_time,
+			SUM(read_duration)/COUNT(*) `read_duration`,
+			SUM(read_distance)/COUNT(*) `read_distance`,
+			SUM(read_light)/COUNT(*) `read_light`,
+			SUM(look_phone_duration)/SUM(look_phone_count)  `look_phone_duration`,
+			SUM(look_tv_computer_duration)/SUM(look_tv_computer_count) `look_tv_computer_duration`,
+			SUM(sit_tilt)/COUNT(*) `sit_tilt`
+		FROM
+			t_use_jianhuyi_log
+		WHERE
+			user_id =  #{userId}
+		AND `status` = 1
+		AND save_time between #{start} and #{end}
+		GROUP BY
+			date_format(save_time, '%Y-%m-%d')
 	</select>
 
     <select id="queryUserRecordBetweenSum" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
@@ -112,6 +167,41 @@
 		GROUP BY
 			date_format(save_time, '%Y-%m-%d')
 	</select>
+
+    <select id="getOutdurationYear" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+			SUM(outdoors_duration) outdoors_duration
+		FROM
+			t_use_jianhuyi_log
+		where
+		save_time BETWEEN #{start} and #{end}  and user_id=  #{userId} AND `status` = 2
+
+		GROUP BY
+			date_format(save_time, '%Y-%m-%d')
+
+	</select>
+
+
+    <select id="getUseJianhuyiTimeYear" resultType="com.jianhuyi.information.domain.UseTimeDO">
+		SELECT
+		 `id`,`use_time`,`save_time`,COUNT(*) userDurtion from t_use_time
+		where
+		use_time  BETWEEN #{start} and #{end} and user_id=  #{userId}
+
+		GROUP BY
+			date_format(use_time, '%Y-%m-%d')
+	</select>
+
+    <select id="getRemindYear" resultType="com.jianhuyi.information.domain.UseRemindsDO">
+		SELECT
+		 `id`,`reminds_time`,`save_time`,COUNT(*) remindsNum from t_use_reminds
+		where
+		reminds_time   BETWEEN #{start} and #{end} and user_id=  #{userId}
+
+		GROUP BY
+			date_format(reminds_time, '%Y-%m-%d')
+	</select>
+
 
     <select id="list" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         select
@@ -199,7 +289,9 @@
 			`del_flag`,
 			save_time,
 			equipment_id,
-			status
+			status,
+			remind,
+			upload_id
 		)
 		values
 		(
@@ -219,9 +311,61 @@
 			#{delFlag},
 			#{saveTime},
 			#{equipmentId},
-			#{status}
+			#{status},
+			#{remind},
+			#{uploadId}
 		)
 	</insert>
+
+    <insert id="saveList">
+        insert into t_use_jianhuyi_log
+        (
+        `user_id`,
+        `add_time`,
+        `read_duration`,
+        `outdoors_duration`,
+        `read_distance`,
+        `read_light`,
+        `look_phone_duration`,
+        `look_phone_count`,
+        `look_tv_computer_duration`,
+        `look_tv_computer_count`,
+        `sit_tilt`,
+        `use_jianhuyi_duration`,
+        `sport_duration`,
+        `del_flag`,
+        save_time,
+        equipment_id,
+        status,
+        remind,
+        upload_id
+        )
+        values
+        <foreach collection="useJianhuyiLogDOList" item="item" separator=",">
+            (
+            #{item.userId},
+            #{item.addTime},
+            #{item.readDuration},
+            #{item.outdoorsDuration},
+            #{item.readDistance},
+            #{item.readLight},
+            #{item.lookPhoneDuration},
+            #{item.lookPhoneCount},
+            #{item.lookTvComputerDuration},
+            #{item.lookTvComputerCount},
+            #{item.sitTilt},
+            #{item.useJianhuyiDuration},
+            #{item.sportDuration},
+            #{item.delFlag},
+            #{item.saveTime},
+            #{item.equipmentId},
+            #{item.status},
+            #{item.remind},
+            #{item.uploadId}
+            )
+        </foreach>
+    </insert>
+
 
     <update id="update" parameterType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         update t_use_jianhuyi_log
