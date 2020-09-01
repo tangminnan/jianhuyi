@@ -41,7 +41,7 @@
                     <div class="columns pull-right col-md-3 nopadding">
                         <select name="forIds" id="forIds" class="selectpicker form-control"
                                 data-live-search="true">
-                            <option style="text-align: center" value="0">请选择用户</option>
+                            <option style="text-align: center" value="">请选择用户</option>
                             <option th:each="li:${userList}"
                                     th:text="'id:' + ${li.id}  + '  &nbsp&nbsp&nbsp姓名：'+${li.name} +' &nbsp&nbsp&nbsp手机号：'+${li.phone} +' &nbsp&nbsp&nbsp学号：'+${li.studentNum}"
                                     th:value="${li.id}"></option>

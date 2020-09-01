@@ -286,6 +286,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                     outdoorsDurationCount++;
                     outdoorsDuration.put(string, useJianhuyiLogDO1.getOutdoorsDuration());
                     AlloutdoorsDuration += useJianhuyiLogDO1.getOutdoorsDuration();
+                } else {
+                    outdoorsDuration.put(string, 0.0);
                 }
             } else {
                 outdoorsDuration.put(string, 0.0);
@@ -304,9 +306,9 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
             //使用时长
             UseTimeDO useTimeDO = useJianhuyiLogDao.queryUseTime(string, userId);
             if (useTimeDO != null && useTimeDO.getUserDurtion() > 0) {
-                avgUseJianhuyiDuration.put(string, useTimeDO.getUserDurtion());
+                avgUseJianhuyiDuration.put(string, useTimeDO.getUserDurtion() * 180);
                 useJianhuyiDurationCount++;
-                AlluseJianhuyiDuration += useTimeDO.getUserDurtion();
+                AlluseJianhuyiDuration += (useTimeDO.getUserDurtion() * 180);
             } else {
                 avgUseJianhuyiDuration.put(string, 0);
             }
@@ -513,9 +515,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                 if (useJianhuyiLogDOList.size() > 0) {
                     for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
                         outdoorsDurationT += useJianhuyiLogDO.getOutdoorsDuration();
-
-                        outdoorsDuration.put(i + 1, outdoorsDurationT / useJianhuyiLogDOList.size());
                     }
+                    outdoorsDuration.put(i + 1, outdoorsDurationT / useJianhuyiLogDOList.size());
                 } else {
                     outdoorsDuration.put(i + 1, 0.0);
                 }
@@ -523,10 +524,10 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                 List<UseTimeDO> useTimeDOList = useJianhuyiLogDao.getUseJianhuyiTimeYear(sdf.parse(list.get(i)), end, userId);
                 if (useTimeDOList.size() > 0) {
                     for (UseTimeDO useTimeDO : useTimeDOList) {
-                        useJianhuyiDurationT += useTimeDO.getUserDurtion() * 180;
-
-                        avgUseJianhuyiDuration.put(i + 1, useJianhuyiDurationT / useTimeDOList.size());
+                        System.out.println("===============getUserDurtion==============" + useTimeDO.getUserDurtion());
+                        useJianhuyiDurationT += (useTimeDO.getUserDurtion() * 180);
                     }
+                    avgUseJianhuyiDuration.put(i + 1, useJianhuyiDurationT / useTimeDOList.size());
                 } else {
                     avgUseJianhuyiDuration.put(i + 1, 0);
                 }
@@ -535,9 +536,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                 if (useRemindsDOList.size() > 0) {
                     for (UseRemindsDO useRemindsDO : useRemindsDOList) {
                         remindCountT += useRemindsDO.getRemindsNum();
-
-                        remindCount.put(i + 1, remindCountT / useRemindsDOList.size());
                     }
+                    remindCount.put(i + 1, remindCountT / useRemindsDOList.size());
                 } else {
                     remindCount.put(i + 1, 0);
                 }

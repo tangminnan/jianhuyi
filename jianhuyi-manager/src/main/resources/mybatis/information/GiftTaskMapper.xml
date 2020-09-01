@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.information.dao.GiftTaskDao">
+
+    <select id="get" resultType="com.jianhuyi.information.domain.GiftTaskDO">
+		select `id`,`gift_id`,`task_time`,`avg_rate`,`task_details`,`create_time` from t_gift_task where id = #{value}
+	</select>
+
+    <select id="list" resultType="com.jianhuyi.information.domain.GiftTaskDO">
+        select `id`,`gift_id`,`task_time`,`avg_rate`,`task_details`,`create_time` from t_gift_task
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="giftId != null and giftId != ''">and gift_id = #{giftId}</if>
+            <if test="taskTime != null and taskTime != ''">and task_time = #{taskTime}</if>
+            <if test="avgRate != null and avgRate != ''">and avg_rate = #{avgRate}</if>
+            <if test="taskDetails != null and taskDetails != ''">and task_details = #{taskDetails}</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from t_gift_task
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="giftId != null and giftId != ''">and gift_id = #{giftId}</if>
+            <if test="taskTime != null and taskTime != ''">and task_time = #{taskTime}</if>
+            <if test="avgRate != null and avgRate != ''">and avg_rate = #{avgRate}</if>
+            <if test="taskDetails != null and taskDetails != ''">and task_details = #{taskDetails}</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.jianhuyi.information.domain.GiftTaskDO">
+		insert into t_gift_task
+		(
+			`id`, 
+			`gift_id`, 
+			`task_time`, 
+			`avg_rate`, 
+			`task_details`, 
+			`create_time`
+		)
+		values
+		(
+			#{id}, 
+			#{giftId}, 
+			#{taskTime}, 
+			#{avgRate}, 
+			#{taskDetails}, 
+			#{createTime}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.jianhuyi.information.domain.GiftTaskDO">
+        update t_gift_task
+        <set>
+            <if test="giftId != null">`gift_id` = #{giftId},</if>
+            <if test="taskTime != null">`task_time` = #{taskTime},</if>
+            <if test="avgRate != null">`avg_rate` = #{avgRate},</if>
+            <if test="taskDetails != null">`task_details` = #{taskDetails},</if>
+            <if test="createTime != null">`create_time` = #{createTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="remove">
+		delete from t_gift_task where id = #{value}
+	</delete>
+
+    <delete id="batchRemove">
+        delete from t_gift_task where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

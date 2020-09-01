@@ -11,12 +11,12 @@
     <select id="queryData" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         SELECT tuj.id,tuj.user_id,tu.`name`,tu.nickname,tu.phone,tu.student_num,tuj.upload_id,tuj.equipment_id,
         date_format(tuj.save_time, '%Y-%m-%d') save_time, SUM(IFNULL(tuj.read_duration, 0.0) ) / count(*) read_duration,
-        SUM(IFNULL(tuj.read_duration, 0.0) ) / count(*) read_distance, SUM(IFNULL(tuj.read_light, 0.0)) / count(*)
+        SUM(IFNULL(tuj.read_distance, 0.0) ) / count(*) read_distance, SUM(IFNULL(tuj.read_light, 0.0)) / count(*)
         read_light,
         SUM(IFNULL(tuj.look_phone_duration, 0.0 )) / SUM(tuj.look_phone_count) look_phone_duration,SUM(IFNULL(
         tuj.look_tv_computer_duration,0.0)) / SUM(tuj.look_tv_computer_count) look_tv_computer_duration,
         SUM(IFNULL(tuj.sit_tilt, 0.0)) / count(*) sit_tilt,date_format(tur.reminds_time,'%Y-%m-%d')
-        reminds_time,tur.remindsNum, tut.userDurtion * 3 AS userDurtion,
+        reminds_time,tur.remindsNum, tut.userDurtion /20 AS userDurtion,
         outdoor.outdoors_duration
         FROM
         t_use_jianhuyi_log tuj
@@ -104,7 +104,7 @@
         IFNULL(tuj.read_duration, 0.0)
         ) / count(*) 平均阅读时长,
         SUM(
-        IFNULL(tuj.read_duration, 0.0)
+        IFNULL(tuj.read_distance, 0.0)
         ) / count(*) 平均阅读距离,
         SUM(IFNULL(tuj.read_light, 0.0)) / count(*) 平均阅读光照,
         SUM(
@@ -137,8 +137,9 @@
         COUNT(*) remindsNum
         FROM
         t_use_reminds
-        WHERE
-        reminds_time LIKE CONCAT('%', #{saveTime}, '%')
+        <where>
+            <if test="saveTime != null and saveTime != ''">and reminds_time like CONCAT('%',#{saveTime},'%')</if>
+        </where>
         GROUP BY
         user_id
         ) tur,
@@ -152,11 +153,72 @@
         COUNT(*) userDurtion
         FROM
         t_use_time
-        WHERE
-        use_time LIKE CONCAT('%', #{saveTime}, '%')
+        <where>
+            <if test="saveTime != null and saveTime != ''">and use_time like CONCAT('%',#{saveTime},'%')</if>
+        </where>
         GROUP BY
         user_id
         ) tut,
+
+        (
+        SELECT
+        user_id,
+        SUM(outdoors_duration) outdoors_duration
+        FROM
+        t_use_jianhuyi_log
+        <where>
+            <if test="saveTime != null and saveTime != ''">and save_time like CONCAT('%',#{saveTime},'%')</if>
+            AND `status` = 2
+        </where>
+
+        GROUP BY
+        user_id
+        ) outdoor
+        <where>
+            <if test="saveTime != null and saveTime != ''">and tuj.save_time like CONCAT('%',#{saveTime},'%')</if>
+            <if test="uploadId != null and uploadId != ''">and tuj.upload_id = #{uploadId}</if>
+            <if test="userId != null and userId != ''">and tuj.user_id = #{userId}</if>
+            AND tur.user_id = tuj.user_id
+            AND tut.user_id = tuj.user_id
+            and outdoor.user_id = tuj.user_id
+            AND tuj.`status` = 1
+        </where>
+
+        GROUP BY
+        <choose>
+            <when test="userId != ''">
+                date_format(tuj.save_time, '%Y-%m-%d')
+            </when>
+            <otherwise>
+                tuj.user_id
+            </otherwise>
+        </choose>
+
+    </select>
+
+
+    <select id="list" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        tuj.user_id,
+        tuj.upload_id,
+        tuj.equipment_id,
+        date_format(tuj.save_time, '%Y-%m-%d') save_time,
+        SUM(IFNULL(tuj.read_duration, 0.0)) / count(*) read_duration,
+        SUM(IFNULL(tuj.read_distance, 0.0)) / count(*) read_distance,
+        SUM(IFNULL(tuj.read_light, 0.0)) / count(*) read_light,
+        SUM(
+        IFNULL(tuj.look_phone_duration, 0.0)
+        ) / SUM(tuj.look_phone_count) look_phone_duration,
+        SUM(
+        IFNULL(
+        tuj.look_tv_computer_duration,
+        0.0
+        )
+        ) / SUM(tuj.look_tv_computer_count) look_tv_computer_duration,
+        SUM(IFNULL(tuj.sit_tilt, 0.0)) / count(*) sit_tilt,
+        outdoor.outdoors_duration
+        FROM
+        t_use_jianhuyi_log tuj,
         (
         SELECT
         user_id,
@@ -164,87 +226,17 @@
         FROM
         t_use_jianhuyi_log
         WHERE
-        save_time LIKE CONCAT('%', #{saveTime}, '%')
-        AND `status` = 2
+        `status` = 2
         GROUP BY
+        substr(save_time, 1, 10),
         user_id
         ) outdoor
-        WHERE
-        tuj.save_time LIKE CONCAT('%', #{saveTime}, '%')
-        AND tur.user_id = tuj.user_id
-        AND tut.user_id = tuj.user_id
-        AND outdoor.user_id = tuj.user_id
-        AND tuj.`status` = 1
+        WHERE tuj.status =1
         GROUP BY
+        substr(tuj.save_time, 1, 10),
         tuj.user_id
-
-    </select>
-
-
-    <select id="list" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-        select
-        id,
-        user_id,
-        add_time,
-        equipment_id,
-        save_time,
-        SUM(read_duration)/count(*) read_duration,
-        SUM(outdoors_duration)/count(*) outdoors_duration,
-        SUM(read_distance)/count(*) read_distance,
-        SUM(read_light)/count(*) read_light,
-        SUM(look_phone_duration)/count(*) look_phone_duration,
-        SUM(look_phone_count)/count(*) look_phone_count,
-        SUM(look_tv_computer_duration)/count(*) look_tv_computer_duration,
-        SUM(look_tv_computer_count)/count(*) look_tv_computer_count,
-        SUM(sit_tilt)/count(*) sit_tilt,
-        SUM(use_jianhuyi_duration)/count(*) use_jianhuyi_duration,
-        SUM(sport_duration)/count(*) sport_duration,
-        `del_flag`
-        from t_use_jianhuyi_log
-        <where>
-            <if test="id != null and id != ''">and id = #{id}</if>
-            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
-            <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
-            <if test="saveTime != null and saveTime != ''">and save_time like CONCAT('%',#{saveTime},'%')</if>
-            <if test="startTime != null and startTime != ''">and add_time &gt;= #{startTime}</if>
-            <if test="endTime != null and endTime != ''">and add_time &lt;= #{endTime}</if>
-            <if test="readDuration != null and readDuration != ''">and read_duration = #{readDuration}</if>
-            <if test="outdoorsDuration != null and outdoorsDuration != ''">and outdoors_duration = #{outdoorsDuration}
-            </if>
-            <if test="readDistance != null and readDistance != ''">and read_distance = #{readDistance}</if>
-            <if test="readLight != null and readLight != ''">and read_light = #{readLight}</if>
-            <if test="lookPhoneDuration != null and lookPhoneDuration != ''">and look_phone_duration =
-                #{lookPhoneDuration}
-            </if>
-            <if test="lookTvComputerDuration != null and lookTvComputerDuration != ''">and look_tv_computer_duration =
-                #{lookTvComputerDuration}
-            </if>
-            <if test="sitTilt != null and sitTilt != ''">and sit_tilt = #{sitTilt}</if>
-            <if test="useJianhuyiDuration != null and useJianhuyiDuration != ''">and use_jianhuyi_duration =
-                #{useJianhuyiDuration}
-            </if>
-            <if test="sportDuration != null and sportDuration != ''">and sport_duration = #{sportDuration}</if>
-            <if test="delFlag != null and delFlag != ''">and del_flag = #{delFlag}</if>
-
-            <if test="week != null and week != ''">and YEARWEEK(date_format(save_time,'%Y-%m-%d'),1) =
-                YEARWEEK(now(),1)
-            </if>
-            <if test="month != null and month != ''">and DATE_FORMAT( save_time, '%Y%m') = DATE_FORMAT( CURDATE( ) ,
-                '%Y%m' )
-            </if>
-            <if test="quarter != null and quarter != ''">and QUARTER(save_time)=QUARTER(now())</if>
-            <if test="year != null and year != ''">and YEAR(save_time)=YEAR(NOW())</if>
-
-        </where>
-        GROUP BY date_format(save_time, '%Y-%m-%d')
-        <choose>
-            <when test="sort != null and sort.trim() != ''">
-                order by ${sort} ${order}
-            </when>
-            <otherwise>
-                order by save_time desc
-            </otherwise>
-        </choose>
+        ORDER BY
+        substr(tuj.save_time, 1, 10) DESC
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>
@@ -398,40 +390,50 @@
 	</select>
 
     <select id="count" resultType="int">
-        select count(*) from (
         SELECT
-        count(*)
-        FROM
-        t_use_jianhuyi_log
-        <where>
-            <if test="id != null and id != ''">and id = #{id}</if>
-            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
-            <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
-            <if test="readDuration != null and readDuration != ''">and read_duration = #{readDuration}</if>
-            <if test="outdoorsDuration != null and outdoorsDuration != ''">and outdoors_duration = #{outdoorsDuration}
-            </if>
-            <if test="readDistance != null and readDistance != ''">and read_distance = #{readDistance}</if>
-            <if test="readLight != null and readLight != ''">and read_light = #{readLight}</if>
-            <if test="lookPhoneDuration != null and lookPhoneDuration != ''">and look_phone_duration =
-                #{lookPhoneDuration}
-            </if>
-            <if test="lookTvComputerDuration != null and lookTvComputerDuration != ''">and look_tv_computer_duration =
-                #{lookTvComputerDuration}
-            </if>
-            <if test="sitTilt != null and sitTilt != ''">and sit_tilt = #{sitTilt}</if>
-            <if test="useJianhuyiDuration != null and useJianhuyiDuration != ''">and use_jianhuyi_duration =
-                #{useJianhuyiDuration}
-            </if>
-            <if test="sportDuration != null and sportDuration != ''">and sport_duration = #{sportDuration}</if>
-            <if test="delFlag != null and delFlag != ''">and del_flag = #{delFlag}</if>
-            <if test="week != null and week != ''">and YEARWEEK(date_format(save_time,'%Y-%m-%d'),1) =
-                YEARWEEK(now(),1)
-            </if>
-        </where>
-        GROUP BY
-        date_format(save_time, '%Y-%m-%d')
-        ) t_use_jianhuyi_log
-
+                count(*)
+            FROM
+                (
+                    SELECT
+                tuj.user_id,
+                tuj.upload_id,
+                tuj.equipment_id,
+                date_format(tuj.save_time, '%Y-%m-%d') save_time,
+                SUM(IFNULL(tuj.read_duration, 0.0)) / count(*) read_duration,
+                SUM(IFNULL(tuj.read_distance, 0.0)) / count(*) read_distance,
+                SUM(IFNULL(tuj.read_light, 0.0)) / count(*) read_light,
+                SUM(
+                    IFNULL(tuj.look_phone_duration, 0.0)
+                ) / SUM(tuj.look_phone_count) look_phone_duration,
+                SUM(
+                    IFNULL(
+                        tuj.look_tv_computer_duration,
+                        0.0
+                    )
+                ) / SUM(tuj.look_tv_computer_count) look_tv_computer_duration,
+                SUM(IFNULL(tuj.sit_tilt, 0.0)) / count(*) sit_tilt,
+             outdoor.outdoors_duration
+            FROM
+                t_use_jianhuyi_log tuj,
+            (
+                SELECT
+                    user_id,
+                    SUM(outdoors_duration) outdoors_duration
+                FROM
+                    t_use_jianhuyi_log
+                WHERE
+                    `status` = 2
+                GROUP BY
+                    substr(save_time, 1, 10),
+                user_id
+            ) outdoor
+            WHERE tuj.status =1
+            GROUP BY
+                substr(tuj.save_time, 1, 10),
+                tuj.user_id
+            ORDER BY
+                substr(tuj.save_time, 1, 10) DESC
+                ) a
     </select>
 
     <insert id="save" parameterType="com.jianhuyi.information.domain.UseJianhuyiLogDO" useGeneratedKeys="true"

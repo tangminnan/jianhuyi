@@ -595,6 +595,51 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
             for (String string : list) {
                 useJianhuyiLogDOList.addAll(useJianhuyiLogDao.queryData(string, uploadId, userId));
             }
+        } else if (start != null && end == null) {
+            end = new Date();
+            while (start.compareTo(end) <= 0) {
+                map.put(format(start), 0.0);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(start);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                start = calendar.getTime();
+            }
+            List<String> list = new ArrayList<String>();
+
+            Set<String> keySet = map.keySet();
+            Iterator<String> iterator = keySet.iterator();
+            while (iterator.hasNext()) {
+                list.add(iterator.next());
+            }
+            for (String string : list) {
+                useJianhuyiLogDOList.addAll(useJianhuyiLogDao.queryData(string, uploadId, userId));
+            }
+        } else if (start == null && end == null) {
+            Calendar calendar11 = Calendar.getInstance();
+            calendar11.setTime(new Date());
+            calendar11.set(Calendar.HOUR_OF_DAY, 0);
+            calendar11.set(Calendar.MINUTE, 0);
+            calendar11.set(Calendar.SECOND, 0);
+
+            start = calendar11.getTime();
+            end = new Date();
+            while (start.compareTo(end) <= 0) {
+                map.put(format(start), 0.0);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(start);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                start = calendar.getTime();
+            }
+            List<String> list = new ArrayList<String>();
+
+            Set<String> keySet = map.keySet();
+            Iterator<String> iterator = keySet.iterator();
+            while (iterator.hasNext()) {
+                list.add(iterator.next());
+            }
+            for (String string : list) {
+                useJianhuyiLogDOList.addAll(useJianhuyiLogDao.queryData(string, uploadId, userId));
+            }
         } else {
             useJianhuyiLogDOList.addAll(useJianhuyiLogDao.queryData(null, uploadId, userId));
         }
@@ -643,6 +688,25 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
             }
             for (String string : list) {
                 System.out.println("=============useJianhuyiLogDao.exeList(string, uploadId, userId)============================" + useJianhuyiLogDao.exeList(string, uploadId, userId));
+                exelist.addAll(useJianhuyiLogDao.exeList(string, uploadId, userId));
+            }
+        } else if (start != null && end == null) {
+            end = new Date();
+            while (start.compareTo(end) <= 0) {
+                map.put(format(start), 0.0);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(start);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                start = calendar.getTime();
+            }
+            List<String> list = new ArrayList<String>();
+
+            Set<String> keySet = map.keySet();
+            Iterator<String> iterator = keySet.iterator();
+            while (iterator.hasNext()) {
+                list.add(iterator.next());
+            }
+            for (String string : list) {
                 exelist.addAll(useJianhuyiLogDao.exeList(string, uploadId, userId));
             }
         } else {

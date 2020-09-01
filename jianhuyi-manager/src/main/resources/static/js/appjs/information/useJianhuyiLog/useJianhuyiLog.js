@@ -78,11 +78,9 @@ function load() {
                   title: '日平均单次阅读时长(分钟）',
                   formatter: function (value) {
                      if (value != null && value != 0) {
-                        return value.toFixed(1);
-                     } else if (value == 0) {
-                        return 0.0
+                        return Math.ceil(value);
                      } else {
-                        return ''
+                        return 0
                      }
                   }
                },
@@ -91,11 +89,9 @@ function load() {
                   title: '日户外总时长(分钟）',
                   formatter: function (value) {
                      if (value != null && value != 0) {
-                        return value.toFixed(1);
-                     } else if (value == 0) {
-                        return 0.0
+                        return Math.ceil(value);
                      } else {
-                        return ''
+                        return 0
                      }
                   }
                },
@@ -104,11 +100,9 @@ function load() {
                   title: '日平均阅读距离(厘米)',
                   formatter: function (value) {
                      if (value != null && value != 0) {
-                        return value.toFixed(1);
-                     } else if (value == 0) {
-                        return 0.0
+                        return Math.ceil(value);
                      } else {
-                        return ''
+                        return 0
                      }
                   }
                },
@@ -117,11 +111,9 @@ function load() {
                   title: '平均阅读光照(lux)',
                   formatter: function (value) {
                      if (value != null && value != 0) {
-                        return value.toFixed(1);
-                     } else if (value == 0) {
-                        return 0.0
+                        return Math.ceil(value);
                      } else {
-                        return ''
+                        return 0
                      }
                   }
                },
@@ -130,11 +122,9 @@ function load() {
                   title: '平均单次看手机时长(分钟)',
                   formatter: function (value) {
                      if (value != null && value != 0) {
-                        return value.toFixed(1);
-                     } else if (value == 0) {
-                        return 0.0
+                        return Math.ceil(value);
                      } else {
-                        return ''
+                        return 0
                      }
                   }
                },
@@ -143,11 +133,9 @@ function load() {
                   title: '平均单次看显示器时长(分钟）',
                   formatter: function (value) {
                      if (value != null && value != 0) {
-                        return value.toFixed(1);
-                     } else if (value == 0) {
-                        return 0.0
+                        return Math.ceil(value);
                      } else {
-                        return ''
+                        return 0
                      }
                   }
                },
@@ -156,11 +144,9 @@ function load() {
                   title: '日平均坐姿倾斜度',
                   formatter: function (value) {
                      if (value != null && value != 0) {
-                        return value.toFixed(1);
-                     } else if (value == 0) {
-                        return 0.0
+                        return Math.ceil(value);
                      } else {
-                        return ''
+                        return 0
                      }
                   }
                },
@@ -168,13 +154,12 @@ function load() {
                   field: 'userDurtion',
                   title: '使用监护仪时长(小时）',
                   formatter: function (value) {
-                     if (value != null && value != 0) {
-                        return value.toFixed(1);
-                     } else if (value == 0) {
-                        return 0.0
+                     /*if (value != null && value != 0) {
+                        return Math.ceil(value);
                      } else {
-                        return ''
-                     }
+                        return 0
+                     }*/
+                     return value
                   }
                },
                {

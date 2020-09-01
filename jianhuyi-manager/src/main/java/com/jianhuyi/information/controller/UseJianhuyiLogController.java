@@ -74,12 +74,23 @@ public class UseJianhuyiLogController {
         if (params.get("uploadId") != null && !params.get("uploadId").equals("")) {
             uploadId = Long.parseLong(params.get("uploadId").toString());
         }
-        if (params.get("userId") != null && !params.get("userId").equals("")) {
+        if (params.get("userId") != null && !params.get("userId").equals("") && !params.get("userId").equals("0")) {
             userId = Long.parseLong(params.get("userId").toString());
         }
 
-        if (!params.get("startTime").equals("") || !params.get("endTime").equals("") ||
-                !params.get("uploadId").equals("") || !params.get("userId").equals("")) {
+        if (params.get("startTime").equals("") && params.get("endTime").equals("") &&
+                params.get("uploadId").equals("") && (params.get("userId").equals("") || params.get("userId").equals("0"))) {
+
+            Query query = new Query(params);
+            List<UseJianhuyiLogDO> useJianhuyiLogList = useJianhuyiLogService.list(query);
+
+
+            List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.list(null);
+            PageUtils pageUtils = new PageUtils(useJianhuyiLogList, useJianhuyiLogDOS.size());
+
+            return pageUtils;
+
+        } else {
             List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.selectData(start, end, params);
             List<UseJianhuyiLogDO> useJianhuyiLogDOList11 = new ArrayList<>();
             //分页
@@ -95,13 +106,6 @@ public class UseJianhuyiLogController {
             }
 
             PageUtils pageUtils = new PageUtils(useJianhuyiLogDOList11, useJianhuyiLogDOList.size());
-
-            return pageUtils;
-        } else {
-            Query query = new Query(params);
-            List<UseJianhuyiLogDO> useJianhuyiLogList = useJianhuyiLogService.list(query);
-            int total = useJianhuyiLogService.count(query);
-            PageUtils pageUtils = new PageUtils(useJianhuyiLogList, total);
 
             return pageUtils;
         }

@@ -70,7 +70,7 @@ public class UseJianhuyiLogDO implements Serializable {
 
     private Integer remindsNum;
 
-    private Integer userDurtion;
+    private Double userDurtion;
 
 
     public Integer getUploadId() {
@@ -89,11 +89,11 @@ public class UseJianhuyiLogDO implements Serializable {
         this.remindsNum = remindsNum;
     }
 
-    public Integer getUserDurtion() {
+    public Double getUserDurtion() {
         return userDurtion;
     }
 
-    public void setUserDurtion(Integer userDurtion) {
+    public void setUserDurtion(Double userDurtion) {
         this.userDurtion = userDurtion;
     }
 
