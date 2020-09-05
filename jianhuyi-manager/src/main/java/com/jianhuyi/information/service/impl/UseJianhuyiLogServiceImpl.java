@@ -731,6 +731,11 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
     }
 
     @Override
+    public int countLog(Map<String, Object> map) {
+        return useJianhuyiLogDao.countLog(map);
+    }
+
+    @Override
     public int save(UseJianhuyiLogDO useJianhuyiLog) {
         return useJianhuyiLogDao.save(useJianhuyiLog);
     }

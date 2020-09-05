@@ -58,7 +58,14 @@ public class UseJianhuyiLogController {
     @ResponseBody
     @GetMapping("/list")
     @RequiresPermissions("information:useJianhuyiLog:useJianhuyiLog")
-    public PageUtils list(@RequestParam Map<String, Object> params) throws ParseException {
+    public PageUtils list(@RequestParam Map<String, Object> params) {
+
+        Query query = new Query(params);
+        List<UseJianhuyiLogDO> useJianhuyiLogList = useJianhuyiLogService.list(query);
+        int total = useJianhuyiLogService.countLog(query);
+        PageUtils pageUtils = new PageUtils(useJianhuyiLogList, total);
+        return pageUtils;
+        /*
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date start = null;
         Date end = null;
@@ -109,7 +116,7 @@ public class UseJianhuyiLogController {
 
             return pageUtils;
         }
-
+        */
 
     }
 

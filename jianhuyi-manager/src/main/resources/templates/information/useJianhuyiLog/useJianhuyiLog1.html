@@ -21,8 +21,8 @@
                     </div>
 
                     <div class="columns pull-right">
-                        <button class="btn btn-success" onclick="reLoad()">查询</button>
-                    </div>
+                    <button class="btn btn-success" onclick="reLoad()">查询</button>
+                </div>
                     <div class="columns pull-right">
                         <button class="btn btn-success" onclick="exportExcel(2)">导出</button>
                     </div>
@@ -83,11 +83,11 @@
 <script type="text/javascript">
    laydate.render({
       elem: '#startTime',
-      type: 'datetime'
+      type: 'date'
    });
    laydate.render({
       elem: '#endTime',
-      type: 'datetime'
+      type: 'date'
    });
 
    function exportExcel(type) {

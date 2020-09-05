@@ -22,6 +22,7 @@ public interface UseJianhuyiLogService {
     List<UseJianhuyiLogDO> list(Map<String, Object> map);
 
     int count(Map<String, Object> map);
+    int countLog(Map<String, Object> map);
 
     int save(UseJianhuyiLogDO useJianhuyiLog);
 
