@@ -82,7 +82,7 @@ public class UseJianhuyiLogController {
         boolean flag = true;
         try {
             if (saveParamsDOList != null) {
-                if (saveParamsDOList.getUseRemindsDOList() != null) {
+                if (saveParamsDOList.getUseRemindsDOList() != null && saveParamsDOList.getUseRemindsDOList().size()>0) {
                     for (UseRemindsDO useRemindsDO : saveParamsDOList.getUseRemindsDOList()) {
                         if (useRemindsDO != null) {
                             useRemindsDO.setSaveTime(new Date());
@@ -91,7 +91,7 @@ public class UseJianhuyiLogController {
 
                     useRemindsService.saveList(saveParamsDOList.getUseRemindsDOList());
                 }
-                if (saveParamsDOList.getUseTimeDOList() != null) {
+                if (saveParamsDOList.getUseTimeDOList() != null && saveParamsDOList.getUseTimeDOList().size()>0) {
                     for (UseTimeDO useTimeDO : saveParamsDOList.getUseTimeDOList()) {
                         if (useTimeDO != null) {
                             useTimeDO.setSaveTime(new Date());
@@ -101,7 +101,7 @@ public class UseJianhuyiLogController {
                     useTimeService.saveList(saveParamsDOList.getUseTimeDOList());
                 }
 
-                if (saveParamsDOList.getUseJianhuyiLogDOList() != null) {
+                if (saveParamsDOList.getUseJianhuyiLogDOList() != null && saveParamsDOList.getUseJianhuyiLogDOList().size()>0) {
                     for (UseJianhuyiLogDO useJianhuyiLogDO : saveParamsDOList.getUseJianhuyiLogDOList()) {
                         useJianhuyiLogDO.setAddTime(new Date());
                         useJianhuyiLogDO.setDelFlag(0);

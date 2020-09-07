@@ -13,7 +13,7 @@ import java.util.Date;
  * @email bushuo@163.com
  * @date 2019-10-11 18:54:34
  */
-@Data
+//@Data
 public class UseJianhuyiLogDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -72,5 +72,179 @@ public class UseJianhuyiLogDO implements Serializable {
     //治疗提醒
     private Integer remind;
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(Integer uploadId) {
+        this.uploadId = uploadId;
+    }
+
+    public String getSaveTime() {
+        return saveTime;
+    }
+
+    public void setSaveTime(String saveTime) {
+        this.saveTime = saveTime;
+    }
+
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
+    public Double getReadDuration() {
+        return readDuration;
+    }
+
+    public void setReadDuration(Double readDuration) {
+        this.readDuration = readDuration;
+    }
+
+    public Double getOutdoorsDuration() {
+        return outdoorsDuration;
+    }
+
+    public void setOutdoorsDuration(Double outdoorsDuration) {
+        this.outdoorsDuration = outdoorsDuration;
+    }
+
+    public Double getReadDistance() {
+        return readDistance;
+    }
+
+    public void setReadDistance(Double readDistance) {
+        this.readDistance = readDistance;
+    }
+
+    public Double getReadLight() {
+        return readLight;
+    }
+
+    public void setReadLight(Double readLight) {
+        this.readLight = readLight;
+    }
+
+    public Double getLookPhoneDuration() {
+        return lookPhoneDuration;
+    }
+
+    public void setLookPhoneDuration(Double lookPhoneDuration) {
+        this.lookPhoneDuration = lookPhoneDuration;
+    }
+
+    public Integer getLookPhoneCount() {
+        return lookPhoneCount;
+    }
+
+    public void setLookPhoneCount(Integer lookPhoneCount) {
+        this.lookPhoneCount = lookPhoneCount;
+    }
+
+    public Integer getLookTvComputerCount() {
+        return lookTvComputerCount;
+    }
+
+    public void setLookTvComputerCount(Integer lookTvComputerCount) {
+        this.lookTvComputerCount = lookTvComputerCount;
+    }
+
+    public Double getLookTvComputerDuration() {
+        return lookTvComputerDuration;
+    }
+
+    public void setLookTvComputerDuration(Double lookTvComputerDuration) {
+        this.lookTvComputerDuration = lookTvComputerDuration;
+    }
+
+    public Double getSitTilt() {
+        return sitTilt;
+    }
+
+    public void setSitTilt(Double sitTilt) {
+        this.sitTilt = sitTilt;
+    }
+
+    public Integer getUseJianhuyiDuration() {
+        return useJianhuyiDuration;
+    }
+
+    public void setUseJianhuyiDuration(Integer useJianhuyiDuration) {
+        this.useJianhuyiDuration = useJianhuyiDuration;
+    }
+
+    public Double getSportDuration() {
+        return sportDuration;
+    }
+
+    public void setSportDuration(Double sportDuration) {
+        this.sportDuration = sportDuration;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+
+    public Double getAllreadDuration() {
+        return allreadDuration;
+    }
+
+    public void setAllreadDuration(Double allreadDuration) {
+        this.allreadDuration = allreadDuration;
+    }
+
+    public Integer getRemind() {
+        return remind;
+    }
+
+    public void setRemind(Integer remind) {
+        this.remind = remind;
+    }
 }

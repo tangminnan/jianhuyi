@@ -17,8 +17,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -281,5 +283,64 @@ public class UseJianhuyiLogController {
         useJianhuyiLogService.batchRemove(ids);
         return R.ok();
     }
+
+    @GetMapping("/shujudaochu")
+    String shujudaochu(){
+        return "information/useJianhuyiLog/shujudaochu";
+    }
+
+    @GetMapping("/kaishidaochu")
+    void kaishidaochu(UseJianhuyiLogDO useJianhuyiLog,HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<Map<String,Object>> bb = new ArrayList<Map<String,Object>>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String,Object> map = new HashMap<>();
+        map.put("startTime",sdf.format(useJianhuyiLog.getStartTime()));
+        map.put("endTime",sdf.format(useJianhuyiLog.getEndTime()));
+        List<UseJianhuyiLogDO> list = useJianhuyiLogService.list(map);
+
+        if(list.size()>0){
+            for (UseJianhuyiLogDO ujl : list) {
+                Map<String,Object> mapp = new LinkedHashMap<>();
+                mapp.put("数据时间",ujl.getSaveTime());
+                mapp.put("用户id",ujl.getUserId());
+                mapp.put("上传人id",ujl.getUploadId());
+                mapp.put("设备号",ujl.getEquipmentId());
+                mapp.put("阅读时长(分钟)",ujl.getReadDuration());
+                mapp.put("阅读距离(厘米)",ujl.getReadDistance());
+                mapp.put("阅读光照(lux)",ujl.getReadLight());
+                mapp.put("看手机时长(分钟)",ujl.getLookPhoneDuration());
+                mapp.put("看电脑电视时长(分钟)",ujl.getLookTvComputerDuration());
+                mapp.put("坐姿倾斜度",ujl.getSitTilt());
+                mapp.put("户外时长(小时)",ujl.getOutdoorsDuration());
+                mapp.put("使用监护仪时长(小时)",ujl.getUserDurtion());
+                mapp.put("提醒次数",ujl.getRemindsNum());
+                bb.add(mapp);
+            }
+        }else{
+            Map<String,Object> mapP = new HashMap<String,Object>();
+            mapP.put("信息", "暂无数据！！！");
+            bb.add(mapP);
+        }
+
+        String filename = "导出数据"+sdf.format(new Date().getTime())+".xls";
+        response.setContentType("application/ms-excel;charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment;filename="+new String(filename.getBytes(),"iso-8859-1"));
+
+        Cookie status = new Cookie("status","success");
+        status.setMaxAge(600);
+        response.addCookie(status);
+
+        OutputStream out = response.getOutputStream();
+
+        try {
+            ExcelExportUtil4DIY.exportToFile(bb,out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            out.close();
+        }
+
+    }
+
 
 }

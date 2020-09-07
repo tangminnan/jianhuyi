@@ -277,3 +277,15 @@ function batchRemove() {
 
    });
 }
+
+function daochu() {
+    var page = layer.open({
+        type: 2,
+        title: '条件导出',
+        maxmin: true,
+        shadeClose: false, // 点击遮罩关闭层
+        area: ['800px', '520px'],
+        content: "/information/useJianhuyiLog/shujudaochu" // iframe的url
+    });
+    layer.full(page);
+}

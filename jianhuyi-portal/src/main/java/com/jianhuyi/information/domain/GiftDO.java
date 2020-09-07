@@ -14,7 +14,7 @@ import java.util.Date;
  * @email bushuo@163.com
  * @date 2020-08-18 11:44:12
  */
-@Data
+//@Data
 @ToString(exclude = "Password")
 public class GiftDO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -48,5 +48,83 @@ public class GiftDO implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String taskDetails;
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getGiftId() {
+        return giftId;
+    }
+
+    public void setGiftId(String giftId) {
+        this.giftId = giftId;
+    }
+
+    public String getCoverImg() {
+        return coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
+
+    public String getGiftName() {
+        return giftName;
+    }
+
+    public void setGiftName(String giftName) {
+        this.giftName = giftName;
+    }
+
+    public String getGiftDetails() {
+        return giftDetails;
+    }
+
+    public void setGiftDetails(String giftDetails) {
+        this.giftDetails = giftDetails;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public MultipartFile getImgFile() {
+        return imgFile;
+    }
+
+    public void setImgFile(MultipartFile imgFile) {
+        this.imgFile = imgFile;
+    }
+
+    public Double getTaskTime() {
+        return taskTime;
+    }
+
+    public void setTaskTime(Double taskTime) {
+        this.taskTime = taskTime;
+    }
+
+    public String getAvgRate() {
+        return avgRate;
+    }
+
+    public void setAvgRate(String avgRate) {
+        this.avgRate = avgRate;
+    }
+
+    public String getTaskDetails() {
+        return taskDetails;
+    }
+
+    public void setTaskDetails(String taskDetails) {
+        this.taskDetails = taskDetails;
+    }
 }
