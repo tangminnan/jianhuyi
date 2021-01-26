@@ -43,4 +43,5 @@ public interface OwnerUserDao {
 	int updateUser(OwnerUserDO ownerUserDO);
 
 
+    OwnerUserDO getUserByIdCard(String idCard);
 }

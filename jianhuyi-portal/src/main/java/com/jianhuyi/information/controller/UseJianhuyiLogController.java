@@ -82,29 +82,47 @@ public class UseJianhuyiLogController {
         boolean flag = true;
         try {
             if (saveParamsDOList != null) {
-                if (saveParamsDOList.getUseRemindsDOList() != null && saveParamsDOList.getUseRemindsDOList().size()>0) {
+                if (saveParamsDOList.getUseRemindsDOList() != null && saveParamsDOList.getUseRemindsDOList().size() > 0) {
                     for (UseRemindsDO useRemindsDO : saveParamsDOList.getUseRemindsDOList()) {
                         if (useRemindsDO != null) {
                             useRemindsDO.setSaveTime(new Date());
+
+                            if (saveParamsDOList.getEquipmentId() != null) {
+                                useRemindsDO.setEquipmentId(saveParamsDOList.getEquipmentId());
+                            }
                         }
                     }
 
                     useRemindsService.saveList(saveParamsDOList.getUseRemindsDOList());
                 }
-                if (saveParamsDOList.getUseTimeDOList() != null && saveParamsDOList.getUseTimeDOList().size()>0) {
+                if (saveParamsDOList.getUseTimeDOList() != null && saveParamsDOList.getUseTimeDOList().size() > 0) {
                     for (UseTimeDO useTimeDO : saveParamsDOList.getUseTimeDOList()) {
                         if (useTimeDO != null) {
                             useTimeDO.setSaveTime(new Date());
+
+                            if (saveParamsDOList.getEquipmentId() != null) {
+                                useTimeDO.setEquipmentId(saveParamsDOList.getEquipmentId());
+                            }
                         }
                     }
 
                     useTimeService.saveList(saveParamsDOList.getUseTimeDOList());
                 }
 
-                if (saveParamsDOList.getUseJianhuyiLogDOList() != null && saveParamsDOList.getUseJianhuyiLogDOList().size()>0) {
+                if (saveParamsDOList.getUseJianhuyiLogDOList() != null && saveParamsDOList.getUseJianhuyiLogDOList().size() > 0) {
                     for (UseJianhuyiLogDO useJianhuyiLogDO : saveParamsDOList.getUseJianhuyiLogDOList()) {
                         useJianhuyiLogDO.setAddTime(new Date());
                         useJianhuyiLogDO.setDelFlag(0);
+
+                        if (saveParamsDOList.getEquipmentId() != null) {
+                            useJianhuyiLogDO.setEquipmentId(saveParamsDOList.getEquipmentId());
+                        }
+                        if (saveParamsDOList.getUploadId() != null) {
+                            useJianhuyiLogDO.setUploadId(Integer.parseInt(saveParamsDOList.getUploadId().toString()));
+                        }
+                        if (saveParamsDOList.getUserId() != null) {
+                            useJianhuyiLogDO.setUserId(Integer.parseInt(saveParamsDOList.getUserId().toString()));
+                        }
                     }
 
                     useJianhuyiLogService.saveList(saveParamsDOList.getUseJianhuyiLogDOList());

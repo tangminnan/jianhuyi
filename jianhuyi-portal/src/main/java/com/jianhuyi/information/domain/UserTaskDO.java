@@ -56,6 +56,56 @@ public class UserTaskDO implements Serializable {
     //计算后的总评级
     private String countGrade;
 
+    private String[] idCards;
+
+    private String idCard;
+
+    private int taskType;
+
+    private GiftDO giftDO;
+
+    private GiftPcDO giftPcDO;
+
+    public GiftDO getGiftDO() {
+        return giftDO;
+    }
+
+    public void setGiftDO(GiftDO giftDO) {
+        this.giftDO = giftDO;
+    }
+
+    public GiftPcDO getGiftPcDO() {
+        return giftPcDO;
+    }
+
+    public void setGiftPcDO(GiftPcDO giftPcDO) {
+        this.giftPcDO = giftPcDO;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public int getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
+    }
+
+    public String[] getIdCards() {
+        return idCards;
+    }
+
+    public void setIdCards(String[] idCards) {
+        this.idCards = idCards;
+    }
+
     public String getCountGrade() {
         return countGrade;
     }

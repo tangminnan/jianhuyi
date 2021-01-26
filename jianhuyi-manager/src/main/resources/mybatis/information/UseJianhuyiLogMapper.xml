@@ -106,11 +106,11 @@
         )
         ) / SUM(tuj.look_tv_computer_count) 平均看电子屏时长,
         SUM(IFNULL(tuj.sit_tilt, 0.0)) / count(*) 平均坐姿角度,
-        IFNULL(tur.remindsNum, '') AS 提醒次数,
-        IFNULL(tut.userDurtion * 3, '') AS 有效使用时长,
+        IFNULL(tur.remindsNum, 0) AS 提醒次数,
+        IFNULL(tut.userDurtion * 3, 0) AS 有效使用时长,
         IFNULL(
         outdoor.outdoors_duration,
-        ''
+        0
         ) AS 户外使用时长
         FROM
         t_use_jianhuyi_log tuj
@@ -212,69 +212,305 @@
         </where>
     </select>
 
+    <select id="selectPersonAndDate" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        zo.user_id,
+        zo.save_time,
+        zo.add_time,
+        zo.save_time1,
+        zo.upload_id,
+        zo.equipment_id,
+        tur.remindsNum,
+        tut.userDurtion
+        FROM
+        (
+        SELECT
+        tuj.user_id,
+        DATE_FORMAT(tuj.save_time, '%Y-%m-%d') save_time,
+        tuj.save_time save_time1,
+        upload_id,equipment_id,add_time
+        FROM
+        t_use_jianhuyi_log tuj
+        GROUP BY
+        DATE_FORMAT(tuj.save_time, '%Y-%m-%d'),
+        tuj.user_id,
+        tuj.equipment_id
+        ORDER BY
+        substr(tuj.save_time, 1, 10) DESC
+        ) zo
+        LEFT JOIN (
+        SELECT
+        upload_id,
+        user_id,
+        date_format(reminds_time, '%Y-%m-%d') reminds_time,
+        COUNT(*) remindsNum
+        FROM
+        t_use_reminds
+        GROUP BY
+        substr(reminds_time, 1, 10),
+        user_id
+        ) tur ON zo.user_id = tur.user_id
+        AND zo.save_time = tur.reminds_time
+        LEFT JOIN (
+        SELECT
+        `id`,
+        date_format(use_time, '%Y-%m-%d') use_time,
+        `save_time`,
+        user_id,
+        upload_id,
+        <!--/20 = *180/60/60-->
+        COUNT(*) /20 userDurtion
+        FROM
+        t_use_time
+        GROUP BY
+        substr(use_time, 1, 10),
+        user_id
+        ) tut ON zo.user_id = tut.user_id
+        AND zo.save_time = tut.use_time
+        <where>
+            <if test="uploadId != null and uploadId != ''">and zo.upload_id = #{uploadId}</if>
+            <if test="userId != null and userId != ''">and zo.user_id = #{userId}</if>
+
+            <if test="startTime != null and startTime != ''">and zo.save_time &gt;= #{startTime}</if>
+            <if test="endTime != null and endTime != ''">AND zo.save_time &lt;= #{endTime}
+            </if>
+
+            <if test="week != null and week != ''">and YEARWEEK(date_format(zo.save_time, '%Y-%m-%d')) =
+                YEARWEEK(now())
+            </if>
+            <if test="month != null and month != ''">and DATE_FORMAT(zo.save_time, '%Y%m') =
+                DATE_FORMAT(CURDATE(),'%Y%m')
+            </if>
+            <if test="quarter != null and quarter != ''">and QUARTER(zo.save_time)=QUARTER(now())</if>
+            <if test="year != null and year != ''">and YEAR(zo.save_time)=YEAR(NOW())</if>
+        </where>
+        ORDER BY
+        zo.add_time DESC
+    </select>
+
+    <select id="selectAllData" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        equipment_id,
+        user_id,
+        save_time,
+        `status`,
+        read_duration,
+        outdoors_duration,
+        read_distance,
+        read_light,
+        look_phone_count,
+        look_phone_duration,
+        look_tv_computer_count,
+        look_tv_computer_duration,
+        sit_tilt
+        FROM
+        (
+        SELECT
+        equipment_id,
+        user_id,
+        DATE_FORMAT(save_time, '%Y-%m-%d') save_time1,
+        save_time,
+        `status`,
+        read_duration,
+        outdoors_duration,
+        read_distance,
+        read_light,
+        look_phone_count,
+        look_phone_duration,
+        look_tv_computer_count,
+        look_tv_computer_duration,
+        sit_tilt
+        FROM
+        t_use_jianhuyi_log
+        ) a
+        <where>
+            <if test="uploadId != null and uploadId != ''">and upload_id = #{uploadId}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="startTime != null and startTime != ''">and a.save_time1 &gt;= #{startTime}</if>
+            <if test="endTime != null and endTime != ''">AND a.save_time1 &lt;= #{endTime}
+            </if>
+            <if test="week != null and week != ''">and YEARWEEK(date_format(a.save_time1, '%Y-%m-%d')) = YEARWEEK(now())
+            </if>
+            <if test="month != null and month != ''">and DATE_FORMAT(a.save_time1, '%Y%m') = DATE_FORMAT(CURDATE(),
+                '%Y%m')
+            </if>
+            <if test="quarter != null and quarter != ''">and QUARTER(a.save_time1)=QUARTER(now())</if>
+            <if test="year != null and year != ''">and YEAR(a.save_time1)=YEAR(NOW())</if>
+        </where>
+        ORDER BY
+        save_time DESC
+
+    </select>
+
+    <select id="uploadRecordList" resultType="com.jianhuyi.information.domain.UploadRecordDO">
+        SELECT
+        upload_id,
+        user_id,
+        save_time,
+        add_time,
+        equipment_id,
+        type
+        type
+        FROM
+        t_use_jianhuyi_log
+        <where>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id like CONCAT('%',#{equipmentId},'%')
+            </if>
+            <if test="startTime != null and startTime != ''">and save_time &gt;= #{startTime}</if>
+            <if test="endTime != null and endTime != ''">AND save_time &lt;= DATE_ADD(#{endTime}, INTERVAL 1 DAY )
+            </if>
+        </where>
+
+        GROUP BY
+        DATE_FORMAT(save_time, '%Y-%m-%d'),
+        user_id,
+        equipment_id
+        ORDER BY
+        add_time DESC
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="uploadRecordCount" resultType="int">
+        SELECT
+        count(*)
+        FROM(
+        SELECT
+        upload_id,
+        user_id,
+        save_time,
+        add_time,
+        equipment_id
+        FROM
+        t_use_jianhuyi_log
+        <where>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id like CONCAT('%',#{equipmentId},'%')
+            </if>
+            <if test="startTime != null and startTime != ''">and save_time &gt;= #{startTime}</if>
+            <if test="endTime != null and endTime != ''">AND save_time &lt;= DATE_ADD(#{endTime}, INTERVAL 1 DAY )
+            </if>
+        </where>
+        GROUP BY
+        DATE_FORMAT(save_time, '%Y-%m-%d'),
+        user_id,
+        equipment_id
+        ORDER BY
+        save_time DESC
+        ) a
+
+    </select>
+
     <select id="list" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         SELECT
-            zo.user_id,
-            zo.upload_id,
-            zo.equipment_id,
-            zo.save_time,
-            zo.read_duration,
-            zo.read_distance,
-            zo.read_light,
-            zo.look_phone_duration,
-            zo.look_tv_computer_duration,
-            zo.sit_tilt,
-            zo.outdoors_duration,
-            tur.remindsNum ,tut.userDurtion
-        from
+        zo.user_id,
+        zo.upload_id,
+        zo.equipment_id,
+        zo.save_time,
+        zo.read_duration,
+        zo.read_distance,
+        zo.read_light,
+        zo.look_phone_duration,
+        zo.look_tv_computer_duration,
+        zo.sit_tilt,
+        zo.outdoors_duration,
+        tur.remindsNum,
+        tut.userDurtion
+        FROM
         (
-            SELECT
-            tuj.user_id,
-            tuj.upload_id,
-            tuj.equipment_id,
-            date_format(tuj.save_time, '%Y-%m-%d') save_time,
-            SUM(IFNULL(tuj.read_duration, 0.0)) / count(read_duration) read_duration,
-            SUM(IFNULL(tuj.read_distance, 0.0)) / count(read_distance) read_distance,
-            SUM(IFNULL(tuj.read_light, 0.0)) / count(read_light) read_light,
-            SUM(IFNULL(tuj.look_phone_duration, 0.0)) / SUM(tuj.look_phone_count) look_phone_duration,
-            SUM(IFNULL(tuj.look_tv_computer_duration,0.0)) / SUM(tuj.look_tv_computer_count) look_tv_computer_duration,
-            SUM(IFNULL(tuj.sit_tilt, 0.0)) / count(sit_tilt) sit_tilt,
-            sum(if(tuj.status=2,outdoors_duration,0)) outdoors_duration
-            FROM
-            t_use_jianhuyi_log tuj
-            GROUP BY
-            substr(tuj.save_time, 1, 10),tuj.user_id
-            ORDER BY
-            substr(tuj.save_time, 1, 10) DESC
+        SELECT
+        tuj.user_id,
+        tuj.upload_id,
+        tuj.equipment_id,
+        date_format(tuj.save_time, '%Y-%m-%d') save_time,
+        SUM(
+
+        IF (
+        tuj.read_duration > 5,
+        tuj.read_duration,
+        0.0
+        )
+        ) read_duration,
+        SUM(
+
+        IF (
+        tuj.read_duration > 5,
+        tuj.read_distance,
+        0.0
+        )
+        ) read_distance,
+        SUM(
+
+        IF (
+        tuj.read_duration > 5,
+        tuj.read_light,
+        0.0
+        )
+        ) read_light,
+        SUM(
+        IFNULL(
+        tuj.look_phone_duration,
+        0.0
+        )
+        ) / SUM(tuj.look_phone_count) look_phone_duration,
+        SUM(
+        IFNULL(
+        tuj.look_tv_computer_duration,
+        0.0
+        )
+        ) / SUM(tuj.look_tv_computer_count) look_tv_computer_duration,
+        SUM(
+
+        IF (
+        tuj.read_duration > 5,
+        tuj.sit_tilt,
+        0.0
+        )
+        ) sit_tilt,
+        sum(
+
+        IF (
+        tuj. STATUS = 2,
+        outdoors_duration,
+        0
+        )
+        ) outdoors_duration
+        FROM
+        t_use_jianhuyi_log tuj
+        GROUP BY
+        substr(tuj.save_time, 1, 10),
+        tuj.user_id
+        ORDER BY
+        substr(tuj.save_time, 1, 10) DESC
         ) zo
-        LEFT JOIN
-        (
-            SELECT
-            upload_id,
-            user_id,
-            date_format(reminds_time, '%Y-%m-%d') reminds_time,
-            COUNT(*) remindsNum
-            FROM
-            t_use_reminds
-            GROUP BY
-            substr(reminds_time, 1, 10),user_id
-        ) tur
-        on zo.user_id = tur.user_id and zo.save_time = tur.reminds_time
-        LEFT JOIN
-        (
-            SELECT
-            `id`,
-            date_format(use_time, '%Y-%m-%d') use_time,
-            `save_time`,
-            user_id,
-            upload_id,
-            COUNT(*)/20 userDurtion
-            FROM
-            t_use_time
-            GROUP BY
-            substr(use_time, 1, 10),user_id
-        )tut
-        on zo.user_id = tut.user_id and zo.save_time = tut.use_time
+        LEFT JOIN (
+        SELECT
+        upload_id,
+        user_id,
+        date_format(reminds_time, '%Y-%m-%d') reminds_time,
+        COUNT(*) remindsNum
+        FROM
+        t_use_reminds
+        GROUP BY
+        substr(reminds_time, 1, 10),
+        user_id
+        ) tur ON zo.user_id = tur.user_id
+        AND zo.save_time = tur.reminds_time
+        LEFT JOIN (
+        SELECT
+        `id`,
+        date_format(use_time, '%Y-%m-%d') use_time,
+        `save_time`,
+        user_id,
+        upload_id,
+        COUNT(*) / 20 userDurtion
+        FROM
+        t_use_time
+        GROUP BY
+        substr(use_time, 1, 10),
+        user_id
+        ) tut ON zo.user_id = tut.user_id
+        AND zo.save_time = tut.use_time
         <where>
             <if test="uploadId != null and uploadId != ''">and zo.upload_id = #{uploadId}</if>
             <if test="userId != null and userId != ''">and zo.user_id = #{userId}</if>
@@ -284,39 +520,7 @@
         <if test="offset != null and limit != null">
             limit #{offset}, #{limit}
         </if>
-        <!--
-            SELECT
-            tuj.user_id,
-            tuj.upload_id,
-            tuj.equipment_id,
-            date_format(tuj.save_time, '%Y-%m-%d') save_time,
-            SUM(IFNULL(tuj.read_duration, 0.0)) / count(*) read_duration,
-            SUM(IFNULL(tuj.read_distance, 0.0)) / count(*) read_distance,
-            SUM(IFNULL(tuj.read_light, 0.0)) / count(*) read_light,
-            SUM(
-            IFNULL(tuj.look_phone_duration, 0.0)
-            ) / SUM(tuj.look_phone_count) look_phone_duration,
-            SUM(
-            IFNULL(
-            tuj.look_tv_computer_duration,
-            0.0
-            )
-            ) / SUM(tuj.look_tv_computer_count) look_tv_computer_duration,
-            SUM(IFNULL(tuj.sit_tilt, 0.0)) / count(*) sit_tilt,
-            sum(if(status=2,outdoors_duration,0)) outdoors_duration
-            FROM
-            t_use_jianhuyi_log tuj
 
-            WHERE tuj.status =1
-            GROUP BY
-            substr(tuj.save_time, 1, 10),
-            tuj.user_id
-            ORDER BY
-            substr(tuj.save_time, 1, 10) DESC
-            <if test="offset != null and limit != null">
-                limit #{offset}, #{limit}
-            </if>
-            -->
     </select>
 
     <select id="listDetail" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
@@ -337,7 +541,8 @@
         sit_tilt,
         use_jianhuyi_duration,
         sport_duration,
-        `del_flag`
+        `del_flag`,
+        status
         from t_use_jianhuyi_log
         where
         save_time &gt;= date_sub(#{saveTime}, INTERVAL - 0 DAY)

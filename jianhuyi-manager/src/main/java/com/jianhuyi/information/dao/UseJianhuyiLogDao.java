@@ -1,13 +1,11 @@
 package com.jianhuyi.information.dao;
 
+import com.jianhuyi.information.domain.UploadRecordDO;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 检测记录表
@@ -28,6 +26,7 @@ public interface UseJianhuyiLogDao {
     List<UseJianhuyiLogDO> listDetail(Map<String, Object> map);
 
     int count(Map<String, Object> map);
+
     int countLog(Map<String, Object> map);
 
     int save(UseJianhuyiLogDO useJianhuyiLog);
@@ -48,4 +47,13 @@ public interface UseJianhuyiLogDao {
     Collection<? extends UseJianhuyiLogDO> queryData(@Param("saveTime") String string, @Param("uploadId") Long uploadId, @Param("userId") Long userId);
 
     List<Map<String, Object>> exeList(@Param("saveTime") String string, @Param("uploadId") Long uploadId, @Param("userId") Long userId);
+
+
+    LinkedList<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
+
+    LinkedList<UseJianhuyiLogDO> selectAllData(Map<String, Object> map);
+
+    int uploadRecordCount(Map<String, Object> params);
+
+    List<UploadRecordDO> uploadRecordList(Map<String, Object> params);
 }

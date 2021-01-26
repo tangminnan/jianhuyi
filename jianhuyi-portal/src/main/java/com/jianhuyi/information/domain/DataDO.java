@@ -22,6 +22,7 @@ public class DataDO implements Serializable {
     //1 阅读，2 非阅读，3 遮挡状态，4 无效
     private Integer status;
     private Long userId;
+    private Long uploadId;
     //设备号
     private String equipmentId;
     //角度信息（以json数据保存）
@@ -39,6 +40,15 @@ public class DataDO implements Serializable {
     private String imgs;
 
     private List<DataImgDO> pictures;
+
+    public Long getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(Long uploadId) {
+        this.uploadId = uploadId;
+    }
+
 
     public String getImgs() {
         return imgs;

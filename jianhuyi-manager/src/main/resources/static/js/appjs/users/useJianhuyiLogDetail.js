@@ -81,185 +81,82 @@ function load() {
                      valign: 'middle',
                      rowspan: 2
                   },
+
                   {
-                     title: '总评价',
+                     field: 'status',
+                     title: '状态',
                      align: 'center',
-                     valign: 'middle',
-                     rowspan: 2,
-                     cellStyle: function (value, row, index, field) {
-                        return {
-                           classes: 'text - nowrap another - class',
-                           css: {'background-color': '#5792C6', 'font - size': '50px'}
+                     formatter: function (value) {
+                        if (value == 1) {
+                           return "阅读"
+                        } else if (value == 2) {
+                           return "非阅读"
+                        } else {
+                           return ""
                         }
                      },
-                     formatter: function (value, row) {
-                        if ((row.readDuration <= 20 && row.outdoorsDuration >= 2 && row.readDistance >= 33) &&
-                           ((row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.lookTvComputerDuration <= 20 && row.sitTilt <= 5) || (row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.lookTvComputerDuration <= 20) || (row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.sitTilt <= 5) || (row.lookTvComputerDuration <= 20 && row.lookPhoneDuration <= 10 && row.sitTilt <= 5))
-                           && (row.useJianhuyiDuration >= 10 || row.useJianhuyiDuration <= 8 && row.useJianhuyiDuration < 10)) {
-                           return "优"
-                        } else if (
-                           ((row.readDuration <= 20) || (row.readDuration > 20 && row.readDuration <= 40)) && ((row.outdoorsDuration >= 2 || (row.outdoorsDuration >= 1 && row.outdoorsDuration < 2))) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33))
-                           //d优良差
-                           && (
-                              (
-                                 ((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300) || ((row.readLight >= 200) && (row.readLight < 250)))
-                                 && ((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20))
-                                 && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40))
-                                 && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10))
-                              ) || (
-                                 ((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300))
-                                 && ((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20) || (row.lookPhoneDuration > 20 && row.lookPhoneDuration <= 40))
-                                 && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40))
-                                 && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10))
-                              ) || (
-                                 ((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300))
-                                 && ((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20)
-                                    && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40) || (row.lookTvComputerDuration > 40 && row.lookTvComputerDuration <= 60))
-                                    && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10))
-                                 )
-                              ) || (
-                                 ((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300))
-                                 && ((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20)
-                                    && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40))
-                                    && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10) || (row.sitTilt > 10 && row.sitTilt <= 15))
-                                 )
-                              )
-                           ) && (row.useJianhuyiDuration >= 10 || (row.useJianhuyiDuration >= 8 && row.useJianhuyiDuration < 10))
-                        ) {
-                           return "良"
-                        } else if (
-                           (
-                              ((row.readDuration <= 20) || ((row.readDuration > 20 && row.readDuration <= 40)) || ((row.readDuration > 40 && row.readDuration <= 90))) && ((row.outdoorsDuration >= 2) || ((row.outdoorsDuration >= 1 && row.outdoorsDuration < 2))) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33))
-                              ||
-                              ((row.readDuration <= 20) || ((row.readDuration > 20 && row.readDuration <= 40))) && ((row.outdoorsDuration >= 2) || ((row.outdoorsDuration >= 1 && row.outdoorsDuration < 2)) || (row.outdoorsDuration >= 0.5 && row.outdoorsDuration < 1)) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33))
-                              ||
-                              ((row.readDuration <= 20) || (row.readDuration > 20 && row.readDuration <= 40)) || ((row.outdoorsDuration >= 2) || ((row.outdoorsDuration >= 1 && row.outdoorsDuration < 2))) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33) || (row.readDistance > 20 && row.readDistance <= 30))
-                           ) && (
-                              (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300) || (row.readLight >= 200 && row.readLight < 250)) && ((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20)) && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10)))
-                              ||
-                              (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300)) && (((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20)) || (row.lookPhoneDuration > 20 && row.lookPhoneDuration <= 40)) && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10)))
-                              ||
-                              (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300)) && (((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20))) && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40) || (row.lookTvComputerDuration > 40 && row.lookTvComputerDuration <= 60)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10)))
-                              ||
-                              (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300)) && (((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20))) && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10)) || (row.sitTilt > 10 && row.sitTilt <= 15))
-                           )
-                           && (
-                              ((row.useJianhuyiDuration >= 10) || (row.useJianhuyiDuration >= 8 && row.useJianhuyiDuration < 10) || (row.useJianhuyiDuration >= 5 && row.useJianhuyiDuration < 8))
-                           )
-                        ) {
-                           return "不太好"
-                        } else if (
-                           (
-                              //前三项最多2项差
-                              (
-                                 ((row.readDuration <= 20) || (row.readDuration > 20 && row.readDuration <= 40) || (row.readDuration > 40 && row.readDuration <= 90)) && ((row.outdoorsDuration >= 2) || (row.outdoorsDuration >= 1 && row.outdoorsDuration < 2) || (row.outdoorsDuration >= 0.5 && row.outdoorsDuration < 1)) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33))
-                              )
-                              ||
-                              (
-                                 ((row.readDuration <= 20) || (row.readDuration > 20 && row.readDuration <= 40)) && ((row.outdoorsDuration >= 2) || (row.outdoorsDuration >= 1 && row.outdoorsDuration < 2) || (row.outdoorsDuration >= 0.5 && row.outdoorsDuration < 1)) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33) || (row.readDistance > 20 && row.readDistance <= 30))
-                              )
-                              ||
-                              (
-                                 ((row.readDuration <= 20) || (row.readDuration > 20 && row.readDuration <= 40) || (row.readDuration > 40 && row.readDuration <= 90)) && ((row.outdoorsDuration >= 2) || (row.outdoorsDuration >= 1 && row.outdoorsDuration < 2)) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33) || (row.readDistance > 20 && row.readDistance <= 30))
-                              )
-                           ) &&
-                           (
-                              (
-                                 (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300) || (row.readLight >= 200 && row.readLight < 250)) && ((row.lookPhoneDuration >= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20) || (row.lookPhoneDuration > 20 && row.lookPhoneDuration <= 40)) && ((row.lookTvComputerDuration >= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40) || (row.lookTvComputerDuration > 40 && row.lookTvComputerDuration <= 60)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10)))//123
-                                 &&
-                                 (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300) || (row.readLight >= 200 && row.readLight < 250)) && ((row.lookPhoneDuration >= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20)) && ((row.lookTvComputerDuration >= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40) || (row.lookTvComputerDuration > 40 && row.lookTvComputerDuration <= 60)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10) || (row.sitTilt > 10 && row.sitTilt <= 15)))//134
-                                 &&
-                                 (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300)) && ((row.lookPhoneDuration >= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20) || (row.lookPhoneDuration > 20 && row.lookPhoneDuration <= 40)) && ((row.lookTvComputerDuration >= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40) || (row.lookTvComputerDuration > 40 && row.lookTvComputerDuration <= 60)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10) || (row.sitTilt > 10 && row.sitTilt <= 15)))//234
-                                 &&
-                                 (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300) || (row.readLight >= 200 && row.readLight < 250)) && ((row.lookPhoneDuration >= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20) || (row.lookPhoneDuration > 20 && row.lookPhoneDuration <= 40)) && ((row.lookTvComputerDuration >= 20) || (row.lookTvComputerDuration > 20 && f <= 40)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10) || (row.sitTilt > 10 && row.sitTilt <= 15)))//234
-                              )
-                           ) &&
-                           (
-                              (row.useJianhuyiDuration >= 10) || (row.useJianhuyiDuration >= 8 && row.useJianhuyiDuration < 10) || (row.useJianhuyiDuration >= 5 && row.useJianhuyiDuration < 8) || (row.useJianhuyiDuration < 5)
-                           )
-                        ) {
-                           return "差"
-                        } else {
-                           return "极差"
-                        }
+                     valign: 'middle',
+                     rowspan: 2,
 
 
-                        /*else if(){
-
-                        } else if (row.readDuration > 20 && row.readDuration <= 40) {
-                            return "良"
-                        } else if (row.readDuration == 20) {
-                            return "标准"
-                        } else if (row.readDuration > 40 && row.readDuration <= 90) {
-                            return "差"
-                        } else if (row.readDuration > 90) {
-                            return "极差"
-                        }*/
-                     }
                   },
                   {
                      /*field : 'readDuration', */
                      title: '阅读时长(分钟)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 2
+                     colspan: 1
                   },
                   {
                      field: 'outdoorsDuration',
                      title: '户外时长(小时)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 2
+                     colspan: 1
                   },
                   {
                      field: 'readDistance',
                      title: '阅读距离(厘米)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 2
+                     colspan: 1
                   },
                   {
                      field: 'readLight',
                      title: '阅读光照(lux)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 2
+                     colspan: 1
                   },
                   {
                      field: 'lookPhoneDuration',
                      title: '看手机时长<br>(分钟)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 3
+                     colspan: 2
                   },
                   {
                      field: 'lookTvComputerDuration',
                      title: '看电脑电视时长<br>(分钟)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 3
+                     colspan: 2
                   },
                   {
                      field: 'sitTilt',
                      title: '坐姿倾斜度',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 2
+                     colspan: 1
                   },
                   {
                      field: 'useJianhuyiDuration',
                      title: '使用监护仪时长<br>(小时)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 2
+                     colspan: 1
                   },
-                  {
-                     field: 'sportDuration',
-                     title: '运动时长<br>(小时)',
-                     align: 'center',
-                     valign: 'middle',
-                     colspan: 2
-                  },
+
                   /*								{
                       field : 'delFlag',
                       title : '删除标志(1:删除 0：未删除)'
@@ -285,24 +182,7 @@ function load() {
                   valign: 'middle',
                   align: 'center'
                },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle',
-                     formatter: function (value, row) {
-                        if (row.readDuration < 20) {
-                           return "优"
-                        } else if (row.readDuration > 20 && row.readDuration <= 40) {
-                           return "良"
-                        } else if (row.readDuration == 20) {
-                           return "标准"
-                        } else if (row.readDuration > 40 && row.readDuration <= 90) {
-                           return "差"
-                        } else if (row.readDuration > 90) {
-                           return "极差"
-                        }
-                     }
-                  },
+
                   {
                      field: 'outdoorsDuration',
                      title: '户外',
@@ -315,29 +195,7 @@ function load() {
                      },
                      align: 'center'
                   },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle', cellStyle: function (value, row, index, field) {
-                        return {
-                           classes: 'text - nowrap another - class',
-                           css: {'background-color': '#5792C6', 'font - size': '50px'}
-                        }
-                     },
-                     formatter: function (value, row) {
-                        if (row.outdoorsDuration > 2) {
-                           return "优"
-                        } else if (row.outdoorsDuration >= 1 && row.outdoorsDuration < 2) {
-                           return "良"
-                        } else if (row.outdoorsDuration == 2) {
-                           return "标准"
-                        } else if (row.outdoorsDuration >= 0.5 && row.outdoorsDuration < 1) {
-                           return "差"
-                        } else if (row.outdoorsDuration < 0.5) {
-                           return "极差"
-                        }
-                     }
-                  },
+
                   {
                      field: 'readDistance',
                      title: '距离',
@@ -345,24 +203,7 @@ function load() {
                      sortable: true,
                      align: 'center'
                   },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle',
-                     formatter: function (value, row) {
-                        if (row.readDistance > 33) {
-                           return "优"
-                        } else if (row.readDistance >= 30 && row.readDistance <= 33) {
-                           return "良"
-                        } else if (row.readDistance == 33) {
-                           return "标准"
-                        } else if (row.readDistance > 20 && row.readDistance <= 30) {
-                           return "差"
-                        } else if (row.readDistance < 20) {
-                           return "极差"
-                        }
-                     }
-                  },
+
 
                   {
                      field: 'readLight',
@@ -376,29 +217,7 @@ function load() {
                      },
                      align: 'center'
                   },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle', cellStyle: function (value, row, index, field) {
-                        return {
-                           classes: 'text - nowrap another - class',
-                           css: {'background-color': '#5792C6', 'font - size': '50px'}
-                        }
-                     },
-                     formatter: function (value, row) {
-                        if (row.readLight > 300) {
-                           return "优"
-                        } else if (row.readLight >= 250 && row.readLight < 300) {
-                           return "良"
-                        } else if (row.readLight == 300) {
-                           return "标准"
-                        } else if (row.readLight >= 200 && row.readLight < 250) {
-                           return "差"
-                        } else if (row.readLight < 200) {
-                           return "极差"
-                        }
-                     }
-                  },
+
 
                   {
                      field: 'lookPhoneDuration',
@@ -413,24 +232,7 @@ function load() {
                   sortable: true,
                   align: 'center'
                },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle',
-                     formatter: function (value, row) {
-                        if (row.lookPhoneDuration < 10) {
-                           return "优"
-                        } else if (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20) {
-                           return "良"
-                        } else if (row.lookPhoneDuration == 10) {
-                           return "标准"
-                        } else if (row.lookPhoneDuration > 20 && row.lookPhoneDuration <= 40) {
-                           return "差"
-                        } else if (row.lookPhoneDuration > 40) {
-                           return "极差"
-                        }
-                     }
-                  },
+
 
                   {
                      field: 'lookTvComputerDuration',
@@ -456,29 +258,6 @@ function load() {
                      },
                      align: 'center'
                   },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle', cellStyle: function (value, row, index, field) {
-                        return {
-                           classes: 'text - nowrap another - class',
-                           css: {'background-color': '#5792C6', 'font - size': '50px'}
-                        }
-                     },
-                     formatter: function (value, row) {
-                        if (row.lookTvComputerDuration < 20) {
-                           return "优"
-                        } else if (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40) {
-                           return "良"
-                        } else if (row.lookTvComputerDuration == 20) {
-                           return "标准"
-                        } else if (row.lookTvComputerDuration > 40 && row.lookTvComputerDuration <= 60) {
-                           return "差"
-                        } else if (row.lookTvComputerDuration > 60) {
-                           return "极差"
-                        }
-                     }
-                  },
 
                   {
                      field: 'sitTilt',
@@ -487,24 +266,7 @@ function load() {
                      sortable: true,
                      align: 'center'
                   },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle',
-                     formatter: function (value, row) {
-                        if (row.sitTilt < 5) {
-                           return "优"
-                        } else if (row.sitTilt > 5 && row.sitTilt <= 10) {
-                           return "良"
-                        } else if (row.sitTilt == 5) {
-                           return "标准"
-                        } else if (row.sitTilt > 10 && row.sitTilt <= 15) {
-                           return "差"
-                        } else if (row.sitTilt > 15) {
-                           return "极差"
-                        }
-                     }
-                  },
+
 
                   {
                      field: 'useJianhuyiDuration',
@@ -518,55 +280,6 @@ function load() {
                      },
                      align: 'center'
                   },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle', cellStyle: function (value, row, index, field) {
-                        return {
-                           classes: 'text - nowrap another - class',
-                           css: {'background-color': '#5792C6', 'font - size': '50px'}
-                        }
-                     },
-                     formatter: function (value, row) {
-                        if (row.useJianhuyiDuration > 10) {
-                           return "优"
-                        } else if (row.useJianhuyiDuration >= 8 && row.useJianhuyiDuration < 10) {
-                           return "良"
-                        } else if (row.useJianhuyiDuration == 10) {
-                           return "标准"
-                        } else if (row.useJianhuyiDuration >= 5 && row.useJianhuyiDuration < 8) {
-                           return "差"
-                        } else if (row.useJianhuyiDuration < 5) {
-                           return "极差"
-                        }
-                     }
-                  },
-
-                  {
-                     field: 'sportDuration',
-                     title: '运动时长',
-                     sortable: true,
-                     valign: 'middle',
-                     align: 'center'
-                  },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle',
-                     formatter: function (value, row) {
-                        if (row.sportDuration > 2) {
-                           return "优"
-                        } else if (row.sportDuration >= 1 && row.sportDuration < 2) {
-                           return "良"
-                        } else if (row.sportDuration == 2) {
-                           return "标准"
-                        } else if (row.sportDuration >= 0.5 && row.sportDuration < 1) {
-                           return "差"
-                        } else if (row.sportDuration < 0.5) {
-                           return "极差"
-                        }
-                     }
-                  }
 
 
                ]

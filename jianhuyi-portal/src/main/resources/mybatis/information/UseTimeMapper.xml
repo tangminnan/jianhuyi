@@ -22,6 +22,19 @@
 
     </select>
 
+    <select id="getTodayUse" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+            user_id,
+            COUNT(*) / 20 useJianhuyiDuration
+        FROM
+            t_use_time
+        WHERE
+            user_id = #{userId}
+        AND TO_DAYS(use_time) = TO_DAYS(NOW())
+        GROUP BY
+            substr(use_time, 1, 10)
+    </select>
+
     <select id="count" resultType="int">
         select count(*) from t_use_time
         <where>

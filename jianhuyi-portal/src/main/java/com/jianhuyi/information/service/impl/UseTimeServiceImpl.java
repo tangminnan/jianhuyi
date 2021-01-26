@@ -1,6 +1,7 @@
 package com.jianhuyi.information.service.impl;
 
 import com.jianhuyi.information.dao.UseTimeDao;
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseTimeDO;
 import com.jianhuyi.information.service.UseTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,11 @@ public class UseTimeServiceImpl implements UseTimeService {
     @Override
     public void saveList(List<UseTimeDO> useTimeDOList) {
         useTimeDao.saveList(useTimeDOList);
+    }
+
+    @Override
+    public UseJianhuyiLogDO getTodayUse(Long userId) {
+        return useTimeDao.getTodayUse(userId);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.jianhuyi.information.service;
 
 
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseRemindsDO;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface UseRemindsService {
     int batchRemove(Long[] ids);
 
     void saveList(List<UseRemindsDO> useRemindsDOList);
+
+    UseJianhuyiLogDO getTodayReminds(Long userId);
 }

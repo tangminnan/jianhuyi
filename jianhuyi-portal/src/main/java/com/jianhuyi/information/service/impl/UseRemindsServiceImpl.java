@@ -1,6 +1,7 @@
 package com.jianhuyi.information.service.impl;
 
 import com.jianhuyi.information.dao.UseRemindsDao;
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseRemindsDO;
 import com.jianhuyi.information.service.UseRemindsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,11 @@ public class UseRemindsServiceImpl implements UseRemindsService {
     @Override
     public void saveList(List<UseRemindsDO> useRemindsDOList) {
         useRemindsDao.saveList(useRemindsDOList);
+    }
+
+    @Override
+    public UseJianhuyiLogDO getTodayReminds(Long userId) {
+        return useRemindsDao.getTodayReminds(userId);
     }
 
 }

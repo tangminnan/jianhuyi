@@ -1,8 +1,5 @@
 package com.jianhuyi.information.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -30,36 +27,26 @@ public class UseJianhuyiLogDO implements Serializable {
     // 添加时间
     private Date addTime;
     // 阅读时长(分钟）
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double readDuration;
     // 户外时长(小时）
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double outdoorsDuration;
     // 阅读距离(厘米)
     private Double readDistance;
     // 阅读光照(lux)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double readLight;
     // 看手机时长(分钟)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double lookPhoneDuration;
     //看手机次数
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer lookPhoneCount;
     //看电脑次数
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer lookTvComputerCount;
     // 看电脑电视时长(分钟）
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double lookTvComputerDuration;
     // 坐姿倾斜度
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double sitTilt;
     // 使用监护仪时长(小时）
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Integer useJianhuyiDuration;
+    private Double useJianhuyiDuration;
     // 运动时长(小时)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double sportDuration;
     // 删除标志(1:删除 0：未删除)
     private Integer delFlag;
@@ -71,6 +58,26 @@ public class UseJianhuyiLogDO implements Serializable {
     private Double allreadDuration;
     //治疗提醒
     private Integer remind;
+
+    private int type;
+
+    private Double userDurtion;
+
+    public Double getUserDurtion() {
+        return userDurtion;
+    }
+
+    public void setUserDurtion(Double userDurtion) {
+        this.userDurtion = userDurtion;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;
@@ -192,11 +199,11 @@ public class UseJianhuyiLogDO implements Serializable {
         this.sitTilt = sitTilt;
     }
 
-    public Integer getUseJianhuyiDuration() {
+    public Double getUseJianhuyiDuration() {
         return useJianhuyiDuration;
     }
 
-    public void setUseJianhuyiDuration(Integer useJianhuyiDuration) {
+    public void setUseJianhuyiDuration(Double useJianhuyiDuration) {
         this.useJianhuyiDuration = useJianhuyiDuration;
     }
 
@@ -246,5 +253,33 @@ public class UseJianhuyiLogDO implements Serializable {
 
     public void setRemind(Integer remind) {
         this.remind = remind;
+    }
+
+    @Override
+    public String toString() {
+        return "UseJianhuyiLogDO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", uploadId=" + uploadId +
+                ", saveTime='" + saveTime + '\'' +
+                ", equipmentId='" + equipmentId + '\'' +
+                ", addTime=" + addTime +
+                ", readDuration=" + readDuration +
+                ", outdoorsDuration=" + outdoorsDuration +
+                ", readDistance=" + readDistance +
+                ", readLight=" + readLight +
+                ", lookPhoneDuration=" + lookPhoneDuration +
+                ", lookPhoneCount=" + lookPhoneCount +
+                ", lookTvComputerCount=" + lookTvComputerCount +
+                ", lookTvComputerDuration=" + lookTvComputerDuration +
+                ", sitTilt=" + sitTilt +
+                ", useJianhuyiDuration=" + useJianhuyiDuration +
+                ", sportDuration=" + sportDuration +
+                ", delFlag=" + delFlag +
+                ", status=" + status +
+                ", num=" + num +
+                ", allreadDuration=" + allreadDuration +
+                ", remind=" + remind +
+                '}';
     }
 }

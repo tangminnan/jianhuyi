@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.information.dao.StatisticsSuccessRateDao">
+
+    <select id="get" resultType="com.jianhuyi.information.domain.StatisticsSuccessRateDO">
+		select `id`,`equipment_id`,`type`,`time`,`save_time` from t_statistics_success_rate where id = #{value}
+	</select>
+
+    <select id="list" resultType="com.jianhuyi.information.domain.StatisticsSuccessRateDO">
+        select `id`,`equipment_id`,`type`,`time`,`save_time` from t_statistics_success_rate
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
+            <if test="type != null and type != ''">and type = #{type}</if>
+            <if test="time != null and time != ''">and time = #{time}</if>
+            <if test="saveTime != null and saveTime != ''">and save_time = #{saveTime}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="detaillist" resultType="com.jianhuyi.information.domain.StatisticsSuccessRateDO">
+        select
+        a.equipment_id,
+        save_time,
+        b.allCount,
+        b.success,
+        b.clearAll,
+        b.clearAllSuccess,
+        b.dataLengthTooLong
+        FROM
+        t_statistics_success_rate a
+        LEFT JOIN (
+        SELECT
+        equipment_id,
+        SUM(type = 1) allCount,
+        SUM(type = 2) success,
+        SUM(type = 3) clearAll,
+        SUM(type = 4) clearAllSuccess,
+        SUM(type = 5) dataLengthTooLong
+        FROM
+        t_statistics_success_rate
+        GROUP BY
+        equipment_id
+        ) b ON a.equipment_id = b.equipment_id
+        WHERE
+        save_time IN (
+        SELECT
+        MAX(save_time)
+        FROM
+        t_statistics_success_rate
+        GROUP BY
+        equipment_id
+        )
+        GROUP BY
+        equipment_id
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY
+                save_time DESC
+            </otherwise>
+        </choose>
+
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="detailcount" resultType="int">
+        SELECT COUNT(*) from(
+        select
+        a.equipment_id,
+        save_time,
+        b.allCount,
+        b.success,
+        b.clearAll,
+        b.clearAllSuccess,
+        b.dataLengthTooLong
+        FROM
+        t_statistics_success_rate a
+        LEFT JOIN (
+        SELECT
+        equipment_id,
+        SUM(type = 1) allCount,
+        SUM(type = 2) success,
+        SUM(type = 3) clearAll,
+        SUM(type = 4) clearAllSuccess,
+        SUM(type = 5) dataLengthTooLong
+        FROM
+        t_statistics_success_rate
+        GROUP BY
+        equipment_id
+        ) b ON a.equipment_id = b.equipment_id
+        WHERE
+        save_time IN (
+        SELECT
+        MAX(save_time)
+        FROM
+        t_statistics_success_rate
+        GROUP BY
+        equipment_id
+        )
+        GROUP BY
+        equipment_id
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                ORDER BY
+                save_time DESC
+            </otherwise>
+        </choose>
+        )a
+    </select>
+
+
+    <select id="count" resultType="int">
+        select count(*) from t_statistics_success_rate
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
+            <if test="type != null and type != ''">and type = #{type}</if>
+            <if test="time != null and time != ''">and time = #{time}</if>
+            <if test="saveTime != null and saveTime != ''">and save_time = #{saveTime}</if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.jianhuyi.information.domain.StatisticsSuccessRateDO" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into t_statistics_success_rate
+		(
+			`equipment_id`, 
+			`type`, 
+			`time`, 
+			`save_time`
+		)
+		values
+		(
+			#{equipmentId}, 
+			#{type}, 
+			#{time}, 
+			#{saveTime}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.jianhuyi.information.domain.StatisticsSuccessRateDO">
+        update t_statistics_success_rate
+        <set>
+            <if test="equipmentId != null">`equipment_id` = #{equipmentId},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="time != null">`time` = #{time},</if>
+            <if test="saveTime != null">`save_time` = #{saveTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="remove">
+		delete from t_statistics_success_rate where id = #{value}
+	</delete>
+
+    <delete id="batchRemove">
+        delete from t_statistics_success_rate where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

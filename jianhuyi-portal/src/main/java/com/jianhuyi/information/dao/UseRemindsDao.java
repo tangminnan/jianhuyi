@@ -1,5 +1,6 @@
 package com.jianhuyi.information.dao;
 
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseRemindsDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -30,4 +31,6 @@ public interface UseRemindsDao {
     int batchRemove(Long[] ids);
 
     void saveList(@Param("useRemindsDOList") List<UseRemindsDO> useRemindsDOList);
+
+    UseJianhuyiLogDO getTodayReminds(@Param("userId") Long userId);
 }

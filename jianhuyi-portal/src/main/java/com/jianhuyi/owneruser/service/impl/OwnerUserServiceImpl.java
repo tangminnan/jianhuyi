@@ -117,4 +117,9 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 		return ownerUserMapper.updateUser(ownerUserDO);
 	}
 
+	@Override
+	public OwnerUserDO getUserByIdCard(String idCard) {
+		return ownerUserMapper.getUserByIdCard(idCard);
+	}
+
 }

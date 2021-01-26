@@ -68,7 +68,7 @@ function load() {
                      align: 'center',
                      valign: 'middle',
                      rowspan: 2
-                  }, {
+                  }, /* {
                   field: 'addTime',
                   title: '上传时间',
                   align: 'center',
@@ -80,7 +80,7 @@ function load() {
                   align: 'center',
                   valign: 'middle',
                   rowspan: 2
-               }, /* {
+               },*/ /* {
                         field: 'status',
                         title: '状态',
                         formatter:function (value) {
@@ -108,7 +108,7 @@ function load() {
                      formatter: function (value, row) {
                         if ((row.readDuration <= 20 && row.outdoorsDuration >= 2 && row.readDistance >= 33) &&
                            ((row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.lookTvComputerDuration <= 20 && row.sitTilt <= 5) || (row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.lookTvComputerDuration <= 20) || (row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.sitTilt <= 5) || (row.lookTvComputerDuration <= 20 && row.lookPhoneDuration <= 10 && row.sitTilt <= 5))
-                           && (row.useJianhuyiDuration >= 10 || row.useJianhuyiDuration <= 8 && row.useJianhuyiDuration < 10)) {
+                           && (row.userDurtion >= 10 || row.userDurtion <= 8 && row.userDurtion < 10)) {
                            return "优"
                         } else if (
                            ((row.readDuration <= 20) || (row.readDuration > 20 && row.readDuration <= 40)) && ((row.outdoorsDuration >= 2 || (row.outdoorsDuration >= 1 && row.outdoorsDuration < 2))) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33))
@@ -137,7 +137,7 @@ function load() {
                                     && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10) || (row.sitTilt > 10 && row.sitTilt <= 15))
                                  )
                               )
-                           ) && (row.useJianhuyiDuration >= 10 || (row.useJianhuyiDuration >= 8 && row.useJianhuyiDuration < 10))
+                           ) && (row.userDurtion >= 10 || (row.userDurtion >= 8 && row.userDurtion < 10))
                         ) {
                            return "良"
                         } else if (
@@ -157,7 +157,7 @@ function load() {
                               (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300)) && (((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20))) && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10)) || (row.sitTilt > 10 && row.sitTilt <= 15))
                            )
                            && (
-                              ((row.useJianhuyiDuration >= 10) || (row.useJianhuyiDuration >= 8 && row.useJianhuyiDuration < 10) || (row.useJianhuyiDuration >= 5 < 8))
+                              ((row.userDurtion >= 10) || (row.userDurtion >= 8 && row.userDurtion < 10) || (row.userDurtion >= 5 < 8))
                            )
                         ) {
                            return "不太好"
@@ -188,7 +188,7 @@ function load() {
                               )
                            ) &&
                            (
-                              (row.useJianhuyiDuration >= 10) || (row.useJianhuyiDuration >= 8 && row.useJianhuyiDuration < 10) || (row.useJianhuyiDuration >= 5 && row.useJianhuyiDuration < 8) || (row.useJianhuyiDuration < 5)
+                              (row.userDurtion >= 10) || (row.userDurtion >= 8 && row.userDurtion < 10) || (row.userDurtion >= 5 && row.userDurtion < 8) || (row.userDurtion < 5)
                            )
                         ) {
                            return "差"
@@ -224,7 +224,7 @@ function load() {
                   {
                      field: 'outdoorsDuration',
                      title:
-                        '户外时长(小时)',
+                        '户外时长(分钟)',
                      align:
                         'center',
                      valign:
@@ -266,7 +266,7 @@ function load() {
                      valign:
                         'middle',
                      colspan:
-                        3
+                        2
                   }
                   ,
                   {
@@ -278,7 +278,7 @@ function load() {
                      valign:
                         'middle',
                      colspan:
-                        3
+                        2
                   }
                   ,
                   {
@@ -294,21 +294,9 @@ function load() {
                   }
                   ,
                   {
-                     field: 'useJianhuyiDuration',
+                     field: 'userDurtion',
                      title:
                         '使用监护仪时长<br>(小时)',
-                     align:
-                        'center',
-                     valign:
-                        'middle',
-                     colspan:
-                        2
-                  }
-                  ,
-                  {
-                     field: 'sportDuration',
-                     title:
-                        '运动时长<br>(小时)',
                      align:
                         'center',
                      valign:
@@ -504,13 +492,7 @@ function load() {
                         }
 
                      }
-                  }, {
-                  field: 'lookPhoneCount',
-                  title: '次数',
-                  valign: 'middle',
-                  sortable: true,
-                  align: 'center'
-               },
+                  },
                   {
                      title: '评价',
                      align: 'center',
@@ -550,19 +532,7 @@ function load() {
                         }
 
                      }
-                  }, {
-                  field: 'lookTvComputerCount',
-                  title: '次数',
-                  valign: 'middle',
-                  sortable: true,
-                  align: 'center',
-                  cellStyle: function (value, row, index, field) {
-                     return {
-                        classes: 'text - nowrap another - class',
-                        css: {'background-color': '#5792C6', 'font - size': '50px'}
-                     }
-                  }
-               },
+                  },
                   {
                      title: '评价',
                      align: 'center',
@@ -623,7 +593,7 @@ function load() {
                   },
 
                   {
-                     field: 'useJianhuyiDuration',
+                     field: 'userDurtion',
                      title: '使用时长',
                      sortable: true,
                      valign: 'middle',
@@ -646,55 +616,21 @@ function load() {
                         }
                      },
                      formatter: function (value, row) {
-                        if (row.useJianhuyiDuration > 10) {
+                        if (row.userDurtion > 10) {
                            return "优"
-                        } else if (row.useJianhuyiDuration >= 8 && row.useJianhuyiDuration < 10) {
+                        } else if (row.userDurtion >= 8 && row.userDurtion < 10) {
                            return "良"
-                        } else if (row.useJianhuyiDuration == 10) {
+                        } else if (row.userDurtion == 10) {
                            return "标准"
-                        } else if (row.useJianhuyiDuration >= 5 && row.useJianhuyiDuration < 8) {
+                        } else if (row.userDurtion >= 5 && row.userDurtion < 8) {
                            return "差"
-                        } else if (row.useJianhuyiDuration < 5) {
+                        } else if (row.userDurtion < 5) {
                            return "极差"
                         } else {
                            return "暂无"
                         }
                      }
                   },
-
-                  {
-                     field: 'sportDuration',
-                     title: '运动时长',
-                     sortable: true,
-                     valign: 'middle',
-                     align: 'center',
-                     formatter: function (value) {
-                        if (value != null) {
-                           return value.toFixed(2);
-                        } else {
-                           return ""
-                        }
-
-                     }
-                  },
-                  {
-                     title: '评价',
-                     align: 'center',
-                     valign: 'middle',
-                     formatter: function (value, row) {
-                        if (row.sportDuration > 2) {
-                           return "优"
-                        } else if (row.sportDuration >= 1 && row.sportDuration < 2) {
-                           return "良"
-                        } else if (row.sportDuration == 2) {
-                           return "标准"
-                        } else if (row.sportDuration >= 0.5 && row.sportDuration < 1) {
-                           return "差"
-                        } else if (row.sportDuration < 0.5) {
-                           return "极差"
-                        }
-                     }
-                  }
 
 
                ]
@@ -791,14 +727,13 @@ function weekEchart() {
    var myChart5 = echarts.init(document.getElementById('main5'));
    var myChart6 = echarts.init(document.getElementById('main6'));
    var myChart7 = echarts.init(document.getElementById('main7'));
-   var myChart8 = echarts.init(document.getElementById('main8'));
 
    $.ajax({
       type: 'get',
       dataType: "json",
       async: true,
       cache: false,
-      url: '/information/useJianhuyiLog/listData',
+      url: 'http://eyemonitor-api.dddmaker.com/jianhuyi/useJianhuyiLog/weekData',
       data: {
          userId: $('#uid').val(),
          start: startDate,
@@ -806,97 +741,7 @@ function weekEchart() {
       },
       success: function (result) {
          console.log(result)
-         /*$('#div1')[0].innerText = '总平均' + readDurations + '分钟';
-         if (readDurations >= 20) {
-             $('#span1')[0].innerText = '优';
-         } else if (readDurations > 20 && readDurations <= 40) {
-             $('#span1')[0].innerText = '良';
-         } else if (readDurations > 40 && readDurations <= 90) {
-             $('#span1')[0].innerText = '差';
-         } else if (readDurations > 90) {
-             $('#span1')[0].innerText = '极差';
-         }
-         $('#div2')[0].innerText = '总平均' + outdoorsDurations + '小时';
-         if (outdoorsDurations >= 2) {
-             $('#span2')[0].innerText = '优';
-         } else if (outdoorsDurations >= 1 && outdoorsDurations < 2) {
-             $('#span2')[0].innerText = '良';
-         } else if (outdoorsDurations >= 0.5 && outdoorsDurations < 1) {
-             $('#span2')[0].innerText = '差';
-         } else if (outdoorsDurations < 0.5) {
-             $('#span2')[0].innerText = '极差';
-         }
-         $('#div3')[0].innerText = '总平均' + readDistances + '厘米';
-         if (readDistances >= 33) {
-             $('#span3')[0].innerText = '优';
-         } else if (readDistances >= 30 && readDistances < 33) {
-             $('#span3')[0].innerText = '良';
-         } else if (readDistances > 20 && readDistances <= 30) {
-             $('#span3')[0].innerText = '差';
-         } else if (readDistances < 20) {
-             $('#span3')[0].innerText = '极差';
-         }
-         $('#div4')[0].innerText = '总平均' + readLights + 'lux';
-         if (readLights >= 300) {
-             $('#span4')[0].innerText = '优';
-         } else if (readLights >= 250 && readLights < 300) {
-             $('#span4')[0].innerText = '良';
-         } else if (readLights >= 200 && readLights < 250) {
-             $('#span4')[0].innerText = '差';
-         } else if (readLights < 200) {
-             $('#span4')[0].innerText = '极差';
-         }
-         $('#div5')[0].innerText = '总平均' + lookPhoneDurations + '分钟';
-         if (lookPhoneDurations >= 10) {
-             $('#span5')[0].innerText = '优';
-         } else if (lookPhoneDurations > 10 && lookPhoneDurations <= 20) {
-             $('#span5')[0].innerText = '良';
-         } else if (lookPhoneDurations > 20 && lookPhoneDurations <= 40) {
-             $('#span5')[0].innerText = '差';
-         } else if (lookPhoneDurations > 40) {
-             $('#span5')[0].innerText = '极差';
-         }
-         $('#div6')[0].innerText = '总平均' + lookTvComputerDurations + '分钟';
-         if (lookTvComputerDurations >= 20) {
-             $('#span6')[0].innerText = '优';
-         } else if (lookTvComputerDurations > 20 && lookTvComputerDurations <= 40) {
-             $('#span6')[0].innerText = '良';
-         } else if (lookTvComputerDurations > 40 && lookTvComputerDurations <= 60) {
-             $('#span6')[0].innerText = '差';
-         } else if (lookTvComputerDurations > 60) {
-             $('#span6')[0].innerText = '极差';
-         }
-         $('#div7')[0].innerText = '总平均' + sitTilts + '°';
-         if (sitTilts >= 5) {
-             $('#span7')[0].innerText = '优';
-         } else if (sitTilts > 5 && sitTilts <= 10) {
-             $('#span7')[0].innerText = '良';
-         } else if (sitTilts > 10 && sitTilts <= 15) {
-             $('#span7')[0].innerText = '差';
-         } else if (sitTilts > 15) {
-             $('#span7')[0].innerText = '极差';
-         }
-         $('#div8')[0].innerText = '总平均' + useJianhuyiDurations + '小时';
-         if (useJianhuyiDurations >= 10) {
-             $('#span8')[0].innerText = '优';
-         } else if (useJianhuyiDurations >= 8 && useJianhuyiDurations < 10) {
-             $('#span8')[0].innerText = '良';
-         } else if (useJianhuyiDurations >= 5 && useJianhuyiDurations < 8) {
-             $('#span8')[0].innerText = '差';
-         } else if (useJianhuyiDurations < 5) {
-             $('#span8')[0].innerText = '极差';
-         }
-         $('#div9')[0].innerText = '总平均' + sportDurations + '小时';
-         if (sportDurations >= 2) {
-             $('#span9')[0].innerText = '优';
-         } else if (sportDurations >= 1 && sportDurations < 2) {
-             $('#span9')[0].innerText = '良';
-         } else if (sportDurations >= 0.5 && sportDurations < 1) {
-             $('#span9')[0].innerText = '差';
-         } else if (sportDurations < 0.5) {
-             $('#span9')[0].innerText = '极差';
-         }*/
-
+         result = result.data.lineChart.mapP
 
          myChart.setOption({
             title: {
@@ -1140,35 +985,7 @@ function weekEchart() {
             }]
          })
 
-         myChart8.hideLoading();
-         myChart8.setOption({
-            title: {
-               text: '运动时长',
-               left: 'center'
-            },
-            tooltip: {
-               trigger: 'axis'
-            },
-            xAxis: {
-               type: 'category',
-               data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-            },
-            yAxis: {
-               type: 'value',
-               name: '小时',
-               splitNumber: 5
-            },
-            series: [{
-               data: result.sportDuration,
-               markLine: {
-                  label: '标准线',
-                  data: [
-                     {xAxis: 0, yAxis: 2}
-                  ]
-               },
-               type: 'line'
-            }]
-         })
+
       }
 
    })
@@ -1191,14 +1008,13 @@ function monthEchart() {
    var myChart5 = echarts.init(document.getElementById('main5'));
    var myChart6 = echarts.init(document.getElementById('main6'));
    var myChart7 = echarts.init(document.getElementById('main7'));
-   var myChart8 = echarts.init(document.getElementById('main8'));
 
    $.ajax({
       type: 'get',
       dataType: "json",
       async: true,
       cache: false,
-      url: '/information/useJianhuyiLog/listData',
+      url: 'http://eyemonitor-api.dddmaker.com/jianhuyi/useJianhuyiLog/weekData',
       data: {
          userId: $('#uid').val(),
          start: startDate,
@@ -1206,98 +1022,8 @@ function monthEchart() {
       },
       success: function (result) {
          console.log(result)
+         result = result.data.lineChart.mapP
 
-         /*$('#div1')[0].innerText = '总平均' + readDurations + '分钟';
-         if (readDurations >= 20) {
-             $('#span1')[0].innerText = '优';
-         } else if (readDurations > 20 && readDurations <= 40) {
-             $('#span1')[0].innerText = '良';
-         } else if (readDurations > 40 && readDurations <= 90) {
-             $('#span1')[0].innerText = '差';
-         } else if (readDurations > 90) {
-             $('#span1')[0].innerText = '极差';
-         }
-         $('#div2')[0].innerText = '总平均' + outdoorsDurations + '小时';
-         if (outdoorsDurations >= 2) {
-             $('#span2')[0].innerText = '优';
-         } else if (outdoorsDurations >= 1 && outdoorsDurations < 2) {
-             $('#span2')[0].innerText = '良';
-         } else if (outdoorsDurations >= 0.5 && outdoorsDurations < 1) {
-             $('#span2')[0].innerText = '差';
-         } else if (outdoorsDurations < 0.5) {
-             $('#span2')[0].innerText = '极差';
-         }
-         $('#div3')[0].innerText = '总平均' + readDistances + '厘米';
-         if (readDistances >= 33) {
-             $('#span3')[0].innerText = '优';
-         } else if (readDistances >= 30 && readDistances < 33) {
-             $('#span3')[0].innerText = '良';
-         } else if (readDistances > 20 && readDistances <= 30) {
-             $('#span3')[0].innerText = '差';
-         } else if (readDistances < 20) {
-             $('#span3')[0].innerText = '极差';
-         }
-         $('#div4')[0].innerText = '总平均' + readLights + 'lux';
-         if (readLights >= 300) {
-             $('#span4')[0].innerText = '优';
-         } else if (readLights >= 250 && readLights < 300) {
-             $('#span4')[0].innerText = '良';
-         } else if (readLights >= 200 && readLights < 250) {
-             $('#span4')[0].innerText = '差';
-         } else if (readLights < 200) {
-             $('#span4')[0].innerText = '极差';
-         }
-         $('#div5')[0].innerText = '总平均' + lookPhoneDurations + '分钟';
-         if (lookPhoneDurations >= 10) {
-             $('#span5')[0].innerText = '优';
-         } else if (lookPhoneDurations > 10 && lookPhoneDurations <= 20) {
-             $('#span5')[0].innerText = '良';
-         } else if (lookPhoneDurations > 20 && lookPhoneDurations <= 40) {
-             $('#span5')[0].innerText = '差';
-         } else if (lookPhoneDurations > 40) {
-             $('#span5')[0].innerText = '极差';
-         }
-         $('#div6')[0].innerText = '总平均' + lookTvComputerDurations + '分钟';
-         if (lookTvComputerDurations >= 20) {
-             $('#span6')[0].innerText = '优';
-         } else if (lookTvComputerDurations > 20 && lookTvComputerDurations <= 40) {
-             $('#span6')[0].innerText = '良';
-         } else if (lookTvComputerDurations > 40 && lookTvComputerDurations <= 60) {
-             $('#span6')[0].innerText = '差';
-         } else if (lookTvComputerDurations > 60) {
-             $('#span6')[0].innerText = '极差';
-         }
-         $('#div7')[0].innerText = '总平均' + sitTilts + '°';
-         if (sitTilts >= 5) {
-             $('#span7')[0].innerText = '优';
-         } else if (sitTilts > 5 && sitTilts <= 10) {
-             $('#span7')[0].innerText = '良';
-         } else if (sitTilts > 10 && sitTilts <= 15) {
-             $('#span7')[0].innerText = '差';
-         } else if (sitTilts > 15) {
-             $('#span7')[0].innerText = '极差';
-         }
-         $('#div8')[0].innerText = '总平均' + useJianhuyiDurations + '小时';
-         if (useJianhuyiDurations >= 10) {
-             $('#span8')[0].innerText = '优';
-         } else if (useJianhuyiDurations >= 8 && useJianhuyiDurations < 10) {
-             $('#span8')[0].innerText = '良';
-         } else if (useJianhuyiDurations >= 5 && useJianhuyiDurations < 8) {
-             $('#span8')[0].innerText = '差';
-         } else if (useJianhuyiDurations < 5) {
-             $('#span8')[0].innerText = '极差';
-         }
-         $('#div9')[0].innerText = '总平均' + sportDurations + '小时';
-         if (sportDurations >= 2) {
-             $('#span9')[0].innerText = '优';
-         } else if (sportDurations >= 1 && sportDurations < 2) {
-             $('#span9')[0].innerText = '良';
-         } else if (sportDurations >= 0.5 && sportDurations < 1) {
-             $('#span9')[0].innerText = '差';
-         } else if (sportDurations < 0.5) {
-             $('#span9')[0].innerText = '极差';
-         }
-*/
 
          myChart.setOption({
             title: {
@@ -1557,37 +1283,6 @@ function monthEchart() {
             }]
          })
 
-         myChart8.hideLoading();
-         myChart8.setOption({
-            title: {
-               text: '运动时长',
-               left: 'center'
-            },
-            tooltip: {
-               trigger: 'axis'
-            },
-            xAxis: {
-               type: 'category',
-               data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-                  '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
-               name: '日'
-            },
-            yAxis: {
-               type: 'value',
-               name: '小时',
-               splitNumber: 5
-            },
-            series: [{
-               data: result.sportDuration,
-               markLine: {
-                  label: '标准线',
-                  data: [
-                     {xAxis: 0, yAxis: 2}
-                  ]
-               },
-               type: 'line'
-            }]
-         })
       }
 
 
@@ -1611,14 +1306,13 @@ function quarterEchart() {
    var myChart5 = echarts.init(document.getElementById('main5'));
    var myChart6 = echarts.init(document.getElementById('main6'));
    var myChart7 = echarts.init(document.getElementById('main7'));
-   var myChart8 = echarts.init(document.getElementById('main8'));
 
    $.ajax({
       type: 'get',
       dataType: "json",
       async: true,
       cache: false,
-      url: '/information/useJianhuyiLog/seasonData',
+      url: 'http://eyemonitor-api.dddmaker.com/jianhuyi/useJianhuyiLog/seasonData',
       data: {
          userId: $('#uid').val(),
          start: startDate,
@@ -1626,97 +1320,7 @@ function quarterEchart() {
       },
       success: function (result) {
          console.log(result)
-
-         /* $('#div1')[0].innerText = '总平均' + readDurations + '分钟';
-          if (readDurations >= 20) {
-              $('#span1')[0].innerText = '优';
-          } else if (readDurations > 20 && readDurations <= 40) {
-              $('#span1')[0].innerText = '良';
-          } else if (readDurations > 40 && readDurations <= 90) {
-              $('#span1')[0].innerText = '差';
-          } else if (readDurations > 90) {
-              $('#span1')[0].innerText = '极差';
-          }
-          $('#div2')[0].innerText = '总平均' + outdoorsDurations + '小时';
-          if (outdoorsDurations >= 2) {
-              $('#span2')[0].innerText = '优';
-          } else if (outdoorsDurations >= 1 && outdoorsDurations < 2) {
-              $('#span2')[0].innerText = '良';
-          } else if (outdoorsDurations >= 0.5 && outdoorsDurations < 1) {
-              $('#span2')[0].innerText = '差';
-          } else if (outdoorsDurations < 0.5) {
-              $('#span2')[0].innerText = '极差';
-          }
-          $('#div3')[0].innerText = '总平均' + readDistances + '厘米';
-          if (readDistances >= 33) {
-              $('#span3')[0].innerText = '优';
-          } else if (readDistances >= 30 && readDistances < 33) {
-              $('#span3')[0].innerText = '良';
-          } else if (readDistances > 20 && readDistances <= 30) {
-              $('#span3')[0].innerText = '差';
-          } else if (readDistances < 20) {
-              $('#span3')[0].innerText = '极差';
-          }
-          $('#div4')[0].innerText = '总平均' + readLights + 'lux';
-          if (readLights >= 300) {
-              $('#span4')[0].innerText = '优';
-          } else if (readLights >= 250 && readLights < 300) {
-              $('#span4')[0].innerText = '良';
-          } else if (readLights >= 200 && readLights < 250) {
-              $('#span4')[0].innerText = '差';
-          } else if (readLights < 200) {
-              $('#span4')[0].innerText = '极差';
-          }
-          $('#div5')[0].innerText = '总平均' + lookPhoneDurations + '分钟';
-          if (lookPhoneDurations >= 10) {
-              $('#span5')[0].innerText = '优';
-          } else if (lookPhoneDurations > 10 && lookPhoneDurations <= 20) {
-              $('#span5')[0].innerText = '良';
-          } else if (lookPhoneDurations > 20 && lookPhoneDurations <= 40) {
-              $('#span5')[0].innerText = '差';
-          } else if (lookPhoneDurations > 40) {
-              $('#span5')[0].innerText = '极差';
-          }
-          $('#div6')[0].innerText = '总平均' + lookTvComputerDurations + '分钟';
-          if (lookTvComputerDurations >= 20) {
-              $('#span6')[0].innerText = '优';
-          } else if (lookTvComputerDurations > 20 && lookTvComputerDurations <= 40) {
-              $('#span6')[0].innerText = '良';
-          } else if (lookTvComputerDurations > 40 && lookTvComputerDurations <= 60) {
-              $('#span6')[0].innerText = '差';
-          } else if (lookTvComputerDurations > 60) {
-              $('#span6')[0].innerText = '极差';
-          }
-          $('#div7')[0].innerText = '总平均' + sitTilts + '°';
-          if (sitTilts >= 5) {
-              $('#span7')[0].innerText = '优';
-          } else if (sitTilts > 5 && sitTilts <= 10) {
-              $('#span7')[0].innerText = '良';
-          } else if (sitTilts > 10 && sitTilts <= 15) {
-              $('#span7')[0].innerText = '差';
-          } else if (sitTilts > 15) {
-              $('#span7')[0].innerText = '极差';
-          }
-          $('#div8')[0].innerText = '总平均' + useJianhuyiDurations + '小时';
-          if (useJianhuyiDurations >= 10) {
-              $('#span8')[0].innerText = '优';
-          } else if (useJianhuyiDurations >= 8 && useJianhuyiDurations < 10) {
-              $('#span8')[0].innerText = '良';
-          } else if (useJianhuyiDurations >= 5 && useJianhuyiDurations < 8) {
-              $('#span8')[0].innerText = '差';
-          } else if (useJianhuyiDurations < 5) {
-              $('#span8')[0].innerText = '极差';
-          }
-          $('#div9')[0].innerText = '总平均' + sportDurations + '小时';
-          if (sportDurations >= 2) {
-              $('#span9')[0].innerText = '优';
-          } else if (sportDurations >= 1 && sportDurations < 2) {
-              $('#span9')[0].innerText = '良';
-          } else if (sportDurations >= 0.5 && sportDurations < 1) {
-              $('#span9')[0].innerText = '差';
-          } else if (sportDurations < 0.5) {
-              $('#span9')[0].innerText = '极差';
-          }*/
+         result = result.data.lineChart.mapP
 
 
          myChart.setOption({
@@ -1969,36 +1573,7 @@ function quarterEchart() {
             }]
          })
 
-         myChart8.hideLoading();
-         myChart8.setOption({
-            title: {
-               text: '运动时长',
-               left: 'center'
-            },
-            tooltip: {
-               trigger: 'axis'
-            },
-            xAxis: {
-               type: 'category',
-               data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-               name: '周'
-            },
-            yAxis: {
-               type: 'value',
-               name: '小时',
-               splitNumber: 5
-            },
-            series: [{
-               data: result.sportDuration,
-               markLine: {
-                  label: '标准线',
-                  data: [
-                     {xAxis: 0, yAxis: 2}
-                  ]
-               },
-               type: 'line'
-            }]
-         })
+
       }
 
 
@@ -2023,7 +1598,6 @@ function yearEchart() {
    var myChart5 = echarts.init(document.getElementById('main5'));
    var myChart6 = echarts.init(document.getElementById('main6'));
    var myChart7 = echarts.init(document.getElementById('main7'));
-   var myChart8 = echarts.init(document.getElementById('main8'));
 
 
    console.log(myChart)
@@ -2032,7 +1606,7 @@ function yearEchart() {
       dataType: "json",
       async: true,
       cache: false,
-      url: '/information/useJianhuyiLog/yearData',
+      url: 'http://eyemonitor-api.dddmaker.com/jianhuyi/useJianhuyiLog/yearData',
       data: {
          userId: $('#uid').val(),
          start: startDate,
@@ -2040,6 +1614,7 @@ function yearEchart() {
       },
       success: function (result) {
          console.log(result)
+         result = result.data.lineChart.mapP
          myChart.setOption({
             title: {
                text: '日平均单次阅读时长',
@@ -2290,36 +1865,6 @@ function yearEchart() {
             }]
          })
 
-         myChart8.hideLoading();
-         myChart8.setOption({
-            title: {
-               text: '运动时长',
-               left: 'center'
-            },
-            tooltip: {
-               trigger: 'axis'
-            },
-            xAxis: {
-               type: 'category',
-               data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-               name: '月'
-            },
-            yAxis: {
-               type: 'value',
-               name: '小时',
-               splitNumber: 5
-            },
-            series: [{
-               data: result.sportDuration,
-               markLine: {
-                  label: '标准线',
-                  data: [
-                     {xAxis: 0, yAxis: 2}
-                  ]
-               },
-               type: 'line'
-            }]
-         })
 
       }
 

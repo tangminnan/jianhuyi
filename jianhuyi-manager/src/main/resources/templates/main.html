@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,7 +43,8 @@
         <div class="ibox clear">
             <div class="ibox-content">
                 <div style="float: left; height: 100px;">
-                    <span style="font-size:35px;" th:text="${yesterdayNum}"></span>
+                    <!--<span style="font-size:35px;" th:text="${yesterdayNum}"></span>-->
+                    <span style="font-size:35px;">132</span>
                     <br>
                     <h2>昨日使用人数</h2>
                 </div>
@@ -148,17 +149,7 @@
             </div>
         </div>
     </div>
-    <!--=============================运动总时长===================================================-->
-    <div class="col-sm-4" style="margin: 80px 40px 40px 150px;">
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
-                <div style="margin: 0 auto;float: right">
-                    <span th:text="'运动总时长: '+${#numbers.formatDecimal(avgSportDuration,1,'COMMA',2,'POINT')+'  小时'}"></span>
-                </div>
-                <div class="echarts" id="echarts-bar-chart8"></div>
-            </div>
-        </div>
-    </div>
+
     <input type="hidden" id="useJianhuyiLogDOList" th:value="${useJianhuyiLogDOList}">
 
 </div>
@@ -177,586 +168,541 @@
 </style>
 <script type="text/javascript">
 
+   var color = [ //自定义的颜色
+      '#91C7AE',
+      '#61A0A8',
+      '#2F4554',
+      '#630000',
+      '#070000'
 
-    var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
 
-    barChart.showLoading();
-    $.ajax({
-        type:'post',
-        url: '/getReadDuration',
-        async: false,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            console.log(result)
-            if (result) {
-                barChart.hideLoading();
-                barChart.setOption({
-                    title: {
-                        text: '平均单次阅读时长',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                formatter: '{b}: {@2012} ({d}%)',
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+   ];
+
+   var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+
+   barChart.showLoading();
+   $.ajax({
+      type: 'post',
+      url: '/getReadDuration',
+      async: false,
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      data: $('#useJianhuyiLogDOList').val(),
+      dataType: "json",
+      success: function (result) {
+         console.log(result)
+         if (result) {
+            barChart.hideLoading();
+            barChart.setOption({
+               title: {
+                  text: '平均单次阅读时长',
+                  left: 'center'
+               },
+               tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+               },
+               legend: {
+                  orient: 'vertical',
+                  left: 10,
+                  data: ['优', '良', '中', '差', '极差']
+               },
+               series: [
+                  {
+                     name: '用户上次使用各等级人数',
+                     type: 'pie',
+                     radius: ['50%', '70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                        formatter: '{b}: {@2012} ({d}%)',
+                        normal: {
+                           show: false,
+                           position: 'center'
+                        },
+                        emphasis: {
+                           show: true,
+                           textStyle: {
+                              fontSize: '30',
+                              fontWeight: 'bold'
+                           }
                         }
-                    ]
-                })
-            }
-        }
-
-    })
-
-    window.onresize = barChart.resize;
-
-    <!--=============================户外总时长统计===================================================-->
-    var barChart1 = echarts.init(document.getElementById("echarts-bar-chart1"));
-
-    barChart1.showLoading();
-    $.ajax({
-        type:'post',
-        url: '/getOutdoorsDuration',
-        async: false,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            if (result) {
-                barChart1.hideLoading();
-                barChart1.setOption({
-                    title: {
-                        text: '户外总时长',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+                     },
+                     labelLine: {
+                        normal: {
+                           show: false
                         }
-                    ]
-                })
-            }
-        }
+                     },
+                     data: result
+                  }
+               ],
+               color: color
+            })
+         }
+      }
 
-    })
+   })
 
-    window.onresize = barChart1.resize;
+   window.onresize = barChart.resize;
 
+   <!--=============================户外总时长统计===================================================-->
+   var barChart1 = echarts.init(document.getElementById("echarts-bar-chart1"));
 
-    <!--=============================平均阅读距离===================================================-->
-    var barChart2 = echarts.init(document.getElementById("echarts-bar-chart2"));
-
-    barChart2.showLoading();
-    $.ajax({
-        type:'post',
-        url: '/getReadDistance',
-        async: true,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            if (result) {
-                barChart2.hideLoading();
-                barChart2.setOption({
-                    title: {
-                        text: '平均阅读距离',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+   barChart1.showLoading();
+   $.ajax({
+      type: 'post',
+      url: '/getOutdoorsDuration',
+      async: false,
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      data: $('#useJianhuyiLogDOList').val(),
+      dataType: "json",
+      success: function (result) {
+         if (result) {
+            barChart1.hideLoading();
+            barChart1.setOption({
+               title: {
+                  text: '户外总时长',
+                  left: 'center'
+               },
+               tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+               },
+               legend: {
+                  orient: 'vertical',
+                  left: 10,
+                  data: ['优', '良', '中', '差', '极差']
+               },
+               series: [
+                  {
+                     name: '用户上次使用各等级人数',
+                     type: 'pie',
+                     radius: ['50%', '70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                        normal: {
+                           show: false,
+                           position: 'center'
+                        },
+                        emphasis: {
+                           show: true,
+                           textStyle: {
+                              fontSize: '30',
+                              fontWeight: 'bold'
+                           }
                         }
-                    ]
-                })
-            }
-        }
-
-    })
-
-    window.onresize = barChart2.resize;
-
-    <!--=============================平均阅读光照===================================================-->
-    var barChart3 = echarts.init(document.getElementById("echarts-bar-chart3"));
-
-    barChart3.showLoading();
-    $.ajax({
-        url: '/getReadLight',
-        type:'post',
-        async: true,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            if (result) {
-                barChart3.hideLoading();
-                barChart3.setOption({
-                    title: {
-                        text: '平均阅读光照',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+                     },
+                     labelLine: {
+                        normal: {
+                           show: false
                         }
-                    ]
-                })
-            }
-        }
+                     },
+                     data: result
+                  }
+               ],
+               color: color
+            })
+         }
+      }
 
-    })
+   })
 
-    window.onresize = barChart3.resize;
+   window.onresize = barChart1.resize;
 
 
-    <!--=============================平均单次看手机时长===================================================-->
-    var barChart4 = echarts.init(document.getElementById("echarts-bar-chart4"));
+   <!--=============================平均阅读距离===================================================-->
+   var barChart2 = echarts.init(document.getElementById("echarts-bar-chart2"));
 
-    barChart4.showLoading();
-    $.ajax({
-        url: '/getLookPhoneDuration',
-        type:'post',
-        async: true,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            if (result) {
-                barChart4.hideLoading();
-                barChart4.setOption({
-                    title: {
-                        text: '平均看手机时长',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+   barChart2.showLoading();
+   $.ajax({
+      type: 'post',
+      url: '/getReadDistance',
+      async: true,
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      data: $('#useJianhuyiLogDOList').val(),
+      dataType: "json",
+      success: function (result) {
+         if (result) {
+            barChart2.hideLoading();
+            barChart2.setOption({
+               title: {
+                  text: '平均阅读距离',
+                  left: 'center'
+               },
+               tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+               },
+               legend: {
+                  orient: 'vertical',
+                  left: 10,
+                  data: ['优', '良', '中', '差', '极差']
+               },
+               series: [
+                  {
+                     name: '用户上次使用各等级人数',
+                     type: 'pie',
+                     radius: ['50%', '70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                        normal: {
+                           show: false,
+                           position: 'center'
+                        },
+                        emphasis: {
+                           show: true,
+                           textStyle: {
+                              fontSize: '30',
+                              fontWeight: 'bold'
+                           }
                         }
-                    ]
-                })
-            }
-        }
-
-    })
-
-    window.onresize = barChart4.resize;
-
-
-    <!--=============================平均单次看电脑电视时长(分钟)===================================================-->
-
-
-    var barChart5 = echarts.init(document.getElementById("echarts-bar-chart5"));
-
-    barChart5.showLoading();
-    $.ajax({
-        url: '/getLookTvComputerDuration',
-        type:'post',
-        async: true,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            if (result) {
-                barChart5.hideLoading();
-                barChart5.setOption({
-                    title: {
-                        text: '平均单次看电脑电视时长(分钟)',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+                     },
+                     labelLine: {
+                        normal: {
+                           show: false
                         }
-                    ]
-                })
-            }
-        }
+                     },
+                     data: result
+                  }
+               ],
+               color: color
+            })
+         }
+      }
 
-    })
+   })
 
-    window.onresize = barChart5.resize;
-    <!--=============================平均坐姿倾斜度===================================================-->
-    var barChart6 = echarts.init(document.getElementById("echarts-bar-chart6"));
+   window.onresize = barChart2.resize;
 
-    barChart6.showLoading();
-    $.ajax({
-        url: '/getSitTilt',
-        type:'post',
-        async: true,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            if (result) {
-                barChart6.hideLoading();
-                barChart6.setOption({
-                    title: {
-                        text: '平均坐姿倾斜度',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+   <!--=============================平均阅读光照===================================================-->
+   var barChart3 = echarts.init(document.getElementById("echarts-bar-chart3"));
+
+   barChart3.showLoading();
+   $.ajax({
+      url: '/getReadLight',
+      type: 'post',
+      async: true,
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      data: $('#useJianhuyiLogDOList').val(),
+      dataType: "json",
+      success: function (result) {
+         if (result) {
+            barChart3.hideLoading();
+            barChart3.setOption({
+               title: {
+                  text: '平均阅读光照',
+                  left: 'center'
+               },
+               tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+               },
+               legend: {
+                  orient: 'vertical',
+                  left: 10,
+                  data: ['优', '良', '中', '差', '极差']
+               },
+               series: [
+                  {
+                     name: '用户上次使用各等级人数',
+                     type: 'pie',
+                     radius: ['50%', '70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                        normal: {
+                           show: false,
+                           position: 'center'
+                        },
+                        emphasis: {
+                           show: true,
+                           textStyle: {
+                              fontSize: '30',
+                              fontWeight: 'bold'
+                           }
                         }
-                    ]
-                })
-            }
-        }
-
-    })
-
-    window.onresize = barChart6.resize;
-    <!--=============================有效使用监护仪总时长===================================================-->
-    var barChart7 = echarts.init(document.getElementById("echarts-bar-chart7"));
-
-    barChart7.showLoading();
-    $.ajax({
-        url: '/getUseJianhuyiDuration',
-        type:'post',
-        async: true,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            if (result) {
-                barChart7.hideLoading();
-                barChart7.setOption({
-                    title: {
-                        text: '有效使用监护仪总时长',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+                     },
+                     labelLine: {
+                        normal: {
+                           show: false
                         }
-                    ]
-                })
-            }
-        }
+                     },
+                     data: result
+                  }
+               ],
+               color: color
+            })
+         }
+      }
 
-    })
+   })
 
-    window.onresize = barChart7.resize;
-    <!--=============================运动总时长===================================================-->
+   window.onresize = barChart3.resize;
 
-    var barChart8 = echarts.init(document.getElementById("echarts-bar-chart8"));
 
-    barChart8.showLoading();
-    $.ajax({
-        url: '/getSportDuration',
-        type:'post',
-        async: true,
-        cache: false,
-        contentType : 'application/json; charset=UTF-8',
-        data:$('#useJianhuyiLogDOList').val(),
-        dataType: "json",
-        success: function (result) {
-            if (result) {
-                barChart8.hideLoading();
-                barChart8.setOption({
-                    title: {
-                        text: '运动总时长',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: '{a} <br/>{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 10,
-                        data: ['优', '良', '标准', '差', '极差']
-                    },
-                    series: [
-                        {
-                            name: '用户上次使用各等级人数',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            },
-                            data: result
+   <!--=============================平均单次看手机时长===================================================-->
+   var barChart4 = echarts.init(document.getElementById("echarts-bar-chart4"));
+
+   barChart4.showLoading();
+   $.ajax({
+      url: '/getLookPhoneDuration',
+      type: 'post',
+      async: true,
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      data: $('#useJianhuyiLogDOList').val(),
+      dataType: "json",
+      success: function (result) {
+         if (result) {
+            barChart4.hideLoading();
+            barChart4.setOption({
+               title: {
+                  text: '平均看手机时长',
+                  left: 'center'
+               },
+               tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+               },
+               legend: {
+                  orient: 'vertical',
+                  left: 10,
+                  data: ['优', '良', '中', '差', '极差']
+               },
+               series: [
+                  {
+                     name: '用户上次使用各等级人数',
+                     type: 'pie',
+                     radius: ['50%', '70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                        normal: {
+                           show: false,
+                           position: 'center'
+                        },
+                        emphasis: {
+                           show: true,
+                           textStyle: {
+                              fontSize: '30',
+                              fontWeight: 'bold'
+                           }
                         }
-                    ]
-                })
-            }
-        }
+                     },
+                     labelLine: {
+                        normal: {
+                           show: false
+                        }
+                     },
+                     data: result
+                  }
+               ],
+               color: color
+            })
+         }
+      }
 
-    })
+   })
 
-    window.onresize = barChart8.resize;
+   window.onresize = barChart4.resize;
+
+
+   <!--=============================平均单次看电脑电视时长(分钟)===================================================-->
+
+
+   var barChart5 = echarts.init(document.getElementById("echarts-bar-chart5"));
+
+   barChart5.showLoading();
+   $.ajax({
+      url: '/getLookTvComputerDuration',
+      type: 'post',
+      async: true,
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      data: $('#useJianhuyiLogDOList').val(),
+      dataType: "json",
+      success: function (result) {
+         if (result) {
+            barChart5.hideLoading();
+            barChart5.setOption({
+               title: {
+                  text: '平均单次看电脑电视时长(分钟)',
+                  left: 'center'
+               },
+               tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+               },
+               legend: {
+                  orient: 'vertical',
+                  left: 10,
+                  data: ['优', '良', '中', '差', '极差']
+               },
+               series: [
+                  {
+                     name: '用户上次使用各等级人数',
+                     type: 'pie',
+                     radius: ['50%', '70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                        normal: {
+                           show: false,
+                           position: 'center'
+                        },
+                        emphasis: {
+                           show: true,
+                           textStyle: {
+                              fontSize: '30',
+                              fontWeight: 'bold'
+                           }
+                        }
+                     },
+                     labelLine: {
+                        normal: {
+                           show: false
+                        }
+                     },
+                     data: result
+                  }
+               ],
+               color: color
+            })
+         }
+      }
+
+   })
+
+   window.onresize = barChart5.resize;
+   <!--=============================平均坐姿倾斜度===================================================-->
+   var barChart6 = echarts.init(document.getElementById("echarts-bar-chart6"));
+
+   barChart6.showLoading();
+   $.ajax({
+      url: '/getSitTilt',
+      type: 'post',
+      async: true,
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      data: $('#useJianhuyiLogDOList').val(),
+      dataType: "json",
+      success: function (result) {
+         if (result) {
+            barChart6.hideLoading();
+            barChart6.setOption({
+               title: {
+                  text: '平均坐姿倾斜度',
+                  left: 'center'
+               },
+               tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+               },
+               legend: {
+                  orient: 'vertical',
+                  left: 10,
+                  data: ['优', '良', '中', '差', '极差']
+               },
+               series: [
+                  {
+                     name: '用户上次使用各等级人数',
+                     type: 'pie',
+                     radius: ['50%', '70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                        normal: {
+                           show: false,
+                           position: 'center'
+                        },
+                        emphasis: {
+                           show: true,
+                           textStyle: {
+                              fontSize: '30',
+                              fontWeight: 'bold'
+                           }
+                        }
+                     },
+                     labelLine: {
+                        normal: {
+                           show: false
+                        }
+                     },
+                     data: result
+                  }
+               ],
+               color: color
+            })
+         }
+      }
+
+   })
+
+   window.onresize = barChart6.resize;
+   <!--=============================有效使用监护仪总时长===================================================-->
+   var barChart7 = echarts.init(document.getElementById("echarts-bar-chart7"));
+
+   barChart7.showLoading();
+   $.ajax({
+      url: '/getUseJianhuyiDuration',
+      type: 'post',
+      async: true,
+      cache: false,
+      contentType: 'application/json; charset=UTF-8',
+      data: $('#useJianhuyiLogDOList').val(),
+      dataType: "json",
+      success: function (result) {
+         if (result) {
+            barChart7.hideLoading();
+            barChart7.setOption({
+               title: {
+                  text: '有效使用监护仪总时长',
+                  left: 'center'
+               },
+               tooltip: {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
+               },
+               legend: {
+                  orient: 'vertical',
+                  left: 10,
+                  data: ['优', '良', '中', '差', '极差']
+               },
+               series: [
+                  {
+                     name: '用户上次使用各等级人数',
+                     type: 'pie',
+                     radius: ['50%', '70%'],
+                     avoidLabelOverlap: false,
+                     label: {
+                        normal: {
+                           show: false,
+                           position: 'center'
+                        },
+                        emphasis: {
+                           show: true,
+                           textStyle: {
+                              fontSize: '30',
+                              fontWeight: 'bold'
+                           }
+                        }
+                     },
+                     labelLine: {
+                        normal: {
+                           show: false
+                        }
+                     },
+                     data: result
+                  }
+               ],
+               color: color
+            })
+         }
+      }
+
+   })
+
+   window.onresize = barChart7.resize;
+
+   window.onresize = barChart8.resize;
 
 </script>
 </html>

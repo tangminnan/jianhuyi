@@ -101,13 +101,6 @@
                         <div class="echarts" id="main7" style="width: 600px;height:400px;"></div>
                     </div>
 
-                    <div class="col-sm-3" style="width: 570px;height:500px;margin: 80px 40px 40px 50px;">
-                        <div style="float: right">
-                            <span id="div9"></span><br>
-                            <span id="span9" style="float: right;padding-right: 50px;color: red">优</span>
-                        </div>
-                        <div class="echarts" id="main8" style="width: 600px;height:400px;"></div>
-                    </div>
 
                 </div>
             </div>
@@ -119,24 +112,24 @@
     <!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
     <div>
         <script type="text/javascript">
-            var s_edit_h = 'hidden';
-            var s_remove_h = 'hidden';
-            var s_resetPwd_h = 'hidden';
+           var s_edit_h = 'hidden';
+           var s_remove_h = 'hidden';
+           var s_resetPwd_h = 'hidden';
         </script>
     </div>
     <div shiro:hasPermission="information:useJianhuyiLog:edit">
         <script type="text/javascript">
-            s_edit_h = '';
+           s_edit_h = '';
         </script>
     </div>
     <div shiro:hasPermission="information:useJianhuyiLog:remove">
         <script type="text/javascript">
-            var s_remove_h = '';
+           var s_remove_h = '';
         </script>
     </div>
     <div shiro:hasPermission="information:useJianhuyiLog:resetPwd">
         <script type="text/javascript">
-            var s_resetPwd_h = '';
+           var s_resetPwd_h = '';
         </script>
     </div>
 </div>
@@ -148,15 +141,14 @@
 <script type="text/javascript" src="/js/moment.min.js"></script>
 <script type="text/javascript">
 
-    laydate.render({
-        elem: '#startTime',
-        type: 'datetime'
-    });
-    laydate.render({
-        elem: '#endTime',
-        type: 'datetime'
-    });
-
+   laydate.render({
+      elem: '#startTime',
+      type: 'datetime'
+   });
+   laydate.render({
+      elem: '#endTime',
+      type: 'datetime'
+   });
 
 
 </script>

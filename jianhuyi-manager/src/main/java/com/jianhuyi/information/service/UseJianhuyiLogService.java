@@ -1,5 +1,6 @@
 package com.jianhuyi.information.service;
 
+import com.jianhuyi.information.domain.UploadRecordDO;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 
 import java.text.ParseException;
@@ -19,9 +20,10 @@ public interface UseJianhuyiLogService {
 
     UseJianhuyiLogDO get(Integer id);
 
-    List<UseJianhuyiLogDO> list(Map<String, Object> map);
+    Map<String, Object> list(Map<String, Object> map);
 
     int count(Map<String, Object> map);
+
     int countLog(Map<String, Object> map);
 
     int save(UseJianhuyiLogDO useJianhuyiLog);
@@ -45,4 +47,10 @@ public interface UseJianhuyiLogService {
     List<UseJianhuyiLogDO> selectData(Date start, Date end, Map<String, Object> params);
 
     List<Map<String, Object>> exeList(Map<String, Object> map) throws ParseException;
+
+    List<UseJianhuyiLogDO> getData(Map<String, Object> map);
+
+    List<UploadRecordDO> uploadRecordList(Map<String, Object> params);
+
+    int uploadRecordCount(Map<String, Object> params);
 }

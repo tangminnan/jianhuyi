@@ -40,4 +40,5 @@ public interface OwnerUserService {
 
 	int updateUser(OwnerUserDO ownerUserDO);
 
+    OwnerUserDO getUserByIdCard(String idCard);
 }

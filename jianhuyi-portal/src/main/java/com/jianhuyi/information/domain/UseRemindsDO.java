@@ -15,7 +15,7 @@ public class UseRemindsDO implements Serializable {
     //ID
     private Long id;
     //震动时间
-    private Date remindsTime;
+    private String remindsTime;
     //保存时间
     private Date saveTime;
     //用户id
@@ -25,10 +25,20 @@ public class UseRemindsDO implements Serializable {
     private Long uploadId;
 
     //设备id
-    private Long equipmentId;
+    private String equipmentId;
     //震动次数
     private Integer remindsNum;
 
+    private Integer type;
+
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Long getUploadId() {
         return uploadId;
@@ -46,11 +56,11 @@ public class UseRemindsDO implements Serializable {
         this.remindsNum = remindsNum;
     }
 
-    public Long getEquipmentId() {
+    public String getEquipmentId() {
         return equipmentId;
     }
 
-    public void setEquipmentId(Long equipmentId) {
+    public void setEquipmentId(String equipmentId) {
         this.equipmentId = equipmentId;
     }
 
@@ -79,14 +89,14 @@ public class UseRemindsDO implements Serializable {
     /**
      * 设置：震动时间
      */
-    public void setRemindsTime(Date remindsTime) {
+    public void setRemindsTime(String remindsTime) {
         this.remindsTime = remindsTime;
     }
 
     /**
      * 获取：震动时间
      */
-    public Date getRemindsTime() {
+    public String getRemindsTime() {
         return remindsTime;
     }
 

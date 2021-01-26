@@ -8,7 +8,7 @@
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.GiftDO">
-        select `id`,`gift_id`,`cover_img`,`gift_name`,`gift_details`,`create_time` from t_gift
+        select `id`,`gift_id`,`cover_img`,`gift_name`,`gift_details`,`create_time`,type from t_gift
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>
             <if test="giftId != null and giftId != ''">and gift_id = #{giftId}</if>
@@ -16,6 +16,7 @@
             <if test="giftName != null and giftName != ''">and gift_name = #{giftName}</if>
             <if test="giftDetails != null and giftDetails != ''">and gift_details = #{giftDetails}</if>
             <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="type != null and type != ''">and type = #{type}</if>
         </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">

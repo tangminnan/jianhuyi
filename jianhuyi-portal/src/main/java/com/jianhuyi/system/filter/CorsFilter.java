@@ -32,10 +32,11 @@ public class CorsFilter implements Filter {
          */
         httpResponse.addHeader("Access-Control-Allow-Origin", "*");
         httpResponse.addHeader("Access-Control-Allow-Credentials", "true");
+
 //        httpResponse.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         httpResponse.setHeader("Access-Control-Allow-Headers", "X-Requested-With, accept,Content-Type ,content-type,xxxx,Authorization,userid,clentid,acton,trandt,trantm,chnflg");
         httpResponse.setHeader("Access-Control-Allow-Methods", "HEAD,GET,OPTIONS, PUT, POST");
-        System.out.println("*********************************过滤器被使用**************************");
+       // System.out.println("*********************************过滤器被使用**************************");
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

@@ -67,12 +67,27 @@ function load() {
                   field: 'userId',
                   title: '用户Id'
                }, {
-                  field: 'saveTime',
-                  title: '开始时间'
-               }, /*{
-                        field: 'equipmentId',
-                        title: '设备号'
-                    },*/
+                  field: 'saveTime1',
+                  title: '数据测试时间'
+               },
+               {
+                  field: 'addTime',
+                  title: '数据上传时间'
+               }, {
+                  field: 'equipmentId',
+                  title: '设备号'
+               },
+               {
+                  field: 'allReadDuration',
+                  title: '总阅读时长(小时）',
+                  formatter: function (value) {
+                     if (value != null && value != 0) {
+                        return (value / 60).toFixed(1);
+                     } else {
+                        return 0
+                     }
+                  }
+               },
                {
                   field: 'readDuration',
                   title: '日平均单次阅读时长(分钟）',
@@ -279,13 +294,13 @@ function batchRemove() {
 }
 
 function daochu() {
-    var page = layer.open({
-        type: 2,
-        title: '条件导出',
-        maxmin: true,
-        shadeClose: false, // 点击遮罩关闭层
-        area: ['800px', '520px'],
-        content: "/information/useJianhuyiLog/shujudaochu" // iframe的url
-    });
-    layer.full(page);
+   var page = layer.open({
+      type: 2,
+      title: '条件导出',
+      maxmin: true,
+      shadeClose: false, // 点击遮罩关闭层
+      area: ['800px', '520px'],
+      content: "/information/useJianhuyiLog/shujudaochu" // iframe的url
+   });
+   layer.full(page);
 }

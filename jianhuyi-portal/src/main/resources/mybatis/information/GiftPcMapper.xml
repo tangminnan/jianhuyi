@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.information.dao.GiftPcDao">
+
+	<select id="get" resultType="com.jianhuyi.information.domain.GiftPcDO">
+		select `id`,`gift_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time` from t_gift_pc where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.jianhuyi.information.domain.GiftPcDO">
+		select `id`,`gift_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time` from t_gift_pc
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="giftId != null and giftId != ''"> and gift_id = #{giftId} </if>
+		  		  <if test="taskTime != null and taskTime != ''"> and task_time = #{taskTime} </if>
+		  		  <if test="eyeRate != null and eyeRate != ''"> and eye_rate = #{eyeRate} </if>
+		  		  <if test="avgRead != null and avgRead != ''"> and avg_read = #{avgRead} </if>
+		  		  <if test="avgOut != null and avgOut != ''"> and avg_out = #{avgOut} </if>
+		  		  <if test="avgReadDistance != null and avgReadDistance != ''"> and avg_read_distance = #{avgReadDistance} </if>
+		  		  <if test="avgLookPhone != null and avgLookPhone != ''"> and avg_look_phone = #{avgLookPhone} </if>
+		  		  <if test="avgLookTv != null and avgLookTv != ''"> and avg_look_tv = #{avgLookTv} </if>
+		  		  <if test="avgSitTilt != null and avgSitTilt != ''"> and avg_sit_tilt = #{avgSitTilt} </if>
+		  		  <if test="effectiveUseTime != null and effectiveUseTime != ''"> and effective_use_time = #{effectiveUseTime} </if>
+		  		  <if test="avgLight != null and avgLight != ''"> and avg_light = #{avgLight} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from t_gift_pc
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="giftId != null and giftId != ''"> and gift_id = #{giftId} </if>
+		  		  <if test="taskTime != null and taskTime != ''"> and task_time = #{taskTime} </if>
+		  		  <if test="eyeRate != null and eyeRate != ''"> and eye_rate = #{eyeRate} </if>
+		  		  <if test="avgRead != null and avgRead != ''"> and avg_read = #{avgRead} </if>
+		  		  <if test="avgOut != null and avgOut != ''"> and avg_out = #{avgOut} </if>
+		  		  <if test="avgReadDistance != null and avgReadDistance != ''"> and avg_read_distance = #{avgReadDistance} </if>
+		  		  <if test="avgLookPhone != null and avgLookPhone != ''"> and avg_look_phone = #{avgLookPhone} </if>
+		  		  <if test="avgLookTv != null and avgLookTv != ''"> and avg_look_tv = #{avgLookTv} </if>
+		  		  <if test="avgSitTilt != null and avgSitTilt != ''"> and avg_sit_tilt = #{avgSitTilt} </if>
+		  		  <if test="effectiveUseTime != null and effectiveUseTime != ''"> and effective_use_time = #{effectiveUseTime} </if>
+		  		  <if test="avgLight != null and avgLight != ''"> and avg_light = #{avgLight} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.jianhuyi.information.domain.GiftPcDO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_gift_pc
+		(
+			`gift_id`, 
+			`task_time`, 
+			`eye_rate`, 
+			`avg_read`, 
+			`avg_out`, 
+			`avg_read_distance`, 
+			`avg_look_phone`, 
+			`avg_look_tv`, 
+			`avg_sit_tilt`, 
+			`effective_use_time`, 
+			`avg_light`, 
+			`create_time`
+		)
+		values
+		(
+			#{giftId}, 
+			#{taskTime}, 
+			#{eyeRate}, 
+			#{avgRead}, 
+			#{avgOut}, 
+			#{avgReadDistance}, 
+			#{avgLookPhone}, 
+			#{avgLookTv}, 
+			#{avgSitTilt}, 
+			#{effectiveUseTime}, 
+			#{avgLight}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.jianhuyi.information.domain.GiftPcDO">
+		update t_gift_pc 
+		<set>
+			<if test="giftId != null">`gift_id` = #{giftId}, </if>
+			<if test="taskTime != null">`task_time` = #{taskTime}, </if>
+			<if test="eyeRate != null">`eye_rate` = #{eyeRate}, </if>
+			<if test="avgRead != null">`avg_read` = #{avgRead}, </if>
+			<if test="avgOut != null">`avg_out` = #{avgOut}, </if>
+			<if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance}, </if>
+			<if test="avgLookPhone != null">`avg_look_phone` = #{avgLookPhone}, </if>
+			<if test="avgLookTv != null">`avg_look_tv` = #{avgLookTv}, </if>
+			<if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt}, </if>
+			<if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime}, </if>
+			<if test="avgLight != null">`avg_light` = #{avgLight}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from t_gift_pc where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from t_gift_pc where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

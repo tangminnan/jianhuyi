@@ -1,14 +1,15 @@
 package com.jianhuyi.information.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.*;
+import com.jianhuyi.information.service.impl.UseJianhuyiLogServiceImpl;
+import com.jianhuyi.owneruser.domain.OwnerUserDO;
+import com.jianhuyi.owneruser.service.OwnerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -35,6 +36,14 @@ public class GiftController {
     @Autowired
     private UseJianhuyiLogService useJianhuyiLogService;
 
+    @Autowired
+    private UseJianhuyiLogServiceImpl useJianhuyiLogServiceimpl;
+
+    @Autowired
+    private OwnerUserService userService;
+    @Autowired
+    private GiftPcService giftPcService;
+
     /**
      * 礼物列表
      */
@@ -50,6 +59,45 @@ public class GiftController {
         return R.ok(data);
     }
 
+
+    /**
+     * pc端礼物列表（老师端，礼物任务自定义）
+     * */
+    @ResponseBody
+    @GetMapping("/listPc")
+    public String listPc(@RequestParam("callback") String callback) {
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", 2);
+        List<GiftDO> giftDOList = giftService.list(params);
+        data.put("data", giftDOList);
+        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
+    }
+
+    /**
+     * pc端礼物列表（家长端）
+     * */
+    @ResponseBody
+    @GetMapping("/listPcJiazhang")
+    public String listPcJiazhang(@RequestParam("callback") String callback) {
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", 2);
+        List<GiftDO> giftDOList = giftService.list(params);
+        if(giftDOList.size()>0){
+            for (GiftDO giftDO : giftDOList) {
+                if(giftDO!=null){
+                    Map<String,Object> params11 = new HashMap<>();
+                    params11.put("giftId",giftDO.getId());
+                    giftDO.setGiftPc(giftPcService.list(params11).get(0));
+
+
+                }
+            }
+        }
+        data.put("data", giftDOList);
+        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
+    }
     /**
      * 礼物详情
      */
@@ -74,6 +122,266 @@ public class GiftController {
         return R.ok(result);
     }
 
+
+    /**
+     * 老师自定义任务下发给班级
+     */
+    @ResponseBody
+    @GetMapping("/customTaskPc")
+    public String customTask(@RequestParam("callback") String callback,UserTaskDO userTaskDO) {
+        //已有任务的集合
+        List<String> havedTaskuserName = new ArrayList<>();
+        //没有用户的ids
+        List<String> nosavedusername = new ArrayList<>();
+        Map<String,Object> map = new HashMap<>();
+        if(userTaskDO.getIdCards()!=null){
+            //查询用户是否有任务和是否存在
+            //userTaskDO.getIdCards()
+            for (String idCard : userTaskDO.getIdCards()) {
+
+                //截取身份证号
+                idCard = idCard.replace("\"","");
+                idCard = idCard.replace("[","");
+                idCard = idCard.replace("]","");
+                OwnerUserDO userDO = userService.getUserByIdCard(idCard);
+                if(userDO!=null){
+                    Map<String, Object> params = new HashMap<>();
+                    //查询用户 未完成的任务
+                    params.put("userId", userDO.getId());
+                    params.put("finishStatus", "2");
+                    //学校任务
+                    params.put("taskType",1);
+                    List<UserTaskDO> userTaskDOList = userTaskService.list(params);
+                    if(userTaskDOList.size()>0){
+                        havedTaskuserName.add(userDO.getName()+"--"+userDO.getIdentityCard());
+                    }else{
+                        userTaskDO.setUserId(userDO.getId());
+                        userTaskDO.setTaskType(1);
+                        userTaskDO.setFinishStatus("2");
+                        userTaskDO.setCreateTime(new Date());
+                        userTaskDO.setFinishDay(0);
+                        userTaskDO.setUnfinishedDay(0);
+                        userTaskDO.setType(1);
+                        int result = userTaskService.save(userTaskDO);
+                        while (result == 0) {
+                            nosavedusername.add(userDO.getName()+"--"+userDO.getIdentityCard());
+                        }
+                    }
+                }else{
+                    OwnerUserDO userDO1 = new OwnerUserDO();
+                    userDO1.setIdentityCard(idCard);
+                    if(userService.save(userDO1)>0){
+                        userTaskDO.setUserId(userDO1.getId());
+                        userTaskDO.setTaskType(1);
+                        userTaskDO.setFinishStatus("2");
+                        userTaskDO.setCreateTime(new Date());
+                        int result = userTaskService.save(userTaskDO);
+                        while (result == 0) {
+                            nosavedusername.add(userDO1.getName()+"--"+userDO1.getIdentityCard());
+                        }
+                    }
+                }
+            }
+            map.put("havedTaskuserName",havedTaskuserName);
+            map.put("nosavedusername",nosavedusername);
+            return callback+"("+JSONObject.toJSONString(R.ok(map))+")";
+        }else{
+            return callback+"("+JSONObject.toJSONString(R.error("请选择用户或班级！"))+")";
+        }
+    }
+
+    /**
+     * 家长下发给学生
+     */
+    @ResponseBody
+    @GetMapping("/addTaskPcByJz")
+    public String addTaskPcByJz(@RequestParam("callback") String callback,String idCard,Long giftId) {
+        Map<String,Object> map = new HashMap<>();
+                OwnerUserDO userDO = userService.getUserByIdCard(idCard);
+                if(userDO!=null){
+                    Map<String, Object> params = new HashMap<>();
+                    //查询用户 未完成的任务
+                    params.put("userId", userDO.getId());
+                    params.put("finishStatus", "2");
+                    //个人任务
+                    params.put("taskType",2);
+                    List<UserTaskDO> userTaskDOList = userTaskService.list(params);
+                    if(userTaskDOList.size()>0){
+                        return callback+"("+JSONObject.toJSONString(R.error("有一个未结束任务，同时只能存在一个任务哦！"))+")";
+                    }else{
+                        map.put("giftId",giftId);
+                        GiftPcDO giftPcDO = new GiftPcDO();
+                        if(giftPcService.list(map).size()>0){
+                            giftPcDO = giftPcService.list(map).get(0);
+                        }
+
+                        UserTaskDO userTaskDO = new UserTaskDO();
+                        userTaskDO.setUserId(userDO.getId());
+                        userTaskDO.setTaskType(2);
+                        userTaskDO.setFinishStatus("2");
+                        userTaskDO.setCreateTime(new Date());
+                        userTaskDO.setFinishDay(0);
+                        userTaskDO.setUnfinishedDay(0);
+                        userTaskDO.setType(1);
+                        userTaskDO.setEyeRate(giftPcDO.getEyeRate());
+                        userTaskDO.setAvgRead(giftPcDO.getAvgRead());
+                        userTaskDO.setTaskTime(giftPcDO.getTaskTime());
+                        userTaskDO.setAvgOut(giftPcDO.getAvgOut());
+                        userTaskDO.setAvgLight(giftPcDO.getAvgLight());
+                        userTaskDO.setAvgReadDistance(giftPcDO.getAvgReadDistance());
+                        userTaskDO.setAvgSitTilt(giftPcDO.getAvgSitTilt());
+                        userTaskDO.setAvgLookTv(giftPcDO.getAvgLookTv());
+                        userTaskDO.setAvgLookPhone(giftPcDO.getAvgLookPhone());
+                        userTaskDO.setEffectiveUseTime(giftPcDO.getEffectiveUseTime());
+                        userTaskDO.setGiftId(giftId);
+
+                        int result = userTaskService.save(userTaskDO);
+                        if(result>0)
+                            return callback+"("+JSONObject.toJSONString(R.ok("保存成功！"))+")";
+                        else
+                            return callback+"("+JSONObject.toJSONString(R.error("保存失败，请重试"))+")";
+                    }
+                }else{
+                    map.put("giftId",giftId);
+                    GiftPcDO giftPcDO = new GiftPcDO();
+                    if(giftPcService.list(map).size()>0){
+                        giftPcDO = giftPcService.list(map).get(0);
+                    }
+
+                    OwnerUserDO userDO1 = new OwnerUserDO();
+                    userDO1.setIdentityCard(idCard);
+                    if(userService.save(userDO1)>0){
+                        UserTaskDO userTaskDO = new UserTaskDO();
+                        userTaskDO.setUserId(userDO1.getId());
+                        userTaskDO.setTaskType(2);
+                        userTaskDO.setFinishStatus("2");
+                        userTaskDO.setCreateTime(new Date());
+                        userTaskDO.setFinishDay(0);
+                        userTaskDO.setUnfinishedDay(0);
+                        userTaskDO.setType(2);
+                        userTaskDO.setEyeRate(giftPcDO.getEyeRate());
+                        userTaskDO.setAvgRead(giftPcDO.getAvgRead());
+                        userTaskDO.setTaskTime(giftPcDO.getTaskTime());
+                        userTaskDO.setAvgOut(giftPcDO.getAvgOut());
+                        userTaskDO.setAvgLight(giftPcDO.getAvgLight());
+                        userTaskDO.setAvgReadDistance(giftPcDO.getAvgReadDistance());
+                        userTaskDO.setAvgSitTilt(giftPcDO.getAvgSitTilt());
+                        userTaskDO.setAvgLookTv(giftPcDO.getAvgLookTv());
+                        userTaskDO.setAvgLookPhone(giftPcDO.getAvgLookPhone());
+                        userTaskDO.setEffectiveUseTime(giftPcDO.getEffectiveUseTime());
+                        userTaskDO.setGiftId(giftId);
+
+                        int result = userTaskService.save(userTaskDO);
+                        if(result>0)
+                            return callback+"("+JSONObject.toJSONString(R.ok("保存成功！"))+")";
+                        else
+                            return callback+"("+JSONObject.toJSONString(R.error("保存失败，请重试"))+")";
+                    }else{
+                        return callback+"("+JSONObject.toJSONString(R.error("用户不存在且保存失败，请重试"))+")";
+                    }
+                }
+
+    }
+
+    /**
+     * 家长自定义下发给学生
+     */
+    @ResponseBody
+    @GetMapping("/customTaskPcByJz")
+    public String customTaskPcByJz(@RequestParam("callback") String callback,UserTaskDO userTaskDO) {
+        Map<String,Object> map = new HashMap<>();
+        OwnerUserDO userDO = userService.getUserByIdCard(userTaskDO.getIdCard());
+        if(userDO!=null){
+            Map<String, Object> params = new HashMap<>();
+            //查询用户 未完成的任务
+            params.put("userId", userDO.getId());
+            params.put("finishStatus", "2");
+            //个人任务
+            params.put("taskType",2);
+            List<UserTaskDO> userTaskDOList = userTaskService.list(params);
+            if(userTaskDOList.size()>0){
+                return callback+"("+JSONObject.toJSONString(R.error("有一个未结束任务，同时只能存在一个任务哦！"))+")";
+            }else{
+                userTaskDO.setUserId(userDO.getId());
+                userTaskDO.setTaskType(2);
+                userTaskDO.setFinishStatus("2");
+                userTaskDO.setCreateTime(new Date());
+                userTaskDO.setFinishDay(0);
+                userTaskDO.setUnfinishedDay(0);
+                userTaskDO.setType(1);
+
+                int result = userTaskService.save(userTaskDO);
+                if(result>0)
+                    return callback+"("+JSONObject.toJSONString(R.ok("保存成功！"))+")";
+                else
+                    return callback+"("+JSONObject.toJSONString(R.error("保存失败，请重试"))+")";
+            }
+        }else{
+            OwnerUserDO userDO1 = new OwnerUserDO();
+            userDO1.setIdentityCard(userTaskDO.getIdCard());
+            if(userService.save(userDO1)>0){
+                userTaskDO.setUserId(userDO1.getId());
+                userTaskDO.setTaskType(2);
+                userTaskDO.setFinishStatus("2");
+                userTaskDO.setCreateTime(new Date());
+                userTaskDO.setFinishDay(0);
+                userTaskDO.setUnfinishedDay(0);
+                userTaskDO.setType(1);
+                int result = userTaskService.save(userTaskDO);
+                if(result>0)
+                    return callback+"("+JSONObject.toJSONString(R.ok("保存成功！"))+")";
+                else
+                    return callback+"("+JSONObject.toJSONString(R.error("保存失败，请重试"))+")";
+            }else{
+                return callback+"("+JSONObject.toJSONString(R.error("用户不存在且保存失败，请重试"))+")";
+            }
+        }
+
+    }
+
+
+    /**
+     * pc端查询我的任务
+     */
+    @ResponseBody
+    @GetMapping("/myGiftPc")
+    public String myGiftPc(@RequestParam("callback") String callback,String idCard,int taskType) {
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params11 = new HashMap<>();
+        Map<String, Object> params2 = new HashMap<>();
+        List<RecordDO> recordDOList = new LinkedList<RecordDO>();
+        if(idCard!=null){
+            OwnerUserDO userDO = userService.getUserByIdCard(idCard);
+            params.put("userId",userDO.getId());
+            params.put("taskType",taskType);
+            List<UserTaskDO> taskDOList =  userTaskService.list(params);
+            if(taskDOList!=null && taskDOList.size()==1){
+                if(taskDOList.get(0).getGiftId()!=null){
+                    params11.put("giftId",taskDOList.get(0).getGiftId());
+                    GiftDO giftDO = giftService.get(taskDOList.get(0).getGiftId());
+
+                    taskDOList.get(0).setGiftDO(giftDO);
+                }
+                result.put("taskIng",taskDOList.get(0));
+
+                recordDOList = (List<RecordDO>)getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("recordDOList");
+
+                //返回平均等级
+                UseJianhuyiLogDO useJianhuyiLogDO = (UseJianhuyiLogDO) getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("allUseJianhuyiLogDO");
+                result.put("overallMerit", getGrade(useJianhuyiLogDO));
+                result.put("allUseJianhuyi", getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("allUseJianhuyi"));
+                result.put("recordDOList",recordDOList);
+            }
+        }else{
+            return callback+"("+JSONObject.toJSONString(R.error("学生身份证号为空"))+")";
+        }
+
+        data.put("data",result);
+
+        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
+    }
 
     /**
      * 自定义任务(保存和修改)
@@ -115,7 +423,6 @@ public class GiftController {
             return R.error("请选择用户！！！");
         }
     }
-
 
     /**
      * 提交任务（我要挑战）
@@ -241,7 +548,7 @@ public class GiftController {
             UseJianhuyiLogDO useJianhuyiLogDO = (UseJianhuyiLogDO) getRecordList(userTaskDO.getId(), userId).get("allUseJianhuyiLogDO");
             userTaskDO.setCountGrade(getGrade(useJianhuyiLogDO));
 
-            if (userTaskDO.getFinishDay() == userTaskDO.getTaskTime()) {
+            if (userTaskDO.getFinishDay() >= userTaskDO.getTaskTime()) {
                 userTaskDO.setFinishStatus("1");
                 data.put("taskIng", new UserTaskDO());
             } else {
@@ -354,7 +661,7 @@ public class GiftController {
         Double avgSitTilt = 0.0;
         Double outdoorsDuration = 0.0;
         Double avgReadDistance = 0.0;
-        Integer allUseJianhuyi = 0;
+        Double allUseJianhuyi = 0.0;
 
         UseJianhuyiLogDO allUseJianhuyiLogDO = new UseJianhuyiLogDO();
 
@@ -415,11 +722,11 @@ public class GiftController {
 
 
                     if (Double.parseDouble(getArray(resultData, "avgUseJianhuyiDuration")[i]) > 0) {
-                        useJianhuyiLogDO.setUseJianhuyiDuration(Integer.parseInt(getArray(resultData, "avgUseJianhuyiDuration")[j]));
-                        allUseJianhuyi += Integer.parseInt(getArray(resultData, "avgUseJianhuyiDuration")[j]);
+                        useJianhuyiLogDO.setUseJianhuyiDuration(Double.parseDouble(getArray(resultData, "avgUseJianhuyiDuration")[j]));
+                        allUseJianhuyi += Double.parseDouble(getArray(resultData, "avgUseJianhuyiDuration")[j]);
                         recordDO.setUseJianhuyiTime(Double.parseDouble(getArray(resultData, "avgUseJianhuyiDuration")[i]));
                     } else {
-                        useJianhuyiLogDO.setUseJianhuyiDuration(0);
+                        useJianhuyiLogDO.setUseJianhuyiDuration(0.0);
                         recordDO.setUseJianhuyiTime(0.0);
                     }
 
@@ -505,7 +812,7 @@ public class GiftController {
             }
 
 
-            //计算每天的评价
+            //计算每天的评价 5=优，4=良，3=不太好，2=差，1=极差
             recordDO.setGrade(getGrade(useJianhuyiLogDO));
             //每天的评价，添加到全部记录里
             recordDOList.add(recordDO);
@@ -857,4 +1164,8 @@ public class GiftController {
         }
         return result;
     }
+
+
+    //获取任务记录的日期和完成度
+
 }

@@ -4,11 +4,11 @@
 <mapper namespace="com.jianhuyi.information.dao.DataDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.DataDO">
-		select `id`,`start_time`,`status`,`base_data`,`remaind`,equipment_id,update_time from t_data where id = #{value}
+		select `id`,`start_time`,`status`,`base_data`,`remaind`,equipment_id,update_time,imgs from t_data where id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.DataDO">
-        select `id`,`start_time`,`status`,`base_data`,`remaind`,equipment_id,update_time from t_data
+        select `id`,`start_time`,`status`,`base_data`,`remaind`,equipment_id,update_time,imgs from t_data
         <where>
 
             <if test="id != null and id != ''">and id = #{id}</if>

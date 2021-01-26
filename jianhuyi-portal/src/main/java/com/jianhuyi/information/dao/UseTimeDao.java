@@ -1,5 +1,6 @@
 package com.jianhuyi.information.dao;
 
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseTimeDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -30,4 +31,6 @@ public interface UseTimeDao {
     int batchRemove(Long[] ids);
 
     void saveList(@Param("useTimeDOList") List<UseTimeDO> useTimeDOList);
+
+    UseJianhuyiLogDO getTodayUse(@Param("userId") Long userId);
 }

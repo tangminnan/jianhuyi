@@ -2,6 +2,7 @@ package com.jianhuyi.information.service.impl;
 
 import com.jianhuyi.common.utils.DateUtils;
 import com.jianhuyi.information.dao.UseJianhuyiLogDao;
+import com.jianhuyi.information.domain.UploadRecordDO;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.service.UseJianhuyiLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,183 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
     }
 
     @Override
-    public List<UseJianhuyiLogDO> list(Map<String, Object> map) {
-        return useJianhuyiLogDao.list(map);
+    public Map<String, Object> list(Map<String, Object> map) {
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList = getData(map);
+        Map<String, Object> result = new HashMap<>();
+        if (Integer.parseInt(map.get("offset").toString()) + Integer.parseInt(map.get("limit").toString()) > useJianhuyiLogDOList.size()) {
+            result.put("useJianhuyiLogDOList", useJianhuyiLogDOList.subList(Integer.parseInt(map.get("offset").toString()), useJianhuyiLogDOList.size()));
+        } else {
+            result.put("useJianhuyiLogDOList", useJianhuyiLogDOList.subList(Integer.parseInt(map.get("offset").toString()), Integer.parseInt(map.get("offset").toString()) + Integer.parseInt(map.get("limit").toString())));
+        }
+
+        result.put("total", useJianhuyiLogDOList.size());
+        return result;
+    }
+
+    //获取时间段内统计数据
+    @Override
+    public List<UseJianhuyiLogDO> getData(Map<String, Object> map) {
+        //用来保留两位小数
+        DecimalFormat df = new DecimalFormat("#.##");
+        //查询所有数据的人和日期
+        LinkedList<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogDao.selectPersonAndDate(map);
+        //查询所有数据
+        LinkedList<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogDao.selectAllData(map);
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        //遍历用户id和日期
+        for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
+            //UseJianhuyiLogDO useJianhuyiLogDO = useJianhuyiLogDOList.get(1);
+            String date = "";
+            Double readDurtion = null;
+            Double allDurtion = null;
+            int count = 0;
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+            Double readDistance = 0.0;
+            Double readDuration = 0.0;
+            Double sitTilt = 0.0;
+            Double lookPhoneDuration = 0.0;
+            int lookPhoneCount = 0;
+            Double lookTvComputerDuration = 0.0;
+            int lookScreenCount = 0;
+            boolean flag = true;
+            Double readLight = 0.0;
+
+            Double outdoorsDurationday = 0.0;
+            int countss = 0;
+            Double readDurtionNum = 0.0;
+            for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOS) {
+                Double oneReadDurtion = jianhuyiLogDO.getReadDuration();
+                if ((useJianhuyiLogDO.getUserId().equals(jianhuyiLogDO.getUserId())) && (jianhuyiLogDO.getSaveTime().contains(useJianhuyiLogDO.getSaveTime())) && (jianhuyiLogDO.getEquipmentId().equals(useJianhuyiLogDO.getEquipmentId()))) {
+                    if (jianhuyiLogDO.getStatus() != null && jianhuyiLogDO.getStatus() == 1) {
+
+                        if (jianhuyiLogDO.getReadDistance() != null)
+                            readDistance += jianhuyiLogDO.getReadDistance() * jianhuyiLogDO.getReadDuration();
+                        if (jianhuyiLogDO.getSitTilt() != null)
+                            sitTilt += jianhuyiLogDO.getSitTilt() * jianhuyiLogDO.getReadDuration();
+                        if (jianhuyiLogDO.getReadLight() != null)
+                            readLight += jianhuyiLogDO.getReadLight() * jianhuyiLogDO.getReadDuration();
+                        if (jianhuyiLogDO.getReadDuration() != null)
+                            readDurtionNum += jianhuyiLogDO.getReadDuration();
+                        if (jianhuyiLogDO.getReadDuration() != null)
+                            readDuration += jianhuyiLogDO.getReadDuration();
+
+                        if (!date.equals("")) {
+                            try {
+                                long getReadDuration = (long) (jianhuyiLogDO.getReadDuration() * 60 * 1000);
+                                long getDate = sdf1.parse(date).getTime();
+                                long difference = (getDate - (sdf1.parse(jianhuyiLogDO.getSaveTime()).getTime() + getReadDuration));
+                                long minute = difference / (1000 * 60);
+                                //间隔大于5分钟，视为2次
+                                if (minute > 5) {
+                                    if (flag) {
+                                        countss += 2;
+                                        if (jianhuyiLogDO.getLookPhoneDuration() != null && jianhuyiLogDO.getLookPhoneDuration() > 0) {
+                                            lookPhoneCount += 2;
+                                            lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
+                                        }
+                                        if (jianhuyiLogDO.getLookTvComputerDuration() != null && jianhuyiLogDO.getLookTvComputerDuration() > 0) {
+                                            lookScreenCount += 2;
+                                            lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
+                                        }
+
+                                        if (jianhuyiLogDO.getReadDuration() > 5) {
+                                            allDurtion += jianhuyiLogDO.getReadDuration();
+                                        }
+                                    } else {
+                                        countss++;
+                                        if (jianhuyiLogDO.getLookPhoneDuration() != null && jianhuyiLogDO.getLookPhoneDuration() > 0) {
+                                            lookPhoneCount++;
+                                            lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
+                                        }
+                                        if (jianhuyiLogDO.getLookTvComputerDuration() != null && jianhuyiLogDO.getLookTvComputerDuration() > 0) {
+                                            lookScreenCount++;
+                                            lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
+                                        }
+                                        if (jianhuyiLogDO.getReadDuration() > 5) {
+                                            allDurtion += jianhuyiLogDO.getReadDuration();
+                                        }
+                                    }
+                                    flag = false;
+
+                                }
+                                //间隔小于5分钟，视为1次
+                                else {
+                                    allDurtion += jianhuyiLogDO.getReadDuration();
+                                    lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
+                                    lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            if (flag) {
+                                countss++;
+                                lookPhoneCount++;
+                                lookScreenCount++;
+                            }
+                            allDurtion = jianhuyiLogDO.getReadDuration();
+                            lookPhoneDuration = jianhuyiLogDO.getLookPhoneDuration();
+                            lookTvComputerDuration = jianhuyiLogDO.getLookTvComputerDuration();
+                            flag = false;
+                        }
+                        date = jianhuyiLogDO.getSaveTime();
+                    } else {
+                        outdoorsDurationday += jianhuyiLogDO.getOutdoorsDuration();
+                    }
+                }
+
+
+            }
+            if (countss > 0) {
+                if (allDurtion != null) {
+                    useJianhuyiLogDO.setReadDuration(Double.parseDouble(df.format(allDurtion / countss)));
+                }
+            }
+
+            if (lookPhoneCount > 0) {
+                useJianhuyiLogDO.setLookPhoneDuration(Double.parseDouble(df.format(lookPhoneDuration / lookPhoneCount)));
+
+            }
+            useJianhuyiLogDO.setAllLookPhoneDuration(Double.parseDouble(df.format(lookPhoneDuration)));
+            if (lookScreenCount > 0) {
+                useJianhuyiLogDO.setLookTvComputerDuration(Double.parseDouble(df.format(lookTvComputerDuration / lookScreenCount)));
+            }
+            useJianhuyiLogDO.setAllLookTvComputerDuration(Double.parseDouble(df.format(lookTvComputerDuration)));
+
+            useJianhuyiLogDO.setAllReadDuration(allDurtion);
+            if (outdoorsDurationday > 0) {
+                useJianhuyiLogDO.setOutdoorsDuration(Double.parseDouble(df.format(outdoorsDurationday)));
+            }
+            if (readDurtionNum > 0) {
+                useJianhuyiLogDO.setReadDistance(Double.parseDouble(df.format(readDistance / readDurtionNum)));
+                useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readDurtionNum)));
+                useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / readDurtionNum)));
+            }
+        }
+        return useJianhuyiLogDOList;
+    }
+
+    @Override
+    public List<UploadRecordDO> uploadRecordList(Map<String, Object> params) {
+        return useJianhuyiLogDao.uploadRecordList(params);
+    }
+
+    @Override
+    public int uploadRecordCount(Map<String, Object> params) {
+        return useJianhuyiLogDao.uploadRecordCount(params);
     }
 
 
     @Override
     public Map<String, Collection<Double>> getlineData(Date start, Date end, Long userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("startTime", start);
+        params.put("endTime", end);
+        params.put("userId", userId);
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Double> avgReadDuration = new LinkedHashMap<String, Double>();
         Map<String, Double> outdoorsDuration = new LinkedHashMap<String, Double>();
@@ -91,8 +262,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                     if (useJianhuyiLogDO.getLookTvComputerCount() != null) {
                         lookTvComputerCount += useJianhuyiLogDO.getLookTvComputerCount();
                     }
-                    useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
-                    sportDurationT += useJianhuyiLogDO.getSportDuration();
+                    if (useJianhuyiLogDO.getUseJianhuyiDuration() != null)
+                        useJianhuyiDurationT += useJianhuyiLogDO.getUseJianhuyiDuration();
 
                     if (useJianhuyiLogDO.getStatus() != null) {
                         if (useJianhuyiLogDO.getStatus() == 1) {

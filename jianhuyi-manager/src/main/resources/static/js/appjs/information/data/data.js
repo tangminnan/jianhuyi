@@ -121,9 +121,7 @@ function load() {
                   field: 'id',
                   align: 'center',
                   formatter: function (value, row, index) {
-                     var e = '<a class="btn btn-primary btn-sm " href="#" mce_href="#" title="角度信息" onclick="jiaodu(\''
-                        + row.id
-                        + '\')"><i class="fa fa-terminal">角度信息</i></a> ';
+                     var e = '<a class="btn btn-primary btn-sm " href="#" mce_href="#" title="角度信息" onclick="jiaodu(\'' + row.id + '\',\'' + row.startTime + '\')"><i class="fa fa-terminal">角度信息</i></a> ';
                      /*var d = '<a class="btn btn-warning btn-sm " href="#" title="电量信息"  mce_href="#" onclick="dianliang(\''
                            + row.id
                            + '\')"><i class="fa fa-battery-quarter">电量信息</i></a> ';*/
@@ -147,14 +145,14 @@ function reLoad() {
    $('#exampleTable').bootstrapTable('refresh');
 };
 
-function jiaodu(id) {
+function jiaodu(id, startTime) {
    var page = layer.open({
       type: 2,
       title: '角度信息',
       maxmin: true,
       shadeClose: false, // 点击遮罩关闭层
       area: ['800px', '520px'],
-      content: prefix + '/jiaodu/' + id // iframe的url
+      content: prefix + '/jiaodu?id=' + id + '&startTime=' + startTime // iframe的url
    });
    layer.full(page);
 }

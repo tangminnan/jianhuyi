@@ -23,7 +23,7 @@ public class UseTimeDO implements Serializable {
     //用户id
     private Long uploadId;
     //设备id
-    private Long equipmentId;
+    private String equipmentId;
 
     private Integer userDurtion;
 
@@ -43,11 +43,11 @@ public class UseTimeDO implements Serializable {
         this.userDurtion = userDurtion;
     }
 
-    public Long getEquipmentId() {
+    public String getEquipmentId() {
         return equipmentId;
     }
 
-    public void setEquipmentId(Long equipmentId) {
+    public void setEquipmentId(String equipmentId) {
         this.equipmentId = equipmentId;
     }
 

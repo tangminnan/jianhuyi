@@ -1,4 +1,5 @@
 $().ready(function() {
+   $('#content_sn').summernote('code', $("#giftDetails").val());
 	validateRule();
 });
 
@@ -7,13 +8,22 @@ $.validator.setDefaults({
 		update();
 	}
 });
+
+
 function update() {
+
+   var content_sn = $("#content_sn").summernote('code');
+   $("#giftDetails").val(content_sn);
+   var formData = new FormData(document.getElementById("signupForm"));
+
 	$.ajax({
 		cache : true,
 		type : "POST",
 		url : "/information/gift/update",
-		data : $('#signupForm').serialize(),// 你的formid
+		data : formData,// 你的formid
 		async : false,
+      processData: false,
+      contentType: false,
 		error : function(request) {
 			parent.layer.alert("Connection error");
 		},

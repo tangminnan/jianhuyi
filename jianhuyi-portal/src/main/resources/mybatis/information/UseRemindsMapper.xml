@@ -4,11 +4,11 @@
 <mapper namespace="com.jianhuyi.information.dao.UseRemindsDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.UseRemindsDO">
-		select `id`,`reminds_time`,`save_time`,user_id,equipment_id from t_use_reminds where id = #{value}
+		select `id`,`reminds_time`,`type`,`save_time`,user_id,equipment_id from t_use_reminds where id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.UseRemindsDO">
-        select `id`,`reminds_time`,`save_time`,COUNT(*) remindsNum from t_use_reminds
+        select `id`,`reminds_time`,`type`,`save_time`,COUNT(*) remindsNum from t_use_reminds
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>
             <if test="remindsTime != null and remindsTime != ''">and reminds_time = #{remindsTime}</if>
@@ -20,6 +20,19 @@
         GROUP BY
         date_format(reminds_time, '%Y-%m-%d')
 
+    </select>
+
+
+    <select id="getTodayReminds" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+            user_id,
+            COUNT(*) remind
+        FROM
+            t_use_reminds
+        WHERE
+            user_id = #{userId} and TO_DAYS(reminds_time) = TO_DAYS(NOW())
+        GROUP BY
+            substr(reminds_time, 1, 10)
     </select>
 
     <select id="count" resultType="int">
@@ -60,7 +73,8 @@
         `save_time`,
         user_id,
         equipment_id,
-        upload_id
+        upload_id,
+        `type`
         )
         values
         <foreach collection="useRemindsDOList" item="item" separator=",">
@@ -69,7 +83,8 @@
             #{item.saveTime},
             #{item.userId},
             #{item.equipmentId},
-            #{item.uploadId}
+            #{item.uploadId},
+            #{item.type}
             )
         </foreach>
     </insert>
@@ -81,7 +96,8 @@
             <if test="remindsTime != null">`reminds_time` = #{remindsTime},</if>
             <if test="saveTime != null">`save_time` = #{saveTime},</if>
             <if test="userId != null">user_id = #{userId},</if>
-            <if test="equipmentId != null">equipment_id = #{equipmentId}</if>
+            <if test="equipmentId != null">equipment_id = #{equipmentId},</if>
+            <if test="type != null">type = #{type}</if>
         </set>
         where id = #{id}
     </update>

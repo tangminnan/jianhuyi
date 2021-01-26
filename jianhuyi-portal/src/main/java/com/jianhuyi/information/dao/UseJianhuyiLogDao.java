@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +31,9 @@ public interface UseJianhuyiLogDao {
 
     int update(UseJianhuyiLogDO useJianhuyiLog);
 
-    UseJianhuyiLogDO getByTime(Long userId);
+    UseJianhuyiLogDO getByTime(@Param("userId") Long userId);
 
-    UseJianhuyiLogDO getDayRemind(Long userId);
+    UseJianhuyiLogDO getDayRemind(@Param("userId") Long userId);
 
     List<UseJianhuyiLogDO> getMonthAndWeekByTime(@Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
 
@@ -40,7 +41,7 @@ public interface UseJianhuyiLogDao {
 
     List<UseJianhuyiLogDO> getMonthAndWeekRemind(@Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
 
-    UseJianhuyiLogDO getOutduration(Long userId);
+    UseJianhuyiLogDO getOutduration(@Param("userId") Long userId);
 
 
     UseJianhuyiLogDO queryUserWeekRecord(@Param("saveTime") String saveTime, @Param("userId") Long userId);
@@ -67,4 +68,18 @@ public interface UseJianhuyiLogDao {
                                      @Param("userId") Long userId);
 
     void saveList(@Param("useJianhuyiLogDOList") List<UseJianhuyiLogDO> useJianhuyiLogDOList);
+
+    LinkedList<UseJianhuyiLogDO> selectAllData(Map<String, Object> map);
+
+    List<UseJianhuyiLogDO> getByDay(@Param("date") String string, @Param("userId") Long userId);
+
+    UseJianhuyiLogDO getRemindByUseidByday(@Param("date") String string, @Param("userId") Long userId);
+
+    UseJianhuyiLogDO getUseByUseidByday(@Param("date") String string, @Param("userId") Long userId);
+
+    List<UseJianhuyiLogDO> getAllDate(@Param("start") Date parse, @Param("end") Date end, @Param("userId") Long userId);
+
+    LinkedList<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
+
+    LinkedList<UseJianhuyiLogDO> selectDataEvery(Map<String, Object> map);
 }

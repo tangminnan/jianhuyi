@@ -1,6 +1,7 @@
 package com.jianhuyi.information.service;
 
 
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseTimeDO;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface UseTimeService {
     int batchRemove(Long[] ids);
 
     void saveList(List<UseTimeDO> useTimeDOList);
+
+    UseJianhuyiLogDO getTodayUse(Long userId);
 }

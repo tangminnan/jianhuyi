@@ -13,9 +13,36 @@ import java.util.List;
 public class SaveParamsDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private Long userId;
+    private Long uploadId;
+    private String equipmentId;
     private List<UseJianhuyiLogDO> useJianhuyiLogDOList;
     private List<UseRemindsDO> useRemindsDOList;
     private List<UseTimeDO> useTimeDOList;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(Long uploadId) {
+        this.uploadId = uploadId;
+    }
+
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
 
     public List<UseJianhuyiLogDO> getUseJianhuyiLogDOList() {
         return useJianhuyiLogDOList;

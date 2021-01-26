@@ -9,8 +9,10 @@ import com.jianhuyi.common.service.FileService;
 import com.jianhuyi.common.utils.MD5Utils;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.common.utils.ShiroUtils;
+import com.jianhuyi.information.dao.UseJianhuyiLogDao;
 import com.jianhuyi.information.domain.EchartsDO;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import com.jianhuyi.information.service.UseJianhuyiLogService;
 import com.jianhuyi.system.domain.MenuDO;
 import com.jianhuyi.system.service.MenuService;
 import com.jianhuyi.users.service.UserService;
@@ -27,8 +29,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class LoginController extends BaseController {
@@ -40,6 +43,11 @@ public class LoginController extends BaseController {
     FileService fileService;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UseJianhuyiLogService useJianhuyiLogService;
+    @Autowired
+    private UseJianhuyiLogDao useJianhuyiLogDao;
 
     @GetMapping({"/", ""})
     String welcome(Model model) {
@@ -95,7 +103,8 @@ public class LoginController extends BaseController {
     }
 
     @GetMapping("/main")
-    ModelAndView main() {
+    ModelAndView main() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ModelAndView mav = new ModelAndView();
         // 首页总人数
         Integer num = userService.list(null).size();
@@ -106,76 +115,62 @@ public class LoginController extends BaseController {
         List<UseJianhuyiLogDO> useJianhuyiLogDOList = userService.selectLastUse();
 
         List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = new ArrayList<>();
-        System.out.println("==========useJianhuyiLogDOList=================="+useJianhuyiLogDOList.get(0).getSaveTime());
-        System.out.println("==========useJianhuyiLogDOList=================="+useJianhuyiLogDOList.get(0).getUserId());
 
-        Double avgReadDuration=0.00;
-        Double avgOutdoorsDuration =0.00;
-        Double avgReadDistance =0.00;
-        Double avgReadLight =0.00;
-        Double avgLookPhoneDuration =0.00;
-        Double avgLookTvComputerDuration =0.00;
-        Double avgSitTilt =0.00;
-        Double avgUseJianhuyiDuration =0.00;
-        Double avgSportDuration =0.00;
+        Map<String, Object> params = new HashMap<>();
+        //查询所有数据的人和日期
+        LinkedList<UseJianhuyiLogDO> useJianhuyiLogDOLinkedList = useJianhuyiLogDao.selectPersonAndDate(params);
 
-        for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
-            UseJianhuyiLogDO useJianhuyiLogDO1 = userService.getUseDay(useJianhuyiLogDO.getSaveTime(),useJianhuyiLogDO.getUserId());
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(sdf.parse(useJianhuyiLogDOLinkedList.get(0).getSaveTime()));
+        calendar.add(calendar.DATE, +1);
 
-            useJianhuyiLogDOList1.add(useJianhuyiLogDO1);
+        params.put("startTime", useJianhuyiLogDOLinkedList.get(0).getSaveTime());
+        params.put("endTime", sdf.format(calendar.getTime()));
 
-            if(useJianhuyiLogDO1!=null){
-                if(useJianhuyiLogDO1.getReadDuration()!=null){
-                    avgReadDuration+= useJianhuyiLogDO1.getReadDuration();
-                }
-                if(useJianhuyiLogDO1.getOutdoorsDuration()!=null){
-                    avgOutdoorsDuration+=useJianhuyiLogDO1.getOutdoorsDuration();
-                }
-                if(useJianhuyiLogDO1.getReadDistance()!=null){
-                    avgReadDistance+=useJianhuyiLogDO1.getReadDistance();
-                }
-                if(useJianhuyiLogDO1.getReadLight()!=null){
-                    avgReadLight+=useJianhuyiLogDO1.getReadLight();
-                }
+        List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.getData(params);
 
-                if(useJianhuyiLogDO1.getReadLight()!=null){
-                    avgReadLight+=useJianhuyiLogDO1.getReadLight();
-                }
-                if(useJianhuyiLogDO1.getLookPhoneDuration()!=null){
-                    avgLookPhoneDuration+=useJianhuyiLogDO1.getLookPhoneDuration();
-                }
-                if(useJianhuyiLogDO1.getLookTvComputerDuration()!=null){
-                    avgLookTvComputerDuration+=useJianhuyiLogDO1.getLookTvComputerDuration();
-                }
-                if(useJianhuyiLogDO1.getSitTilt()!=null){
-                    avgSitTilt+=useJianhuyiLogDO1.getSitTilt();
-                }
-                if(useJianhuyiLogDO1.getUseJianhuyiDuration()!=null){
-                    avgUseJianhuyiDuration+=useJianhuyiLogDO1.getUseJianhuyiDuration();
-                }
-                if(useJianhuyiLogDO1.getSportDuration()!=null){
-                    avgSportDuration+=useJianhuyiLogDO1.getSportDuration();
-                }
-            }
+        Double avgReadDuration = 0.00;
+        Double avgOutdoorsDuration = 0.00;
+        Double avgReadDistance = 0.00;
+        Double avgReadLight = 0.00;
+        Double avgLookPhoneDuration = 0.00;
+        Double avgLookTvComputerDuration = 0.00;
+        Double avgSitTilt = 0.00;
+        Double avgUseJianhuyiDuration = 0.00;
 
-
-
+        for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOS) {
+            if (useJianhuyiLogDO.getReadDuration() != null)
+                avgReadDuration += useJianhuyiLogDO.getReadDuration();
+            if (useJianhuyiLogDO.getOutdoorsDuration() != null)
+                avgOutdoorsDuration += useJianhuyiLogDO.getOutdoorsDuration();
+            if (useJianhuyiLogDO.getReadDistance() != null)
+                avgReadDistance += useJianhuyiLogDO.getReadDistance();
+            if (useJianhuyiLogDO.getLookPhoneDuration() != null)
+                avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+            if (useJianhuyiLogDO.getLookTvComputerDuration() != null)
+                avgLookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+            if (useJianhuyiLogDO.getReadLight() != null)
+                avgReadLight += useJianhuyiLogDO.getReadLight();
+            if (useJianhuyiLogDO.getSitTilt() != null)
+                avgSitTilt += useJianhuyiLogDO.getSitTilt();
+            if (useJianhuyiLogDO.getUserDurtion() != null)
+                avgUseJianhuyiDuration += useJianhuyiLogDO.getUserDurtion();
         }
 
         // 首页各等级数据统计
-        mav.addObject("avgReadDuration", avgReadDuration/useJianhuyiLogDOList.size());
-        mav.addObject("avgOutdoorsDuration", avgOutdoorsDuration/useJianhuyiLogDOList.size());
-        mav.addObject("avgReadDistance", avgReadDistance/useJianhuyiLogDOList.size());
-        mav.addObject("avgReadLight", avgReadLight/useJianhuyiLogDOList.size());
-        mav.addObject("avgLookPhoneDuration", avgLookPhoneDuration/useJianhuyiLogDOList.size());
-        mav.addObject("avgLookTvComputerDuration", avgLookTvComputerDuration/useJianhuyiLogDOList.size());
-        mav.addObject("avgSitTilt", avgSitTilt/useJianhuyiLogDOList.size());
-        mav.addObject("avgUseJianhuyiDuration", avgUseJianhuyiDuration/useJianhuyiLogDOList.size());
-        mav.addObject("avgSportDuration", avgSportDuration/useJianhuyiLogDOList.size());
+        mav.addObject("avgReadDuration", avgReadDuration / useJianhuyiLogDOS.size());
+        mav.addObject("avgOutdoorsDuration", avgOutdoorsDuration / useJianhuyiLogDOS.size() / 60);
+        mav.addObject("avgReadDistance", avgReadDistance / useJianhuyiLogDOS.size());
+        mav.addObject("avgReadLight", avgReadLight / useJianhuyiLogDOS.size());
+        mav.addObject("avgLookPhoneDuration", avgLookPhoneDuration / useJianhuyiLogDOS.size());
+        mav.addObject("avgLookTvComputerDuration", avgLookTvComputerDuration / useJianhuyiLogDOS.size());
+        mav.addObject("avgSitTilt", avgSitTilt / useJianhuyiLogDOS.size());
+        mav.addObject("avgUseJianhuyiDuration", avgUseJianhuyiDuration / useJianhuyiLogDOS.size());
+
 
         mav.addObject("num", num);
         mav.addObject("yesterdayNum", yesterdayNum);
-        mav.addObject("useJianhuyiLogDOList", JSON.toJSONString(useJianhuyiLogDOList1));
+        mav.addObject("useJianhuyiLogDOList", JSON.toJSONString(useJianhuyiLogDOS));
 
         mav.setViewName("main");
         return mav;
@@ -184,9 +179,7 @@ public class LoginController extends BaseController {
     @RequestMapping(path = "/getReadDuration")
     @ResponseBody
     List<EchartsDO> getReadDuration(@RequestBody String useJianhuyiLogDOList) throws IOException {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
-
-        System.out.println("===========useJianhuyiLogDOList1=================="+useJianhuyiLogDOList1);
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList, UseJianhuyiLogDO.class);
 
         // 首页查询平均单次阅读时长各等级人数
         return userService.selectGrade(useJianhuyiLogDOList1);
@@ -195,7 +188,7 @@ public class LoginController extends BaseController {
     @PostMapping("/getOutdoorsDuration")
     @ResponseBody
     List<EchartsDO> getOutdoorsDuration(@RequestBody String useJianhuyiLogDOList) {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList, UseJianhuyiLogDO.class);
         // 首页户外总时长各等级人数
         return userService.getOutdoorsDuration(useJianhuyiLogDOList1);
     }
@@ -203,7 +196,7 @@ public class LoginController extends BaseController {
     @PostMapping("/getReadDistance")
     @ResponseBody
     List<EchartsDO> getReadDistance(@RequestBody String useJianhuyiLogDOList) {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList, UseJianhuyiLogDO.class);
         // 首页平均阅读距离各等级人数
         return userService.getReadDistance(useJianhuyiLogDOList1);
     }
@@ -211,7 +204,7 @@ public class LoginController extends BaseController {
     @PostMapping("/getReadLight")
     @ResponseBody
     List<EchartsDO> getReadLight(@RequestBody String useJianhuyiLogDOList) {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList, UseJianhuyiLogDO.class);
         // 首页平均阅读距离各等级人数
         return userService.getReadLight(useJianhuyiLogDOList1);
     }
@@ -219,7 +212,7 @@ public class LoginController extends BaseController {
     @PostMapping("/getLookPhoneDuration")
     @ResponseBody
     List<EchartsDO> getLookPhoneDuration(@RequestBody String useJianhuyiLogDOList) {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList, UseJianhuyiLogDO.class);
         // 首页平均阅读距离各等级人数
         return userService.getLookPhoneDuration(useJianhuyiLogDOList1);
     }
@@ -227,7 +220,7 @@ public class LoginController extends BaseController {
     @PostMapping("/getLookTvComputerDuration")
     @ResponseBody
     List<EchartsDO> getLookTvComputerDuration(@RequestBody String useJianhuyiLogDOList) {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList, UseJianhuyiLogDO.class);
         // 首页平均阅读距离各等级人数
         return userService.getLookTvComputerDuration(useJianhuyiLogDOList1);
     }
@@ -235,7 +228,7 @@ public class LoginController extends BaseController {
     @PostMapping("/getSitTilt")
     @ResponseBody
     List<EchartsDO> getSitTilt(@RequestBody String useJianhuyiLogDOList) {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList, UseJianhuyiLogDO.class);
         // 首页平均阅读距离各等级人数
         return userService.getSitTilt(useJianhuyiLogDOList1);
     }
@@ -243,17 +236,10 @@ public class LoginController extends BaseController {
     @PostMapping("/getUseJianhuyiDuration")
     @ResponseBody
     List<EchartsDO> getUseJianhuyiDuration(@RequestBody String useJianhuyiLogDOList) {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
+        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList, UseJianhuyiLogDO.class);
         // 首页平均阅读距离各等级人数
         return userService.getUseJianhuyiDuration(useJianhuyiLogDOList1);
     }
 
-    @PostMapping("/getSportDuration")
-    @ResponseBody
-    List<EchartsDO> getSportDuration(@RequestBody String useJianhuyiLogDOList) {
-        List<UseJianhuyiLogDO> useJianhuyiLogDOList1 = JSON.parseArray(useJianhuyiLogDOList,UseJianhuyiLogDO.class);
-        // 首页平均阅读距离各等级人数
-        return userService.getSportDuration(useJianhuyiLogDOList1);
-    }
 
 }

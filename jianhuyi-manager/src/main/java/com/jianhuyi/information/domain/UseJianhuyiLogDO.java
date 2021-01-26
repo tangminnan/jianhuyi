@@ -31,6 +31,9 @@ public class UseJianhuyiLogDO implements Serializable {
     private Date endTime;
     //阅读时长(分钟）
     private Double readDuration;
+
+    //阅读时长(分钟）
+    private Double allReadDuration;
     //户外时长(小时）
     private Double outdoorsDuration;
     //阅读距离(厘米)
@@ -39,6 +42,10 @@ public class UseJianhuyiLogDO implements Serializable {
     private Double readLight;
     //看手机时长(分钟)
     private Double lookPhoneDuration;
+
+    private Double allLookPhoneDuration;
+
+    private Double allLookTvComputerDuration;
     //看手机次数
     private Integer lookPhoneCount;
     //看电脑电视时长(分钟）
@@ -72,6 +79,50 @@ public class UseJianhuyiLogDO implements Serializable {
 
     private Double userDurtion;
 
+    private int type;
+
+    private String saveTime1;
+
+    public Double getAllLookPhoneDuration(){
+        return allLookPhoneDuration;
+    }
+
+
+    public void setAllLookPhoneDuration(Double allLookPhoneDuration) {
+        this.allLookPhoneDuration = allLookPhoneDuration;
+    }
+
+    public Double getAllLookTvComputerDuration() {
+        return allLookTvComputerDuration;
+    }
+
+    public void setAllLookTvComputerDuration(Double allLookTvComputerDuration) {
+        this.allLookTvComputerDuration = allLookTvComputerDuration;
+    }
+
+    public Double getAllReadDuration() {
+        return allReadDuration;
+    }
+
+    public void setAllReadDuration(Double allReadDuration) {
+        this.allReadDuration = allReadDuration;
+    }
+
+    public String getSaveTime1() {
+        return saveTime1;
+    }
+
+    public void setSaveTime1(String saveTime1) {
+        this.saveTime1 = saveTime1;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public Integer getUploadId() {
         return uploadId;
@@ -385,13 +436,36 @@ public class UseJianhuyiLogDO implements Serializable {
 
     @Override
     public String toString() {
-        return "UseJianhuyiLogDO [id=" + id + ", userId=" + userId + ", addTime=" + addTime + ", startTime=" + startTime
-                + ", endTime=" + endTime + ", readDuration=" + readDuration + ", outdoorsDuration=" + outdoorsDuration
-                + ", readDistance=" + readDistance + ", readLight=" + readLight + ", lookPhoneDuration="
-                + lookPhoneDuration + ", lookTvComputerDuration=" + lookTvComputerDuration + ", sitTilt=" + sitTilt
-                + ", useJianhuyiDuration=" + useJianhuyiDuration + ", sportDuration=" + sportDuration + ", delFlag="
-                + delFlag + ", week=" + week + ", month=" + month + ", quarter=" + quarter + ", year=" + year + "]";
+        return "UseJianhuyiLogDO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", uploadId=" + uploadId +
+                ", addTime=" + addTime +
+                ", saveTime='" + saveTime + '\'' +
+                ", equipmentId='" + equipmentId + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", readDuration=" + readDuration +
+                ", outdoorsDuration=" + outdoorsDuration +
+                ", readDistance=" + readDistance +
+                ", readLight=" + readLight +
+                ", lookPhoneDuration=" + lookPhoneDuration +
+                ", lookPhoneCount=" + lookPhoneCount +
+                ", lookTvComputerDuration=" + lookTvComputerDuration +
+                ", lookTvComputerCount=" + lookTvComputerCount +
+                ", sitTilt=" + sitTilt +
+                ", useJianhuyiDuration=" + useJianhuyiDuration +
+                ", sportDuration=" + sportDuration +
+                ", delFlag=" + delFlag +
+                ", week='" + week + '\'' +
+                ", month='" + month + '\'' +
+                ", quarter='" + quarter + '\'' +
+                ", year='" + year + '\'' +
+                ", num=" + num +
+                ", day='" + day + '\'' +
+                ", status=" + status +
+                ", remindsNum=" + remindsNum +
+                ", userDurtion=" + userDurtion +
+                '}';
     }
-
-
 }

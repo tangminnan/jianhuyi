@@ -8,48 +8,84 @@
 	</select>
 
 
-    <!--今日户外非阅读数据统计-->
-    <select id="getOutduration" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-			SELECT
-				SUM(outdoors_duration) outdoors_duration
-			FROM
-				t_use_jianhuyi_log
-			WHERE
-				TO_DAYS(save_time) = TO_DAYS(NOW()) and `status` = 2
-			AND user_id= #{userId}
-			GROUP BY
-				date_format(save_time, '%Y-%m-%d')
-	</select>
+    <select id="selectAllData" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        equipment_id,
+        user_id,
+        save_time,
+        `status`,
+        read_duration,
+        outdoors_duration,
+        read_distance,
+        read_light,
+        look_phone_count,
+        look_phone_duration,
+        look_tv_computer_count,
+        look_tv_computer_duration,
+        sit_tilt
+        FROM
+        t_use_jianhuyi_log
+        WHERE user_id = #{userId} and TO_DAYS(save_time) = TO_DAYS(NOW())
+        ORDER BY
+        save_time DESC
+    </select>
 
-    <!--今日阅读状态数据统计-->
-    <select id="getByTime" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
-		SELECT
-			id,
-			user_id,
-			add_time,
-			equipment_id,
-			save_time,
-			SUM(read_duration) allreadDuration,
-			SUM(read_duration) / count(*) readDuration,
-			SUM(read_distance) / count(*) read_distance,
-			SUM(read_light) / count(*) read_light,
-			SUM(look_phone_duration) / SUM(look_phone_count) look_phone_duration,
-			SUM(look_tv_computer_duration)/SUM(look_tv_computer_count)  look_tv_computer_duration,
-			SUM(look_tv_computer_count) / count(*) look_tv_computer_count,
-			SUM(sit_tilt) / count(*) sit_tilt,
-			SUM(use_jianhuyi_duration) use_jianhuyi_duration,
-			SUM(sport_duration) / count(*) sport_duration,
-			SUM(remind) remind,
-			`del_flag`
-		FROM
-			t_use_jianhuyi_log
-		WHERE
-			TO_DAYS(save_time) = TO_DAYS(NOW()) and `status` = 1
-		and user_id= #{userId}
-		GROUP BY
-			date_format(save_time, '%Y-%m-%d')
-	</select>
 
+    <!--某天某人的数据-->
+    <select id="getByDay" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        equipment_id,
+        user_id,
+        save_time,
+        `status`,
+        read_duration,
+        outdoors_duration,
+        read_distance,
+        read_light,
+        look_phone_count,
+        look_phone_duration,
+        look_tv_computer_count,
+        look_tv_computer_duration,
+        sit_tilt
+        FROM
+        t_use_jianhuyi_log
+        <where>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="date != null and date != ''">and save_time like CONCAT("%",#{date},"%")</if>
+        </where>
+        ORDER BY
+        save_time DESC
+    </select>
+
+    <!--某天某人的震动次数-->
+    <select id="getRemindByUseidByday" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        user_id,
+        COUNT(*) remind
+        FROM
+        t_use_reminds
+        <where>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="date != null and date != ''">and reminds_time like CONCAT("%",#{date},"%")</if>
+        </where>
+        group by
+        substr(reminds_time, 1, 10)
+    </select>
+
+    <!--某天某人的有效使用时长-->
+    <select id="getUseByUseidByday" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        user_id,
+        COUNT(*) / 20 useJianhuyiDuration
+        FROM
+        t_use_time
+        <where>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="date != null and date != ''">and use_time like CONCAT("%",#{date},"%")</if>
+        </where>
+        group by
+        substr(use_time, 1, 10)
+    </select>
 
     <!--当日阅读状态数据统计-->
     <select id="queryUserWeekRecord" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
@@ -120,27 +156,48 @@
         HAVING  read_duration &lt;&gt;  0
     </select>
 
-    <!--年数据阅读状态的某月每一天的数据-->
+    <!--获取某时间段的全部数据-->
     <select id="queryUserWeekRecordBetween" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
 		SELECT
-			`id`,
-			`user_id`,
-			save_time,
-			SUM(read_duration)/COUNT(*) `read_duration`,
-			SUM(read_distance)/COUNT(*) `read_distance`,
-			SUM(read_light)/COUNT(*) `read_light`,
-			SUM(look_phone_duration)/SUM(look_phone_count)  `look_phone_duration`,
-			SUM(look_tv_computer_duration)/SUM(look_tv_computer_count) `look_tv_computer_duration`,
-			SUM(sit_tilt)/COUNT(*) `sit_tilt`
-		FROM
-			t_use_jianhuyi_log
-		WHERE
-			user_id =  #{userId}
-		AND `status` = 1
-		AND save_time between #{start} and #{end}
-		GROUP BY
-			date_format(save_time, '%Y-%m-%d')
+            equipment_id,
+            user_id,
+            save_time,
+            `status`,
+            read_duration,
+            outdoors_duration,
+            read_distance,
+            read_light,
+            look_phone_count,
+            look_phone_duration,
+            look_tv_computer_count,
+            look_tv_computer_duration,
+            sit_tilt
+        FROM
+            t_use_jianhuyi_log
+        WHERE
+            user_id = #{userId}
+        AND save_time BETWEEN #{start}
+        AND DATE_ADD(#{end}, INTERVAL 1 DAY )
+        ORDER BY
+            save_time DESC
 	</select>
+
+    <!--获取某时间段内有数据的全部日期-->
+    <select id="getAllDate" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+		SELECT
+            date_format(save_time, '%Y-%m-%d') saveTime
+            FROM
+            t_use_jianhuyi_log
+            WHERE
+                user_id = #{userId}
+                AND save_time BETWEEN #{start}
+                AND DATE_ADD(#{end}, INTERVAL 1 DAY )
+            GROUP BY
+            date_format(save_time, '%Y-%m-%d')
+            ORDER BY
+            save_time DESC
+	</select>
+
 
     <select id="queryUserRecordBetweenSum" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
 		SELECT
@@ -339,7 +396,8 @@
         equipment_id,
         status,
         remind,
-        upload_id
+        upload_id,
+        type
         )
         values
         <foreach collection="useJianhuyiLogDOList" item="item" separator=",">
@@ -362,7 +420,8 @@
             #{item.equipmentId},
             #{item.status},
             #{item.remind},
-            #{item.uploadId}
+            #{item.uploadId},
+            #{item.type}
             )
         </foreach>
     </insert>
@@ -388,4 +447,132 @@
     </update>
 
 
+    <select id="selectPersonAndDate" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        zo.user_id,
+        zo.save_time,
+        zo.add_time,
+        zo.save_time1,
+        zo.upload_id,
+        zo.equipment_id,
+        tur.remindsNum,
+        tut.userDurtion
+        FROM
+        (
+        SELECT
+        tuj.user_id,
+        DATE_FORMAT(tuj.save_time, '%Y-%m-%d') save_time,
+        tuj.save_time save_time1,
+        upload_id,equipment_id,add_time
+        FROM
+        t_use_jianhuyi_log tuj
+        GROUP BY
+        DATE_FORMAT(tuj.save_time, '%Y-%m-%d'),
+        tuj.user_id
+        ORDER BY
+        substr(tuj.save_time, 1, 10) DESC
+        ) zo
+        LEFT JOIN (
+        SELECT
+        upload_id,
+        user_id,
+        date_format(reminds_time, '%Y-%m-%d') reminds_time,
+        COUNT(*) remindsNum
+        FROM
+        t_use_reminds
+        GROUP BY
+        substr(reminds_time, 1, 10),
+        user_id
+        ) tur ON zo.user_id = tur.user_id
+        AND zo.save_time = tur.reminds_time
+        LEFT JOIN (
+        SELECT
+        `id`,
+        date_format(use_time, '%Y-%m-%d') use_time,
+        `save_time`,
+        user_id,
+        upload_id,
+        <!--/20 = *180/60/60-->
+        COUNT(*) /20 userDurtion
+        FROM
+        t_use_time
+        GROUP BY
+        substr(use_time, 1, 10),
+        user_id
+        ) tut ON zo.user_id = tut.user_id
+        AND zo.save_time = tut.use_time
+        <where>
+            <if test="uploadId != null and uploadId != ''">and zo.upload_id = #{uploadId}</if>
+            <if test="userId != null and userId != ''">and zo.user_id = #{userId}</if>
+
+            <if test="startTime != null and startTime != ''">and zo.save_time &gt;= #{startTime}</if>
+            <if test="endTime != null and endTime != ''">AND zo.save_time &lt;= #{endTime}
+            </if>
+
+            <if test="week != null and week != ''">and YEARWEEK(date_format(zo.save_time, '%Y-%m-%d')) =
+                YEARWEEK(now())
+            </if>
+            <if test="month != null and month != ''">and DATE_FORMAT(zo.save_time, '%Y%m') =
+                DATE_FORMAT(CURDATE(),'%Y%m')
+            </if>
+            <if test="quarter != null and quarter != ''">and QUARTER(zo.save_time)=QUARTER(now())</if>
+            <if test="year != null and year != ''">and YEAR(zo.save_time)=YEAR(NOW())</if>
+        </where>
+        ORDER BY
+        zo.add_time DESC
+    </select>
+
+    <select id="selectDataEvery" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        equipment_id,
+        user_id,
+        save_time,
+        `status`,
+        read_duration,
+        outdoors_duration,
+        read_distance,
+        read_light,
+        look_phone_count,
+        look_phone_duration,
+        look_tv_computer_count,
+        look_tv_computer_duration,
+        sit_tilt
+        FROM
+        (
+        SELECT
+        equipment_id,
+        user_id,
+        DATE_FORMAT(save_time, '%Y-%m-%d') save_time1,
+        save_time,
+        `status`,
+        read_duration,
+        outdoors_duration,
+        read_distance,
+        read_light,
+        look_phone_count,
+        look_phone_duration,
+        look_tv_computer_count,
+        look_tv_computer_duration,
+        sit_tilt
+        FROM
+        t_use_jianhuyi_log
+        ) a
+        <where>
+            <if test="uploadId != null and uploadId != ''">and upload_id = #{uploadId}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="startTime != null and startTime != ''">and a.save_time1 &gt;= #{startTime}</if>
+            <if test="endTime != null and endTime != ''">AND a.save_time1 &lt;= #{endTime}
+            </if>
+            <if test="week != null and week != ''">and YEARWEEK(date_format(a.save_time1, '%Y-%m-%d')) = YEARWEEK(now())
+            </if>
+            <if test="month != null and month != ''">and DATE_FORMAT(a.save_time1, '%Y%m') = DATE_FORMAT(CURDATE(),
+                '%Y%m')
+            </if>
+            <if test="quarter != null and quarter != ''">and QUARTER(a.save_time1)=QUARTER(now())</if>
+            <if test="year != null and year != ''">and YEAR(a.save_time1)=YEAR(NOW())</if>
+        </where>
+        ORDER BY
+        save_time DESC
+
+    </select>
 </mapper>

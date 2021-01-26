@@ -1,6 +1,7 @@
 package com.jianhuyi.information.domain;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
 
@@ -40,6 +41,8 @@ public class UserTaskLinshiDO implements Serializable {
     private String avgLight;
     //创建时间
     private Date createTime;
+
+
 
     /**
      * 设置：id
@@ -235,5 +238,25 @@ public class UserTaskLinshiDO implements Serializable {
      */
     public Date getCreateTime() {
         return createTime;
+    }
+
+    @Override
+    public String toString() {
+        return "UserTaskLinshiDO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", giftId=" + giftId +
+                ", taskTime=" + taskTime +
+                ", eyeRate='" + eyeRate + '\'' +
+                ", avgRead='" + avgRead + '\'' +
+                ", avgOut='" + avgOut + '\'' +
+                ", avgReadDistance='" + avgReadDistance + '\'' +
+                ", avgLookPhone='" + avgLookPhone + '\'' +
+                ", avgLookTv='" + avgLookTv + '\'' +
+                ", avgSitTilt='" + avgSitTilt + '\'' +
+                ", effectiveUseTime='" + effectiveUseTime + '\'' +
+                ", avgLight='" + avgLight + '\'' +
+                ", createTime=" + createTime +
+                '}';
     }
 }

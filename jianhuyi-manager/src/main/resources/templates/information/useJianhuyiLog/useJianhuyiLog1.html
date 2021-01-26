@@ -21,8 +21,8 @@
                     </div>
 
                     <div class="columns pull-right">
-                    <button class="btn btn-success" onclick="reLoad()">查询</button>
-                </div>
+                        <button class="btn btn-success" onclick="reLoad()">查询</button>
+                    </div>
                     <div class="columns pull-right">
                         <!--<button class="btn btn-success" onclick="exportExcel(2)">导出</button>-->
                         <button class="btn btn-success" onclick="daochu()">导出</button>
@@ -39,10 +39,9 @@
                         <input id="uploadId" type="text" class="form-control"
                                placeholder="上传人id">
                     </div>
-                    <div class="columns pull-right col-md-3 nopadding">
-                        <select name="forIds" id="forIds" class="selectpicker form-control"
-                                data-live-search="true">
-                            <option style="text-align: center" value="">请选择用户</option>
+                    <div class="columns pull-right col-md-3">
+                        <select name="forIds" id="forIds" class="selectpicker form-control">
+                            <option value="">请选择用户id</option>
                             <option th:each="li:${userList}"
                                     th:text="'id:' + ${li.id}  + '  &nbsp&nbsp&nbsp姓名：'+${li.name} +' &nbsp&nbsp&nbsp手机号：'+${li.phone} +' &nbsp&nbsp&nbsp学号：'+${li.studentNum}"
                                     th:value="${li.id}"></option>

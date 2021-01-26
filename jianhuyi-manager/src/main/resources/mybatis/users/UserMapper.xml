@@ -118,6 +118,7 @@
             <if test="rColumnDiameter != null and rColumnDiameter != ''">and R_column_diameter = #{rColumnDiameter}</if>
             <if test="lEyeAxis != null and lEyeAxis != ''">and L_eye_axis = #{lEyeAxis}</if>
             <if test="rEyeAxis != null and rEyeAxis != ''">and R_eye_axis = #{rEyeAxis}</if>
+            and delete_flag = 1
         </where>
     </select>
 

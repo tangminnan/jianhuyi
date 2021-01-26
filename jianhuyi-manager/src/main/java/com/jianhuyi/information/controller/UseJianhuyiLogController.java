@@ -4,6 +4,7 @@ import com.jianhuyi.common.utils.ExcelExportUtil4DIY;
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
+import com.jianhuyi.information.domain.UploadRecordDO;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.service.UseJianhuyiLogService;
 import com.jianhuyi.users.domain.UserDO;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.ParseException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -63,63 +64,28 @@ public class UseJianhuyiLogController {
     public PageUtils list(@RequestParam Map<String, Object> params) {
 
         Query query = new Query(params);
-        List<UseJianhuyiLogDO> useJianhuyiLogList = useJianhuyiLogService.list(query);
-        int total = useJianhuyiLogService.countLog(query);
-        PageUtils pageUtils = new PageUtils(useJianhuyiLogList, total);
+        Map<String, Object> useJianhuyiLogList = useJianhuyiLogService.list(query);
+        PageUtils pageUtils = new PageUtils((List<UseJianhuyiLogDO>) useJianhuyiLogList.get("useJianhuyiLogDOList"), (int) useJianhuyiLogList.get("total"));
         return pageUtils;
-        /*
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Date start = null;
-        Date end = null;
-        Long uploadId = null;
-        Long userId = null;
-        //查询列表数据
-        if (params.get("startTime") != null && !params.get("startTime").equals("")) {
-            start = sdf.parse((String) params.get("startTime"));
-        }
-        if (params.get("endTime") != null && !params.get("endTime").equals("")) {
-            end = sdf.parse((String) params.get("endTime"));
-        }
-        if (params.get("uploadId") != null && !params.get("uploadId").equals("")) {
-            uploadId = Long.parseLong(params.get("uploadId").toString());
-        }
-        if (params.get("userId") != null && !params.get("userId").equals("") && !params.get("userId").equals("0")) {
-            userId = Long.parseLong(params.get("userId").toString());
-        }
+    }
 
-        if (params.get("startTime").equals("") && params.get("endTime").equals("") &&
-                params.get("uploadId").equals("") && (params.get("userId").equals("") || params.get("userId").equals("0"))) {
+    @GetMapping("/uploadRecord")
+    String uploadRecord() {
 
-            Query query = new Query(params);
-            List<UseJianhuyiLogDO> useJianhuyiLogList = useJianhuyiLogService.list(query);
+        return "information/useJianhuyiLog/uploadRecord";
+    }
 
+    @ResponseBody
+    @GetMapping("/uploadRecordList")
+    public PageUtils uploadRecordList(@RequestParam Map<String, Object> params) {
 
-            List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.list(null);
-            PageUtils pageUtils = new PageUtils(useJianhuyiLogList, useJianhuyiLogDOS.size());
+        Query query = new Query(params);
+        List<UploadRecordDO> uploadRecordDOS = useJianhuyiLogService.uploadRecordList(query);
 
-            return pageUtils;
-
-        } else {
-            List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.selectData(start, end, params);
-            List<UseJianhuyiLogDO> useJianhuyiLogDOList11 = new ArrayList<>();
-            //分页
-
-            if ((Integer.parseInt(params.get("offset").toString())) + Integer.parseInt(params.get("limit").toString()) > useJianhuyiLogDOList.size()) {
-                useJianhuyiLogDOList11 = useJianhuyiLogDOList.subList(
-                        Integer.parseInt(params.get("offset").toString()),
-                        useJianhuyiLogDOList.size());
-            } else {
-                useJianhuyiLogDOList11 = useJianhuyiLogDOList.subList(
-                        Integer.parseInt(params.get("offset").toString()),
-                        (Integer.parseInt(params.get("offset").toString())) + Integer.parseInt(params.get("limit").toString()));
-            }
-
-            PageUtils pageUtils = new PageUtils(useJianhuyiLogDOList11, useJianhuyiLogDOList.size());
-
-            return pageUtils;
-        }
-        */
-
+        int total = useJianhuyiLogService.uploadRecordCount(query);
+        System.out.println("======total===========" + total);
+        PageUtils pageUtils = new PageUtils(uploadRecordDOS, total);
+        return pageUtils;
     }
 
 
@@ -285,58 +251,73 @@ public class UseJianhuyiLogController {
     }
 
     @GetMapping("/shujudaochu")
-    String shujudaochu(){
+    String shujudaochu() {
         return "information/useJianhuyiLog/shujudaochu";
     }
 
     @GetMapping("/kaishidaochu")
-    void kaishidaochu(UseJianhuyiLogDO useJianhuyiLog,HttpServletRequest request, HttpServletResponse response) throws IOException {
-        List<Map<String,Object>> bb = new ArrayList<Map<String,Object>>();
+    void kaishidaochu(UseJianhuyiLogDO useJianhuyiLog, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> bb = new ArrayList<Map<String, Object>>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Map<String,Object> map = new HashMap<>();
-        map.put("startTime",sdf.format(useJianhuyiLog.getStartTime()));
-        map.put("endTime",sdf.format(useJianhuyiLog.getEndTime()));
-        List<UseJianhuyiLogDO> list = useJianhuyiLogService.list(map);
+        Map<String, Object> map = new HashMap<>();
+        map.put("startTime", sdf.format(useJianhuyiLog.getStartTime()));
+        map.put("endTime", sdf.format(useJianhuyiLog.getEndTime()));
+        DecimalFormat df = new DecimalFormat("#.##");
 
-        if(list.size()>0){
+        List<UseJianhuyiLogDO> list = useJianhuyiLogService.getData(map);
+
+        if (list.size() > 0) {
             for (UseJianhuyiLogDO ujl : list) {
-                Map<String,Object> mapp = new LinkedHashMap<>();
-                mapp.put("数据时间",ujl.getSaveTime());
-                mapp.put("用户id",ujl.getUserId());
-                mapp.put("上传人id",ujl.getUploadId());
-                mapp.put("设备号",ujl.getEquipmentId());
-                mapp.put("阅读时长(分钟)",ujl.getReadDuration());
-                mapp.put("阅读距离(厘米)",ujl.getReadDistance());
-                mapp.put("阅读光照(lux)",ujl.getReadLight());
-                mapp.put("看手机时长(分钟)",ujl.getLookPhoneDuration());
-                mapp.put("看电脑电视时长(分钟)",ujl.getLookTvComputerDuration());
-                mapp.put("坐姿倾斜度",ujl.getSitTilt());
-                mapp.put("户外时长(小时)",ujl.getOutdoorsDuration());
-                mapp.put("使用监护仪时长(小时)",ujl.getUserDurtion());
-                mapp.put("提醒次数",ujl.getRemindsNum());
+
+                Map<String, Object> mapp = new LinkedHashMap<>();
+                mapp.put("数据时间", ujl.getSaveTime());
+                mapp.put("用户id", ujl.getUserId());
+                if (ujl.getUserId() != null) {
+                    UserDO userDO = userService.get(ujl.getUserId());
+                    mapp.put("姓名", userDO.getName());
+                    mapp.put("学校", userDO.getSchool());
+                    mapp.put("年级", userDO.getGrade());
+                }
+                mapp.put("上传人id", ujl.getUploadId());
+                mapp.put("设备号", ujl.getEquipmentId());
+
+                if (ujl.getAllReadDuration() != null) {
+                    mapp.put("总阅读时长(小时)", df.format(ujl.getAllReadDuration() / 60));
+                }
+                mapp.put("阅读时长(分钟)", ujl.getReadDuration());
+                mapp.put("阅读距离(厘米)", ujl.getReadDistance());
+                mapp.put("阅读光照(lux)", ujl.getReadLight());
+                mapp.put("看手机时长(分钟)", ujl.getLookPhoneDuration());
+                mapp.put("看电脑电视时长(分钟)", ujl.getLookTvComputerDuration());
+                mapp.put("坐姿倾斜度", ujl.getSitTilt());
+                mapp.put("户外时长(分钟)", ujl.getOutdoorsDuration());
+                mapp.put("使用监护仪时长(小时)", ujl.getUserDurtion());
+                mapp.put("提醒次数", ujl.getRemindsNum());
+                mapp.put("总看手机时长",ujl.getAllLookPhoneDuration());
+                mapp.put("总看电脑时长",ujl.getAllLookTvComputerDuration());
                 bb.add(mapp);
             }
-        }else{
-            Map<String,Object> mapP = new HashMap<String,Object>();
+        } else {
+            Map<String, Object> mapP = new HashMap<String, Object>();
             mapP.put("信息", "暂无数据！！！");
             bb.add(mapP);
         }
 
-        String filename = "导出数据"+sdf.format(new Date().getTime())+".xls";
+        String filename = "导出数据" + sdf.format(new Date().getTime()) + ".xls";
         response.setContentType("application/ms-excel;charset=UTF-8");
-        response.setHeader("Content-Disposition", "attachment;filename="+new String(filename.getBytes(),"iso-8859-1"));
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes(), "iso-8859-1"));
 
-        Cookie status = new Cookie("status","success");
+        Cookie status = new Cookie("status", "success");
         status.setMaxAge(600);
         response.addCookie(status);
 
         OutputStream out = response.getOutputStream();
 
         try {
-            ExcelExportUtil4DIY.exportToFile(bb,out);
+            ExcelExportUtil4DIY.exportToFile(bb, out);
         } catch (Exception e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             out.close();
         }
 

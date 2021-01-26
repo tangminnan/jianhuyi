@@ -48,6 +48,26 @@ public class GiftDO implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String taskDetails;
 
+    private int type;
+
+    private GiftPcDO giftPc;
+
+    public GiftPcDO getGiftPc() {
+        return giftPc;
+    }
+
+    public void setGiftPc(GiftPcDO giftPc) {
+        this.giftPc = giftPc;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public Long getId() {
         return id;
     }

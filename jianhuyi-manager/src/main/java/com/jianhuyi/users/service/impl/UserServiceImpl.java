@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
         return userDao.list(map);
     }
 
+
     @Override
     public int count(Map<String, Object> map) {
         return userDao.count(map);
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
     public List<EchartsDO> selectGrade(List<UseJianhuyiLogDO> avgReadDuration) {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -131,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -145,7 +146,7 @@ public class UserServiceImpl implements UserService {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -178,7 +179,7 @@ public class UserServiceImpl implements UserService {
 
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -190,7 +191,7 @@ public class UserServiceImpl implements UserService {
     public List<EchartsDO> getReadDistance(List<UseJianhuyiLogDO> avgReadDistance) {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -222,7 +223,7 @@ public class UserServiceImpl implements UserService {
 
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -234,7 +235,7 @@ public class UserServiceImpl implements UserService {
     public List<EchartsDO> getReadLight(List<UseJianhuyiLogDO> avgReadLight) {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -263,7 +264,7 @@ public class UserServiceImpl implements UserService {
         }
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -275,7 +276,7 @@ public class UserServiceImpl implements UserService {
     public List<EchartsDO> getLookPhoneDuration(List<UseJianhuyiLogDO> avgLookPhoneDuration) {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -309,7 +310,7 @@ public class UserServiceImpl implements UserService {
 
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -321,7 +322,7 @@ public class UserServiceImpl implements UserService {
     public List<EchartsDO> getLookTvComputerDuration(List<UseJianhuyiLogDO> avgLookTvComputerDuration) {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -352,7 +353,7 @@ public class UserServiceImpl implements UserService {
         }
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -365,7 +366,7 @@ public class UserServiceImpl implements UserService {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -397,7 +398,7 @@ public class UserServiceImpl implements UserService {
         }
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -409,7 +410,7 @@ public class UserServiceImpl implements UserService {
     public List<EchartsDO> getUseJianhuyiDuration(List<UseJianhuyiLogDO> avgUseJianhuyiDuration) {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -419,18 +420,18 @@ public class UserServiceImpl implements UserService {
 
         for (UseJianhuyiLogDO useJianhuyiLogDO : avgUseJianhuyiDuration) {
             if (useJianhuyiLogDO != null) {
-                if (useJianhuyiLogDO.getUseJianhuyiDuration() != null) {
-                    if (useJianhuyiLogDO.getUseJianhuyiDuration() > 10) {
+                if (useJianhuyiLogDO.getUserDurtion() != null) {
+                    if (useJianhuyiLogDO.getUserDurtion() > 10) {
                         a++;
-                    } else if (useJianhuyiLogDO.getUseJianhuyiDuration() >= 8
-                            && useJianhuyiLogDO.getUseJianhuyiDuration() < 10) {
+                    } else if (useJianhuyiLogDO.getUserDurtion() >= 8
+                            && useJianhuyiLogDO.getUserDurtion() < 10) {
                         b++;
-                    } else if (useJianhuyiLogDO.getUseJianhuyiDuration() == 10) {
+                    } else if (useJianhuyiLogDO.getUserDurtion() == 10) {
                         c++;
-                    } else if (useJianhuyiLogDO.getUseJianhuyiDuration() >= 5
-                            && useJianhuyiLogDO.getUseJianhuyiDuration() < 8) {
+                    } else if (useJianhuyiLogDO.getUserDurtion() >= 5
+                            && useJianhuyiLogDO.getUserDurtion() < 8) {
                         d++;
-                    } else if (useJianhuyiLogDO.getUseJianhuyiDuration() < 5) {
+                    } else if (useJianhuyiLogDO.getUserDurtion() < 5) {
                         e++;
                     }
                 } else {
@@ -443,7 +444,7 @@ public class UserServiceImpl implements UserService {
 
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -455,7 +456,7 @@ public class UserServiceImpl implements UserService {
     public List<EchartsDO> getSportDuration(List<UseJianhuyiLogDO> avgSportDuration) {
         List<EchartsDO> list = new ArrayList<EchartsDO>();
 
-        // a 优 ，b 良，c 标准，d 差，e 极差
+        // a 优 ，b 良，c 中，d 差，e 极差
         Integer a = 0;
         Integer b = 0;
         Integer c = 0;
@@ -488,7 +489,7 @@ public class UserServiceImpl implements UserService {
 
         list.add(new EchartsDO("优", a));
         list.add(new EchartsDO("良", b));
-        list.add(new EchartsDO("标准", c));
+        list.add(new EchartsDO("中", c));
         list.add(new EchartsDO("差", d));
         list.add(new EchartsDO("极差", e));
 
@@ -678,12 +679,7 @@ public class UserServiceImpl implements UserService {
                                             deviceDao.update(deviceDO);
                                         }
                                     } else {
-                                        deviceDO.setUserId(list(params).get(0).getId());
-                                        deviceDO.setDeleted(0);
-                                        deviceDO.setDeviceType(0);
-                                        deviceDO.setDefaultDevice(1);
-                                        deviceDO.setAccount(name);
-                                        deviceDao.save(deviceDO);
+                                        errnum.add(rowNum);
                                     }
                                     num++;
                                 }
@@ -712,15 +708,7 @@ public class UserServiceImpl implements UserService {
                                             continue;
                                         }
                                     } else {
-                                        deviceDO.setUserId(list(params).get(0).getId());
-                                        deviceDO.setDeleted(0);
-                                        deviceDO.setDeviceType(0);
-                                        deviceDO.setDefaultDevice(1);
-                                        deviceDO.setAccount(name);
-                                        deviceDao.save(deviceDO);
-
-                                        num++;
-                                        continue;
+                                        errnum.add(rowNum);
                                     }
                                 }
 

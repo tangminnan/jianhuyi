@@ -3,16 +3,15 @@ package com.jianhuyi.information.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.common.config.BootdoConfig;
+import com.jianhuyi.common.utils.DataParseUtil;
 import com.jianhuyi.common.utils.FileUtil;
 import com.jianhuyi.common.utils.R;
+import com.jianhuyi.common.utils.domain.HistoryDataBean;
 import com.jianhuyi.information.domain.DataDO;
 import com.jianhuyi.information.domain.EnergysDataDO;
 import com.jianhuyi.information.domain.ErrorDataDO;
 import com.jianhuyi.information.domain.QueryDOS;
-import com.jianhuyi.information.service.DataImgService;
-import com.jianhuyi.information.service.DataService;
-import com.jianhuyi.information.service.EnergysDataService;
-import com.jianhuyi.information.service.ErrorDataService;
+import com.jianhuyi.information.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +45,43 @@ public class DataController {
     private ErrorDataService errorDataService;
     @Autowired
     private BootdoConfig bootdoConfig;
+    @Autowired
+    private DataInitService dataInitService;
+
+    @ResponseBody
+    @PostMapping("/saveInit")
+    R saveInit(@RequestBody MultipartFile initFile) {
+        String filename = initFile.getOriginalFilename();
+        String[] str = filename.split("_");
+        try {
+            FileUtil.uploadFile(initFile.getBytes(), bootdoConfig.getUploadPath() + "/initFile/", filename);
+
+            HistoryDataBean historyDataBean = new HistoryDataBean();
+            File file = new File(bootdoConfig.getUploadPath() + "/initFile/"+filename);
+            if(file.exists()) {
+                historyDataBean = DataParseUtil.readFileTo(file);
+                historyDataBean.setEquipmentId(str[0]);
+                historyDataBean.setUserId(Integer.parseInt(str[1]));
+            }
+
+            historyDataBean.setReadData(JSON.toJSON(historyDataBean.getDataDOList()).toString());
+            historyDataBean.setEnergysData(JSON.toJSON(historyDataBean.getEnergysDataDOList()).toString());
+            historyDataBean.setErrorData(JSON.toJSON(historyDataBean.getErrorDataDOList()).toString());
+            historyDataBean.setRemaindData(JSON.toJSON(historyDataBean.getRemaind()).toString());
+
+            historyDataBean.setAddTime(new Date());
+            if(dataInitService.save(historyDataBean)>0){
+                return R.ok();
+            }else{
+                return R.error("解析失败");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(500, e.toString());
+        }
+    }
+
 
     /**
      * 保存
@@ -107,6 +143,12 @@ public class DataController {
                             }
                             if (query.getUserId() != null) {
                                 datum.setUserId(query.getUserId());
+                            }
+                            if (query.getUploadId() != null) {
+                                datum.setUploadId(query.getUploadId());
+                            }
+                            if (query.getEquipmentId() != null) {
+                                datum.setEquipmentId(query.getEquipmentId());
                             }
                         }
                     }
