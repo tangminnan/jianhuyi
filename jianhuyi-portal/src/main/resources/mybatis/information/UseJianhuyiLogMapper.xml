@@ -119,6 +119,11 @@
 		save_time like CONCAT('%',#{saveTime},'%')  and user_id=  #{userId} AND `status` = 2
 	</select>
 
+    <select id="getMyData" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT  * FROM  t_use_jianhuyi_log where add_time between #{startTime}
+        and #{endTime} where user_id=#{userId}
+    </select>
+
     <!--每日震动提醒次数-->
     <select id="queryRemind" resultType="com.jianhuyi.information.domain.UseRemindsDO">
 		SELECT

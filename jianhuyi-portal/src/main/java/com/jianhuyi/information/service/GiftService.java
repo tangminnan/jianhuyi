@@ -2,6 +2,7 @@ package com.jianhuyi.information.service;
 
 
 import com.jianhuyi.information.domain.GiftDO;
+import com.jianhuyi.information.domain.MyGiftDO;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +27,8 @@ public interface GiftService {
     int remove(Long id);
 
     int batchRemove(Long[] ids);
+
+    List<MyGiftDO> getMyAllGift(Long userId);
+
+    void saveMyGiftDO(MyGiftDO myGiftDO);
 }

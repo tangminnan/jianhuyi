@@ -1327,6 +1327,16 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         useJianhuyiLogDao.saveList(useJianhuyiLogDOList);
     }
 
+    @Override
+    public List<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map) {
+       return useJianhuyiLogDao.selectPersonAndDate(map);
+    }
+
+    @Override
+    public List<UseJianhuyiLogDO> getMyData(Map<String, Object> map) {
+        return useJianhuyiLogDao.getMyData(map);
+    }
+
     //获取时间段内统计数据
     public List<UseJianhuyiLogDO> getDataByDay(Map<String, Object> map) {
         //用来保留两位小数
@@ -1399,7 +1409,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                                             allDurtion += jianhuyiLogDO.getReadDuration();
                                         }
                                     } else {
-                                        countss++;
+                                         countss++;
                                         if (jianhuyiLogDO.getLookPhoneDuration() != null && jianhuyiLogDO.getLookPhoneDuration() > 0) {
                                             lookPhoneCount++;
                                             lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
@@ -1548,18 +1558,18 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                                         }
                                     } else {
                                         countss++;
-                                        if (jianhuyiLogDO.getLookPhoneDuration() != null && jianhuyiLogDO.getLookPhoneDuration() > 0) {
-                                            lookPhoneCount++;
-                                            lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
-                                        }
-                                        if (jianhuyiLogDO.getLookTvComputerDuration() != null && jianhuyiLogDO.getLookTvComputerDuration() > 0) {
-                                            lookScreenCount++;
-                                            lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
-                                        }
-                                        if (jianhuyiLogDO.getReadDuration() > 5) {
-                                            allDurtion += jianhuyiLogDO.getReadDuration();
-                                        }
+                                    if (jianhuyiLogDO.getLookPhoneDuration() != null && jianhuyiLogDO.getLookPhoneDuration() > 0) {
+                                        lookPhoneCount++;
+                                        lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
                                     }
+                                    if (jianhuyiLogDO.getLookTvComputerDuration() != null && jianhuyiLogDO.getLookTvComputerDuration() > 0) {
+                                        lookScreenCount++;
+                                        lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
+                                    }
+                                    if (jianhuyiLogDO.getReadDuration() > 5) {
+                                        allDurtion += jianhuyiLogDO.getReadDuration();
+                                    }
+                                }
                                     flag = false;
 
                                 }

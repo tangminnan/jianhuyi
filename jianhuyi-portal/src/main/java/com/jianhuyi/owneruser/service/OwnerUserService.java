@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.jianhuyi.information.domain.UserDO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,4 +42,12 @@ public interface OwnerUserService {
 	int updateUser(OwnerUserDO ownerUserDO);
 
     OwnerUserDO getUserByIdCard(String idCard);
+
+    List<UserDO> getStudent(String name);
+
+	UserDO getByPhone(String phone);
+
+	UserDO getById(Long userId);
+
+	void updateScores(UserDO userDO);
 }

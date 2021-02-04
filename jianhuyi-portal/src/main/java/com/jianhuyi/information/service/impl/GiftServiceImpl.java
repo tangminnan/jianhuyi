@@ -2,6 +2,7 @@ package com.jianhuyi.information.service.impl;
 
 import com.jianhuyi.information.dao.GiftDao;
 import com.jianhuyi.information.domain.GiftDO;
+import com.jianhuyi.information.domain.MyGiftDO;
 import com.jianhuyi.information.service.GiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,16 @@ public class GiftServiceImpl implements GiftService {
     public int batchRemove(Long[] ids) {
         return giftDao.batchRemove(ids);
     }
+
+    @Override
+    public List<MyGiftDO> getMyAllGift(Long userId) {
+      return giftDao.getMyAllGift(userId);
+    }
+
+    @Override
+    public void saveMyGiftDO(MyGiftDO myGiftDO) {
+       giftDao.saveMyGiftDO(myGiftDO);
+    }
+
 
 }

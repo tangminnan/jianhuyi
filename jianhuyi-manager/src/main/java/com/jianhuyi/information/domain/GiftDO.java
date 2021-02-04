@@ -26,6 +26,10 @@ public class GiftDO implements Serializable {
     private String giftDetails;
     //礼物创建时间
     private Date createTime;
+    //性别   1=男 2=女
+    private Integer sex;
+    //所需积分
+    private Integer score;
 
     private MultipartFile imgFile;
 
@@ -119,5 +123,21 @@ public class GiftDO implements Serializable {
      */
     public Date getCreateTime() {
         return createTime;
+    }
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }

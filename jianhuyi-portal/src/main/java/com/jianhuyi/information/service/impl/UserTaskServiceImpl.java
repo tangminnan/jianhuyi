@@ -50,4 +50,14 @@ public class UserTaskServiceImpl implements UserTaskService {
         return userTaskDao.batchRemove(ids);
     }
 
+    @Override
+    public UserTaskDO getRecentlyTask(Long userId) {
+       return userTaskDao.getRecentlyTask(userId);
+    }
+
+    @Override
+    public List<UserTaskDO> getAllReadyFinishedTask(Long userId, Integer flag) {
+        return userTaskDao.getAllReadyFinishedTask(userId,flag);
+    }
+
 }

@@ -26,4 +26,8 @@ public interface UserTaskService {
     int remove(Long id);
 
     int batchRemove(Long[] ids);
+
+    UserTaskDO getRecentlyTask(Long userId);
+
+    List<UserTaskDO> getAllReadyFinishedTask(Long userId, Integer flag);
 }

@@ -28,6 +28,7 @@
             </if>
             <if test="avgLight != null and avgLight != ''">and avg_light = #{avgLight}</if>
             <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="taskId != null and taskId != ''">and task_id = #{taskId}</if>
         </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">

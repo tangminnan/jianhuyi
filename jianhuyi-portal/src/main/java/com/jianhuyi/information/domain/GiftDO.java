@@ -10,9 +10,7 @@ import java.util.Date;
 
 
 /**
- * @author wjl
- * @email bushuo@163.com
- * @date 2020-08-18 11:44:12
+ *  礼物表
  */
 //@Data
 @ToString(exclude = "Password")
@@ -37,6 +35,10 @@ public class GiftDO implements Serializable {
     private Date createTime;
 
     private MultipartFile imgFile;
+    //性别   1=男 2=女
+    private Integer sex;
+    //所需积分
+    private Integer score;
 
     //任务时间
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -51,6 +53,14 @@ public class GiftDO implements Serializable {
     private int type;
 
     private GiftPcDO giftPc;
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
 
     public GiftPcDO getGiftPc() {
         return giftPc;
@@ -146,5 +156,13 @@ public class GiftDO implements Serializable {
 
     public void setTaskDetails(String taskDetails) {
         this.taskDetails = taskDetails;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }

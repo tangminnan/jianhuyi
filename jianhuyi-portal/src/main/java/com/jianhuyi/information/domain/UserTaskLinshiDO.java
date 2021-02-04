@@ -6,257 +6,211 @@ import java.util.Date;
 
 
 /**
- * @author chglee
- * @email 1992lcg@163.com
- * @date 2020-08-21 11:33:27
+ *  任务进度表
  */
 public class UserTaskLinshiDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //id
     private Long id;
-    //用户id
+    /**
+     *  用户id
+     */
     private Long userId;
-    //礼物id
-    private Long giftId;
-    //任务时长
-    private Integer taskTime;
-    //健康用眼评级
+    /**
+     *  任务id
+     */
+    private Long taskId;
+    /**
+     *  当日等级 5=优 4=良  2=差  1=极差
+     */
     private String eyeRate;
-    //平均单次阅读时长
+    /**
+     *  平均每次阅读时长 5=优 4=良  2=差  1=极差
+     */
     private String avgRead;
-    //平均户外时长
+    /**
+     *  平均户外时长 5=优 4=良  2=差  1=极差
+     */
     private String avgOut;
-    //平均阅读距离
+    /**
+     *  平均阅读距离 5=优 4=良  2=差  1=极差
+     */
     private String avgReadDistance;
-    //平均单次看手机时长
+    /**
+     *  平均单次看手机时长 5=优 4=良  2=差  1=极差
+     */
     private String avgLookPhone;
-    //看电子屏
+    /**
+     *  平均单次看电脑电视时长 5=优 4=良  2=差  1=极差
+     */
     private String avgLookTv;
-    //平均坐姿倾斜度
+    /**
+     *  平均阅读旋转角度 5=优 4=良  2=差  1=极差
+     */
     private String avgSitTilt;
-    //有效使用时长
+    /**
+     *  有效使用时长 5=优 4=良  2=差  1=极差
+     */
     private String effectiveUseTime;
-    //平均阅读光照
+    /**
+     *  平均每次阅读光照 5=优 4=良  2=差  1=极差
+     */
     private String avgLight;
-    //创建时间
+    /**
+     *  数据生成时间
+     */
     private Date createTime;
-
-
-
     /**
-     * 设置：id
+     *  监护仪有效使用时长
      */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    private String hourtime;
     /**
-     * 获取：id
+     *  当日所获积分
      */
+    private Integer score;
+    /**
+     *  是否完成 0=完成   1=未完成
+     */
+    private Integer iffinish;
+    /**
+     * 日期
+     */
+    private String day;
+
     public Long getId() {
         return id;
     }
 
-    /**
-     * 设置：用户id
-     */
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    /**
-     * 获取：用户id
-     */
     public Long getUserId() {
         return userId;
     }
 
-    /**
-     * 设置：礼物id
-     */
-    public void setGiftId(Long giftId) {
-        this.giftId = giftId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    /**
-     * 获取：礼物id
-     */
-    public Long getGiftId() {
-        return giftId;
+    public Long getTaskId() {
+        return taskId;
     }
 
-    /**
-     * 设置：任务时长
-     */
-    public void setTaskTime(Integer taskTime) {
-        this.taskTime = taskTime;
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 
-    /**
-     * 获取：任务时长
-     */
-    public Integer getTaskTime() {
-        return taskTime;
-    }
-
-    /**
-     * 设置：健康用眼评级
-     */
-    public void setEyeRate(String eyeRate) {
-        this.eyeRate = eyeRate;
-    }
-
-    /**
-     * 获取：健康用眼评级
-     */
     public String getEyeRate() {
         return eyeRate;
     }
 
-    /**
-     * 设置：平均单次阅读时长
-     */
-    public void setAvgRead(String avgRead) {
-        this.avgRead = avgRead;
+    public void setEyeRate(String eyeRate) {
+        this.eyeRate = eyeRate;
     }
 
-    /**
-     * 获取：平均单次阅读时长
-     */
     public String getAvgRead() {
         return avgRead;
     }
 
-    /**
-     * 设置：平均户外时长
-     */
-    public void setAvgOut(String avgOut) {
-        this.avgOut = avgOut;
+    public void setAvgRead(String avgRead) {
+        this.avgRead = avgRead;
     }
 
-    /**
-     * 获取：平均户外时长
-     */
     public String getAvgOut() {
         return avgOut;
     }
 
-    /**
-     * 设置：平均阅读距离
-     */
-    public void setAvgReadDistance(String avgReadDistance) {
-        this.avgReadDistance = avgReadDistance;
+    public void setAvgOut(String avgOut) {
+        this.avgOut = avgOut;
     }
 
-    /**
-     * 获取：平均阅读距离
-     */
     public String getAvgReadDistance() {
         return avgReadDistance;
     }
 
-    /**
-     * 设置：平均单次看手机时长
-     */
-    public void setAvgLookPhone(String avgLookPhone) {
-        this.avgLookPhone = avgLookPhone;
+    public void setAvgReadDistance(String avgReadDistance) {
+        this.avgReadDistance = avgReadDistance;
     }
 
-    /**
-     * 获取：平均单次看手机时长
-     */
     public String getAvgLookPhone() {
         return avgLookPhone;
     }
 
-    /**
-     * 设置：看电子屏
-     */
-    public void setAvgLookTv(String avgLookTv) {
-        this.avgLookTv = avgLookTv;
+    public void setAvgLookPhone(String avgLookPhone) {
+        this.avgLookPhone = avgLookPhone;
     }
 
-    /**
-     * 获取：看电子屏
-     */
     public String getAvgLookTv() {
         return avgLookTv;
     }
 
-    /**
-     * 设置：平均坐姿倾斜度
-     */
-    public void setAvgSitTilt(String avgSitTilt) {
-        this.avgSitTilt = avgSitTilt;
+    public void setAvgLookTv(String avgLookTv) {
+        this.avgLookTv = avgLookTv;
     }
 
-    /**
-     * 获取：平均坐姿倾斜度
-     */
     public String getAvgSitTilt() {
         return avgSitTilt;
     }
 
-    /**
-     * 设置：有效使用时长
-     */
-    public void setEffectiveUseTime(String effectiveUseTime) {
-        this.effectiveUseTime = effectiveUseTime;
+    public void setAvgSitTilt(String avgSitTilt) {
+        this.avgSitTilt = avgSitTilt;
     }
 
-    /**
-     * 获取：有效使用时长
-     */
     public String getEffectiveUseTime() {
         return effectiveUseTime;
     }
 
-    /**
-     * 设置：平均阅读光照
-     */
-    public void setAvgLight(String avgLight) {
-        this.avgLight = avgLight;
+    public void setEffectiveUseTime(String effectiveUseTime) {
+        this.effectiveUseTime = effectiveUseTime;
     }
 
-    /**
-     * 获取：平均阅读光照
-     */
     public String getAvgLight() {
         return avgLight;
     }
 
-    /**
-     * 设置：创建时间
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setAvgLight(String avgLight) {
+        this.avgLight = avgLight;
     }
 
-    /**
-     * 获取：创建时间
-     */
     public Date getCreateTime() {
         return createTime;
     }
 
-    @Override
-    public String toString() {
-        return "UserTaskLinshiDO{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", giftId=" + giftId +
-                ", taskTime=" + taskTime +
-                ", eyeRate='" + eyeRate + '\'' +
-                ", avgRead='" + avgRead + '\'' +
-                ", avgOut='" + avgOut + '\'' +
-                ", avgReadDistance='" + avgReadDistance + '\'' +
-                ", avgLookPhone='" + avgLookPhone + '\'' +
-                ", avgLookTv='" + avgLookTv + '\'' +
-                ", avgSitTilt='" + avgSitTilt + '\'' +
-                ", effectiveUseTime='" + effectiveUseTime + '\'' +
-                ", avgLight='" + avgLight + '\'' +
-                ", createTime=" + createTime +
-                '}';
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getHourtime() {
+        return hourtime;
+    }
+
+    public void setHourtime(String hourtime) {
+        this.hourtime = hourtime;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getIffinish() {
+        return iffinish;
+    }
+
+    public void setIffinish(Integer iffinish) {
+        this.iffinish = iffinish;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 }

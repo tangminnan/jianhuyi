@@ -62,6 +62,10 @@ public class UseJianhuyiLogDO implements Serializable {
     private int type;
 
     private Double userDurtion;
+    /**
+     *  创建时间
+     */
+    private String createTime;
 
     public Double getUserDurtion() {
         return userDurtion;
@@ -253,6 +257,14 @@ public class UseJianhuyiLogDO implements Serializable {
 
     public void setRemind(Integer remind) {
         this.remind = remind;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     @Override

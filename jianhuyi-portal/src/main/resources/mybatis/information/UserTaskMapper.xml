@@ -48,6 +48,8 @@
         </if>
     </select>
 
+
+
     <select id="count" resultType="int">
         select count(*) from t_user_task
         <where>
@@ -76,43 +78,100 @@
 
     <insert id="save" parameterType="com.jianhuyi.information.domain.UserTaskDO" useGeneratedKeys="true"
             keyProperty="id">
-		insert into t_user_task
+
+        insert into t_user_task
 		(
-			`user_id`, 
-			`gift_id`, 
-			`task_time`, 
-			`eye_rate`, 
-			`avg_read`, 
-			`avg_out`, 
-			`avg_read_distance`, 
-			`avg_look_phone`, 
-			`avg_look_tv`, 
-			`avg_sit_tilt`, 
-			`effective_use_time`, 
-			`finish_status`, 
-			`finish_day`, 
-			`unfinished_day`, 
-			`avg_light`, 
-			`create_time`,type,task_type
+			`user_id`,
+			`task_time`,
+			`eye_rate`,
+			`avg_read`,
+			`avg_out`,
+			`avg_read_distance`,
+			`avg_look_phone`,
+			`avg_look_tv`,
+			`avg_sit_tilt`,
+			`effective_use_time`,
+			`finish_status`,
+			`finish_day`,
+			`unfinished_day`,
+			`avg_light`,
+			`create_time`,
+			`type`,
+			`task_type`,
+			`avg_read_result`,
+			`avg_read_score`,
+			`avg_read_score_result`,
+			`avg_out_result`,
+			`avg_out_score`,
+			`avg_out_score_result`,
+			`avg_read_distance_result`,
+			`avg_read-distance_score`,
+			`avg_read_distance_score_result`,
+			`avg_look_phone_result`,
+			`avg_look_phone_score`,
+			`avg_look_phone_score_result`,
+			`avg_look_tv_result`,
+			`avg_look_score`,
+			`avg_look_score_result`,
+			`avg_sit_tilt_result`,
+			`avg_sit_tilt_score`,
+			`avg_sit_tilt_score_result`,
+			`effective_use_time_result`,
+			`effective_use_time_score`,
+			`effective_use_time_score_result`,
+			`avg_light_result`,
+			`avg_light_score`,
+			`avg_light_score_result`,
+			`count_grade`,
+			`gift`,
+			 flag
 		)
 		values
 		(
-			#{userId}, 
-			#{giftId}, 
-			#{taskTime}, 
-			#{eyeRate}, 
-			#{avgRead}, 
-			#{avgOut}, 
-			#{avgReadDistance}, 
-			#{avgLookPhone}, 
-			#{avgLookTv}, 
-			#{avgSitTilt}, 
-			#{effectiveUseTime}, 
-			#{finishStatus}, 
-			#{finishDay}, 
-			#{unfinishedDay}, 
-			#{avgLight}, 
-			#{createTime},#{type},#{taskType}
+			#{userId},
+			#{taskTime},
+			#{eyeRate},
+			#{avgRead},
+			#{avgOut},
+			#{avgReadDistance},
+			#{avgLookPhone},
+			#{avgLookTv},
+			#{avgSitTilt},
+			#{effectiveUseTime},
+			#{finishStatus},
+			#{finishDay},
+			#{unfinishedDay},
+			#{avgLight},
+			#{createTime},
+			#{type},
+			#{taskType},
+			#{avgReadResult},
+			#{avgReadScore},
+			#{avgReadScoreResult},
+			#{avgOutResult},
+			#{avgOutScore},
+			#{avgOutScoreResult},
+			#{avgReadDistanceResult},
+			#{avgRead-distanceScore},
+			#{avgReadDistanceScoreResult},
+			#{avgLookPhoneResult},
+			#{avgLookPhoneScore},
+			#{avgLookPhoneScoreResult},
+			#{avgLookTvResult},
+			#{avgLookScore},
+			#{avgLookScoreResult},
+			#{avgSitTiltResult},
+			#{avgSitTiltScore},
+			#{avgSitTiltScoreResult},
+			#{effectiveUseTimeResult},
+			#{effectiveUseTimeScore},
+			#{effectiveUseTimeScoreResult},
+			#{avgLightResult},
+			#{avgLightScore},
+			#{avgLightScoreResult},
+			#{countGrade},
+			#{gift},
+			#{flag}
 		)
 	</insert>
 
@@ -150,5 +209,14 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="getRecentlyTask" resultType="com.jianhuyi.information.domain.UserTaskDO">
+        select * from t_user_task where user_id=#{userId} order by createTime desc limit 1
+    </select>
+
+    <select id="getAllReadyFinishedTask" resultType="com.jianhuyi.information.domain.UserTaskDO">
+        select id,task_time,create_time,count_grade,total_score  from t_user_task where user_id=#{userId}
+        and flag=#{flag} order by create_time desc
+    </select>
 
 </mapper>

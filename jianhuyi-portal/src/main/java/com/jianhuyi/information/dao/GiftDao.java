@@ -1,6 +1,7 @@
 package com.jianhuyi.information.dao;
 
 import com.jianhuyi.information.domain.GiftDO;
+import com.jianhuyi.information.domain.MyGiftDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -27,4 +28,8 @@ public interface GiftDao {
     int remove(Long id);
 
     int batchRemove(Long[] ids);
+
+    List<MyGiftDO> getMyAllGift(Long userId);
+
+    void saveMyGiftDO(MyGiftDO myGiftDO);
 }

@@ -3,6 +3,7 @@ package com.jianhuyi.owneruser.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.jianhuyi.information.domain.UserDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
@@ -44,4 +45,12 @@ public interface OwnerUserDao {
 
 
     OwnerUserDO getUserByIdCard(String idCard);
+
+    List<UserDO> getStudent(String name);
+
+	UserDO getByPhone(String phone);
+
+	UserDO getById(Long userId);
+
+	void updateScores(UserDO userDO);
 }

@@ -9,5 +9,8 @@
         <module name="jianhuyi-portal" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="1.8">
+      <module name="jianhuyi-portal" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

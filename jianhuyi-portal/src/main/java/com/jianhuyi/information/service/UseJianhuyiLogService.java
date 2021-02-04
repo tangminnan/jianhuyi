@@ -36,4 +36,8 @@ public interface UseJianhuyiLogService {
     Map<String, Object> queryUserYearHistory(Date start, Date end, Long userId);
 
     void saveList(List<UseJianhuyiLogDO> useJianhuyiLogDOList);
+
+    List<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
+
+    List<UseJianhuyiLogDO> getMyData(Map<String, Object> map);
 }

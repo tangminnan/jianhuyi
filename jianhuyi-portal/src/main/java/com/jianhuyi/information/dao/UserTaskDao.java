@@ -2,6 +2,7 @@ package com.jianhuyi.information.dao;
 
 import com.jianhuyi.information.domain.UserTaskDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +28,8 @@ public interface UserTaskDao {
     int remove(Long id);
 
     int batchRemove(Long[] ids);
+
+    UserTaskDO getRecentlyTask(Long userId);
+
+    List<UserTaskDO> getAllReadyFinishedTask(@Param("userId") Long userId,@Param("flag") Integer flag);
 }

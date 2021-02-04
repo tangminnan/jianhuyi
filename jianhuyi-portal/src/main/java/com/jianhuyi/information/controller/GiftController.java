@@ -7,11 +7,15 @@ import com.jianhuyi.information.service.*;
 import com.jianhuyi.information.service.impl.UseJianhuyiLogServiceImpl;
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
 import com.jianhuyi.owneruser.service.OwnerUserService;
+import org.activiti.bpmn.model.UserTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static com.jianhuyi.common.utils.DateUtils.format;
 
@@ -43,20 +47,242 @@ public class GiftController {
     private OwnerUserService userService;
     @Autowired
     private GiftPcService giftPcService;
+    public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月dd日");
 
     /**
      * 礼物列表
      */
     @ResponseBody
     @GetMapping("/list")
-    public R list(Integer page) {
-        Map<String, Object> data = new HashMap<>();
+    public Map<String,Object>  list() {
+        Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> params = new HashMap<>();
-        params.put("limit", 12);
-        params.put("offset", (page - 1) * 12);
         List<GiftDO> giftDOList = giftService.list(params);
-        data.put("data", giftDOList);
-        return R.ok(data);
+        resultMap.put("data", giftDOList);
+        resultMap.put("code",0);
+      return resultMap;
+    }
+
+    /**
+     * 兑换记录
+     */
+    @ResponseBody
+    @GetMapping("/getMyAllGift")
+    public Map<String,Object>  getMyAllGift(Long userId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<MyGiftDO> giftDOList = giftService.getMyAllGift(userId);
+        resultMap.put("data", giftDOList);
+        resultMap.put("code",0);
+        return resultMap;
+    }
+
+    /**
+     * 兑换礼物
+     */
+    @ResponseBody
+    @GetMapping("/duihuan")
+    public Map<String,Object> duihuan(Long userId,Long id){
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        UserDO userDO = userService.getById(userId);
+        if(userDO!=null){
+            GiftDO giftDO = giftService.get(id);
+            if(giftDO!=null){
+                Integer scores = userDO.getScores();
+                Integer score = giftDO.getScore();
+                if(scores<score){
+                    resultMap.put("code",0);
+                    resultMap.put("data","积分不足，请继续努力...");
+                }else{
+                    userDO.setScores(scores-score);
+                    userService.updateScores(userDO);
+                    MyGiftDO myGiftDO = new MyGiftDO();
+                    myGiftDO.setGiftId(giftDO.getId());
+                    myGiftDO.setCreateTime(new Date());
+                    myGiftDO.setUserId(userId);
+                    giftService.saveMyGiftDO(myGiftDO);
+                }
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 任务提交
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/submitTask")
+    public Map<String,Object> submitTask(UserTaskDO userTaskDO){
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        Long userId = userTaskDO.getUserId();
+        UserTaskDO userTaskDO1=userTaskService.getRecentlyTask(userId);
+        if(userTaskDO1==null){//新增任务
+            userTaskDO.setCreateTime(new Date());
+            userTaskDO.setFlag(0);
+            userTaskService.save(userTaskDO);
+            resultMap.put("code",0);
+            resultMap.put("data","操作成功");
+        }else{
+            Date createTime = userTaskDO1.getCreateTime();
+            Integer taskdays = userTaskDO1.getTaskTime();
+            long day = (new Date().getTime()-createTime.getTime())/1000/60/60/24;
+            if(day>taskdays){//新增任务
+                userTaskDO.setFlag(0);
+                userTaskDO.setCreateTime(new Date());
+                userTaskService.save(userTaskDO);
+                resultMap.put("code",0);
+                resultMap.put("data","操作成功");
+            }else{//不做任何处理
+                resultMap.put("code",-1);
+                resultMap.put("data","上次的任务还在进行中...");
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取上次的评级
+     */
+    @ResponseBody
+    @PostMapping("/getLastTaskResult")
+    public Map<String,Object> getLastTaskResult(Long userId){
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        UserTaskDO userTaskDO1=userTaskService.getRecentlyTask(userId);
+        if(userTaskDO1!=null){
+            Date createTime = userTaskDO1.getCreateTime();
+            Integer taskdays = userTaskDO1.getTaskTime();
+            long day = (new Date().getTime()-createTime.getTime())/1000/60/60/24;
+            if(day<taskdays) {//本次的任务还未完成
+                resultMap.put("data", userTaskDO1);
+                resultMap.put("code", 0);
+                resultMap.put("msg", "上次的任务还未完成");
+            }else{
+                resultMap.put("data", userTaskDO1);
+                resultMap.put("code", 1);
+                resultMap.put("msg", "上次任务已完成");
+            }
+        }else{
+            resultMap.put("code",-1);
+            resultMap.put("data",null);
+            resultMap.put("msg","从未做过任务");
+        }
+        return resultMap;
+    }
+
+    /**
+     * 根据姓名搜索孩子
+     */
+    @ResponseBody
+    @PostMapping("/getChild")
+    public Map<String,Object> getChild(String name){
+        List<UserDO> list=userService.getStudent(name);
+        Map<String,Object> resultMap=new HashMap<String,Object>();
+        resultMap.put("code",0);
+        resultMap.put("data",list);
+        return resultMap;
+    }
+
+    /**
+     * 根据登陆手机号搜索孩子
+     */
+    @ResponseBody
+    @PostMapping("/getChild")
+    public Map<String,Object> getChildByPhone(String phone){
+        Map<String,Object> resultMap=new HashMap<String,Object>();
+        UserDO userDO = userService.getByPhone(phone);
+        if(userDO!=null){
+            resultMap.put("code",0);
+            resultMap.put("data",userDO);
+        }else{
+            resultMap.put("code",-1);
+            resultMap.put("data","没有找到孩子的信息，可能孩子信息后台没有添加或输入的手机号有误...");
+        }
+
+        return resultMap;
+    }
+
+
+    /**
+     * 获取任务记录
+     */
+    @ResponseBody
+    @PostMapping("/getTask")
+    public Map<String,Object> getTask(Long userId){
+        Integer flag=2;
+        List<UserTaskDO> list = userTaskService.getAllReadyFinishedTask(userId,flag);//查询已经完成的任务
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("code",0);
+        resultMap.put("data",list);
+        return resultMap;
+    }
+
+    /**
+     * 查看任务进度
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/getTaskDetail")
+    public Map<String,Object> getTaskDetail(Long taskId){
+        UserTaskDO userTask=userTaskService.get(taskId);
+        Map<String,Object> resultMap=new HashMap<String,Object>();
+        if(userTask==null){
+            resultMap.put("code",-1);
+            resultMap.put("data","没有找到任务，输入的参数可能有误...");
+            return resultMap;
+        }
+        Map<String,Object> paramsMap = new HashMap<String,Object>();
+        paramsMap.put("taskId",taskId);
+        List<UserTaskLinshiDO> userTaskLinshiDOList = userTaskLinshiService.list(paramsMap);
+        Map<String,UserTaskLinshiDO> utmap = new HashMap<String,UserTaskLinshiDO>();
+        userTaskLinshiDOList.forEach(a->{
+            a.setDay(simpleDateFormat.format(a.getCreateTime()));
+            utmap.put(simpleDateFormat.format(a.getCreateTime()),a);
+        });
+
+        Map<String,Object> map = new HashMap<String,Object>();
+        fillMapDays(map,userTask);
+        for(Map.Entry<String,UserTaskLinshiDO> entry: utmap.entrySet()){
+            map.put(entry.getKey(),entry.getValue());
+        }
+        resultMap.put("renwu",map.size());//已完成任务天数
+        resultMap.put("countGrade",userTask.getCountGrade());//平均等级
+        resultMap.put("totaluser",userTask.getTotaluser());//有效使用时长
+        resultMap.put("day", new ArrayList(map.values()));
+        return  resultMap;
+    }
+
+    /**
+     * 查看当日任务详情
+     */
+    @ResponseBody
+    @PostMapping("/getTaskDetail")
+    public Map<String,Object> getDayDetail(Long id){
+        UserTaskLinshiDO userTaskLinshiDO = userTaskLinshiService.get(id);
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        if(userTaskLinshiDO==null){
+            resultMap.put("code",-1);
+            resultMap.put("data","当天没有数据");
+        }else{
+            resultMap.put("code",0);
+            resultMap.put("data",userTaskLinshiDO);
+        }
+        return resultMap;
+    }
+
+    private void fillMapDays(Map<String, Object> map, UserTaskDO userTask) {
+        Date startDate = userTask.getCreateTime();
+        Calendar calendar  = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DAY_OF_YEAR,userTask.getTaskTime());
+        Date endDate = calendar.getTime();
+        if(endDate.compareTo(new Date())>0)
+            endDate=new Date();
+        while(startDate.compareTo(endDate)<=0){
+            map.put(simpleDateFormat.format(startDate),null);
+            calendar.setTime(startDate);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            startDate=calendar.getTime();
+        }
     }
 
 

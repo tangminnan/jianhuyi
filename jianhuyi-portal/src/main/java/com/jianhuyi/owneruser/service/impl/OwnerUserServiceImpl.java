@@ -3,6 +3,7 @@ package com.jianhuyi.owneruser.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.jianhuyi.information.domain.UserDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,6 +121,26 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 	@Override
 	public OwnerUserDO getUserByIdCard(String idCard) {
 		return ownerUserMapper.getUserByIdCard(idCard);
+	}
+
+	@Override
+	public List<UserDO> getStudent(String name) {
+		return ownerUserMapper.getStudent(name);
+	}
+
+	@Override
+	public UserDO getByPhone(String phone) {
+		return ownerUserMapper.getByPhone(phone);
+	}
+
+	@Override
+	public UserDO getById(Long userId) {
+		return ownerUserMapper.getById(userId);
+	}
+
+	@Override
+	public void updateScores(UserDO userDO) {
+		 ownerUserMapper.updateScores(userDO);
 	}
 
 }

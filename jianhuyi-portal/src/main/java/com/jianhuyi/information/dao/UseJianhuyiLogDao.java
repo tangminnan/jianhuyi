@@ -82,4 +82,6 @@ public interface UseJianhuyiLogDao {
     LinkedList<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
 
     LinkedList<UseJianhuyiLogDO> selectDataEvery(Map<String, Object> map);
+
+    List<UseJianhuyiLogDO> getMyData(Map<String, Object> map);
 }

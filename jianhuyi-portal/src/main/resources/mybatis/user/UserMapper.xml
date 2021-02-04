@@ -34,6 +34,24 @@
     <select id="getUserByphone" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
 		select * from t_user where username = #{phone}
 	</select>
+<!--==============================================begin===================================================-->
+    <select id="getStudent" resultType="com.jianhuyi.information.domain.UserDO">
+      select id,name,sex,scores,birthday,age,school,grade from t_user where name like concat('%',${name},'%')
+    </select>
+
+    <select id="getByPhone" resultType="com.jianhuyi.information.domain.UserDO">
+       select id,name,sex,scores,birthday,age,school,grade from t_user where  phone=#{phone} limit 1
+    </select>
+
+    <select id="getById" resultType="com.jianhuyi.information.domain.UserDO">
+        select id,name,sex,task_id,scores,birthday,age,school,grade from t_user where  id=#{userId}
+    </select>
+
+    <update id="updateScores" parameterType="com.jianhuyi.information.domain.UserDO">
+        update t_user set scores=#{scores} where id=#{id}
+    </update>
+
+    <!--==========================================end=======================================================-->
 
     <select id="list" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
         select

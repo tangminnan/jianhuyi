@@ -4,11 +4,11 @@
 <mapper namespace="com.jianhuyi.information.dao.GiftDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.GiftDO">
-		select `id`,`gift_id`,`cover_img`,`gift_name`,`gift_details`,`create_time` from t_gift where id = #{value}
+		select `id`,`gift_id`,sex,score,`cover_img`,`gift_name`,`gift_details`,`create_time` from t_gift where id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.GiftDO">
-        select `id`,`gift_id`,`cover_img`,`gift_name`,`gift_details`,`create_time`,type from t_gift
+        select `id`,`gift_id`,sex,score,`cover_img`,`gift_name`,`gift_details`,`create_time`,type from t_gift
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>
             <if test="giftId != null and giftId != ''">and gift_id = #{giftId}</if>
@@ -30,7 +30,24 @@
             limit #{offset}, #{limit}
         </if>
     </select>
+<!--================================================BEGIN===================================================-->
+    <select id="getMyAllGift" resultType="com.jianhuyi.information.domain.MyGiftDO">
+        select
+          t_my_gift.id,
+          t_my_gift.user_id ,
+          t_my_gift.gift_id,
+          t_my_gift.create_time,
+          t_gift.gift_name,
+          t_gift.score,
+          t_gift.cover_img from t_my_gift,t_gift
+          where t_my_gift.gift_id=t_gift.id
 
+    </select>
+
+    <insert id="saveMyGiftDO" parameterType="com.jianhuyi.information.domain.MyGiftDO" useGeneratedKeys="true" keyProperty="id">
+        insert into t_my_gift (user_id,gift_id,create_time) values(#{userId},#{giftId},#{create_time})
+    </insert>
+    <!--=============================================END======================================================-->
     <select id="count" resultType="int">
         select count(*) from t_gift
         <where>
@@ -84,5 +101,7 @@
             #{id}
         </foreach>
     </delete>
+
+
 
 </mapper>
