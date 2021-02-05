@@ -9,6 +9,7 @@ import com.jianhuyi.common.utils.SpringContextUtil;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.*;
 import com.jianhuyi.owneruser.service.OwnerUserService;
+import com.sun.istack.internal.Nullable;
 import org.apache.catalina.User;
 import org.jsoup.select.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -397,7 +398,7 @@ public class UseJianhuyiLogController {
             }
             Integer score = ResultUtils.countScore(userTaskDO,userTaskLinshiDO);
             userTaskLinshiDO.setScore(score);
-            userTaskLinshiDO.setEyeRate("");//当日等级
+            userTaskLinshiDO.setEyeRate(ResultUtils.totalDegree(null,userTaskLinshiDO));//当日等级
             userTaskLinshiService.save(userTaskLinshiDO);
         }else if(flag==1){
            int totalScore = userTaskLinshiService.getTotalScore(userTaskDO.getId());
@@ -410,7 +411,7 @@ public class UseJianhuyiLogController {
             userTaskDO.setAvgSitTiltResult(ResultUtils.resultAvgSitTilt(avgSitTilt));
             userTaskDO.setAvgOutResult(ResultUtils.resultOutdoorsDuration(outdoorsDuration));
             userTaskDO.setEffectiveUseTimeResult(ResultUtils.resultUseJianhuyiDuration(useJianhuyiDuration));
-            userTaskDO.setCountGrade("");//平均等级
+            userTaskDO.setCountGrade(ResultUtils.totalDegree(userTaskDO,null));//平均等级
             userTaskService.update(userTaskDO);
         }
         return null;

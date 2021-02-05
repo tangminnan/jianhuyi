@@ -1,7 +1,12 @@
 package com.jianhuyi.information.controller;
 
 import com.jianhuyi.information.domain.UserTaskDO;
-import com.jianhuyi.information.domain.UserTaskLinshiDO; /**
+import com.jianhuyi.information.domain.UserTaskLinshiDO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
  *  监护仪等级判断标准
  */
 public class ResultUtils {
@@ -144,8 +149,333 @@ public class ResultUtils {
     /**
      * 计算平均等级
      */
-    public static String totalDegree(){
+    public static String totalDegree(UserTaskDO userTaskDO,UserTaskLinshiDO userTaskLinshiDO){
+        if(ifY(userTaskDO,userTaskLinshiDO))
+            return "5";
+        if(ifL(userTaskDO,userTaskLinshiDO))
+            return "4";
+        if(ifC(userTaskDO,userTaskLinshiDO))
+            return "3";//不太好
+        if(ifJC(userTaskDO,userTaskLinshiDO))
+            return "2";//差
+        return "1";
 
+    }
+
+    /**
+     * 判断是否为优
+     * @return
+     */
+    public static boolean ifY(UserTaskDO userTaskDO,UserTaskLinshiDO userTaskLinshiDO){
+        if(userTaskLinshiDO!=null) {
+            if ("5".equals(userTaskLinshiDO.getAvgRead())
+                    && "5".equals(userTaskLinshiDO.getAvgOut())
+                    && "5".equals(userTaskLinshiDO.getAvgReadDistance())) {
+                List<String> l = new ArrayList<String>();
+                if ("5".equals(userTaskLinshiDO.getAvgLight()) || "4".equals(userTaskLinshiDO.getAvgLight()))
+                    l.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgLookPhone()) || "4".equals(userTaskLinshiDO.getAvgLookPhone()))
+                    l.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgLookTv()) || "4".equals(userTaskLinshiDO.getAvgLookTv()))
+                    l.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgSitTilt()) || "4".equals(userTaskLinshiDO.getAvgSitTilt()))
+                    l.add("c");
+                if (l.size() >= 3) {
+                    if ("5".equals(userTaskLinshiDO.getEffectiveUseTime()) || "4".equals(userTaskLinshiDO.getEffectiveUseTime()))
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+
+            } else {
+                return false;
+            }
+        }
+        else if(userTaskDO!=null) {
+            if ("5".equals(userTaskDO.getAvgRead())
+                    && "5".equals(userTaskDO.getAvgOut())
+                    && "5".equals(userTaskDO.getAvgReadDistance())) {
+                List<String> l = new ArrayList<String>();
+                if ("5".equals(userTaskDO.getAvgLight()) || "4".equals(userTaskDO.getAvgLight()))
+                    l.add("c");
+                if ("5".equals(userTaskDO.getAvgLookPhone()) || "4".equals(userTaskDO.getAvgLookPhone()))
+                    l.add("c");
+                if ("5".equals(userTaskDO.getAvgLookTv()) || "4".equals(userTaskDO.getAvgLookTv()))
+                    l.add("c");
+                if ("5".equals(userTaskDO.getAvgSitTilt()) || "4".equals(userTaskDO.getAvgSitTilt()))
+                    l.add("c");
+                if (l.size() >= 3) {
+                    if ("5".equals(userTaskDO.getEffectiveUseTime()) || "4".equals(userTaskDO.getEffectiveUseTime()))
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+    /**
+     * 判断是否为良
+     * @return
+     */
+    public static boolean ifL(UserTaskDO userTaskDO,UserTaskLinshiDO userTaskLinshiDO){
+        if(userTaskLinshiDO!=null) {
+            if (("5".equals(userTaskLinshiDO.getAvgRead())
+                    || "4".equals(userTaskLinshiDO.getAvgRead()))
+                    && ("5".equals(userTaskLinshiDO.getAvgOut())
+                    || "4".equals(userTaskLinshiDO.getAvgOut()))
+                    && ("5".equals(userTaskLinshiDO.getAvgReadDistance())
+                    || "4".equals(userTaskLinshiDO.getAvgReadDistance()))) {
+
+                List<String> l = new ArrayList<String>();
+                if ("5".equals(userTaskLinshiDO.getAvgLight()) || "4".equals(userTaskLinshiDO.getAvgLight())
+                        || "2".equals(userTaskLinshiDO.getAvgLight()))
+                    l.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgLookPhone()) || "4".equals(userTaskLinshiDO.getAvgLookPhone())
+                        || "2".equals(userTaskLinshiDO.getAvgLookPhone()))
+                    l.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgLookTv()) || "4".equals(userTaskLinshiDO.getAvgLookTv())
+                        || "2".equals(userTaskLinshiDO.getAvgLookTv()))
+                    l.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgSitTilt()) || "4".equals(userTaskLinshiDO.getAvgSitTilt())
+                        || "2".equals(userTaskLinshiDO.getAvgSitTilt()))
+                    l.add("c");
+                if (l.size() <= 1) {
+                    if ("5".equals(userTaskLinshiDO.getEffectiveUseTime()) || "4".equals(userTaskLinshiDO.getEffectiveUseTime()))
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+
+            } else {
+                return false;
+            }
+        }else if(userTaskDO!=null){
+            if (("5".equals(userTaskDO.getAvgRead())
+                    || "4".equals(userTaskDO.getAvgRead()))
+                    && ("5".equals(userTaskDO.getAvgOut())
+                    || "4".equals(userTaskDO.getAvgOut()))
+                    && ("5".equals(userTaskDO.getAvgReadDistance())
+                    || "4".equals(userTaskDO.getAvgReadDistance()))) {
+
+                List<String> l = new ArrayList<String>();
+                if ("5".equals(userTaskDO.getAvgLight()) || "4".equals(userTaskDO.getAvgLight())
+                        || "2".equals(userTaskDO.getAvgLight()))
+                    l.add("c");
+                if ("5".equals(userTaskDO.getAvgLookPhone()) || "4".equals(userTaskDO.getAvgLookPhone())
+                        || "2".equals(userTaskDO.getAvgLookPhone()))
+                    l.add("c");
+                if ("5".equals(userTaskDO.getAvgLookTv()) || "4".equals(userTaskDO.getAvgLookTv())
+                        || "2".equals(userTaskDO.getAvgLookTv()))
+                    l.add("c");
+                if ("5".equals(userTaskDO.getAvgSitTilt()) || "4".equals(userTaskDO.getAvgSitTilt())
+                        || "2".equals(userTaskDO.getAvgSitTilt()))
+                    l.add("c");
+                if (l.size() <= 1) {
+                    if ("5".equals(userTaskDO.getEffectiveUseTime()) || "4".equals(userTaskDO.getEffectiveUseTime()))
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+    /**
+     * 判断是否为不太好
+     * @return
+     */
+    public static boolean ifC(UserTaskDO userTaskDO,UserTaskLinshiDO userTaskLinshiDO){
+        if(userTaskLinshiDO!=null) {
+            List<String> l = new ArrayList<String>();
+            if (("5".equals(userTaskLinshiDO.getAvgRead()))
+                    || "4".equals(userTaskLinshiDO.getAvgRead())
+                    || "2".equals(userTaskLinshiDO.getAvgRead()))
+                l.add("c");
+            if (("5".equals(userTaskLinshiDO.getAvgOut()))
+                    || "4".equals(userTaskLinshiDO.getAvgOut())
+                    || "2".equals(userTaskLinshiDO.getAvgOut()))
+                l.add("c");
+            if (("5".equals(userTaskLinshiDO.getAvgReadDistance()))
+                    || "4".equals(userTaskLinshiDO.getAvgReadDistance())
+                    || "2".equals(userTaskLinshiDO.getAvgReadDistance()))
+                l.add("c");
+            if (l.size() <= 1) {
+                List<String> ll = new ArrayList<String>();
+                if ("5".equals(userTaskLinshiDO.getAvgLight()) || "4".equals(userTaskLinshiDO.getAvgLight())
+                        || "2".equals(userTaskLinshiDO.getAvgLight()))
+                    ll.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgLookPhone()) || "4".equals(userTaskLinshiDO.getAvgLookPhone())
+                        || "2".equals(userTaskLinshiDO.getAvgLookPhone()))
+                    ll.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgLookTv()) || "4".equals(userTaskLinshiDO.getAvgLookTv())
+                        || "2".equals(userTaskLinshiDO.getAvgLookTv()))
+                    ll.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgSitTilt()) || "4".equals(userTaskLinshiDO.getAvgSitTilt())
+                        || "2".equals(userTaskLinshiDO.getAvgSitTilt()))
+                    ll.add("c");
+                if (ll.size() <= 1) {
+                    if ("5".equals(userTaskLinshiDO.getEffectiveUseTime())
+                            || "4".equals(userTaskLinshiDO.getEffectiveUseTime())
+                            || "2".equals(userTaskLinshiDO.getEffectiveUseTime()))
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }else if(userTaskDO!=null){
+            List<String> l = new ArrayList<String>();
+            if (("5".equals(userTaskDO.getAvgRead()))
+                    || "4".equals(userTaskDO.getAvgRead())
+                    || "2".equals(userTaskDO.getAvgRead()))
+                l.add("c");
+            if (("5".equals(userTaskDO.getAvgOut()))
+                    || "4".equals(userTaskDO.getAvgOut())
+                    || "2".equals(userTaskDO.getAvgOut()))
+                l.add("c");
+            if (("5".equals(userTaskDO.getAvgReadDistance()))
+                    || "4".equals(userTaskDO.getAvgReadDistance())
+                    || "2".equals(userTaskDO.getAvgReadDistance()))
+                l.add("c");
+            if (l.size() <= 1) {
+                List<String> ll = new ArrayList<String>();
+                if ("5".equals(userTaskDO.getAvgLight()) || "4".equals(userTaskDO.getAvgLight())
+                        || "2".equals(userTaskDO.getAvgLight()))
+                    ll.add("c");
+                if ("5".equals(userTaskDO.getAvgLookPhone()) || "4".equals(userTaskDO.getAvgLookPhone())
+                        || "2".equals(userTaskDO.getAvgLookPhone()))
+                    ll.add("c");
+                if ("5".equals(userTaskDO.getAvgLookTv()) || "4".equals(userTaskDO.getAvgLookTv())
+                        || "2".equals(userTaskDO.getAvgLookTv()))
+                    ll.add("c");
+                if ("5".equals(userTaskDO.getAvgSitTilt()) || "4".equals(userTaskDO.getAvgSitTilt())
+                        || "2".equals(userTaskDO.getAvgSitTilt()))
+                    ll.add("c");
+                if (ll.size() <= 1) {
+                    if ("5".equals(userTaskDO.getEffectiveUseTime())
+                            || "4".equals(userTaskDO.getEffectiveUseTime())
+                            || "2".equals(userTaskDO.getEffectiveUseTime()))
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+    /**
+     * 判断是否为差
+     * @return
+     */
+    public static boolean ifJC(UserTaskDO userTaskDO,UserTaskLinshiDO userTaskLinshiDO){
+        if(userTaskLinshiDO!=null) {
+            List<String> l = new ArrayList<String>();
+            if (("5".equals(userTaskLinshiDO.getAvgRead()))
+                    || "4".equals(userTaskLinshiDO.getAvgRead())
+                    || "2".equals(userTaskLinshiDO.getAvgRead()))
+                l.add("c");
+            if (("5".equals(userTaskLinshiDO.getAvgOut()))
+                    || "4".equals(userTaskLinshiDO.getAvgOut())
+                    || "2".equals(userTaskLinshiDO.getAvgOut()))
+                l.add("c");
+            if (("5".equals(userTaskLinshiDO.getAvgReadDistance()))
+                    || "4".equals(userTaskLinshiDO.getAvgReadDistance())
+                    || "2".equals(userTaskLinshiDO.getAvgReadDistance()))
+                l.add("c");
+            if (l.size() <= 2) {
+                List<String> ll = new ArrayList<String>();
+                if ("5".equals(userTaskLinshiDO.getAvgLight()) || "4".equals(userTaskLinshiDO.getAvgLight())
+                        || "2".equals(userTaskLinshiDO.getAvgLight()))
+                    ll.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgLookPhone()) || "4".equals(userTaskLinshiDO.getAvgLookPhone())
+                        || "2".equals(userTaskLinshiDO.getAvgLookPhone()))
+                    ll.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgLookTv()) || "4".equals(userTaskLinshiDO.getAvgLookTv())
+                        || "2".equals(userTaskLinshiDO.getAvgLookTv()))
+                    ll.add("c");
+                if ("5".equals(userTaskLinshiDO.getAvgSitTilt()) || "4".equals(userTaskLinshiDO.getAvgSitTilt())
+                        || "2".equals(userTaskLinshiDO.getAvgSitTilt()))
+                    ll.add("c");
+                if (ll.size() <= 3) {
+                    if ("5".equals(userTaskLinshiDO.getEffectiveUseTime())
+                            || "4".equals(userTaskLinshiDO.getEffectiveUseTime())
+                            || "2".equals(userTaskLinshiDO.getEffectiveUseTime())
+                            || "1".equals(userTaskLinshiDO.getEffectiveUseTime()))
+                        return true;
+                    else
+                        return false;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }else if(userTaskDO!=null){
+            List<String> l = new ArrayList<String>();
+            if(("5".equals(userTaskDO.getAvgRead()))
+                    || "4".equals(userTaskDO.getAvgRead())
+                    || "2".equals(userTaskDO.getAvgRead()))
+                l.add("c");
+            if(("5".equals(userTaskDO.getAvgOut()))
+                    || "4".equals(userTaskDO.getAvgOut())
+                    || "2".equals(userTaskDO.getAvgOut()))
+                l.add("c");
+            if(("5".equals(userTaskDO.getAvgReadDistance()))
+                    || "4".equals(userTaskDO.getAvgReadDistance())
+                    || "2".equals(userTaskDO.getAvgReadDistance()))
+                l.add("c");
+            if(l.size()<=2){
+                List<String> ll = new ArrayList<String>();
+                if("5".equals(userTaskDO.getAvgLight()) || "4".equals(userTaskDO.getAvgLight())
+                        || "2".equals(userTaskDO.getAvgLight()))
+                    ll.add("c");
+                if("5".equals(userTaskDO.getAvgLookPhone()) || "4".equals(userTaskDO.getAvgLookPhone())
+                        || "2".equals(userTaskDO.getAvgLookPhone()))
+                    ll.add("c");
+                if("5".equals(userTaskDO.getAvgLookTv()) || "4".equals(userTaskDO.getAvgLookTv())
+                        || "2".equals(userTaskDO.getAvgLookTv()))
+                    ll.add("c");
+                if("5".equals(userTaskDO.getAvgSitTilt()) || "4".equals(userTaskDO.getAvgSitTilt())
+                        || "2".equals(userTaskDO.getAvgSitTilt()))
+                    ll.add("c");
+                if(ll.size()<=3){
+                    if("5".equals(userTaskDO.getEffectiveUseTime())
+                            || "4".equals(userTaskDO.getEffectiveUseTime())
+                            || "2".equals(userTaskDO.getEffectiveUseTime())
+                            || "1".equals(userTaskDO.getEffectiveUseTime()))
+                        return true;
+                    else
+                        return false;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }
+        return false;
     }
 
     /**

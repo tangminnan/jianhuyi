@@ -289,7 +289,7 @@ public class GiftController {
     /**
      * pc端礼物列表（老师端，礼物任务自定义）
      * */
-    @ResponseBody
+    /*@ResponseBody
     @GetMapping("/listPc")
     public String listPc(@RequestParam("callback") String callback) {
         Map<String, Object> data = new HashMap<>();
@@ -298,12 +298,12 @@ public class GiftController {
         List<GiftDO> giftDOList = giftService.list(params);
         data.put("data", giftDOList);
         return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
-    }
+    }*/
 
     /**
      * pc端礼物列表（家长端）
      * */
-    @ResponseBody
+   /* @ResponseBody
     @GetMapping("/listPcJiazhang")
     public String listPcJiazhang(@RequestParam("callback") String callback) {
         Map<String, Object> data = new HashMap<>();
@@ -323,11 +323,11 @@ public class GiftController {
         }
         data.put("data", giftDOList);
         return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
-    }
+    }*/
     /**
      * 礼物详情
      */
-    @ResponseBody
+   /* @ResponseBody
     @PostMapping("/giftDetails")
     public R giftDetails(Long id) {
         Map<String, Object> params = new HashMap<>();
@@ -346,13 +346,13 @@ public class GiftController {
         data.put("task", giftTaskDO);
         result.put("data", data);
         return R.ok(result);
-    }
+    }*/
 
 
     /**
      * 老师自定义任务下发给班级
      */
-    @ResponseBody
+    /*@ResponseBody
     @GetMapping("/customTaskPc")
     public String customTask(@RequestParam("callback") String callback,UserTaskDO userTaskDO) {
         //已有任务的集合
@@ -414,12 +414,12 @@ public class GiftController {
         }else{
             return callback+"("+JSONObject.toJSONString(R.error("请选择用户或班级！"))+")";
         }
-    }
+    }*/
 
     /**
      * 家长下发给学生
      */
-    @ResponseBody
+    /*@ResponseBody
     @GetMapping("/addTaskPcByJz")
     public String addTaskPcByJz(@RequestParam("callback") String callback,String idCard,Long giftId) {
         Map<String,Object> map = new HashMap<>();
@@ -507,12 +507,12 @@ public class GiftController {
                     }
                 }
 
-    }
+    }*/
 
     /**
      * 家长自定义下发给学生
      */
-    @ResponseBody
+    /*@ResponseBody
     @GetMapping("/customTaskPcByJz")
     public String customTaskPcByJz(@RequestParam("callback") String callback,UserTaskDO userTaskDO) {
         Map<String,Object> map = new HashMap<>();
@@ -564,12 +564,12 @@ public class GiftController {
         }
 
     }
-
+*/
 
     /**
      * pc端查询我的任务
      */
-    @ResponseBody
+  /*  @ResponseBody
     @GetMapping("/myGiftPc")
     public String myGiftPc(@RequestParam("callback") String callback,String idCard,int taskType) {
         Map<String, Object> data = new HashMap<>();
@@ -608,11 +608,11 @@ public class GiftController {
 
         return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
     }
-
+*/
     /**
      * 自定义任务(保存和修改)
      */
-    @ResponseBody
+    /*@ResponseBody
     @PostMapping("/customTask")
     public R customTask(UserTaskLinshiDO userTaskLinshiDO) {
 
@@ -649,11 +649,11 @@ public class GiftController {
             return R.error("请选择用户！！！");
         }
     }
-
+*/
     /**
      * 提交任务（我要挑战）
      */
-    @ResponseBody
+    /*@ResponseBody
     @PostMapping("/saveTask")
     public R saveTask(Long userId, Long giftId, Long taskId) {
         Map<String, Object> params = new HashMap<>();
@@ -719,13 +719,13 @@ public class GiftController {
                 }
             }
         }
-    }
+    }*/
 
 
     /**
      * 我的礼品
      */
-    @ResponseBody
+   /* @ResponseBody
     @GetMapping("/myGift")
     public R myGift(Long userId) {
         Map<String, Object> result = new HashMap<>();
@@ -787,7 +787,7 @@ public class GiftController {
 
         result.put("data", data);
         return R.ok(result);
-    }
+    }*/
 
     //获取每项结果数组
     String[] getArray(Map<String, Object> resultData, String fieldName) {
@@ -804,7 +804,7 @@ public class GiftController {
     /**
      * 任务进度
      */
-    @GetMapping("/taskProgress")
+    /*@GetMapping("/taskProgress")
     @ResponseBody
     public R taskProgress(Long taskId, Long userId) {
         Map<String, Object> result = new HashMap<>();
@@ -871,10 +871,10 @@ public class GiftController {
 
         result.put("data", data);
         return R.ok(result);
-    }
+    }*/
 
     //获取进度集合
-    Map<String, Object> getRecordList(Long taskId, Long userId) {
+    /*Map<String, Object> getRecordList(Long taskId, Long userId) {
         Map<String, Object> result = new LinkedHashMap<String, Object>();
         Map<String, Double> map = new LinkedHashMap<String, Double>();
         List<RecordDO> recordDOList = new LinkedList<RecordDO>();
@@ -1160,7 +1160,7 @@ public class GiftController {
             return "1";
         }
     }
-
+*/
     //已完成天数计算 type=1 自定义
     Integer finishDay(Long taskId, List<UseJianhuyiLogDO> useJianhuyiLogDOList) {
         Integer day = 0;
