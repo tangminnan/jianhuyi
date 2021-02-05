@@ -40,4 +40,8 @@ public interface UseJianhuyiLogService {
     List<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
 
     List<UseJianhuyiLogDO> getMyData(Map<String, Object> map);
+
+    UseJianhuyiLogDO getUserJianHuYiYouXiao(Long userId,String createTime);
+
+    UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(Long userId, Date createTime, Date endTime);
 }

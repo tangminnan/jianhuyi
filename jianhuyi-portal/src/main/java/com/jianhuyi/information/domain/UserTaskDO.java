@@ -205,7 +205,7 @@ public class UserTaskDO implements Serializable {
     /**
      *  有效使用时长
      */
-    private Integer totaluser;
+    private Double totaluser;
 
 
     public Long getId() {
@@ -552,11 +552,11 @@ public class UserTaskDO implements Serializable {
         this.totalScore = totalScore;
     }
 
-    public Integer getTotaluser() {
+    public Double getTotaluser() {
         return totaluser;
     }
 
-    public void setTotaluser(Integer totaluser) {
+    public void setTotaluser(Double totaluser) {
         this.totaluser = totaluser;
     }
 }

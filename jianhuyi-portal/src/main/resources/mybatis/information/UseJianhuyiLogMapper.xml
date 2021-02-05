@@ -87,6 +87,29 @@
         substr(use_time, 1, 10)
     </select>
 
+    <select id="getUserJianHuYiYouXiao"  resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        COUNT(*) / 20 useJianhuyiDuration
+        FROM
+        t_use_time
+        where
+            user_id=#{userId}
+           and DATE_FORMAT(use_time, '%Y-%m-%d') =#{createTime}
+
+
+    </select>
+    <select id="getUserJianHuYiYouXiaoAll" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+        COUNT(*) / 20 useJianhuyiDuration
+        FROM
+        t_use_time
+        where
+        user_id=#{userId}
+        and use_time between #{createTime} and #{endTime}
+
+
+    </select>
+
     <!--当日阅读状态数据统计-->
     <select id="queryUserWeekRecord" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
 		SELECT

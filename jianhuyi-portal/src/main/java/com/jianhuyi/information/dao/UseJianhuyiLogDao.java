@@ -84,4 +84,8 @@ public interface UseJianhuyiLogDao {
     LinkedList<UseJianhuyiLogDO> selectDataEvery(Map<String, Object> map);
 
     List<UseJianhuyiLogDO> getMyData(Map<String, Object> map);
+
+    UseJianhuyiLogDO getUserJianHuYiYouXiao(@Param("userId") Long userId,@Param("createTime") String createTime);
+
+    UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(@Param("userId") Long userId,@Param("createTime") Date createTime,@Param("endTime") Date endTime);
 }

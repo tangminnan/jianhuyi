@@ -178,23 +178,49 @@
     <update id="update" parameterType="com.jianhuyi.information.domain.UserTaskDO">
         update t_user_task
         <set>
-            <if test="userId != null">`user_id` = #{userId},</if>
-            <if test="giftId != null">`gift_id` = #{giftId},</if>
-            <if test="taskTime != null">`task_time` = #{taskTime},</if>
-            <if test="eyeRate != null">`eye_rate` = #{eyeRate},</if>
-            <if test="avgRead != null">`avg_read` = #{avgRead},</if>
-            <if test="avgOut != null">`avg_out` = #{avgOut},</if>
-            <if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance},</if>
-            <if test="avgLookPhone != null">`avg_look_phone` = #{avgLookPhone},</if>
-            <if test="avgLookTv != null">`avg_look_tv` = #{avgLookTv},</if>
-            <if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt},</if>
-            <if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime},</if>
-            <if test="finishStatus != null">`finish_status` = #{finishStatus},</if>
-            <if test="finishDay != null">`finish_day` = #{finishDay},</if>
-            <if test="unfinishedDay != null">`unfinished_day` = #{unfinishedDay},</if>
-            <if test="avgLight != null">`avg_light` = #{avgLight},</if>
-            <if test="createTime != null">`create_time` = #{createTime},</if>
-            <if test="type != null">`type` = #{type}</if>
+            <if test="userId != null">`user_id` = #{userId}, </if>
+            <if test="taskTime != null">`task_time` = #{taskTime}, </if>
+            <if test="eyeRate != null">`eye_rate` = #{eyeRate}, </if>
+            <if test="avgRead != null">`avg_read` = #{avgRead}, </if>
+            <if test="avgOut != null">`avg_out` = #{avgOut}, </if>
+            <if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance}, </if>
+            <if test="avgLookPhone != null">`avg_look_phone` = #{avgLookPhone}, </if>
+            <if test="avgLookTv != null">`avg_look_tv` = #{avgLookTv}, </if>
+            <if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt}, </if>
+            <if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime}, </if>
+            <if test="finishStatus != null">`finish_status` = #{finishStatus}, </if>
+            <if test="finishDay != null">`finish_day` = #{finishDay}, </if>
+            <if test="unfinishedDay != null">`unfinished_day` = #{unfinishedDay}, </if>
+            <if test="avgLight != null">`avg_light` = #{avgLight}, </if>
+            <if test="createTime != null">`create_time` = #{createTime}, </if>
+            <if test="type != null">`type` = #{type}, </if>
+            <if test="taskType != null">`task_type` = #{taskType}, </if>
+            <if test="avgReadResult != null">`avg_read_result` = #{avgReadResult}, </if>
+            <if test="avgReadScore != null">`avg_read_score` = #{avgReadScore}, </if>
+            <if test="avgReadScoreResult != null">`avg_read_score_result` = #{avgReadScoreResult}, </if>
+            <if test="avgOutResult != null">`avg_out_result` = #{avgOutResult}, </if>
+            <if test="avgOutScore != null">`avg_out_score` = #{avgOutScore}, </if>
+            <if test="avgOutScoreResult != null">`avg_out_score_result` = #{avgOutScoreResult}, </if>
+            <if test="avgReadDistanceResult != null">`avg_read_distance_result` = #{avgReadDistanceResult}, </if>
+            <if test="avgReadDistanceScore != null">`avg_read_distance_score` = #{avgReadDistanceScore}, </if>
+            <if test="avgReadDistanceScoreResult != null">`avg_read_distance_score_result` = #{avgReadDistanceScoreResult}, </if>
+            <if test="avgLookPhoneResult != null">`avg_look_phone_result` = #{avgLookPhoneResult}, </if>
+            <if test="avgLookPhoneScore != null">`avg_look_phone_score` = #{avgLookPhoneScore}, </if>
+            <if test="avgLookPhoneScoreResult != null">`avg_look_phone_score_result` = #{avgLookPhoneScoreResult}, </if>
+            <if test="avgLookTvResult != null">`avg_look_tv_result` = #{avgLookTvResult}, </if>
+            <if test="avgLookScore != null">`avg_look_score` = #{avgLookScore}, </if>
+            <if test="avgLookScoreResult != null">`avg_look_score_result` = #{avgLookScoreResult}, </if>
+            <if test="avgSitTiltResult != null">`avg_sit_tilt_result` = #{avgSitTiltResult}, </if>
+            <if test="avgSitTiltScore != null">`avg_sit_tilt_score` = #{avgSitTiltScore}, </if>
+            <if test="avgSitTiltScoreResult != null">`avg_sit_tilt_score_result` = #{avgSitTiltScoreResult}, </if>
+            <if test="effectiveUseTimeResult != null">`effective_use_time_result` = #{effectiveUseTimeResult}, </if>
+            <if test="effectiveUseTimeScore != null">`effective_use_time_score` = #{effectiveUseTimeScore}, </if>
+            <if test="effectiveUseTimeScoreResult != null">`effective_use_time_score_result` = #{effectiveUseTimeScoreResult}, </if>
+            <if test="avgLightResult != null">`avg_light_result` = #{avgLightResult}, </if>
+            <if test="avgLightScore != null">`avg_light_score` = #{avgLightScore}, </if>
+            <if test="avgLightScoreResult != null">`avg_light_score_result` = #{avgLightScoreResult}, </if>
+            <if test="countGrade != null">`count_grade` = #{countGrade}, </if>
+            <if test="gift != null">`gift` = #{gift}</if>
         </set>
         where id = #{id}
     </update>

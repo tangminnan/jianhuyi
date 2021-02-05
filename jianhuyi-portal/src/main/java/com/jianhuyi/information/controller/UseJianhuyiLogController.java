@@ -7,10 +7,7 @@ import com.jianhuyi.common.utils.FileUtil;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.common.utils.SpringContextUtil;
 import com.jianhuyi.information.domain.*;
-import com.jianhuyi.information.service.UseJianhuyiLogService;
-import com.jianhuyi.information.service.UseRemindsService;
-import com.jianhuyi.information.service.UseTimeService;
-import com.jianhuyi.information.service.UserTaskService;
+import com.jianhuyi.information.service.*;
 import com.jianhuyi.owneruser.service.OwnerUserService;
 import org.apache.catalina.User;
 import org.jsoup.select.Collector;
@@ -53,6 +50,8 @@ public class UseJianhuyiLogController {
     private OwnerUserService userService;
     @Autowired
     private UserTaskService userTaskService;
+    @Autowired
+    private UserTaskLinshiService userTaskLinshiService;
     @PostMapping("/saveFile")
 
     @ResponseBody
@@ -162,21 +161,16 @@ public class UseJianhuyiLogController {
                             params.put("endTime", new Date());
                             List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.getMyData(map);
                             if(useJianhuyiLogDOList.size()>0){//创建线程池进行统计分析
-                                ExecutorService executorService = Executors.newFixedThreadPool(2);
-                                executorService.execute(()->{//统计任务每天评级
+
+                               new Thread(()->{
                                     try {
-                                        countPerDay(userTaskDO,useJianhuyiLogDOList);
+                                        countPerDay(userTaskDO,useJianhuyiLogDOList);//统计任务每天评级
+                                        countTotal(userTaskDO,useJianhuyiLogDOList);///统计最终评级
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-                                });
-                                executorService.execute(()->{//统计最终评级
-                                    try {
-                                        countTotal(userTaskDO,useJianhuyiLogDOList);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                });
+
+                                }).start();
                             }
                         }else{
                             System.out.println("上传的数据时间 已经超过最近任务的截止时间，数据不会被统计进入最近一次任务中了");
@@ -263,7 +257,13 @@ public class UseJianhuyiLogController {
                 outdoorsDuration=useJianhuyiLogDOList.stream()
                         .filter(a->a.getStatus()!=null && a.getStatus()==2)
                         .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
-                resultScore(userTaskDO,null,avgReadDuration,avgLookPhoneDuration,avgLookTvComputerDuration,avgSitTilt,avgReadLight,avgReadDistance,outdoorsDuration);
+                UseJianhuyiLogDO userJianHuYiYouXiao = useJianhuyiLogService.getUserJianHuYiYouXiaoAll(userTaskDO.getUserId(),userTaskDO.getCreateTime(),new Date());
+
+
+            Double useJianhuyiDuration = userJianHuYiYouXiao.getUseJianhuyiDuration();//监护仪总的使用时长
+            userTaskDO.setTotaluser(useJianhuyiDuration);
+            long days = (new Date().getTime()-userTaskDO.getCreateTime().getTime())/1000/60/60/24;
+            resultScore(1,userTaskDO,null,avgReadDuration,avgLookPhoneDuration,avgLookTvComputerDuration,avgSitTilt,avgReadLight,avgReadDistance,outdoorsDuration,useJianhuyiDuration/days);
             }
         }
 
@@ -346,7 +346,9 @@ public class UseJianhuyiLogController {
                        .filter(a->a.getStatus()!=null && a.getStatus()==2)
                        .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
                String createTime = entry.getKey();
-              UserTaskLinshiDO userTaskLinshiDO =  resultScore(userTaskDO,createTime,avgReadDuration,avgLookPhoneDuration,avgLookTvComputerDuration,avgSitTilt,avgReadLight,avgReadDistance,outdoorsDuration);
+               UseJianhuyiLogDO userJianHuYiYouXiao = useJianhuyiLogService.getUserJianHuYiYouXiao(userTaskDO.getUserId(),createTime);
+               Double useJianhuyiDuration = userJianHuYiYouXiao.getUseJianhuyiDuration();
+               UserTaskLinshiDO userTaskLinshiDO =  resultScore(0,userTaskDO,createTime,avgReadDuration,avgLookPhoneDuration,avgLookTvComputerDuration,avgSitTilt,avgReadLight,avgReadDistance,outdoorsDuration,useJianhuyiDuration);
            }
        }
     }
@@ -364,7 +366,7 @@ public class UseJianhuyiLogController {
      * @param outdoorsDuration
      * @return
      */
-    private synchronized UserTaskLinshiDO resultScore(UserTaskDO userTaskDO,
+    private synchronized UserTaskLinshiDO resultScore(Integer flag, UserTaskDO userTaskDO,
                                          String createTime,
                                          Double avgReadDuration,
                                          Double avgLookPhoneDuration,
@@ -372,7 +374,45 @@ public class UseJianhuyiLogController {
                                          Double avgSitTilt,
                                          Double avgReadLight,
                                          Double avgReadDistance,
-                                         Double outdoorsDuration) {
+                                                      Double outdoorsDuration,
+                                                      Double useJianhuyiDuration) {
+        if(flag==0) {
+            UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
+            userTaskLinshiDO.setUserId(userTaskDO.getUserId());
+            userTaskLinshiDO.setTaskId(userTaskDO.getId());
+            userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(avgReadDuration));
+            userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(avgLookPhoneDuration));
+            userTaskLinshiDO.setAvgLookTv(ResultUtils.resultAvgLookTvComputerDuration(avgLookTvComputerDuration));
+            userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(avgReadDistance));
+            userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(avgReadLight));
+            userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(avgSitTilt));
+            userTaskLinshiDO.setAvgOut(ResultUtils.resultOutdoorsDuration(outdoorsDuration));
+            userTaskLinshiDO.setEffectiveUseTime(ResultUtils.resultUseJianhuyiDuration(useJianhuyiDuration));
+            userTaskLinshiDO.setHourtime(Double.toString(useJianhuyiDuration));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date d=  simpleDateFormat.parse(createTime);
+                userTaskLinshiDO.setCreateTime(d);
+            } catch (ParseException e) {
+            }
+            Integer score = ResultUtils.countScore(userTaskDO,userTaskLinshiDO);
+            userTaskLinshiDO.setScore(score);
+            userTaskLinshiDO.setEyeRate("");//当日等级
+            userTaskLinshiService.save(userTaskLinshiDO);
+        }else if(flag==1){
+           int totalScore = userTaskLinshiService.getTotalScore(userTaskDO.getId());
+            userTaskDO.setTotalScore(totalScore);//总积分
+            userTaskDO.setAvgReadResult(ResultUtils.resultAvgReadDuration(avgReadDuration));
+            userTaskDO.setAvgLookPhoneResult(ResultUtils.resultAvgLookPhoneDuration(avgLookPhoneDuration));
+            userTaskDO.setAvgLookTvResult(ResultUtils.resultAvgLookTvComputerDuration(avgLookTvComputerDuration));
+            userTaskDO.setAvgReadDistanceResult(ResultUtils.resultAvgReadDistance(avgReadDistance));
+            userTaskDO.setAvgLightResult(ResultUtils.resultAvgReadLight(avgReadLight));
+            userTaskDO.setAvgSitTiltResult(ResultUtils.resultAvgSitTilt(avgSitTilt));
+            userTaskDO.setAvgOutResult(ResultUtils.resultOutdoorsDuration(outdoorsDuration));
+            userTaskDO.setEffectiveUseTimeResult(ResultUtils.resultUseJianhuyiDuration(useJianhuyiDuration));
+            userTaskDO.setCountGrade("");//平均等级
+            userTaskService.update(userTaskDO);
+        }
         return null;
     }
 

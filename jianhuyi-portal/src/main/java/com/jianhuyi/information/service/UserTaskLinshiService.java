@@ -26,4 +26,6 @@ public interface UserTaskLinshiService {
     int remove(Long id);
 
     int batchRemove(Long[] ids);
+
+    int getTotalScore(Long id);
 }

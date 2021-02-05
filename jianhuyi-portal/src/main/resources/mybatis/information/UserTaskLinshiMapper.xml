@@ -69,35 +69,39 @@
             keyProperty="id">
 		insert into t_user_task_linshi
 		(
-			`user_id`, 
-			`gift_id`, 
-			`task_time`, 
-			`eye_rate`, 
-			`avg_read`, 
-			`avg_out`, 
-			`avg_read_distance`, 
-			`avg_look_phone`, 
-			`avg_look_tv`, 
-			`avg_sit_tilt`, 
-			`effective_use_time`, 
-			`avg_light`, 
-			`create_time`
+			`user_id`,
+			`eye_rate`,
+			`avg_read`,
+			`avg_out`,
+			`avg_read_distance`,
+			`avg_look_phone`,
+			`avg_look_tv`,
+			`avg_sit_tilt`,
+			`effective_use_time`,
+			`avg_light`,
+			`create_time`,
+			`score`,
+			`hourtime`,
+			`iffinish`,
+			`task_id`
 		)
 		values
 		(
-			#{userId}, 
-			#{giftId}, 
-			#{taskTime}, 
-			#{eyeRate}, 
-			#{avgRead}, 
-			#{avgOut}, 
-			#{avgReadDistance}, 
-			#{avgLookPhone}, 
-			#{avgLookTv}, 
-			#{avgSitTilt}, 
-			#{effectiveUseTime}, 
-			#{avgLight}, 
-			#{createTime}
+			#{userId},
+			#{eyeRate},
+			#{avgRead},
+			#{avgOut},
+			#{avgReadDistance},
+			#{avgLookPhone},
+			#{avgLookTv},
+			#{avgSitTilt},
+			#{effectiveUseTime},
+			#{avgLight},
+			#{createTime},
+			#{score},
+			#{hourtime},
+			#{iffinish},
+			#{taskId}
 		)
 	</insert>
 
@@ -131,5 +135,9 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="getTotalScore" resultType="int">
+        select sum(score) from t_user_task_linshi where  task_id=#{taskId}
+    </select>
 
 </mapper>

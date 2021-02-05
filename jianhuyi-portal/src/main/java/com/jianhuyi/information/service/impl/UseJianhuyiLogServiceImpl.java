@@ -1337,6 +1337,16 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         return useJianhuyiLogDao.getMyData(map);
     }
 
+    @Override
+    public UseJianhuyiLogDO getUserJianHuYiYouXiao(Long userId,String createTime) {
+        return useJianhuyiLogDao.getUserJianHuYiYouXiao(userId,createTime);
+    }
+
+    @Override
+    public UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(Long userId, Date createTime, Date endTime) {
+        return useJianhuyiLogDao.getUserJianHuYiYouXiaoAll(userId,createTime,endTime);
+    }
+
     //获取时间段内统计数据
     public List<UseJianhuyiLogDO> getDataByDay(Map<String, Object> map) {
         //用来保留两位小数

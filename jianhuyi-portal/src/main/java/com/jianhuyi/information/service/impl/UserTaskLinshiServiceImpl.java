@@ -50,4 +50,9 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
         return userTaskLinshiDao.batchRemove(ids);
     }
 
+    @Override
+    public int getTotalScore(Long id) {
+        return userTaskLinshiDao.getTotalScore(id);
+    }
+
 }

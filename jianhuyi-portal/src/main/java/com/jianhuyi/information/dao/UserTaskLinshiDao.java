@@ -27,4 +27,6 @@ public interface UserTaskLinshiDao {
     int remove(Long id);
 
     int batchRemove(Long[] ids);
+
+    int getTotalScore(Long id);
 }
