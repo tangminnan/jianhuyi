@@ -31,5 +31,9 @@ public interface UserTaskDao {
 
     UserTaskDO getRecentlyTask(Long userId);
 
-    List<UserTaskDO> getAllReadyFinishedTask(@Param("userId") Long userId,@Param("flag") Integer flag);
+    List<UserTaskDO> getAllReadyFinishedTask(Long userId);
+
+    UserTaskDO getCurrentTask(Long userId);
+
+    UserTaskDO getCurrentTaskN(Long userId);
 }

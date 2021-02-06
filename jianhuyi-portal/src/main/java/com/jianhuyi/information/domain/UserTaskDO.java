@@ -183,11 +183,11 @@ public class UserTaskDO implements Serializable {
     /**
      *  已完成天数
      */
-    private Integer finishDay;
+    private Long finishDay;
     /**
      *  未完成天数
      */
-    private Integer unfinishedDay;
+    private Long unfinishedDay;
     /**
      *  任务创建时间
      */
@@ -206,6 +206,10 @@ public class UserTaskDO implements Serializable {
      *  有效使用时长
      */
     private Double totaluser;
+    /**
+     *  任务开始时间
+     */
+    private Date startTime;
 
 
     public Long getId() {
@@ -312,19 +316,19 @@ public class UserTaskDO implements Serializable {
         this.avgLight = avgLight;
     }
 
-    public Integer getFinishDay() {
+    public Long getFinishDay() {
         return finishDay;
     }
 
-    public void setFinishDay(Integer finishDay) {
+    public void setFinishDay(Long finishDay) {
         this.finishDay = finishDay;
     }
 
-    public Integer getUnfinishedDay() {
+    public Long getUnfinishedDay() {
         return unfinishedDay;
     }
 
-    public void setUnfinishedDay(Integer unfinishedDay) {
+    public void setUnfinishedDay(Long unfinishedDay) {
         this.unfinishedDay = unfinishedDay;
     }
 
@@ -558,5 +562,13 @@ public class UserTaskDO implements Serializable {
 
     public void setTotaluser(Double totaluser) {
         this.totaluser = totaluser;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 }

@@ -4,12 +4,12 @@
 <mapper namespace="com.jianhuyi.information.dao.UserTaskLinshiDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
-		select `id`,`user_id`,`gift_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time` from t_user_task_linshi where id = #{value}
+		select `id`,`user_id`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time` from t_user_task_linshi where id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
         select
-        `id`,`user_id`,`gift_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time`
+        `id`,`user_id`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time`
         from t_user_task_linshi
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>

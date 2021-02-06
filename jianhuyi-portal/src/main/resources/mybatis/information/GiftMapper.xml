@@ -41,11 +41,12 @@
           t_gift.score,
           t_gift.cover_img from t_my_gift,t_gift
           where t_my_gift.gift_id=t_gift.id
+          and t_my_gift.user_id=#{userId}
 
     </select>
 
     <insert id="saveMyGiftDO" parameterType="com.jianhuyi.information.domain.MyGiftDO" useGeneratedKeys="true" keyProperty="id">
-        insert into t_my_gift (user_id,gift_id,create_time) values(#{userId},#{giftId},#{create_time})
+        insert into t_my_gift (user_id,gift_id,create_time) values(#{userId},#{giftId},#{createTime})
     </insert>
     <!--=============================================END======================================================-->
     <select id="count" resultType="int">

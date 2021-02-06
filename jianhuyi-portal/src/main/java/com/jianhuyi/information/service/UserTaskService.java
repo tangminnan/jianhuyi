@@ -29,5 +29,9 @@ public interface UserTaskService {
 
     UserTaskDO getRecentlyTask(Long userId);
 
-    List<UserTaskDO> getAllReadyFinishedTask(Long userId, Integer flag);
+    List<UserTaskDO> getAllReadyFinishedTask(Long userId);
+
+    UserTaskDO getCurrentTask(Long userId);
+
+    UserTaskDO getCurrentTaskN(Long userId);
 }

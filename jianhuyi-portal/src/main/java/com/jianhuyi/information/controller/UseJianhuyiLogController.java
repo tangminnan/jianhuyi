@@ -9,9 +9,6 @@ import com.jianhuyi.common.utils.SpringContextUtil;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.*;
 import com.jianhuyi.owneruser.service.OwnerUserService;
-import com.sun.istack.internal.Nullable;
-import org.apache.catalina.User;
-import org.jsoup.select.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -148,7 +145,7 @@ public class UseJianhuyiLogController {
                 if(userDO!=null && userDO.getTaskId()!=null){
                     UserTaskDO userTaskDO = userTaskService.get(userDO.getTaskId());
                     if(userTaskDO!=null){
-                        Date createTime = userTaskDO.getCreateTime();//最近一次任务的开始时间
+                        Date createTime = userTaskDO.getStartTime();//最近一次任务的开始时间
                         Integer taskTime = userTaskDO.getTaskTime();//最近一次任务的天数
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(createTime);

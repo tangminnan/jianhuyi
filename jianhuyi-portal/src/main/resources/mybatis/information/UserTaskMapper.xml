@@ -4,7 +4,7 @@
 <mapper namespace="com.jianhuyi.information.dao.UserTaskDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.UserTaskDO">
-		select `id`,`user_id`,`gift_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`avg_light`,`create_time`,type,task_type from t_user_task where id = #{value}
+		select `id`,`user_id`,start_time,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`avg_light`,`create_time`,type,task_type from t_user_task where id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.UserTaskDO">
@@ -83,7 +83,7 @@
 		(
 			`user_id`,
 			`task_time`,
-			`eye_rate`,
+
 			`avg_read`,
 			`avg_out`,
 			`avg_read_distance`,
@@ -91,13 +91,13 @@
 			`avg_look_tv`,
 			`avg_sit_tilt`,
 			`effective_use_time`,
-			`finish_status`,
+
 			`finish_day`,
 			`unfinished_day`,
 			`avg_light`,
 			`create_time`,
 			`type`,
-			`task_type`,
+
 			`avg_read_result`,
 			`avg_read_score`,
 			`avg_read_score_result`,
@@ -105,7 +105,7 @@
 			`avg_out_score`,
 			`avg_out_score_result`,
 			`avg_read_distance_result`,
-			`avg_read-distance_score`,
+			`avg_read_distance_score`,
 			`avg_read_distance_score_result`,
 			`avg_look_phone_result`,
 			`avg_look_phone_score`,
@@ -124,13 +124,13 @@
 			`avg_light_score_result`,
 			`count_grade`,
 			`gift`,
-			 flag
+			 start_time
 		)
 		values
 		(
 			#{userId},
 			#{taskTime},
-			#{eyeRate},
+
 			#{avgRead},
 			#{avgOut},
 			#{avgReadDistance},
@@ -138,13 +138,13 @@
 			#{avgLookTv},
 			#{avgSitTilt},
 			#{effectiveUseTime},
-			#{finishStatus},
+
 			#{finishDay},
 			#{unfinishedDay},
 			#{avgLight},
 			#{createTime},
 			#{type},
-			#{taskType},
+
 			#{avgReadResult},
 			#{avgReadScore},
 			#{avgReadScoreResult},
@@ -152,7 +152,7 @@
 			#{avgOutScore},
 			#{avgOutScoreResult},
 			#{avgReadDistanceResult},
-			#{avgRead-distanceScore},
+			#{avgReadDistanceScore},
 			#{avgReadDistanceScoreResult},
 			#{avgLookPhoneResult},
 			#{avgLookPhoneScore},
@@ -171,7 +171,7 @@
 			#{avgLightScoreResult},
 			#{countGrade},
 			#{gift},
-			#{flag}
+			#{startTime}
 		)
 	</insert>
 
@@ -237,12 +237,121 @@
     </delete>
 
     <select id="getRecentlyTask" resultType="com.jianhuyi.information.domain.UserTaskDO">
-        select * from t_user_task where user_id=#{userId} order by createTime desc limit 1
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        `avg_read_result`,
+        `avg_out_result`,
+        `avg_read_distance_result`,
+        `avg_look_phone_result`,
+        `avg_look_tv_result`,
+        `avg_sit_tilt_result`,
+        `effective_use_time_result`,
+        `avg_light_result`,
+        date_add(
+        start_time,
+        INTERVAL task_time DAY
+        ) sdate
+        FROM
+        t_user_task
+        WHERE
+        user_id = #{userId}
+        and count_grade is not null
+        ) rtask
+        WHERE
+        sdate &lt; now()
+        ORDER BY
+        sdate DESC
+        LIMIT 1
     </select>
 
     <select id="getAllReadyFinishedTask" resultType="com.jianhuyi.information.domain.UserTaskDO">
-        select id,task_time,create_time,count_grade,total_score  from t_user_task where user_id=#{userId}
-        and flag=#{flag} order by create_time desc
+
+
+
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+         id,
+         task_time,
+         create_time,
+         start_time,
+         count_grade,
+         total_score,
+        date_add(
+        start_time,
+        INTERVAL task_time DAY
+        ) sdate
+        FROM
+        t_user_task
+        WHERE
+        user_id = #{userId}
+        and count_grade is not null
+        ) rtask
+        WHERE
+        sdate &lt; now()
+        ORDER BY
+        sdate DESC
+    </select>
+
+    <select id="getCurrentTask" resultType="com.jianhuyi.information.domain.UserTaskDO">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+         id,
+         task_time,
+         create_time,
+         start_time,
+         count_grade,
+         total_score,
+        date_add(
+        start_time,
+        INTERVAL task_time DAY
+        ) sdate
+        FROM
+        t_user_task
+        WHERE
+        user_id = #{userId}
+        and count_grade is not null
+        ) rtask
+        WHERE
+        sdate &gt; now()
+        ORDER BY
+        sdate DESC
+    </select>
+    
+    <select id="getCurrentTaskN" resultType="com.jianhuyi.information.domain.UserTaskDO">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        id,
+        task_time,
+        create_time,
+        start_time,
+        count_grade,
+        total_score,
+        date_add(
+        start_time,
+        INTERVAL task_time DAY
+        ) sdate
+        FROM
+        t_user_task
+        WHERE
+        user_id = #{userId}
+        ) rtask
+        WHERE
+        sdate &gt; now()
+        ORDER BY
+        sdate DESC
+        LIMIT 1
     </select>
 
 </mapper>

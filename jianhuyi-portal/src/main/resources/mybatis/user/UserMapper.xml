@@ -36,7 +36,7 @@
 	</select>
 <!--==============================================begin===================================================-->
     <select id="getStudent" resultType="com.jianhuyi.information.domain.UserDO">
-      select id,name,sex,scores,birthday,age,school,grade from t_user where name like concat('%',${name},'%')
+      select id,name,sex,scores,birthday,age,school,grade from t_user where name like concat('%',#{name},'%')
     </select>
 
     <select id="getByPhone" resultType="com.jianhuyi.information.domain.UserDO">
