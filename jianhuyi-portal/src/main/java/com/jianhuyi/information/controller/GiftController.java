@@ -140,6 +140,7 @@ public class GiftController {
             calendar.set(Calendar.SECOND,0);
             userTaskDO.setStartTime(calendar.getTime());
             userTaskService.save(userTaskDO);
+
             userService.updateTaskIdInUser(userId,userTaskDO.getId());
             resultMap.put("code",0);
             resultMap.put("data","操作成功");

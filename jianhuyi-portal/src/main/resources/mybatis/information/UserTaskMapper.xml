@@ -4,12 +4,12 @@
 <mapper namespace="com.jianhuyi.information.dao.UserTaskDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.UserTaskDO">
-		select `id`,`user_id`,start_time,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`avg_light`,`create_time`,type,task_type from t_user_task where id = #{value}
+		select `id`,`user_id`,start_time,addready_score,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`avg_light`,`create_time`,type,task_type from t_user_task where id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.UserTaskDO">
         select
-        `id`,`user_id`,`gift_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`avg_light`,`create_time`,type,task_type
+        `id`,`user_id`,`gift_id`,`task_time`,addready_score,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`avg_light`,`create_time`,type,task_type
         from t_user_task
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>
@@ -124,7 +124,8 @@
 			`avg_light_score_result`,
 			`count_grade`,
 			`gift`,
-			 start_time
+			 start_time,
+			 addready_score
 		)
 		values
 		(
@@ -171,7 +172,8 @@
 			#{avgLightScoreResult},
 			#{countGrade},
 			#{gift},
-			#{startTime}
+			#{startTime},
+			#{addreadyScore}
 		)
 	</insert>
 

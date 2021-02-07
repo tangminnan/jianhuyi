@@ -571,4 +571,5 @@ public class UserTaskDO implements Serializable {
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
+
 }

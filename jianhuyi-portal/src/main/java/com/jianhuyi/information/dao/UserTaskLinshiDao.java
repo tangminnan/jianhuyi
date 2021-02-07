@@ -2,7 +2,9 @@ package com.jianhuyi.information.dao;
 
 import com.jianhuyi.information.domain.UserTaskLinshiDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,4 +31,6 @@ public interface UserTaskLinshiDao {
     int batchRemove(Long[] ids);
 
     int getTotalScore(Long id);
+
+    Date getRecentlyDate(Long userId);
 }
