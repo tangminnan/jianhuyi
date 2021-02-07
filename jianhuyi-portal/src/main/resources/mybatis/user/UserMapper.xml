@@ -50,6 +50,10 @@
     <update id="updateScores" parameterType="com.jianhuyi.information.domain.UserDO">
         update t_user set scores=#{scores} where id=#{id}
     </update>
+    
+    <update id="updateTaskIdInUser">
+        update t_user set task_id=#{id} where id=#{userId}
+    </update>
 
     <!--==========================================end=======================================================-->
 

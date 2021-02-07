@@ -7,6 +7,7 @@ import com.jianhuyi.information.domain.UserDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -53,4 +54,6 @@ public interface OwnerUserDao {
 	UserDO getById(Long userId);
 
 	void updateScores(UserDO userDO);
+
+    void updateTaskIdInUser(@Param("userId") Long userId,@Param("id") Long id);
 }

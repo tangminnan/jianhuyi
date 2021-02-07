@@ -50,4 +50,6 @@ public interface OwnerUserService {
 	UserDO getById(Long userId);
 
 	void updateScores(UserDO userDO);
+
+	void updateTaskIdInUser(Long userId, Long id);
 }

@@ -143,4 +143,9 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 		 ownerUserMapper.updateScores(userDO);
 	}
 
+	@Override
+	public void updateTaskIdInUser(Long userId, Long id) {
+		ownerUserMapper.updateTaskIdInUser(userId,id);
+	}
+
 }

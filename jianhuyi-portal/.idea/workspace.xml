@@ -11,24 +11,132 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="280" column="21" lean-forward="false" selection-start-line="280" selection-start-column="21" selection-end-line="280" selection-end-column="21" />
+            <state relative-caret-position="460">
+              <caret line="280" column="24" lean-forward="false" selection-start-line="266" selection-start-column="8" selection-end-line="280" selection-end-column="24" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UseJianhuyiLogController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="application-dev.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/application-dev.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="20" column="28" lean-forward="false" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserTaskController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/UserTaskController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="32" column="24" lean-forward="false" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GiftController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/GiftController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="114">
+              <caret line="142" column="36" lean-forward="false" selection-start-line="142" selection-start-column="36" selection-end-line="142" selection-end-column="36" />
+              <folding>
+                <element signature="e#2839#2854#0" expanded="true" />
+                <element signature="e#4041#4056#0" expanded="true" />
+                <element signature="e#8075#8090#0" expanded="true" />
+                <element signature="e#8307#8322#0" expanded="true" />
+                <element signature="e#8515#8540#0" expanded="true" />
+                <element signature="e#8778#8793#0" expanded="true" />
+                <marker date="1612661779954" expanded="false" signature="23589:23599" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="29884:29900" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="29956:29966" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="33044:33060" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="33116:33126" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="33198:33216" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="35745:35761" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="35816:35832" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="35888:35898" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="35970:35988" ph="&lt;~&gt;" />
+                <marker date="1612661779954" expanded="false" signature="37351:37359" ph="&lt;~&gt;" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OwnerUserService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/service/OwnerUserService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OwnerUserServiceImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/service/impl/OwnerUserServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="147" column="33" lean-forward="true" selection-start-line="147" selection-start-column="33" selection-end-line="147" selection-end-column="33" />
+              <folding>
+                <element signature="e#3478#3479#0" expanded="true" />
+                <element signature="e#3530#3531#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OwnerUserDao.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/dao/OwnerUserDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="57" column="67" lean-forward="false" selection-start-line="57" selection-start-column="65" selection-end-line="57" selection-end-column="67" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserMapper.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/mybatis/user/UserMapper.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="432">
+              <caret line="57" column="53" lean-forward="false" selection-start-line="57" selection-start-column="50" selection-end-line="57" selection-end-column="53" />
+              <folding>
+                <marker date="1612662392644" expanded="true" signature="289:570" ph="select `id`,... t_user" />
+                <marker date="1612662392644" expanded="true" signature="669:956" ph="select `id`,... t_user" />
+                <marker date="1612662392644" expanded="true" signature="1060:1359" ph="select `id`,... t_user" />
+                <marker date="1612662392644" expanded="true" signature="1460:1748" ph="select `id`,... t_user" />
+                <marker date="1612662392644" expanded="true" signature="1848:2135" ph="select `id`,... t_user" />
+                <marker date="1612662392644" expanded="true" signature="2571:2617" ph="select * fro... t_user" />
+                <marker date="1612662392644" expanded="true" signature="2826:2929" ph="select id,na... t_user" />
+                <marker date="1612662392644" expanded="true" signature="3033:3126" ph="select id,na... t_user" />
+                <marker date="1612662392644" expanded="true" signature="3228:3319" ph="select id,na... t_user" />
+                <marker date="1612662392644" expanded="true" signature="3429:3478" ph="update t_use... " />
+                <marker date="1612662392644" expanded="true" signature="3543:3593" ph="update t_use... " />
+                <marker date="1612662392644" expanded="true" signature="8910:9700" ph="insert into t_user... " />
+                <marker date="1612662392644" expanded="true" signature="9804:11426" ph="update t_use... " />
+                <marker date="1612662392644" expanded="true" signature="11537:13171" ph="update t_use... " />
+                <marker date="1612662392644" expanded="true" signature="13214:13252" ph="delete from " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UseJianhuyiLogController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/UseJianhuyiLogController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="77">
-              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state relative-caret-position="1457">
+              <caret line="276" column="36" lean-forward="false" selection-start-line="276" selection-start-column="36" selection-end-line="276" selection-end-column="36" />
               <folding>
-                <marker date="1612607321015" expanded="true" signature="21521:21527" ph="{...}" />
+                <element signature="imports" expanded="true" />
+                <marker date="1612661482721" expanded="true" signature="21523:21529" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -54,6 +162,7 @@
       <find>getCurrentTask</find>
       <find>getRecentlyTask</find>
       <find>eyeRate</find>
+      <find>updateScores</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -74,16 +183,19 @@
         <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/dao/UserTaskLinshiDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/ResultUtils.java" />
         <option value="$PROJECT_DIR$/src/main/resources/mybatis/information/GiftMapper.xml" />
-        <option value="$PROJECT_DIR$/src/main/resources/mybatis/user/UserMapper.xml" />
         <option value="$PROJECT_DIR$/src/main/resources/mybatis/information/UserTaskLinshiMapper.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/domain/UserTaskDO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/service/UserTaskService.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/service/impl/UserTaskServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/dao/UserTaskDao.java" />
         <option value="$PROJECT_DIR$/src/main/resources/mybatis/information/UserTaskMapper.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/GiftController.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/UseJianhuyiLogController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/GiftController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/service/OwnerUserService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/service/impl/OwnerUserServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/dao/OwnerUserDao.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/mybatis/user/UserMapper.xml" />
       </list>
     </option>
   </component>
@@ -187,6 +299,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -234,6 +350,49 @@
               <item name="jianhuyi-portal" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="jianhuyi" type="462c0819:PsiDirectoryNode" />
+              <item name="information" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jianhuyi-portal" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jianhuyi-portal" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="jianhuyi" type="462c0819:PsiDirectoryNode" />
+              <item name="owneruser" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jianhuyi-portal" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jianhuyi-portal" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="jianhuyi" type="462c0819:PsiDirectoryNode" />
+              <item name="owneruser" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jianhuyi-portal" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jianhuyi-portal" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="jianhuyi" type="462c0819:PsiDirectoryNode" />
+              <item name="owneruser" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+              <item name="impl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jianhuyi-portal" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jianhuyi-portal" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -262,10 +421,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -397,19 +552,21 @@
       <workItem from="1612434035248" duration="2384000" />
       <workItem from="1612447205423" duration="7030000" />
       <workItem from="1612488900460" duration="23919000" />
-      <workItem from="1612574193990" duration="26218000" />
+      <workItem from="1612574193990" duration="27001000" />
+      <workItem from="1612660595215" duration="1957000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67153000" />
+    <option name="totallyTimeSpent" value="69893000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5021322" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25159913" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17217484" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -419,18 +576,18 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34021738" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5923913" sideWeight="0.4978678" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5923913" sideWeight="0.4978678" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2902174" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17717391" sideWeight="0.4978678" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3608742" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2979744" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -449,14 +606,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/GiftController.java</url>
-          <line>129</line>
-          <properties />
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="5" />
     </breakpoint-manager>
     <watches-manager />
@@ -466,49 +615,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/UseJianhuyiLogController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4000">
-          <caret line="250" column="36" lean-forward="false" selection-start-line="250" selection-start-column="36" selection-end-line="250" selection-end-column="36" />
-          <folding>
-            <marker date="1612607321015" expanded="true" signature="21521:21527" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/GiftController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10512">
-          <caret line="674" column="16" lean-forward="false" selection-start-line="674" selection-start-column="16" selection-end-line="674" selection-end-column="16" />
-          <folding>
-            <element signature="e#2839#2854#0" expanded="true" />
-            <element signature="e#4041#4056#0" expanded="true" />
-            <element signature="e#8004#8019#0" expanded="true" />
-            <element signature="e#8236#8251#0" expanded="true" />
-            <element signature="e#8444#8469#0" expanded="true" />
-            <element signature="e#8707#8722#0" expanded="true" />
-            <marker date="1612606149326" expanded="false" signature="23518:23528" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="29813:29829" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="29885:29895" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="32973:32989" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="33045:33055" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="33127:33145" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35674:35690" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35745:35761" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35817:35827" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35899:35917" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="37280:37288" ph="&lt;~&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/service/impl/DataServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="13" column="13" lean-forward="false" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/DataController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
@@ -559,7 +665,8 @@
         <state relative-caret-position="3440">
           <caret line="242" column="20" lean-forward="false" selection-start-line="242" selection-start-column="20" selection-end-line="242" selection-end-column="20" />
           <folding>
-            <marker date="1612607321015" expanded="true" signature="21521:21527" ph="{...}" />
+            <element signature="imports" expanded="true" />
+            <marker date="1612661482721" expanded="true" signature="21523:21529" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -571,21 +678,21 @@
           <folding>
             <element signature="e#2839#2854#0" expanded="true" />
             <element signature="e#4041#4056#0" expanded="true" />
-            <element signature="e#8004#8019#0" expanded="true" />
-            <element signature="e#8236#8251#0" expanded="true" />
-            <element signature="e#8444#8469#0" expanded="true" />
-            <element signature="e#8707#8722#0" expanded="true" />
-            <marker date="1612606149326" expanded="false" signature="23518:23528" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="29813:29829" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="29885:29895" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="32973:32989" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="33045:33055" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="33127:33145" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35674:35690" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35745:35761" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35817:35827" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35899:35917" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="37280:37288" ph="&lt;~&gt;" />
+            <element signature="e#8075#8090#0" expanded="true" />
+            <element signature="e#8307#8322#0" expanded="true" />
+            <element signature="e#8515#8540#0" expanded="true" />
+            <element signature="e#8778#8793#0" expanded="true" />
+            <marker date="1612661779954" expanded="false" signature="23589:23599" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="29884:29900" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="29956:29966" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33044:33060" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33116:33126" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33198:33216" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35745:35761" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35816:35832" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35888:35898" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35970:35988" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="37351:37359" ph="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -595,7 +702,8 @@
         <state relative-caret-position="3248">
           <caret line="230" column="8" lean-forward="true" selection-start-line="230" selection-start-column="8" selection-end-line="230" selection-end-column="8" />
           <folding>
-            <marker date="1612607321015" expanded="true" signature="21521:21527" ph="{...}" />
+            <element signature="imports" expanded="true" />
+            <marker date="1612661482721" expanded="true" signature="21523:21529" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -607,21 +715,21 @@
           <folding>
             <element signature="e#2839#2854#0" expanded="true" />
             <element signature="e#4041#4056#0" expanded="true" />
-            <element signature="e#8004#8019#0" expanded="true" />
-            <element signature="e#8236#8251#0" expanded="true" />
-            <element signature="e#8444#8469#0" expanded="true" />
-            <element signature="e#8707#8722#0" expanded="true" />
-            <marker date="1612606149326" expanded="false" signature="23518:23528" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="29813:29829" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="29885:29895" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="32973:32989" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="33045:33055" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="33127:33145" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35674:35690" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35745:35761" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35817:35827" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35899:35917" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="37280:37288" ph="&lt;~&gt;" />
+            <element signature="e#8075#8090#0" expanded="true" />
+            <element signature="e#8307#8322#0" expanded="true" />
+            <element signature="e#8515#8540#0" expanded="true" />
+            <element signature="e#8778#8793#0" expanded="true" />
+            <marker date="1612661779954" expanded="false" signature="23589:23599" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="29884:29900" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="29956:29966" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33044:33060" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33116:33126" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33198:33216" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35745:35761" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35816:35832" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35888:35898" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35970:35988" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="37351:37359" ph="&lt;~&gt;" />
           </folding>
         </state>
       </provider>
@@ -631,7 +739,8 @@
         <state relative-caret-position="224">
           <caret line="41" column="13" lean-forward="false" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
           <folding>
-            <marker date="1612607321015" expanded="true" signature="21521:21527" ph="{...}" />
+            <element signature="imports" expanded="true" />
+            <marker date="1612661482721" expanded="true" signature="21523:21529" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -773,7 +882,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="468">
           <caret line="29" column="7" lean-forward="false" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -799,14 +907,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/application-dev.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="19" lean-forward="false" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/application.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -819,7 +919,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="36" column="34" lean-forward="true" selection-start-line="36" selection-start-column="34" selection-end-line="36" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -865,37 +964,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/mybatis/user/UserMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="38" column="98" lean-forward="false" selection-start-line="38" selection-start-column="98" selection-end-line="38" selection-end-column="98" />
-          <folding>
-            <marker date="1612582259021" expanded="true" signature="289:570" ph="select `id`,... t_user" />
-            <marker date="1612582259021" expanded="true" signature="669:956" ph="select `id`,... t_user" />
-            <marker date="1612582259021" expanded="true" signature="1060:1359" ph="select `id`,... t_user" />
-            <marker date="1612582259021" expanded="true" signature="1460:1748" ph="select `id`,... t_user" />
-            <marker date="1612582259021" expanded="true" signature="1848:2135" ph="select `id`,... t_user" />
-            <marker date="1612582259021" expanded="true" signature="2571:2617" ph="select * fro... t_user" />
-            <marker date="1612582259021" expanded="true" signature="2826:2929" ph="select id,na... t_user" />
-            <marker date="1612582259021" expanded="true" signature="3033:3126" ph="select id,na... t_user" />
-            <marker date="1612582259021" expanded="true" signature="3228:3319" ph="select id,na... t_user" />
-            <marker date="1612582259021" expanded="true" signature="3429:3478" ph="update t_use... " />
-            <marker date="1612582259021" expanded="true" signature="8795:9585" ph="insert into t_user... " />
-            <marker date="1612582259021" expanded="true" signature="9689:11311" ph="update t_use... " />
-            <marker date="1612582259021" expanded="true" signature="11422:13056" ph="update t_use... " />
-            <marker date="1612582259021" expanded="true" signature="13099:13137" ph="delete from " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/UserTaskController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="32" column="24" lean-forward="false" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/domain/UserTaskLinshiDO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="201">
@@ -908,10 +976,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="24" column="35" lean-forward="true" selection-start-line="24" selection-start-column="35" selection-end-line="24" selection-end-column="35" />
-          <folding>
-            <element signature="e#713#714#0" expanded="false" />
-            <element signature="e#763#764#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -920,14 +984,14 @@
         <state relative-caret-position="521">
           <caret line="69" column="42" lean-forward="false" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="42" />
           <folding>
-            <element signature="e#1291#1292#0" expanded="true" />
-            <element signature="e#1348#1349#0" expanded="true" />
-            <element signature="e#1430#1431#0" expanded="true" />
-            <element signature="e#1496#1497#0" expanded="true" />
-            <element signature="e#1563#1564#0" expanded="true" />
-            <element signature="e#1620#1621#0" expanded="true" />
-            <element signature="e#1688#1689#0" expanded="true" />
-            <element signature="e#1746#1747#0" expanded="true" />
+            <element signature="e#1291#1292#0" expanded="false" />
+            <element signature="e#1348#1349#0" expanded="false" />
+            <element signature="e#1430#1431#0" expanded="false" />
+            <element signature="e#1496#1497#0" expanded="false" />
+            <element signature="e#1563#1564#0" expanded="false" />
+            <element signature="e#1620#1621#0" expanded="false" />
+            <element signature="e#1688#1689#0" expanded="false" />
+            <element signature="e#1746#1747#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -944,7 +1008,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="18" column="27" lean-forward="false" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -970,46 +1033,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/GiftController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="132" column="36" lean-forward="true" selection-start-line="132" selection-start-column="36" selection-end-line="132" selection-end-column="36" />
-          <folding>
-            <element signature="e#2839#2854#0" expanded="true" />
-            <element signature="e#4041#4056#0" expanded="true" />
-            <element signature="e#8004#8019#0" expanded="true" />
-            <element signature="e#8236#8251#0" expanded="true" />
-            <element signature="e#8444#8469#0" expanded="true" />
-            <element signature="e#8707#8722#0" expanded="true" />
-            <marker date="1612606149326" expanded="false" signature="23518:23528" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="29813:29829" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="29885:29895" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="32973:32989" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="33045:33055" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="33127:33145" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35674:35690" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35745:35761" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35817:35827" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="35899:35917" ph="&lt;~&gt;" />
-            <marker date="1612606149326" expanded="false" signature="37280:37288" ph="&lt;~&gt;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/domain/UserTaskDO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="169" column="21" lean-forward="true" selection-start-line="169" selection-start-column="8" selection-end-line="169" selection-end-column="22" />
-          <folding>
-            <element signature="e#5983#5984#0" expanded="true" />
-            <element signature="e#6025#6026#0" expanded="true" />
-            <element signature="e#6063#6064#0" expanded="true" />
-            <element signature="e#6099#6100#0" expanded="true" />
-            <element signature="e#12093#12094#0" expanded="true" />
-            <element signature="e#12125#12126#0" expanded="true" />
-            <element signature="e#12173#12174#0" expanded="true" />
-            <element signature="e#12215#12216#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1018,10 +1045,10 @@
         <state relative-caret-position="6246">
           <caret line="347" column="27" lean-forward="true" selection-start-line="347" selection-start-column="27" selection-end-line="347" selection-end-column="27" />
           <folding>
-            <element signature="e#12197#12201#0" expanded="true" />
-            <element signature="e#12799#12803#0" expanded="true" />
-            <element signature="e#13373#13377#0" expanded="true" />
-            <element signature="e#13910#13914#0" expanded="true" />
+            <element signature="e#12197#12201#0" expanded="false" />
+            <element signature="e#12799#12803#0" expanded="false" />
+            <element signature="e#13373#13377#0" expanded="false" />
+            <element signature="e#13910#13914#0" expanded="false" />
             <marker date="1612605712044" expanded="true" signature="291:578" ph="select `id`,... t_user_task" />
             <marker date="1612605712044" expanded="true" signature="5227:7136" ph="insert into t_user_task... " />
             <marker date="1612605712044" expanded="true" signature="7241:11251" ph="update t_use... " />
@@ -1040,20 +1067,114 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/application-dev.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="280" column="21" lean-forward="false" selection-start-line="280" selection-start-column="21" selection-end-line="280" selection-end-column="21" />
+        <state relative-caret-position="360">
+          <caret line="20" column="28" lean-forward="false" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/UserTaskController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="32" column="24" lean-forward="false" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/UseJianhuyiLogController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="77">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state relative-caret-position="1457">
+          <caret line="276" column="36" lean-forward="false" selection-start-line="276" selection-start-column="36" selection-end-line="276" selection-end-column="36" />
           <folding>
-            <marker date="1612607321015" expanded="true" signature="21521:21527" ph="{...}" />
+            <element signature="imports" expanded="true" />
+            <marker date="1612661482721" expanded="true" signature="21523:21529" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="280" column="24" lean-forward="false" selection-start-line="266" selection-start-column="8" selection-end-line="280" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/information/controller/GiftController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="142" column="36" lean-forward="false" selection-start-line="142" selection-start-column="36" selection-end-line="142" selection-end-column="36" />
+          <folding>
+            <element signature="e#2839#2854#0" expanded="true" />
+            <element signature="e#4041#4056#0" expanded="true" />
+            <element signature="e#8075#8090#0" expanded="true" />
+            <element signature="e#8307#8322#0" expanded="true" />
+            <element signature="e#8515#8540#0" expanded="true" />
+            <element signature="e#8778#8793#0" expanded="true" />
+            <marker date="1612661779954" expanded="false" signature="23589:23599" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="29884:29900" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="29956:29966" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33044:33060" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33116:33126" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="33198:33216" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35745:35761" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35816:35832" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35888:35898" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="35970:35988" ph="&lt;~&gt;" />
+            <marker date="1612661779954" expanded="false" signature="37351:37359" ph="&lt;~&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/service/OwnerUserService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="53" column="18" lean-forward="true" selection-start-line="53" selection-start-column="18" selection-end-line="53" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/service/impl/OwnerUserServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="147" column="33" lean-forward="true" selection-start-line="147" selection-start-column="33" selection-end-line="147" selection-end-column="33" />
+          <folding>
+            <element signature="e#3478#3479#0" expanded="true" />
+            <element signature="e#3530#3531#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jianhuyi/owneruser/dao/OwnerUserDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="57" column="67" lean-forward="false" selection-start-line="57" selection-start-column="65" selection-end-line="57" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mybatis/user/UserMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="57" column="53" lean-forward="false" selection-start-line="57" selection-start-column="50" selection-end-line="57" selection-end-column="53" />
+          <folding>
+            <marker date="1612662392644" expanded="true" signature="289:570" ph="select `id`,... t_user" />
+            <marker date="1612662392644" expanded="true" signature="669:956" ph="select `id`,... t_user" />
+            <marker date="1612662392644" expanded="true" signature="1060:1359" ph="select `id`,... t_user" />
+            <marker date="1612662392644" expanded="true" signature="1460:1748" ph="select `id`,... t_user" />
+            <marker date="1612662392644" expanded="true" signature="1848:2135" ph="select `id`,... t_user" />
+            <marker date="1612662392644" expanded="true" signature="2571:2617" ph="select * fro... t_user" />
+            <marker date="1612662392644" expanded="true" signature="2826:2929" ph="select id,na... t_user" />
+            <marker date="1612662392644" expanded="true" signature="3033:3126" ph="select id,na... t_user" />
+            <marker date="1612662392644" expanded="true" signature="3228:3319" ph="select id,na... t_user" />
+            <marker date="1612662392644" expanded="true" signature="3429:3478" ph="update t_use... " />
+            <marker date="1612662392644" expanded="true" signature="3543:3593" ph="update t_use... " />
+            <marker date="1612662392644" expanded="true" signature="8910:9700" ph="insert into t_user... " />
+            <marker date="1612662392644" expanded="true" signature="9804:11426" ph="update t_use... " />
+            <marker date="1612662392644" expanded="true" signature="11537:13171" ph="update t_use... " />
+            <marker date="1612662392644" expanded="true" signature="13214:13252" ph="delete from " />
           </folding>
         </state>
       </provider>

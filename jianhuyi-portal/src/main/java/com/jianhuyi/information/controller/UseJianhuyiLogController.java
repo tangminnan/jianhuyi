@@ -398,7 +398,8 @@ public class UseJianhuyiLogController {
             userTaskLinshiDO.setEyeRate(ResultUtils.totalDegree(null,userTaskLinshiDO));//当日等级
             userTaskLinshiService.save(userTaskLinshiDO);
         }else if(flag==1){
-           int totalScore = userTaskLinshiService.getTotalScore(userTaskDO.getId());
+            int totalScore = userTaskLinshiService.getTotalScore(userTaskDO.getId());
+
             userTaskDO.setTotalScore(totalScore);//总积分
             userTaskDO.setAvgReadResult(ResultUtils.resultAvgReadDuration(avgReadDuration));
             userTaskDO.setAvgLookPhoneResult(ResultUtils.resultAvgLookPhoneDuration(avgLookPhoneDuration));
