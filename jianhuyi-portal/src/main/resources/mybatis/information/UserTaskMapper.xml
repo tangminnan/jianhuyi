@@ -320,7 +320,7 @@
         t_user_task
         WHERE
         user_id = #{userId}
-        and count_grade is not null
+   <!--     and count_grade is not null   -->
         ) rtask
         WHERE
         sdate &gt; now()

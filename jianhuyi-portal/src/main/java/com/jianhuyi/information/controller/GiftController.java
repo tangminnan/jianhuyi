@@ -61,10 +61,12 @@ public class GiftController {
         List<GiftDO> giftDOList = giftService.list(params);
         if(giftDOList.size()>0) {
             resultMap.put("data", giftDOList);
+            resultMap.put("msg","获取数据成功");
             resultMap.put("code", 0);
         }else{
             resultMap.put("data", giftDOList);
             resultMap.put("code", -1);
+            resultMap.put("msg","礼物列表是空的");
         }
       return resultMap;
     }
@@ -79,12 +81,29 @@ public class GiftController {
         List<MyGiftDO> giftDOList = giftService.getMyAllGift(userId);
         if(giftDOList.size()>0) {
             resultMap.put("data", giftDOList);
+            resultMap.put("msg","获取数据成功");
             resultMap.put("code", 0);
         }
         else{
             resultMap.put("data", giftDOList);
             resultMap.put("code", -1);
+            resultMap.put("msg","您还未兑换过礼品呢");
         }
+        return resultMap;
+    }
+
+    /**
+     * 查询我的积分
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getMyScore")
+    public Map<String,Object> getMyScore(Long userId){
+        int score = userService.getMyScore(userId);
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("code",0);
+        resultMap.put("data",score);
+        resultMap.put("msg","获取积分成功");
         return resultMap;
     }
 
@@ -103,7 +122,7 @@ public class GiftController {
                 Integer score = giftDO.getScore();
                 if(scores<score){
                     resultMap.put("code",-1);
-                    resultMap.put("data","积分不足，请继续努力...");
+                    resultMap.put("msg","积分不足，请继续努力...");
                 }else{
                     userDO.setScores(scores-score);
                     userService.updateScores(userDO);
@@ -113,7 +132,7 @@ public class GiftController {
                     myGiftDO.setUserId(userId);
                     giftService.saveMyGiftDO(myGiftDO);
                     resultMap.put("code",0);
-                    resultMap.put("data","兑换成功...");
+                    resultMap.put("msg","兑换成功...");
                 }
             }
         }
@@ -143,10 +162,10 @@ public class GiftController {
 
             userService.updateTaskIdInUser(userId,userTaskDO.getId());
             resultMap.put("code",0);
-            resultMap.put("data","操作成功");
+            resultMap.put("msg","操作成功");
         }else{//不做任何处理
                 resultMap.put("code",-1);
-                resultMap.put("data","上次的任务还在进行中...");
+                resultMap.put("msg","上次的任务还在进行中...");
             }
 
         return resultMap;
@@ -185,9 +204,11 @@ public class GiftController {
         if(list.size()>0) {
             resultMap.put("code", 0);
             resultMap.put("data", list);
+            resultMap.put("msg","获取数据成功");
         }else{
             resultMap.put("code", -1);
             resultMap.put("data", list);
+            resultMap.put("msg","没有搜索到");
         }
         return resultMap;
     }
@@ -203,9 +224,11 @@ public class GiftController {
         if(userDO!=null){
             resultMap.put("code",0);
             resultMap.put("data",userDO);
+            resultMap.put("msg","获取数据成功");
         }else{
             resultMap.put("code",-1);
-            resultMap.put("data","没有找到孩子的信息，可能孩子信息后台没有添加或输入的手机号有误...");
+            resultMap.put("data",null);
+            resultMap.put("msg","没有找到孩子的信息，可能孩子信息后台没有添加或输入的手机号有误...");
         }
 
         return resultMap;
@@ -220,8 +243,15 @@ public class GiftController {
     public Map<String,Object> getTask(Long userId){
         List<UserTaskDO> list = userTaskService.getAllReadyFinishedTask(userId);//查询已经完成的任务
         Map<String,Object> resultMap = new HashMap<String,Object>();
-        resultMap.put("code",0);
-        resultMap.put("data",list);
+        if(list.size()>0) {
+            resultMap.put("code", 0);
+            resultMap.put("msg","获取数据成功");
+            resultMap.put("data", list);
+        }else{
+            resultMap.put("code", -1);
+            resultMap.put("msg","无数据");
+            resultMap.put("data", list);
+        }
         return resultMap;
     }
 
@@ -239,9 +269,11 @@ public class GiftController {
             userTaskDO.setUnfinishedDay(userTaskDO.getTaskTime()-d);//未完成天数
             resultMap.put("code",0);
             resultMap.put("data",userTaskDO);
+            resultMap.put("msg","获取数据成功");
         }else{
             resultMap.put("code",-1);
-            resultMap.put("data","当前没有正在进行的任务");
+            resultMap.put("data",null);
+            resultMap.put("msg","当前没有正在进行的任务");
         }
         return resultMap;
     }
@@ -257,7 +289,8 @@ public class GiftController {
         Map<String,Object> resultMap=new HashMap<String,Object>();
         if(userTask==null){
             resultMap.put("code",-1);
-            resultMap.put("data","没有找到任务，输入的参数可能有误...");
+            resultMap.put("data",null);
+            resultMap.put("msg","没有找到任务，输入的参数可能有误...");
             return resultMap;
         }
         Map<String,Object> paramsMap = new HashMap<String,Object>();
@@ -277,7 +310,9 @@ public class GiftController {
        /* resultMap.put("renwu",map.size());//已完成任务天数
         resultMap.put("countGrade",userTask.getCountGrade());//平均等级
         resultMap.put("totaluser",userTask.getTotaluser());//有效使用时长*/
-        resultMap.put("day", new ArrayList(map.values()));
+        resultMap.put("data", new ArrayList(map.values()));
+        resultMap.put("code",0);
+        resultMap.put("msg","获取数据成功");
         return  resultMap;
     }
 
@@ -291,10 +326,12 @@ public class GiftController {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         if(userTaskLinshiDO==null){
             resultMap.put("code",-1);
-            resultMap.put("data","当天没有数据");
+            resultMap.put("msg","当天没有数据");
+            resultMap.put("data",null);
         }else{
             resultMap.put("code",0);
             resultMap.put("data",userTaskLinshiDO);
+            resultMap.put("msg","获取数据成功");
         }
         return resultMap;
     }

@@ -89,6 +89,8 @@ public class OwnerUserDO implements Serializable {
     private Double lEyeAxis;
     //右眼轴
     private Double rEyeAxis;
+    //所剩积分
+    private Integer scores;
 
     private String studentNum;
 
@@ -522,6 +524,14 @@ public class OwnerUserDO implements Serializable {
 
     public void setFileImg(MultipartFile fileImg) {
         this.fileImg = fileImg;
+    }
+
+    public Integer getScores() {
+        return scores;
+    }
+
+    public void setScores(Integer scores) {
+        this.scores = scores;
     }
 
     @Override
