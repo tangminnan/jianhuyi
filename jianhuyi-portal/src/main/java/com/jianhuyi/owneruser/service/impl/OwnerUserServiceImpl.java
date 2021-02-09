@@ -149,7 +149,7 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 	}
 
 	@Override
-	public int getMyScore(Long userId) {
+	public Integer getMyScore(Long userId) {
 		return ownerUserMapper.getMyScore(userId);
 	}
 

@@ -99,7 +99,7 @@ public class GiftController {
     @ResponseBody
     @GetMapping("/getMyScore")
     public Map<String,Object> getMyScore(Long userId){
-        int score = userService.getMyScore(userId);
+        Integer score = userService.getMyScore(userId);
         Map<String,Object> resultMap = new HashMap<>();
         resultMap.put("code",0);
         resultMap.put("data",score);
@@ -163,9 +163,11 @@ public class GiftController {
             userService.updateTaskIdInUser(userId,userTaskDO.getId());
             resultMap.put("code",0);
             resultMap.put("msg","操作成功");
+            resultMap.put("data",null);
         }else{//不做任何处理
                 resultMap.put("code",-1);
                 resultMap.put("msg","上次的任务还在进行中...");
+                resultMap.put("data",null);
             }
 
         return resultMap;

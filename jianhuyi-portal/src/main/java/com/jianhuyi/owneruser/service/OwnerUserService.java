@@ -53,5 +53,5 @@ public interface OwnerUserService {
 
 	void updateTaskIdInUser(Long userId, Long id);
 
-    int getMyScore(Long userId);
+    Integer getMyScore(Long userId);
 }

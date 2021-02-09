@@ -124,8 +124,7 @@
 			`avg_light_score_result`,
 			`count_grade`,
 			`gift`,
-			 start_time,
-			 addready_score
+			 start_time
 		)
 		values
 		(
@@ -172,8 +171,7 @@
 			#{avgLightScoreResult},
 			#{countGrade},
 			#{gift},
-			#{startTime},
-			#{addreadyScore}
+			#{startTime}
 		)
 	</insert>
 
