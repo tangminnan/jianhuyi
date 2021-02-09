@@ -83,7 +83,9 @@
         `usb_Status`,
         `effective_time`,
         `read_time`,
-        `unRead_time`
+        `unRead_time`,
+        running_time,
+        cover_time
         )
         values
         <foreach collection="energysDataDOList" item="item" separator=",">
@@ -95,7 +97,9 @@
             #{item.usbStatus},
             #{item.effectiveTime},
             #{item.readTime},
-            #{item.unreadTime}
+            #{item.unreadTime},
+            #{item.runningTime},
+            #{item.coverTime}
             )
 
         </foreach>

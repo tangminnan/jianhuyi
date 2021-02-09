@@ -33,6 +33,26 @@ public class EnergysDataDO implements Serializable {
 	//非阅读时长
 	private String unreadTime;
 
+	private String coverTime;
+
+	private String runningTime;
+
+	public String getCoverTime() {
+		return coverTime;
+	}
+
+	public void setCoverTime(String coverTime) {
+		this.coverTime = coverTime;
+	}
+
+	public String getRunningTime() {
+		return runningTime;
+	}
+
+	public void setRunningTime(String runningTime) {
+		this.runningTime = runningTime;
+	}
+
 	public Long getUserId() {
 		return userId;
 	}

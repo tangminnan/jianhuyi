@@ -1,5 +1,6 @@
 package com.jianhuyi.common.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.common.utils.domain.*;
 
 import java.io.BufferedReader;
@@ -47,7 +48,13 @@ public class DataParseUtil {
     public static HistoryDataBean readFileTo(File file) {
 
         String hexString = readFile(file.getAbsolutePath());
-        hexString = hexString.replace(" ", "");
+        if(hexString.contains("sourceData")){
+            JSONObject jsonObject = JSONObject.parseObject(hexString);
+            hexString = jsonObject.get("sourceData").toString();
+            hexString = hexString.replace(" ", "");
+        }else{
+            hexString = hexString.replace(" ", "");
+        }
         return parseData(hexStringToByteArray(hexString));
     }
 
@@ -93,12 +100,15 @@ public class DataParseUtil {
                     else if (Arrays.equals(subBytes(bytes, i, 5),BASE_DATA)) {//基础数据  倾斜角 距离 光感
                         //验证包尾
                         if (i < bytes.length - 21 && Arrays.equals(subBytes(bytes, i + 17, 4),BW)) {
-                            serialDataBean.getBaseDatas().add(getBaseData(bytes, i));
+                            if(serialDataBean!=null){
+                                serialDataBean.getBaseDatas().add(getBaseData(bytes, i));
+                            }
+
                         }
                     }
                     //验证包头
                     else if (Arrays.equals(subBytes(bytes, i, 5),SXT)) {//摄像头图片
-                        serialDataBean.getPictures().add(getPic(bytes, i));
+                        if(serialDataBean!=null){serialDataBean.getPictures().add(getPic(bytes, i));}
                     }
                     //验证包头
                     else if (Arrays.equals(subBytes(bytes, i, 5),ZDTX)) {////震动信息
@@ -166,7 +176,7 @@ public class DataParseUtil {
         int light_l = bytes[index + 14] & 0xFF;
         Double lights;
         if (light_h > 0) {
-            lights = Double.parseDouble(((light_h >> 8) + light_l) + "");
+            lights = Double.parseDouble(((light_h << 8) + light_l) + "");
         } else {
             lights = Double.parseDouble(light_l + "");
         }
@@ -176,7 +186,7 @@ public class DataParseUtil {
         int distance_l = bytes[index + 16] & 0xFF;
         Double distances;
         if (distance_h > 0) {
-            distances = Double.parseDouble((distance_h >> 8) + distance_l + "");
+            distances = Double.parseDouble((distance_h << 8) + distance_l + "");
         } else {
             distances = Double.parseDouble(distance_l + "");
         }
@@ -235,12 +245,34 @@ public class DataParseUtil {
 //        Log.e(TAG, "电源信息时间")
         energy.setTime(getTime(bytes, index + 9, true));
 
+        int runningTimeH = bytes[index+15]& 0xFF;
+        int runningTimeL = bytes[index+16]& 0xFF;
+        int runningTime;
+        if (runningTimeH > 0) {
+            runningTime = ((runningTimeH << 8) + runningTimeL);
+        } else {
+            runningTime = runningTimeL;
+        }
+        energy.setRunningTime(runningTime);
+
+        int coverTimeH = bytes[index+17]& 0xFF;
+        int coverTimeL = bytes[index+18]& 0xFF;
+        int coverTime;
+        if (coverTimeH > 0) {
+            coverTime = ((coverTimeH << 8) + coverTimeL);
+        } else {
+            coverTime = coverTimeL;
+        }
+        energy.setCoverTime(coverTime);
+
+
+
         int effectiveTimeH = bytes[index + 19] & 0xFF;
         ;
         int effectiveTimeL = bytes[index + 20] & 0xFF;
         int effectiveTime;
         if (effectiveTimeH > 0) {
-            effectiveTime = ((effectiveTimeH >> 8) + effectiveTimeL);
+            effectiveTime = ((effectiveTimeH << 8) + effectiveTimeL);
         } else {
             effectiveTime = effectiveTimeL;
         }
@@ -250,7 +282,7 @@ public class DataParseUtil {
         int readTimeL = bytes[index + 22] & 0xFF;
         int readTime;
         if (readTimeH > 0) {
-            readTime = (readTimeH >> 8) + readTimeL;
+            readTime = (readTimeH << 8) + readTimeL;
         } else {
             readTime = readTimeL;
         }
@@ -260,7 +292,7 @@ public class DataParseUtil {
         int unReadTimeL = bytes[index + 24] & 0xFF;
         int unReadTime;
         if (unReadTimeH > 0) {
-            unReadTime = (unReadTimeH >> 8) + unReadTimeL;
+            unReadTime = (unReadTimeH << 8) + unReadTimeL;
         } else {
             unReadTime = unReadTimeL;
         }
@@ -398,12 +430,17 @@ public class DataParseUtil {
      * @return
      */
     public static byte[] hexStringToByteArray(String hexStr) {
-        int len = hexStr.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(hexStr.charAt(i), 16) << 4)
-                    + Character.digit(hexStr.charAt(i + 1), 16));
+        int len = (int) Math.ceil(hexStr.length()/2.0);
+        byte[] data = new byte[len ];
+
+        int j = 0;
+        int i = 0;
+        while (i < hexStr.length()) {
+            data[j] = (byte) ((Character.digit(hexStr.charAt(i), 16) << 4) + Character.digit(hexStr.charAt(i + 1), 16));
+            j++;
+            i += 2;
         }
+
         return data;
     }
 

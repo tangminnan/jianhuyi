@@ -24,6 +24,26 @@ public class HistoryDataBean {
     private String remaindData;//震动提醒
 
 
+    private String startTime;
+
+    private int type;
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public int getId() {
         return id;
     }

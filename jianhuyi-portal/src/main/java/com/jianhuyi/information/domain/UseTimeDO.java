@@ -27,6 +27,8 @@ public class UseTimeDO implements Serializable {
 
     private Integer userDurtion;
 
+
+
     public Long getUploadId() {
         return uploadId;
     }

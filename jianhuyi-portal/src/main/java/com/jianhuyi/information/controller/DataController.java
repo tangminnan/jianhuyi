@@ -7,6 +7,7 @@ import com.jianhuyi.common.utils.DataParseUtil;
 import com.jianhuyi.common.utils.FileUtil;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.common.utils.domain.HistoryDataBean;
+import com.jianhuyi.common.utils.domain.SerialDataBean;
 import com.jianhuyi.information.domain.DataDO;
 import com.jianhuyi.information.domain.EnergysDataDO;
 import com.jianhuyi.information.domain.ErrorDataDO;
@@ -50,7 +51,7 @@ public class DataController {
 
     @ResponseBody
     @PostMapping("/saveInit")
-    R saveInit(@RequestBody MultipartFile initFile) {
+    R saveInit(@RequestBody MultipartFile initFile,int type) {
         String filename = initFile.getOriginalFilename();
         String[] str = filename.split("_");
         try {
@@ -63,13 +64,17 @@ public class DataController {
                 historyDataBean.setEquipmentId(str[0]);
                 historyDataBean.setUserId(Integer.parseInt(str[1]));
             }
-
+            for (SerialDataBean serialDataBean : historyDataBean.getDataDOList()) {
+                serialDataBean.setEquipmentId(str[0]);
+            }
             historyDataBean.setReadData(JSON.toJSON(historyDataBean.getDataDOList()).toString());
             historyDataBean.setEnergysData(JSON.toJSON(historyDataBean.getEnergysDataDOList()).toString());
             historyDataBean.setErrorData(JSON.toJSON(historyDataBean.getErrorDataDOList()).toString());
             historyDataBean.setRemaindData(JSON.toJSON(historyDataBean.getRemaind()).toString());
 
             historyDataBean.setAddTime(new Date());
+            historyDataBean.setStartTime(historyDataBean.getDataDOList().get(0).getStartTime());
+            historyDataBean.setType(type);
             if(dataInitService.save(historyDataBean)>0){
                 return R.ok();
             }else{
