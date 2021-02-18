@@ -6,6 +6,7 @@ import com.jianhuyi.information.service.UserTaskLinshiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,11 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
     @Override
     public int getTotalScore(Long id) {
         return userTaskLinshiDao.getTotalScore(id);
+    }
+
+    @Override
+    public Date getRecentlyDate(Long userId) {
+        return userTaskLinshiDao.getRecentlyDate(userId);
     }
 
 }

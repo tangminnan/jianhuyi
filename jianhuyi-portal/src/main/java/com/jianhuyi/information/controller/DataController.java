@@ -73,7 +73,10 @@ public class DataController {
             historyDataBean.setRemaindData(JSON.toJSON(historyDataBean.getRemaind()).toString());
 
             historyDataBean.setAddTime(new Date());
-            historyDataBean.setStartTime(historyDataBean.getDataDOList().get(0).getStartTime());
+            if(historyDataBean.getDataDOList().size()>0){
+                historyDataBean.setStartTime(historyDataBean.getDataDOList().get(0).getStartTime());
+            }
+
             historyDataBean.setType(type);
             if(dataInitService.save(historyDataBean)>0){
                 return R.ok();

@@ -55,11 +55,15 @@
         update t_user set task_id=#{id} where id=#{userId}
     </update>
 
+    <select id="getMyScore" resultType="int">
+        select scores from t_user where  id=#{userId}
+    </select>
+
     <!--==========================================end=======================================================-->
 
     <select id="list" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
         select
-        `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`unionid`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`age`,`school`,`grade`,student_num,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`
+        `id`,`user_id`,scores,`open_id`,`nickname`,`password`,`phone`,`unionid`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`age`,`school`,`grade`,student_num,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`
         from t_user
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>

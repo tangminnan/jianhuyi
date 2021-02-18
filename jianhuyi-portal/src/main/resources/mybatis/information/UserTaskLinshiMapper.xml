@@ -108,19 +108,21 @@
     <update id="update" parameterType="com.jianhuyi.information.domain.UserTaskLinshiDO">
         update t_user_task_linshi
         <set>
-            <if test="userId != null">`user_id` = #{userId},</if>
-            <if test="giftId != null">`gift_id` = #{giftId},</if>
-            <if test="taskTime != null">`task_time` = #{taskTime},</if>
-            <if test="eyeRate != null">`eye_rate` = #{eyeRate},</if>
-            <if test="avgRead != null">`avg_read` = #{avgRead},</if>
-            <if test="avgOut != null">`avg_out` = #{avgOut},</if>
-            <if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance},</if>
-            <if test="avgLookPhone != null">`avg_look_phone` = #{avgLookPhone},</if>
-            <if test="avgLookTv != null">`avg_look_tv` = #{avgLookTv},</if>
-            <if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt},</if>
-            <if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime},</if>
-            <if test="avgLight != null">`avg_light` = #{avgLight},</if>
-            <if test="createTime != null">`create_time` = #{createTime}</if>
+            <if test="userId != null">`user_id` = #{userId}, </if>
+            <if test="eyeRate != null">`eye_rate` = #{eyeRate}, </if>
+            <if test="avgRead != null">`avg_read` = #{avgRead}, </if>
+            <if test="avgOut != null">`avg_out` = #{avgOut}, </if>
+            <if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance}, </if>
+            <if test="avgLookPhone != null">`avg_look_phone` = #{avgLookPhone}, </if>
+            <if test="avgLookTv != null">`avg_look_tv` = #{avgLookTv}, </if>
+            <if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt}, </if>
+            <if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime}, </if>
+            <if test="avgLight != null">`avg_light` = #{avgLight}, </if>
+            <if test="createTime != null">`create_time` = #{createTime}, </if>
+            <if test="score != null">`score` = #{score}, </if>
+            <if test="hourtime != null">`hourtime` = #{hourtime}, </if>
+            <if test="iffinish != null">`iffinish` = #{iffinish}, </if>
+            <if test="taskId != null">`task_id` = #{taskId}</if>
         </set>
         where id = #{id}
     </update>
@@ -138,6 +140,10 @@
 
     <select id="getTotalScore" resultType="int">
         select sum(score) from t_user_task_linshi where  task_id=#{taskId}
+    </select>
+
+    <select id="getRecentlyDate" resultType="date">
+        select create_time from t_user_task_linshi where `user_id` = #{userId} order by create_time desc limit 1
     </select>
 
 </mapper>
