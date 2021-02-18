@@ -57,5 +57,5 @@ public interface OwnerUserDao {
 
     void updateTaskIdInUser(@Param("userId") Long userId,@Param("id") Long id);
 
-	int getMyScore(Long userId);
+	Integer getMyScore(Long userId);
 }
