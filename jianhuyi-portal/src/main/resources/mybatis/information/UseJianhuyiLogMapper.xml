@@ -603,4 +603,14 @@
         save_time DESC
 
     </select>
+
+
+    <select id="getMaxDate" resultType="date">
+        select max(add_time) from t_use_jianhuyi_log where user_id=#{userId}
+    </select>
+
+    <select id="getNearData" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        select * from t_use_jianhuyi_log where user_id=#{userId}
+        and add_time=#{date}
+    </select>
 </mapper>
