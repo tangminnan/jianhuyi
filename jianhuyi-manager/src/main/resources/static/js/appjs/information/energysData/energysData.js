@@ -79,16 +79,51 @@ function load() {
                     },
                     {
                         field: 'effectiveTime',
-                        title: '有效时长'
+                        title: '有效时长',
+                        formatter:function (value) {
+                           if(value){
+                              return  (value*5/60).toFixed(2)
+                           }
+                        }
                     },
                     {
                         field: 'readTime',
-                        title: '阅读时长'
+                        title: '阅读时长',
+                       formatter:function (value) {
+                          if(value){
+                             return  (value*5/60).toFixed(2)
+                          }
+                       }
                     },
                     {
                         field: 'unreadTime',
-                        title: '非阅读时长'
-                    }/*,
+                        title: '非阅读时长',
+                       formatter:function (value) {
+                          if(value){
+                             return  (value*5/60).toFixed(2)
+                          }
+                       }
+                    },
+                   {
+                      field: 'coverTime',
+                      title: '遮挡时长',
+                      formatter:function (value) {
+                         if(value){
+                            return  (value*5/60).toFixed(2)
+                         }
+                      }
+                   },
+                   {
+                      field: 'runningTime',
+                      title: '开机时长',
+                      formatter:function (value) {
+                         if(value){
+                            return  (value*5/60).toFixed(2)
+                         }
+                      }
+                   }
+
+                    /*,
                     {
                         title: '操作',
                         field: 'id',

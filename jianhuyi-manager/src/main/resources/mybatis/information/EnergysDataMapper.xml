@@ -8,7 +8,7 @@
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.EnergysDataDO">
-        select `id`,`time`,`update_time`,`power`,`usb_Status`,`effective_time`,`read_time`,`unRead_time` from
+        select `id`,`time`,`update_time`,`power`,`usb_Status`,`effective_time`,`read_time`,`unRead_time`,running_time,cover_time from
         t_energys_data
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>

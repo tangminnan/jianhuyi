@@ -4,11 +4,11 @@
 <mapper namespace="com.jianhuyi.information.dao.DataInitDao">
 
 	<select id="get" resultType="com.jianhuyi.common.utils.domain.HistoryDataBean">
-		select `id`,`user_id`,`upload_id`,`equipment_id`,`read_data`,`energys_data`,`error_data`,`remaind_data`,`add_time` from t_data_init where id = #{value}
+		select `id`,`user_id`,`upload_id`,`equipment_id`,`read_data`,`energys_data`,`error_data`,`remaind_data`,`add_time`,type from t_data_init where id = #{value}
 	</select>
 
 	<select id="list" resultType="com.jianhuyi.common.utils.domain.HistoryDataBean">
-		select `id`,`user_id`,`upload_id`,`equipment_id`,`read_data`,`energys_data`,`error_data`,`remaind_data`,`add_time` from t_data_init
+		select `id`,`user_id`,`upload_id`,`equipment_id`,`read_data`,`energys_data`,`error_data`,`remaind_data`,`add_time`,type from t_data_init
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
@@ -58,7 +58,9 @@
 			`energys_data`, 
 			`error_data`, 
 			`remaind_data`, 
-			`add_time`
+			`add_time`,
+			type,
+			start_time
 		)
 		values
 		(
@@ -69,7 +71,9 @@
 			#{energysData}, 
 			#{errorData}, 
 			#{remaindData}, 
-			#{addTime}
+			#{addTime},
+			#{type},
+			#{startTime}
 		)
 	</insert>
 	 

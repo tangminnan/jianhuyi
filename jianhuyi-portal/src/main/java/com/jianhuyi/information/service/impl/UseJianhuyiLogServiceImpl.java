@@ -107,7 +107,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                                     lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
                                 }
 
-                                if (allDurtion > 5) {
+                                if (jianhuyiLogDO.getReadDuration() > 5) {
                                     allDurtion += jianhuyiLogDO.getReadDuration();
                                 }
                             } else {
@@ -120,7 +120,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
                                     lookScreenCount++;
                                     lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
                                 }
-                                if (allDurtion > 5) {
+                                if (jianhuyiLogDO.getReadDuration() > 5) {
                                     allDurtion += jianhuyiLogDO.getReadDuration();
                                 }
                             }
@@ -170,7 +170,7 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         }
 
 
-        newUseJianhuyiLogDO.setAllreadDuration(Double.parseDouble(df.format(readDuration)));
+        newUseJianhuyiLogDO.setAllreadDuration(Double.parseDouble(df.format(allDurtion)));
         if (readDurtionNum > 0) {
             newUseJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / readDurtionNum)));
             newUseJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readDurtionNum)));

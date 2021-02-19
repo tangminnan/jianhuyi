@@ -10,6 +10,25 @@ public class EnergyBean {
     private Integer effectiveTime;//有效时长
     private Integer readTime;//阅读时长
     private Integer unreadTime;//非阅读时长
+    private Integer coverTime;//遮挡时长
+    private Integer runningTime;//开机时长
+
+
+    public Integer getCoverTime() {
+        return coverTime;
+    }
+
+    public void setCoverTime(Integer coverTime) {
+        this.coverTime = coverTime;
+    }
+
+    public Integer getRunningTime() {
+        return runningTime;
+    }
+
+    public void setRunningTime(Integer runningTime) {
+        this.runningTime = runningTime;
+    }
 
     public Integer getPower() {
         return power;
