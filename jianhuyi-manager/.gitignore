@@ -11,3 +11,5 @@
 /applog/
 .DS_Store
 /doc/
+/.idea/
+jianhuyi-manager.iml
