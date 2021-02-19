@@ -239,7 +239,7 @@ public class GiftController {
             if (avgReadDuration != null && count > 0) {
                 avgReadDuration=Double.parseDouble(df.format(avgReadDuration / count));
             }
-            if (avgLookPhoneDuration > 0) {
+            if (lookPhoneCount>0) {
                 avgLookPhoneDuration=Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
             }
             if (lookScreenCount > 0) {
@@ -273,7 +273,18 @@ public class GiftController {
             resultMap.put("data", userTaskLinshiDO);
             resultMap.put("code", 0);
             resultMap.put("msg", "获取成功");
+
+            System.out.println(date);
+            System.out.println("平均每次阅读时长 "+avgReadDuration);
+            System.out.println("使用时长 "+useJianhuyiDuration);
+            System.out.println("户外时间累计 "+outdoorsDuration);
+            System.out.println("平均阅读距离 "+avgReadDistance);
+            System.out.println("平均阅读光照 "+avgReadLight);
+            System.out.println("平均单次看手机时长 "+avgLookPhoneDuration);
+            System.out.println("平均单次看电脑及电视时长 "+avgLookTvComputerDuration);
+            System.out.println("平均旋转角度 "+avgSitTilt);
         }
+
         return resultMap;
     }
 

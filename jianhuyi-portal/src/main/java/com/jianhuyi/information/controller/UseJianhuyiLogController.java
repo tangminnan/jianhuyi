@@ -237,7 +237,7 @@ public class UseJianhuyiLogController {
             if (avgReadDuration != null && count > 0) {
                 avgReadDuration=Double.parseDouble(df.format(avgReadDuration / count));
             }
-            if (avgLookPhoneDuration > 0) {
+            if (lookPhoneCount>0) {
                 avgLookPhoneDuration=Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
             }
             if (lookScreenCount > 0) {
@@ -328,7 +328,7 @@ public class UseJianhuyiLogController {
                if (avgReadDuration != null && count > 0) {
                    avgReadDuration=Double.parseDouble(df.format(avgReadDuration / count));
                }
-               if (avgLookPhoneDuration > 0) {
+               if (lookPhoneCount > 0) {
                    avgLookPhoneDuration=Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
                }
                if (lookScreenCount > 0) {
