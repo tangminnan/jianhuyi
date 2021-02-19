@@ -44,4 +44,8 @@ public interface UseJianhuyiLogService {
     UseJianhuyiLogDO getUserJianHuYiYouXiao(Long userId,String createTime);
 
     UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(Long userId, Date createTime, Date endTime);
+
+    Date getMaxDate(Long userId);
+
+    List<UseJianhuyiLogDO> getNearData(Long userId, Date date);
 }

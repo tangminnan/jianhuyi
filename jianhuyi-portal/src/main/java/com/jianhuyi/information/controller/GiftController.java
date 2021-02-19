@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collector;
@@ -180,17 +182,97 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/getLastTaskResult")
-    public Map<String,Object> getLastTaskResult(Long userId){
+    public Map<String,Object> getLastTaskResult(Long userId) throws ParseException {
         Map<String,Object> resultMap = new HashMap<String,Object>();
-        UserTaskDO userTaskDO1=userTaskService.getRecentlyTask(userId);
-        if(userTaskDO1!=null){
-            resultMap.put("data", userTaskDO1);
+        Date date  = useJianhuyiLogService.getMaxDate(userId);
+        if(date==null) {
+            resultMap.put("data", null);
+            resultMap.put("code", -1);
+            resultMap.put("msg", "没有获取不到数据，请先上传一次呗");
+        }else{
+            List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.getNearData(userId,date);
+            List<UseJianhuyiLogDO> sublist = useJianhuyiLogDOS.stream().filter(a->a.getStatus()!=null && a.getStatus()==1).collect(Collectors.toList());
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Double avgReadDuration = 0.0;//平均每次阅读时长
+            Double outdoorsDuration = 0.0;//户外时间累计版本
+            Double avgReadDistance = 0.0;//平均阅读距离
+            Double avgReadLight = 0.0;//平均阅读光照
+            Double avgLookPhoneDuration = 0.0;//平均单次看手机时长
+            Double avgLookTvComputerDuration = 0.0;//平均单次看电脑及电视时长
+            Double avgSitTilt = 0.0;//平均旋转角度
+            int lookPhoneCount = 0;//看手机次数
+            int lookScreenCount = 0;//看电脑屏幕的次数
+            int count = 0;//阅读次数
+
+            Double readDurtionNum = 0.0;
+            for(int i=0;i<sublist.size();i++) {
+                UseJianhuyiLogDO useJianhuyiLogDO = sublist.get(i);
+                avgReadDistance += useJianhuyiLogDO.getReadDistance() * useJianhuyiLogDO.getReadDuration();
+                avgSitTilt += useJianhuyiLogDO.getSitTilt() * useJianhuyiLogDO.getReadDuration();
+                avgReadLight += useJianhuyiLogDO.getReadLight() * useJianhuyiLogDO.getReadDuration();
+                readDurtionNum += useJianhuyiLogDO.getReadDuration();
+                if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
+                    avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+                }
+                if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
+                    avgLookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+                }
+                avgReadDuration += useJianhuyiLogDO.getReadDuration();
+                if (i + 1 < sublist.size()) {
+                    UseJianhuyiLogDO useJianhuyiLogDO1 = sublist.get(i + 1);
+                    long minute = (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime() -
+                            sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
+                            - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000)) / 1000 / 60;
+                    if (minute >= 5 || i == 0) {
+                        if (useJianhuyiLogDO.getLookPhoneDuration() != null && useJianhuyiLogDO.getLookPhoneDuration() > 0)
+                            lookPhoneCount++;//看手机次数
+                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0)
+                            lookScreenCount++;//看电脑屏幕的次数
+                        if (useJianhuyiLogDO.getReadDuration() >= 3) {
+                            count++;//阅读次数
+                        }
+                    }
+                }
+
+            }
+            DecimalFormat df = new DecimalFormat("#.##");
+            if (avgReadDuration != null && count > 0) {
+                avgReadDuration=Double.parseDouble(df.format(avgReadDuration / count));
+            }
+            if (avgLookPhoneDuration > 0) {
+                avgLookPhoneDuration=Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
+            }
+            if (lookScreenCount > 0) {
+                avgLookTvComputerDuration=Double.parseDouble(df.format(avgLookTvComputerDuration / lookScreenCount));
+            }
+            if (readDurtionNum > 0) {
+                avgSitTilt=Double.parseDouble(df.format(avgSitTilt / readDurtionNum));
+                avgReadLight=Double.parseDouble(df.format(avgReadLight / readDurtionNum));
+                avgReadDistance=Double.parseDouble(df.format(avgReadDistance / readDurtionNum));
+            } else {
+                avgSitTilt=0.0;
+                avgReadLight=0.0;
+                avgReadDistance=0.0;
+            }
+            outdoorsDuration=useJianhuyiLogDOS.stream()
+                    .filter(a->a.getStatus()!=null && a.getStatus()==2)
+                    .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            UseJianhuyiLogDO userJianHuYiYouXiao = useJianhuyiLogService.getUserJianHuYiYouXiao(userId,sdf.format(date));
+            Double useJianhuyiDuration = userJianHuYiYouXiao.getUseJianhuyiDuration();
+            UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
+            userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(avgReadDuration));
+            userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(avgLookPhoneDuration));
+            userTaskLinshiDO.setAvgLookTv(ResultUtils.resultAvgLookTvComputerDuration(avgLookTvComputerDuration));
+            userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(avgReadDistance));
+            userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(avgReadLight));
+            userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(avgSitTilt));
+            userTaskLinshiDO.setAvgOut(ResultUtils.resultOutdoorsDuration(outdoorsDuration));
+            userTaskLinshiDO.setEffectiveUseTime(ResultUtils.resultUseJianhuyiDuration(useJianhuyiDuration));
+            resultMap.put("data", userTaskLinshiDO);
             resultMap.put("code", 0);
             resultMap.put("msg", "获取成功");
-        }else{
-            resultMap.put("code",-1);
-            resultMap.put("data",null);
-            resultMap.put("msg","暂无上次的数据");
         }
         return resultMap;
     }
@@ -236,6 +318,29 @@ public class GiftController {
         return resultMap;
     }
 
+    /**
+     *  根据任务id查询任务记录
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getMyTaskProcess")
+    public Map<String,Object> getMyTaskProcess(Long TaskId){
+        UserTaskDO userTaskDO = userTaskService.get(TaskId);
+        Map<String,Object> resultMap = new HashMap<>();
+        if(userTaskDO!=null){
+            long d   =  (new Date().getTime()-userTaskDO.getStartTime().getTime())/1000/60/60/24;
+            userTaskDO.setFinishDay(d);//已完成天数
+            userTaskDO.setUnfinishedDay(userTaskDO.getTaskTime()-d);//未完成天数
+            resultMap.put("code",0);
+            resultMap.put("data",userTaskDO);
+            resultMap.put("msg","获取数据成功");
+        }else{
+            resultMap.put("code",-1);
+            resultMap.put("data",null);
+            resultMap.put("msg","数据获取失败");
+        }
+        return resultMap;
+    }
 
     /**
      * 获取任务记录
@@ -360,7 +465,7 @@ public class GiftController {
     /**
      * pc端礼物列表（老师端，礼物任务自定义）
      * */
-    /*@ResponseBody
+    @ResponseBody
     @GetMapping("/listPc")
     public String listPc(@RequestParam("callback") String callback) {
         Map<String, Object> data = new HashMap<>();
@@ -369,7 +474,7 @@ public class GiftController {
         List<GiftDO> giftDOList = giftService.list(params);
         data.put("data", giftDOList);
         return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
-    }*/
+    }
 
     /**
      * pc端礼物列表（家长端）

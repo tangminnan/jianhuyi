@@ -1347,6 +1347,16 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
         return useJianhuyiLogDao.getUserJianHuYiYouXiaoAll(userId,createTime,endTime);
     }
 
+    @Override
+    public Date getMaxDate(Long userId) {
+        return useJianhuyiLogDao.getMaxDate(userId);
+    }
+
+    @Override
+    public List<UseJianhuyiLogDO> getNearData(Long userId, Date date) {
+        return useJianhuyiLogDao.getNearData(userId,date);
+    }
+
     //获取时间段内统计数据
     public List<UseJianhuyiLogDO> getDataByDay(Map<String, Object> map) {
         //用来保留两位小数

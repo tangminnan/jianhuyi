@@ -88,4 +88,8 @@ public interface UseJianhuyiLogDao {
     UseJianhuyiLogDO getUserJianHuYiYouXiao(@Param("userId") Long userId,@Param("createTime") String createTime);
 
     UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(@Param("userId") Long userId,@Param("createTime") Date createTime,@Param("endTime") Date endTime);
+
+    Date getMaxDate(Long userId);
+
+    List<UseJianhuyiLogDO> getNearData(@Param("userId") Long userId,@Param("date") Date date);
 }

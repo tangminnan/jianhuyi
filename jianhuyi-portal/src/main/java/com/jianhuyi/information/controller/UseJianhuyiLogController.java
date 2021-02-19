@@ -228,7 +228,7 @@ public class UseJianhuyiLogController {
                         lookPhoneCount++;//看手机次数
                     if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0)
                         lookScreenCount++;//看电脑屏幕的次数
-                    if (useJianhuyiLogDO.getReadDuration() >= 5) {
+                    if (useJianhuyiLogDO.getReadDuration() >= 3) {
                         count++;//阅读次数
                     }
                 }
@@ -314,10 +314,10 @@ public class UseJianhuyiLogController {
                            - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000)) / 1000 / 60;
                    if (minute >= 5 || i == 0) {
                        if (useJianhuyiLogDO.getLookPhoneDuration() != null && useJianhuyiLogDO.getLookPhoneDuration() > 0)
-                           lookPhoneCount++;//看手机次数
+                       lookPhoneCount++;//看手机次数
                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0)
                            lookScreenCount++;//看电脑屏幕的次数
-                       if (useJianhuyiLogDO.getReadDuration() >= 5) {
+                       if (useJianhuyiLogDO.getReadDuration() >= 3) {
                            count++;//阅读次数
                        }
                    }
