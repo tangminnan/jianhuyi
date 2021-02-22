@@ -73,7 +73,11 @@
         `save_time`,
         user_id,
         equipment_id,
-        upload_id
+        upload_id,
+        running_time,
+        effective_time,
+        cover_time,
+        noneffective_time
         )
         values
         <foreach collection="useTimeDOList" item="item" separator=",">
@@ -82,7 +86,11 @@
             #{item.saveTime},
             #{item.userId},
             #{item.equipmentId},
-            #{item.uploadId}
+            #{item.uploadId},
+            #{item.runningTime},
+            #{item.effectiveTime},
+            #{item.coverTime},
+            #{item.noneffectiveTime}
             )
         </foreach>
     </insert>

@@ -87,7 +87,7 @@
         substr(use_time, 1, 10)
     </select>
 
-    <select id="getUserJianHuYiYouXiao"  resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+    <select id="getUserJianHuYiYouXiao" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         SELECT
         COUNT(*) / 20 useJianhuyiDuration
         FROM

@@ -26,68 +26,104 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Date;
 
-
 /**
  * @author chglee
  * @email 1992lcg@163.com
  * @date 2020-03-25 09:40:41
  */
-
 @Controller
 @RequestMapping("/original/data")
 public class DataController {
-    @Autowired
-    private DataService dataService;
-    @Autowired
-    private DataImgService dataImgService;
-    @Autowired
-    private EnergysDataService energysDataService;
-    @Autowired
-    private ErrorDataService errorDataService;
-    @Autowired
-    private BootdoConfig bootdoConfig;
-    @Autowired
-    private DataInitService dataInitService;
+  @Autowired private DataService dataService;
+  @Autowired private DataImgService dataImgService;
+  @Autowired private EnergysDataService energysDataService;
+  @Autowired private ErrorDataService errorDataService;
+  @Autowired private BootdoConfig bootdoConfig;
+  @Autowired private DataInitService dataInitService;
 
-    @ResponseBody
-    @PostMapping("/saveInit")
-    R saveInit(@RequestBody MultipartFile initFile,int type) {
-        String filename = initFile.getOriginalFilename();
-        String[] str = filename.split("_");
-        try {
-            FileUtil.uploadFile(initFile.getBytes(), bootdoConfig.getUploadPath() + "/initFile/", filename);
+  @ResponseBody
+  @PostMapping("/saveInit")
+  R saveInit(@RequestBody MultipartFile initFile, int type) {
+    String filename = initFile.getOriginalFilename();
+    String[] str = filename.split("_");
+    try {
+      FileUtil.uploadFile(
+          initFile.getBytes(), bootdoConfig.getUploadPath() + "/initFile/", filename);
 
-            HistoryDataBean historyDataBean = new HistoryDataBean();
-            File file = new File(bootdoConfig.getUploadPath() + "/initFile/"+filename);
-            if(file.exists()) {
-                historyDataBean = DataParseUtil.readFileTo(file);
-                historyDataBean.setEquipmentId(str[0]);
-                historyDataBean.setUserId(Integer.parseInt(str[1]));
+      HistoryDataBean historyDataBean = new HistoryDataBean();
+      File file = new File(bootdoConfig.getUploadPath() + "/initFile/" + filename);
+      if (file.exists()) {
+        historyDataBean = DataParseUtil.readFileTo(file);
+        historyDataBean.setEquipmentId(str[0]);
+        historyDataBean.setUserId(Integer.parseInt(str[1]));
+      }
+      for (SerialDataBean serialDataBean : historyDataBean.getDataDOList()) {
+        serialDataBean.setEquipmentId(str[0]);
+      }
+      historyDataBean.setReadData(JSON.toJSON(historyDataBean.getDataDOList()).toString());
+      historyDataBean.setEnergysData(
+          JSON.toJSON(historyDataBean.getEnergysDataDOList()).toString());
+      historyDataBean.setErrorData(JSON.toJSON(historyDataBean.getErrorDataDOList()).toString());
+      historyDataBean.setRemaindData(JSON.toJSON(historyDataBean.getRemaind()).toString());
+
+      historyDataBean.setAddTime(new Date());
+      if (historyDataBean.getDataDOList().size() > 0) {
+        historyDataBean.setStartTime(historyDataBean.getDataDOList().get(0).getStartTime());
+      }
+
+      historyDataBean.setType(type);
+      if (dataInitService.save(historyDataBean) > 0) {
+        return R.ok();
+      } else {
+        return R.error("解析失败");
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return R.error(500, e.toString());
+    }
+  }
+
+  /** 保存 */
+  @ResponseBody
+  @PostMapping("/save")
+  public R save(@RequestBody MultipartFile originalFile) {
+    String baseDatasDB;
+    String remaindDB;
+    String imgs;
+    Integer result = 0;
+    String filename = originalFile.getOriginalFilename();
+    try {
+      FileUtil.uploadFile(
+          originalFile.getBytes(), bootdoConfig.getUploadPath() + "/originalFile/", filename);
+      File file = new File(bootdoConfig.getUploadPath() + "/originalFile/" + filename);
+      FileReader in = new FileReader(file);
+      BufferedReader br = new BufferedReader(in);
+      String str = br.readLine();
+
+      if (str != null) {
+        JSONObject queryJson = JSONObject.parseObject(new String(str));
+        QueryDOS query = JSON.toJavaObject(queryJson, QueryDOS.class);
+
+        if (query.getEnergysDataDOList().size() > 0) {
+          for (EnergysDataDO energysDataDO : query.getEnergysDataDOList()) {
+            energysDataDO.setUpdateTime(new Date());
+            if (query.getUserId() != null) {
+              energysDataDO.setUserId(query.getUserId());
             }
-            for (SerialDataBean serialDataBean : historyDataBean.getDataDOList()) {
-                serialDataBean.setEquipmentId(str[0]);
-            }
-            historyDataBean.setReadData(JSON.toJSON(historyDataBean.getDataDOList()).toString());
-            historyDataBean.setEnergysData(JSON.toJSON(historyDataBean.getEnergysDataDOList()).toString());
-            historyDataBean.setErrorData(JSON.toJSON(historyDataBean.getErrorDataDOList()).toString());
-            historyDataBean.setRemaindData(JSON.toJSON(historyDataBean.getRemaind()).toString());
-
-            historyDataBean.setAddTime(new Date());
-            if(historyDataBean.getDataDOList().size()>0){
-                historyDataBean.setStartTime(historyDataBean.getDataDOList().get(0).getStartTime());
-            }
-
-            historyDataBean.setType(type);
-            if(dataInitService.save(historyDataBean)>0){
-                return R.ok();
-            }else{
-                return R.error("解析失败");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return R.error(500, e.toString());
+          }
+          result += energysDataService.saveList(query.getEnergysDataDOList());
         }
+        if (query.getErrorDataDOList().size() > 0) {
+          for (ErrorDataDO errorDataDO : query.getErrorDataDOList()) {
+            errorDataDO.setUpdateTime(new Date());
+            if (query.getUserId() != null) {
+              errorDataDO.setUserId(query.getUserId());
+            }
+          }
+          result += errorDataService.saveList(query.getErrorDataDOList());
+        }
+<<<<<<< HEAD
     }
 
 
@@ -162,17 +198,48 @@ public class DataController {
                     result += dataService.saveList(query.getDataDOList());
                 }
 
+=======
+>>>>>>> 82eac818a75d5d469fd6d9dd5227f60f52d233e4
 
+        if (query.getDataDOList().size() > 0) {
+          for (DataDO datum : query.getDataDOList()) {
+            if (datum != null) {
+              datum.setUpdateTime(new Date());
+              if (datum.getBaseDatas() != null) {
+                baseDatasDB = JSON.toJSON(datum.getBaseDatas()).toString();
+                datum.setBaseDatasDB(baseDatasDB);
+              }
+              if (datum.getRemaind() != null) {
+                remaindDB = JSON.toJSON(datum.getRemaind()).toString();
+                datum.setRemaindDB(remaindDB);
+              }
+              if (datum.getPictures() != null) {
+                imgs = JSON.toJSON(datum.getPictures()).toString();
+                datum.setImgs(imgs);
+              }
+              if (query.getUserId() != null) {
+                datum.setUserId(query.getUserId());
+              }
+              if (query.getUploadId() != null) {
+                datum.setUploadId(query.getUploadId());
+              }
+              if (query.getEquipmentId() != null) {
+                datum.setEquipmentId(query.getEquipmentId());
+              }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return R.error(500, e.toString());
+          }
+          result += dataService.saveList(query.getDataDOList());
         }
-        if (result > 0) {
-            FileUtil.deleteFile(bootdoConfig.getUploadPath() + "/originalFile/" + filename);
-            return R.ok();
-        } else {
-            return R.error(-1, "上传失败");
-        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return R.error(500, e.toString());
     }
+    if (result > 0) {
+      FileUtil.deleteFile(bootdoConfig.getUploadPath() + "/originalFile/" + filename);
+      return R.ok();
+    } else {
+      return R.error(-1, "上传失败");
+    }
+  }
 }
