@@ -144,7 +144,7 @@
 
     <select id="getMyData" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         SELECT  * FROM  t_use_jianhuyi_log where save_time between #{startTime}
-        and #{endTime} where user_id=#{userId}
+        and #{endTime} and user_id=#{userId}
     </select>
 
     <!--每日震动提醒次数-->

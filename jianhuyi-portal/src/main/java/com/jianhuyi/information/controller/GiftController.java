@@ -223,12 +223,12 @@ public class GiftController {
                     long minute = (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime() -
                             sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
                             - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000)) / 1000 / 60;
-                    if (minute >= 5 || i == 0) {
+                    if (minute >= 3 || i == 0) {
                         if (useJianhuyiLogDO.getLookPhoneDuration() != null && useJianhuyiLogDO.getLookPhoneDuration() > 0)
                             lookPhoneCount++;//看手机次数
                         if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0)
                             lookScreenCount++;//看电脑屏幕的次数
-                        if (useJianhuyiLogDO.getReadDuration() >= 3) {
+                        if (useJianhuyiLogDO.getReadDuration() >= 5) {
                             count++;//阅读次数
                         }
                     }

@@ -63,7 +63,6 @@ public class UseJianhuyiLogController {
             BufferedReader br = new BufferedReader(in);
             String str = br.readLine();
 
-            System.out.println("========str===============" + str);
             if (str != null) {
                 JSONObject userlog = JSONObject.parseObject(new String(str));
                 SaveParamsDO saveParamsDO = JSON.toJavaObject(userlog, SaveParamsDO.class);
@@ -141,10 +140,18 @@ public class UseJianhuyiLogController {
              */
             if (saveParamsDOList.getUseJianhuyiLogDOList() != null && saveParamsDOList.getUseJianhuyiLogDOList().size() > 0) {
                 Long userId = saveParamsDOList.getUserId();
+                System.out.println("userId==================="+userId);
+                System.out.println("userId==================="+userId);
+                System.out.println("userId==================="+userId);
+                System.out.println("userId==================="+userId);
                 UserDO userDO = userService.getById(userId);
                 if(userDO!=null && userDO.getTaskId()!=null){
                     UserTaskDO userTaskDO = userTaskService.get(userDO.getTaskId());
                     if(userTaskDO!=null){
+                        System.out.println("统计分析数据==============="+userTaskDO.getId());
+                        System.out.println("统计分析数据==============="+userTaskDO.getId());
+                        System.out.println("统计分析数据==============="+userTaskDO.getId());
+                        System.out.println("统计分析数据==============="+userTaskDO.getId());
                         Date createTime = userTaskDO.getStartTime();//最近一次任务的开始时间
                         Integer taskTime = userTaskDO.getTaskTime();//最近一次任务的天数
                         Calendar calendar = Calendar.getInstance();
@@ -160,6 +167,10 @@ public class UseJianhuyiLogController {
                             List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.getMyData(map);
                             if(useJianhuyiLogDOList.size()>0){//创建线程进行统计分析
                                new Thread(()->{
+                                   System.out.println("创建线程统计分析数据");
+                                   System.out.println("创建线程统计分析数据");
+                                   System.out.println("创建线程统计分析数据");
+                                   System.out.println("创建线程统计分析数据");
                                    System.out.println("创建线程统计分析数据");
                                     try {
                                         countPerDay(userTaskDO,useJianhuyiLogDOList);//统计任务每天评级
@@ -223,12 +234,12 @@ public class UseJianhuyiLogController {
                 long minute = (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime() -
                         sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
                         - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000)) / 1000 / 60;
-                if (minute >= 5 || i == 0) {
+                if (minute >= 3 || i == 0) {
                     if (useJianhuyiLogDO.getLookPhoneDuration() != null && useJianhuyiLogDO.getLookPhoneDuration() > 0)
                         lookPhoneCount++;//看手机次数
                     if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0)
                         lookScreenCount++;//看电脑屏幕的次数
-                    if (useJianhuyiLogDO.getReadDuration() >= 3) {
+                    if (useJianhuyiLogDO.getReadDuration() >= 5) {
                         count++;//阅读次数
                     }
                 }
@@ -312,12 +323,12 @@ public class UseJianhuyiLogController {
                    long minute = (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime() -
                            sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
                            - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000)) / 1000 / 60;
-                   if (minute >= 5 || i == 0) {
+                   if (minute >= 3 || i == 0) {
                        if (useJianhuyiLogDO.getLookPhoneDuration() != null && useJianhuyiLogDO.getLookPhoneDuration() > 0)
                        lookPhoneCount++;//看手机次数
                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0)
                            lookScreenCount++;//看电脑屏幕的次数
-                       if (useJianhuyiLogDO.getReadDuration() >= 3) {
+                       if (useJianhuyiLogDO.getReadDuration() >= 5) {
                            count++;//阅读次数
                        }
                    }

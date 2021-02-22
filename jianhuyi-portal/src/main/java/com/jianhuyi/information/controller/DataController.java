@@ -109,7 +109,6 @@ public class DataController {
             BufferedReader br = new BufferedReader(in);
             String str = br.readLine();
 
-            System.out.println("========str===============" + str);
             if (str != null) {
                 JSONObject queryJson = JSONObject.parseObject(new String(str));
                 QueryDOS query = JSON.toJavaObject(queryJson, QueryDOS.class);
