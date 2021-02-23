@@ -34,6 +34,16 @@ public class UseTimeDO implements Serializable {
 
   private int noneffectiveTime;
 
+  private int serialNumber;
+
+  public int getSerialNumber() {
+    return serialNumber;
+  }
+
+  public void setSerialNumber(int serialNumber) {
+    this.serialNumber = serialNumber;
+  }
+
   public int getRunningTime() {
     return runningTime;
   }
@@ -139,8 +149,23 @@ public class UseTimeDO implements Serializable {
         + saveTime
         + ", userId="
         + userId
-        + ", equipmentId="
+        + ", uploadId="
+        + uploadId
+        + ", equipmentId='"
         + equipmentId
+        + '\''
+        + ", userDurtion="
+        + userDurtion
+        + ", runningTime="
+        + runningTime
+        + ", effectiveTime="
+        + effectiveTime
+        + ", coverTime="
+        + coverTime
+        + ", noneffectiveTime="
+        + noneffectiveTime
+        + ", serialNumber="
+        + serialNumber
         + '}';
   }
 }
