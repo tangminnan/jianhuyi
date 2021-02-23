@@ -52,7 +52,7 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
     }
 
     @Override
-    public int getTotalScore(Long id) {
+    public Integer getTotalScore(Long id) {
         return userTaskLinshiDao.getTotalScore(id);
     }
 

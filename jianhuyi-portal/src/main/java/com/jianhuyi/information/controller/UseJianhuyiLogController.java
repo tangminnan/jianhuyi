@@ -520,7 +520,7 @@ public class UseJianhuyiLogController {
       }
 
     } else if (flag == 1) {
-      int totalScore = userTaskLinshiService.getTotalScore(userTaskDO.getId());
+      Integer totalScore = userTaskLinshiService.getTotalScore(userTaskDO.getId());
       userTaskDO.setTotalScore(totalScore); // 总积分
       userTaskDO.setAvgReadResult(ResultUtils.resultAvgReadDuration(avgReadDuration));
       userTaskDO.setAvgLookPhoneResult(
