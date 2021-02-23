@@ -521,6 +521,9 @@ public class UseJianhuyiLogController {
 
     } else if (flag == 1) {
       Integer totalScore = userTaskLinshiService.getTotalScore(userTaskDO.getId());
+      System.out.println(userTaskDO.getId()+"============="+totalScore);
+      System.out.println(userTaskDO.getId()+"============="+totalScore);
+      System.out.println(userTaskDO.getId()+"============="+totalScore);
       userTaskDO.setTotalScore(totalScore); // 总积分
       userTaskDO.setAvgReadResult(ResultUtils.resultAvgReadDuration(avgReadDuration));
       userTaskDO.setAvgLookPhoneResult(
