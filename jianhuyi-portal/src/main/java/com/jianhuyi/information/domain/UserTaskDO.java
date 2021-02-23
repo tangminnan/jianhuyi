@@ -29,6 +29,12 @@ public class UserTaskDO implements Serializable {
      *
      */
     private String countGrade;
+
+    /**
+     *  上次评级：平均每次阅读时长 5=优 4=良  2=差  1=极差
+     */
+    private String lastavgRead;
+    /**
     /**
      *  目标设定：平均每次阅读时长 5=优 4=良  2=差  1=极差
      */
@@ -45,6 +51,11 @@ public class UserTaskDO implements Serializable {
      *  本次平均每次阅读时长最终积分
      */
     private Integer avgReadScoreResult;
+
+    /**
+     *  上次评级：平均户外时长 5=优 4=良  2=差  1=极差
+     */
+    private String lastavgOut;
 
     /**
      *  目标设定：平均户外时长 5=优 4=良  2=差  1=极差
@@ -65,6 +76,10 @@ public class UserTaskDO implements Serializable {
 
 
     /**
+     *  上次评级：平均阅读距离 5=优 4=良  2=差  1=极差
+     */
+    private String lastavgReadDistance;
+    /**
      *  目标设定：平均阅读距离 5=优 4=良  2=差  1=极差
      */
     private String avgReadDistance;
@@ -82,7 +97,10 @@ public class UserTaskDO implements Serializable {
     private Integer avgReadDistanceScoreResult;
 
 
-
+    /**
+     *  上次评级：平均单次看手机时长 5=优 4=良  2=差  1=极差
+     */
+    private String lastavgLookPhone;
     /**
      *  目标设定：平均单次看手机时长 5=优 4=良  2=差  1=极差
      */
@@ -100,6 +118,10 @@ public class UserTaskDO implements Serializable {
      */
     private Integer avgLookPhoneScoreResult;
 
+    /**
+     *  上次评级：平均单次看电脑电视时长 5=优 4=良  2=差  1=极差
+     */
+    private String lastavgLookTv;
 
     /**
      *  目标设定：平均单次看电脑电视时长 5=优 4=良  2=差  1=极差
@@ -119,6 +141,10 @@ public class UserTaskDO implements Serializable {
     private Integer avgLookScoreResult;
 
     /**
+     *  上次评级：平均阅读旋转角度 5=优 4=良  2=差  1=极差
+     */
+    private String lastavgSitTilt;
+    /**
      *  目标设定：平均阅读旋转角度 5=优 4=良  2=差  1=极差
      */
     private String avgSitTilt;
@@ -135,6 +161,10 @@ public class UserTaskDO implements Serializable {
      */
     private Integer avgSitTiltScoreResult;
 
+    /**
+     *  上次评级：有效使用时长 5=优 4=良  2=差  1=极差
+     */
+    private String lasteffectiveUseTime;
 
     /**
      *  目标设定：有效使用时长 5=优 4=良  2=差  1=极差
@@ -156,7 +186,10 @@ public class UserTaskDO implements Serializable {
 
 
 
-
+    /**
+     *  上次评级：平均每次阅读光照 5=优 4=良  2=差  1=极差
+     */
+    private String lastavgLight;
 
     /**
      *  目标设定：平均每次阅读光照 5=优 4=良  2=差  1=极差
@@ -210,6 +243,11 @@ public class UserTaskDO implements Serializable {
      *  任务开始时间
      */
     private Date startTime;
+
+    /**
+     *  1=学校，2=个人
+     */
+    private Integer taskType;
 
 
     public Long getId() {
@@ -571,5 +609,130 @@ public class UserTaskDO implements Serializable {
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
+
+
+    public Integer getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(Integer taskType) {
+        this.taskType = taskType;
+    }
+
+    public String getLastavgRead() {
+        return lastavgRead;
+    }
+
+    public void setLastavgRead(String lastavgRead) {
+        this.lastavgRead = lastavgRead;
+    }
+
+    public String getLastavgOut() {
+        return lastavgOut;
+    }
+
+    public void setLastavgOut(String lastavgOut) {
+        this.lastavgOut = lastavgOut;
+    }
+
+    public String getLastavgReadDistance() {
+        return lastavgReadDistance;
+    }
+
+    public void setLastavgReadDistance(String lastavgReadDistance) {
+        this.lastavgReadDistance = lastavgReadDistance;
+    }
+
+    public String getLastavgLookPhone() {
+        return lastavgLookPhone;
+    }
+
+    public void setLastavgLookPhone(String lastavgLookPhone) {
+        this.lastavgLookPhone = lastavgLookPhone;
+    }
+
+    public String getLastavgLookTv() {
+        return lastavgLookTv;
+    }
+
+    public void setLastavgLookTv(String lastavgLookTv) {
+        this.lastavgLookTv = lastavgLookTv;
+    }
+
+    public String getLastavgSitTilt() {
+        return lastavgSitTilt;
+    }
+
+    public void setLastavgSitTilt(String lastavgSitTilt) {
+        this.lastavgSitTilt = lastavgSitTilt;
+    }
+
+    public String getLasteffectiveUseTime() {
+        return lasteffectiveUseTime;
+    }
+
+    public void setLasteffectiveUseTime(String lasteffectiveUseTime) {
+        this.lasteffectiveUseTime = lasteffectiveUseTime;
+    }
+
+    public String getLastavgLight() {
+        return lastavgLight;
+    }
+
+    public void setLastavgLight(String lastavgLight) {
+        this.lastavgLight = lastavgLight;
+    }
+
+    @Override
+    public String toString() {
+        return "UserTaskDO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", type=" + type +
+                ", taskTime=" + taskTime +
+                ", countGrade='" + countGrade + '\'' +
+                ", avgRead='" + avgRead + '\'' +
+                ", avgReadResult='" + avgReadResult + '\'' +
+                ", avgReadScore=" + avgReadScore +
+                ", avgReadScoreResult=" + avgReadScoreResult +
+                ", avgOut='" + avgOut + '\'' +
+                ", avgOutResult='" + avgOutResult + '\'' +
+                ", avgOutScore=" + avgOutScore +
+                ", avgOutScoreResult=" + avgOutScoreResult +
+                ", avgReadDistance='" + avgReadDistance + '\'' +
+                ", avgReadDistanceResult='" + avgReadDistanceResult + '\'' +
+                ", avgReadDistanceScore=" + avgReadDistanceScore +
+                ", avgReadDistanceScoreResult=" + avgReadDistanceScoreResult +
+                ", avgLookPhone='" + avgLookPhone + '\'' +
+                ", avgLookPhoneResult='" + avgLookPhoneResult + '\'' +
+                ", avgLookPhoneScore=" + avgLookPhoneScore +
+                ", avgLookPhoneScoreResult=" + avgLookPhoneScoreResult +
+                ", avgLookTv='" + avgLookTv + '\'' +
+                ", avgLookTvResult='" + avgLookTvResult + '\'' +
+                ", avgLookScore=" + avgLookScore +
+                ", avgLookScoreResult=" + avgLookScoreResult +
+                ", avgSitTilt='" + avgSitTilt + '\'' +
+                ", avgSitTiltResult='" + avgSitTiltResult + '\'' +
+                ", avgSitTiltScore=" + avgSitTiltScore +
+                ", avgSitTiltScoreResult=" + avgSitTiltScoreResult +
+                ", effectiveUseTime='" + effectiveUseTime + '\'' +
+                ", effectiveUseTimeResult='" + effectiveUseTimeResult + '\'' +
+                ", effectiveUseTimeScore=" + effectiveUseTimeScore +
+                ", effectiveUseTimeScoreResult=" + effectiveUseTimeScoreResult +
+                ", avgLight='" + avgLight + '\'' +
+                ", avgLightResult='" + avgLightResult + '\'' +
+                ", avgLightScore=" + avgLightScore +
+                ", avgLightScoreResult=" + avgLightScoreResult +
+                ", gift='" + gift + '\'' +
+                ", finishDay=" + finishDay +
+                ", unfinishedDay=" + unfinishedDay +
+                ", createTime=" + createTime +
+                ", flag=" + flag +
+                ", totalScore=" + totalScore +
+                ", totaluser=" + totaluser +
+                ", startTime=" + startTime +
+                '}';
+    }
+
 
 }

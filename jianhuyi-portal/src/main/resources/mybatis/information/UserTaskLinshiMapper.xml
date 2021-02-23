@@ -4,12 +4,12 @@
 <mapper namespace="com.jianhuyi.information.dao.UserTaskLinshiDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
-		select `id`,`user_id`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time` from t_user_task_linshi where id = #{value}
+		select `id`,`user_id`,`eye_rate`,score,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time` from t_user_task_linshi where id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
         select
-        `id`,`user_id`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time`
+        `id`,`user_id`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time`,score,hourtime
         from t_user_task_linshi
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>
@@ -145,5 +145,27 @@
     <select id="getRecentlyDate" resultType="date">
         select create_time from t_user_task_linshi where `user_id` = #{userId} order by create_time desc limit 1
     </select>
+
+    <update id="updateCurrentDay" parameterType="com.jianhuyi.information.domain.UserTaskLinshiDO">
+        update t_user_task_linshi
+        <set>
+
+            <if test="eyeRate != null">`eye_rate` = #{eyeRate}, </if>
+            <if test="avgRead != null">`avg_read` = #{avgRead}, </if>
+            <if test="avgOut != null">`avg_out` = #{avgOut}, </if>
+            <if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance}, </if>
+            <if test="avgLookPhone != null">`avg_look_phone` = #{avgLookPhone}, </if>
+            <if test="avgLookTv != null">`avg_look_tv` = #{avgLookTv}, </if>
+            <if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt}, </if>
+            <if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime}, </if>
+            <if test="avgLight != null">`avg_light` = #{avgLight}, </if>
+
+            <if test="score != null">`score` = #{score}, </if>
+            <if test="hourtime != null">`hourtime` = #{hourtime}, </if>
+            <if test="iffinish != null">`iffinish` = #{iffinish} </if>
+
+        </set>
+        where `user_id` = #{userId} and `task_id` = #{taskId} and `create_time` = #{createTime}
+    </update>
 
 </mapper>

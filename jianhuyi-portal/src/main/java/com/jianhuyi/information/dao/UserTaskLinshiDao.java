@@ -30,7 +30,9 @@ public interface UserTaskLinshiDao {
 
     int batchRemove(Long[] ids);
 
-    int getTotalScore(Long id);
+    Integer getTotalScore(Long id);
 
     Date getRecentlyDate(Long userId);
+
+    void updateCurrentDay(UserTaskLinshiDO userTaskLinshiDO);
 }

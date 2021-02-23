@@ -52,13 +52,18 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
     }
 
     @Override
-    public int getTotalScore(Long id) {
+    public Integer getTotalScore(Long id) {
         return userTaskLinshiDao.getTotalScore(id);
     }
 
     @Override
     public Date getRecentlyDate(Long userId) {
         return userTaskLinshiDao.getRecentlyDate(userId);
+    }
+
+    @Override
+    public void updateCurrentDay(UserTaskLinshiDO userTaskLinshiDO) {
+        userTaskLinshiDao.updateCurrentDay(userTaskLinshiDO);
     }
 
 }
