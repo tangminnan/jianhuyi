@@ -4,7 +4,12 @@
 <mapper namespace="com.jianhuyi.information.dao.UserTaskDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.UserTaskDO">
-		select `id`,`user_id`,start_time,addready_score,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`avg_light`,`create_time`,type,task_type from t_user_task where id = #{value}
+        SELECT
+	*
+FROM
+	t_user_task
+WHERE
+	id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.UserTaskDO">
@@ -124,7 +129,16 @@
 			`avg_light_score_result`,
 			`count_grade`,
 			`gift`,
-			 start_time
+			 start_time,
+			 task_type,
+			`lastavgRead`,
+            `lastavgOut`,
+            `lastavgReadDistance`,
+            `lastavgLookTv`,
+            `lastavgSitTilt`,
+            `lasteffectiveUseTime`,
+            `lastavgLight`,
+            `lastavgLookPhone`
 		)
 		values
 		(
@@ -171,7 +185,16 @@
 			#{avgLightScoreResult},
 			#{countGrade},
 			#{gift},
-			#{startTime}
+			#{startTime},
+			#{taskType},
+			#{lastavgRead},
+            #{lastavgOut},
+            #{lastavgReadDistance},
+            #{lastavgLookTv},
+            #{lastavgSitTilt},
+            #{lasteffectiveUseTime},
+            #{lastavgLight},
+            #{lastavgLookPhone}
 		)
 	</insert>
 
@@ -180,7 +203,6 @@
         <set>
             <if test="userId != null">`user_id` = #{userId}, </if>
             <if test="taskTime != null">`task_time` = #{taskTime}, </if>
-            <if test="eyeRate != null">`eye_rate` = #{eyeRate}, </if>
             <if test="avgRead != null">`avg_read` = #{avgRead}, </if>
             <if test="avgOut != null">`avg_out` = #{avgOut}, </if>
             <if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance}, </if>
@@ -188,13 +210,9 @@
             <if test="avgLookTv != null">`avg_look_tv` = #{avgLookTv}, </if>
             <if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt}, </if>
             <if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime}, </if>
-            <if test="finishStatus != null">`finish_status` = #{finishStatus}, </if>
-            <if test="finishDay != null">`finish_day` = #{finishDay}, </if>
-            <if test="unfinishedDay != null">`unfinished_day` = #{unfinishedDay}, </if>
             <if test="avgLight != null">`avg_light` = #{avgLight}, </if>
             <if test="createTime != null">`create_time` = #{createTime}, </if>
             <if test="type != null">`type` = #{type}, </if>
-            <if test="taskType != null">`task_type` = #{taskType}, </if>
             <if test="avgReadResult != null">`avg_read_result` = #{avgReadResult}, </if>
             <if test="avgReadScore != null">`avg_read_score` = #{avgReadScore}, </if>
             <if test="avgReadScoreResult != null">`avg_read_score_result` = #{avgReadScoreResult}, </if>
@@ -220,7 +238,8 @@
             <if test="avgLightScore != null">`avg_light_score` = #{avgLightScore}, </if>
             <if test="avgLightScoreResult != null">`avg_light_score_result` = #{avgLightScoreResult}, </if>
             <if test="countGrade != null">`count_grade` = #{countGrade}, </if>
-            <if test="gift != null">`gift` = #{gift}</if>
+            <if test="gift != null">`gift` = #{gift},</if>
+            <if test="totalScore != null">`total_score` = #{totalScore}</if>
         </set>
         where id = #{id}
     </update>

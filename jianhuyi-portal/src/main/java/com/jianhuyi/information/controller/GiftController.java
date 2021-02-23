@@ -147,7 +147,7 @@ public class GiftController {
      */
     @ResponseBody
     @PostMapping("/submitTask")
-    public Map<String,Object> submitTask(UserTaskDO userTaskDO){
+    public Map<String,Object> submitTask(UserTaskDO userTaskDO) throws ParseException {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         Long userId = userTaskDO.getUserId();
         UserTaskDO userTaskDO1=userTaskService.getCurrentTaskN(userId);
@@ -160,6 +160,17 @@ public class GiftController {
             calendar.set(Calendar.MINUTE,0);
             calendar.set(Calendar.SECOND,0);
             userTaskDO.setStartTime(calendar.getTime());
+            userTaskDO.setTaskType(2);//个人任务
+            Map<String,Object> map =  getLastTaskResult(userId);
+            UserTaskLinshiDO userTaskLinshiDO = (UserTaskLinshiDO)map.get("data");
+            userTaskDO.setLastavgLight(userTaskLinshiDO.getAvgLight());
+            userTaskDO.setLastavgLookPhone(userTaskLinshiDO.getAvgLookPhone());
+            userTaskDO.setLastavgLookTv(userTaskLinshiDO.getAvgLookTv());
+            userTaskDO.setLastavgOut(userTaskLinshiDO.getAvgOut());
+            userTaskDO.setLastavgRead(userTaskLinshiDO.getAvgRead());
+            userTaskDO.setLastavgReadDistance(userTaskLinshiDO.getAvgReadDistance());
+            userTaskDO.setLastavgSitTilt(userTaskLinshiDO.getAvgSitTilt());
+            userTaskDO.setLasteffectiveUseTime(userTaskLinshiDO.getEffectiveUseTime());
             userTaskService.save(userTaskDO);
 
             userService.updateTaskIdInUser(userId,userTaskDO.getId());
@@ -202,15 +213,35 @@ public class GiftController {
             Double avgSitTilt = 0.0;//平均旋转角度
             int lookPhoneCount = 0;//看手机次数
             int lookScreenCount = 0;//看电脑屏幕的次数
+            int avgReadLightCount=0;//光照强度次数
+            int avgSitTiltCount=0;//角度次数
+            int  avgReadDistanceCount=0;
             int count = 0;//阅读次数
 
             Double readDurtionNum = 0.0;
             for(int i=0;i<sublist.size();i++) {
                 UseJianhuyiLogDO useJianhuyiLogDO = sublist.get(i);
-                avgReadDistance += useJianhuyiLogDO.getReadDistance() * useJianhuyiLogDO.getReadDuration();
-                avgSitTilt += useJianhuyiLogDO.getSitTilt() * useJianhuyiLogDO.getReadDuration();
-                avgReadLight += useJianhuyiLogDO.getReadLight() * useJianhuyiLogDO.getReadDuration();
-                readDurtionNum += useJianhuyiLogDO.getReadDuration();
+
+                if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412) {
+                    avgReadLight += 100*ResultUtils.log(useJianhuyiLogDO.getReadLight(),4.3) ;
+                    avgReadLightCount++;
+                }
+                if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412
+                        &&  useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
+                        && useJianhuyiLogDO.getReadDistance()<=60){
+
+
+                    avgSitTilt += useJianhuyiLogDO.getSitTilt();
+                    avgSitTiltCount++;
+                }
+
+                if(useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
+                        && useJianhuyiLogDO.getReadDistance()<=60){
+
+
+                    avgReadDistance += useJianhuyiLogDO.getReadDistance();
+                    avgReadDistanceCount++;
+                }
                 if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
                     avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
                 }
@@ -245,14 +276,18 @@ public class GiftController {
             if (lookScreenCount > 0) {
                 avgLookTvComputerDuration=Double.parseDouble(df.format(avgLookTvComputerDuration / lookScreenCount));
             }
-            if (readDurtionNum > 0) {
-                avgSitTilt=Double.parseDouble(df.format(avgSitTilt / readDurtionNum));
-                avgReadLight=Double.parseDouble(df.format(avgReadLight / readDurtionNum));
-                avgReadDistance=Double.parseDouble(df.format(avgReadDistance / readDurtionNum));
-            } else {
-                avgSitTilt=0.0;
-                avgReadLight=0.0;
-                avgReadDistance=0.0;
+
+            if(avgReadLightCount>0){
+                avgReadLight = Double.parseDouble(df.format(avgReadLight / avgReadLightCount));
+            }
+
+            if(avgSitTiltCount>0){
+                avgSitTilt = Double.parseDouble(df.format(avgSitTilt / avgSitTiltCount));
+            }
+
+            if(avgReadDistanceCount>0){
+                avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
+
             }
             outdoorsDuration=useJianhuyiLogDOS.stream()
                     .filter(a->a.getStatus()!=null && a.getStatus()==2)

@@ -1,5 +1,5 @@
 jianhuyi:
-  uploadPath: D:/www/uploaded_files/
+  uploadPath: /www/uploaded_files/
 logging:
   level:
     root: info

@@ -33,4 +33,6 @@ public interface UserTaskLinshiDao {
     int getTotalScore(Long id);
 
     Date getRecentlyDate(Long userId);
+
+    void updateCurrentDay(UserTaskLinshiDO userTaskLinshiDO);
 }

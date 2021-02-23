@@ -213,4 +213,27 @@ public class UserTaskLinshiDO implements Serializable {
     public void setDay(String day) {
         this.day = day;
     }
+
+    @Override
+    public String toString() {
+        return "UserTaskLinshiDO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", taskId=" + taskId +
+                ", eyeRate='" + eyeRate + '\'' +
+                ", avgRead='" + avgRead + '\'' +
+                ", avgOut='" + avgOut + '\'' +
+                ", avgReadDistance='" + avgReadDistance + '\'' +
+                ", avgLookPhone='" + avgLookPhone + '\'' +
+                ", avgLookTv='" + avgLookTv + '\'' +
+                ", avgSitTilt='" + avgSitTilt + '\'' +
+                ", effectiveUseTime='" + effectiveUseTime + '\'' +
+                ", avgLight='" + avgLight + '\'' +
+                ", createTime=" + createTime +
+                ", hourtime='" + hourtime + '\'' +
+                ", score=" + score +
+                ", iffinish=" + iffinish +
+                ", day='" + day + '\'' +
+                '}';
+    }
 }

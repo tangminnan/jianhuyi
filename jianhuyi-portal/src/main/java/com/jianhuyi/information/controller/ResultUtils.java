@@ -1,8 +1,13 @@
 package com.jianhuyi.information.controller;
 
+import com.jianhuyi.information.domain.ResultData;
+import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UserTaskDO;
 import com.jianhuyi.information.domain.UserTaskLinshiDO;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +15,10 @@ import java.util.List;
  *  监护仪等级判断标准
  */
 public class ResultUtils {
+
+
+
+
     /**
      *  平均单次阅读时长判断
      */
@@ -485,20 +494,163 @@ public class ResultUtils {
      * @return
      */
     public static int countScore(UserTaskDO userTaskDO, UserTaskLinshiDO userTaskLinshiDO) {
-       int score1 = StrC(userTaskDO.getAvgRead(),userTaskLinshiDO.getAvgRead())==1? userTaskDO.getAvgReadScore():0;
-       int score2 = StrC(userTaskDO.getAvgLookPhone(),userTaskLinshiDO.getAvgLookPhone())==1? userTaskDO.getAvgLookPhoneScore():0;
-       int score3 = StrC(userTaskDO.getAvgLookTv(),userTaskLinshiDO.getAvgLookTv())==1?userTaskDO.getAvgLookScore():0;
-       int score4 = StrC(userTaskDO.getAvgLight(),userTaskLinshiDO.getAvgLight())==1?userTaskDO.getAvgLightScore():0;
-       int score5 = StrC(userTaskDO.getAvgOut(),userTaskLinshiDO.getAvgOut())==1?userTaskDO.getAvgOutScore():0;
-       int score6 = StrC(userTaskDO.getAvgReadDistance(),userTaskLinshiDO.getAvgReadDistance())==1? userTaskDO.getAvgReadDistanceScore():0;
-       int score7 = StrC(userTaskDO.getAvgSitTilt(),userTaskLinshiDO.getAvgSitTilt())==1?userTaskDO.getAvgSitTiltScore():0;
-       int score8 = StrC(userTaskDO.getEffectiveUseTime(),userTaskLinshiDO.getEffectiveUseTime())==1?userTaskDO.getEffectiveUseTimeScore():0;
-       return score1+score2+score3+score4+score5+score6+score7+score8;
+        System.out.println(userTaskDO);
+        System.out.println(userTaskLinshiDO);
+        Integer score1 = StrC(userTaskDO.getAvgRead(),userTaskLinshiDO.getAvgRead())==1?
+                (userTaskDO.getAvgReadScore()==null?0 :userTaskDO.getAvgReadScore()):0;
+        Integer score2 = StrC(userTaskDO.getAvgLookPhone(),userTaskLinshiDO.getAvgLookPhone())==1?
+                (userTaskDO.getAvgLookPhoneScore()==null?0:userTaskDO.getAvgLookPhoneScore()):0;
+        Integer score3 = StrC(userTaskDO.getAvgLookTv(),userTaskLinshiDO.getAvgLookTv())==1?
+                (userTaskDO.getAvgLookScore()==null?0:userTaskDO.getAvgLookScore()):0;
+        Integer score4 = StrC(userTaskDO.getAvgLight(),userTaskLinshiDO.getAvgLight())==1?
+                (userTaskDO.getAvgLightScore()==null?0:userTaskDO.getAvgLightScore()):0;
+        Integer score5 = StrC(userTaskDO.getAvgOut(),userTaskLinshiDO.getAvgOut())==1?
+                (userTaskDO.getAvgOutScore()==null?0:userTaskDO.getAvgOutScore()):0;
+        Integer score6 = StrC(userTaskDO.getAvgReadDistance(),userTaskLinshiDO.getAvgReadDistance())==1?
+                (userTaskDO.getAvgReadDistanceScore()==null?0:userTaskDO.getAvgReadDistanceScore()):0;
+        Integer score7 = StrC(userTaskDO.getAvgSitTilt(),userTaskLinshiDO.getAvgSitTilt())==1?
+                (userTaskDO.getAvgSitTiltScore()==null?0:userTaskDO.getAvgSitTiltScore()):0;
+        Integer score8 = StrC(userTaskDO.getEffectiveUseTime(),userTaskLinshiDO.getEffectiveUseTime())==1?
+                (userTaskDO.getEffectiveUseTimeScore()==null?0:userTaskDO.getEffectiveUseTimeScore()):0;
+
+        return score1+score2+score3+score4+score5+score6+score7+score8;
     }
 
     public static int StrC(String a,String b){
-        if(a.compareTo(b)<=0)
+        if(a!=null && b!=null && a.compareTo(b)<=0)
             return 1;
         else return 0;
+    }
+
+    /**
+     * 取对数运算
+     * @param value
+     * @param base
+     * @return
+     */
+     public static double log(double value, double base) {
+         return Math.log(value) / Math.log(base);
+    }
+
+
+    /**
+     *  数据统计
+     * @param useJianhuyiLogDOList
+     * @return
+     * @throws ParseException
+     */
+    public static ResultData countData(List<UseJianhuyiLogDO> useJianhuyiLogDOList)
+            throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        useJianhuyiLogDOList.forEach(
+                a -> {
+                    a.setCreateTime(sdf.format(a.getAddTime()));
+                });
+        Double avgReadDuration = 0.0; // 平均每次阅读时长
+        Double avgReadDistance = 0.0; // 平均阅读距离
+        Double avgReadLight = 0.0; // 平均阅读光照
+        Double avgLookPhoneDuration = 0.0; // 平均单次看手机时长
+        Double avgLookTvComputerDuration = 0.0; // 平均单次看电脑及电视时长
+        Double avgSitTilt = 0.0; // 平均旋转角度
+        int lookPhoneCount = 0; // 看手机次数
+        int lookScreenCount = 0; // 看电脑屏幕的次数
+        int count = 0; // 阅读次数
+        int avgReadLightCount=0;//光照强度次数
+        int avgSitTiltCount=0;//角度次数
+        int  avgReadDistanceCount=0;
+        for (int i = 0; i < useJianhuyiLogDOList.size(); i++) {
+            UseJianhuyiLogDO useJianhuyiLogDO = useJianhuyiLogDOList.get(i);
+            /**
+             *  光照强度
+             */
+            if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412) {
+                avgReadLight += 100*ResultUtils.log(useJianhuyiLogDO.getReadLight(),4.3) ;
+                avgReadLightCount++;
+            }
+            /**
+             *  坐姿旋转角度
+             */
+            if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412
+                    &&  useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
+                    && useJianhuyiLogDO.getReadDistance()<=60){
+                avgSitTilt += useJianhuyiLogDO.getSitTilt();
+                avgSitTiltCount++;
+            }
+            /**
+             *  阅读距离
+             */
+            if(useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
+                    && useJianhuyiLogDO.getReadDistance()<=60){
+                avgReadDistance += useJianhuyiLogDO.getReadDistance();
+                avgReadDistanceCount++;
+            }
+            /**
+             *  看电脑时长
+             */
+            if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
+                avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
+            }
+            /**
+             *  看电脑电视时长
+             */
+            if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
+                avgLookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
+            }
+            /**
+             *  单次阅读
+             */
+            avgReadDuration += useJianhuyiLogDO.getReadDuration();
+            /**
+             *  看电脑、手机次数统计
+             */
+            if (i + 1 < useJianhuyiLogDOList.size()) {
+                UseJianhuyiLogDO useJianhuyiLogDO1 = useJianhuyiLogDOList.get(i + 1);
+                long minute =
+                        (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime()
+                                - sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
+                                - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000))
+                                / 1000
+                                / 60;
+                if (minute >= 3 || i == 0) {
+                    if (useJianhuyiLogDO.getLookPhoneDuration() != null
+                            && useJianhuyiLogDO.getLookPhoneDuration() > 0) lookPhoneCount++; // 看手机次数
+                    if (useJianhuyiLogDO.getLookTvComputerDuration() != null
+                            && useJianhuyiLogDO.getLookTvComputerDuration() > 0) lookScreenCount++; // 看电脑屏幕的次数
+                    if (useJianhuyiLogDO.getReadDuration() >= 5) {
+                        count++; // 阅读次数
+                    }
+                }
+            }
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        if (avgReadDuration != null && count > 0) {
+            avgReadDuration = Double.parseDouble(df.format(avgReadDuration / count));
+        }
+        if (lookPhoneCount > 0) {
+            avgLookPhoneDuration = Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
+        }
+        if (lookScreenCount > 0) {
+            avgLookTvComputerDuration = Double.parseDouble(df.format(avgLookTvComputerDuration / lookScreenCount));
+        }
+        if(avgReadLightCount>0){
+            avgReadLight = Double.parseDouble(df.format(avgReadLight / avgReadLightCount));
+        }
+
+        if(avgSitTiltCount>0){
+            avgSitTilt = Double.parseDouble(df.format(avgSitTilt / avgSitTiltCount));
+        }
+        if(avgReadDistanceCount>0){
+            avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
+        }
+
+        ResultData resultData = new ResultData();
+        resultData.setAvgReadDuration(avgReadDuration);
+        resultData.setAvgLookPhoneDuration(avgLookPhoneDuration);
+        resultData.setAvgLookTvComputerDuration(avgLookTvComputerDuration);
+        resultData.setAvgReadLight(avgReadLight);
+        resultData.setAvgSitTilt(avgSitTilt);
+        resultData.setAvgReadDistance(avgReadDistance);
+        return  resultData;
     }
 }
