@@ -144,8 +144,8 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 	}
 
 	@Override
-	public void updateTaskIdInUser(Long userId, Long id) {
-		ownerUserMapper.updateTaskIdInUser(userId,id);
+	public void updateTaskIdInUser(Long userId, String taskId) {
+		ownerUserMapper.updateTaskIdInUser(userId,taskId);
 	}
 
 	@Override

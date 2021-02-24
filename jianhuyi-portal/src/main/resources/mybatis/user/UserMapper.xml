@@ -52,7 +52,7 @@
     </update>
     
     <update id="updateTaskIdInUser">
-        update t_user set task_id=#{id} where id=#{userId}
+        update t_user set task_id=#{taskId} where id=#{userId}
     </update>
 
     <select id="getMyScore" resultType="int">

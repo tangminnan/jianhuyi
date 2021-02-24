@@ -57,8 +57,8 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
     }
 
     @Override
-    public Date getRecentlyDate(Long userId) {
-        return userTaskLinshiDao.getRecentlyDate(userId);
+    public UserTaskLinshiDO getRecentlyDate(Long userId,Long taskId) {
+        return userTaskLinshiDao.getRecentlyDate(userId,taskId);
     }
 
     @Override

@@ -30,7 +30,7 @@ public interface UserTaskLinshiService {
 
     Integer getTotalScore(Long id);
 
-    Date getRecentlyDate(Long userId);
+    UserTaskLinshiDO getRecentlyDate(Long userId,Long taskId);
 
     void updateCurrentDay(UserTaskLinshiDO userTaskLinshiDO);
 }

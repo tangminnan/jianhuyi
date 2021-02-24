@@ -142,8 +142,11 @@
         select sum(score) from t_user_task_linshi where  task_id=#{taskId}
     </select>
 
-    <select id="getRecentlyDate" resultType="date">
-        select create_time from t_user_task_linshi where `user_id` = #{userId} order by create_time desc limit 1
+    <select id="getRecentlyDate" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
+        select * from t_user_task_linshi where `user_id` = #{userId}
+
+       and task_id=#{taskId}
+        order by create_time desc limit 1
     </select>
 
     <update id="updateCurrentDay" parameterType="com.jianhuyi.information.domain.UserTaskLinshiDO">

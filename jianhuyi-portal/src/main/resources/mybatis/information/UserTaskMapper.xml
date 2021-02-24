@@ -365,6 +365,7 @@ WHERE
         t_user_task
         WHERE
         user_id = #{userId}
+        and type = #{type}
         ) rtask
         WHERE
         sdate &gt; now()

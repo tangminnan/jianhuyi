@@ -1,7 +1,9 @@
 package com.jianhuyi.information.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.common.utils.R;
+import com.jianhuyi.common.utils.StringUtils;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.*;
 import com.jianhuyi.information.service.impl.UseJianhuyiLogServiceImpl;
@@ -150,7 +152,8 @@ public class GiftController {
     public Map<String,Object> submitTask(UserTaskDO userTaskDO) throws ParseException {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         Long userId = userTaskDO.getUserId();
-        UserTaskDO userTaskDO1=userTaskService.getCurrentTaskN(userId);
+        Integer type = userTaskDO.getType();
+        UserTaskDO userTaskDO1=userTaskService.getCurrentTaskN(userId,type);
         if(userTaskDO1==null){//新增任务
             userTaskDO.setCreateTime(new Date());
             Calendar calendar = Calendar.getInstance();
@@ -160,7 +163,6 @@ public class GiftController {
             calendar.set(Calendar.MINUTE,0);
             calendar.set(Calendar.SECOND,0);
             userTaskDO.setStartTime(calendar.getTime());
-            userTaskDO.setTaskType(2);//个人任务
             Map<String,Object> map =  getLastTaskResult(userId);
             UserTaskLinshiDO userTaskLinshiDO = (UserTaskLinshiDO)map.get("data");
             userTaskDO.setLastavgLight(userTaskLinshiDO.getAvgLight());
@@ -172,8 +174,17 @@ public class GiftController {
             userTaskDO.setLastavgSitTilt(userTaskLinshiDO.getAvgSitTilt());
             userTaskDO.setLasteffectiveUseTime(userTaskLinshiDO.getEffectiveUseTime());
             userTaskService.save(userTaskDO);
-
-            userService.updateTaskIdInUser(userId,userTaskDO.getId());
+            UserDO userDO = userService.getById(userId);
+            String taskId = userDO.getTaskId();
+            Map<Integer,Long> map1 = null;
+            if(StringUtils.isNotBlank(taskId)){
+                map1 = JSONObject.parseObject(taskId, Map.class);
+            }else{
+                map1 = new HashMap<Integer,Long>();
+            }
+            map1.put(type,userTaskDO.getId());
+            String s = JSON.toJSONString(map1);
+            userService.updateTaskIdInUser(userId,s);
             resultMap.put("code",0);
             resultMap.put("msg","操作成功");
             resultMap.put("data",null);
@@ -203,92 +214,8 @@ public class GiftController {
         }else{
             List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.getNearData(userId,date);
             List<UseJianhuyiLogDO> sublist = useJianhuyiLogDOS.stream().filter(a->a.getStatus()!=null && a.getStatus()==1).collect(Collectors.toList());
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Double avgReadDuration = 0.0;//平均每次阅读时长
             Double outdoorsDuration = 0.0;//户外时间累计版本
-            Double avgReadDistance = 0.0;//平均阅读距离
-            Double avgReadLight = 0.0;//平均阅读光照
-            Double avgLookPhoneDuration = 0.0;//平均单次看手机时长
-            Double avgLookTvComputerDuration = 0.0;//平均单次看电脑及电视时长
-            Double avgSitTilt = 0.0;//平均旋转角度
-            int lookPhoneCount = 0;//看手机次数
-            int lookScreenCount = 0;//看电脑屏幕的次数
-            int avgReadLightCount=0;//光照强度次数
-            int avgSitTiltCount=0;//角度次数
-            int  avgReadDistanceCount=0;
-            int count = 0;//阅读次数
-
-            Double readDurtionNum = 0.0;
-            for(int i=0;i<sublist.size();i++) {
-                UseJianhuyiLogDO useJianhuyiLogDO = sublist.get(i);
-
-                if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412) {
-                    avgReadLight += 100*ResultUtils.log(useJianhuyiLogDO.getReadLight(),4.3) ;
-                    avgReadLightCount++;
-                }
-                if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412
-                        &&  useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
-                        && useJianhuyiLogDO.getReadDistance()<=60){
-
-
-                    avgSitTilt += useJianhuyiLogDO.getSitTilt();
-                    avgSitTiltCount++;
-                }
-
-                if(useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
-                        && useJianhuyiLogDO.getReadDistance()<=60){
-
-
-                    avgReadDistance += useJianhuyiLogDO.getReadDistance();
-                    avgReadDistanceCount++;
-                }
-                if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                    avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-                }
-                if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                    avgLookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-                }
-                avgReadDuration += useJianhuyiLogDO.getReadDuration();
-                if (i + 1 < sublist.size()) {
-                    UseJianhuyiLogDO useJianhuyiLogDO1 = sublist.get(i + 1);
-                    long minute = (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime() -
-                            sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
-                            - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000)) / 1000 / 60;
-                    if (minute >= 3 || i == 0) {
-                        if (useJianhuyiLogDO.getLookPhoneDuration() != null && useJianhuyiLogDO.getLookPhoneDuration() > 0)
-                            lookPhoneCount++;//看手机次数
-                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0)
-                            lookScreenCount++;//看电脑屏幕的次数
-                        if (useJianhuyiLogDO.getReadDuration() >= 5) {
-                            count++;//阅读次数
-                        }
-                    }
-                }
-
-            }
-            DecimalFormat df = new DecimalFormat("#.##");
-            if (avgReadDuration != null && count > 0) {
-                avgReadDuration=Double.parseDouble(df.format(avgReadDuration / count));
-            }
-            if (lookPhoneCount>0) {
-                avgLookPhoneDuration=Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
-            }
-            if (lookScreenCount > 0) {
-                avgLookTvComputerDuration=Double.parseDouble(df.format(avgLookTvComputerDuration / lookScreenCount));
-            }
-
-            if(avgReadLightCount>0){
-                avgReadLight = Double.parseDouble(df.format(avgReadLight / avgReadLightCount));
-            }
-
-            if(avgSitTiltCount>0){
-                avgSitTilt = Double.parseDouble(df.format(avgSitTilt / avgSitTiltCount));
-            }
-
-            if(avgReadDistanceCount>0){
-                avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
-
-            }
+            Map<String,Double> map = ResultUtils.countData(sublist);
             outdoorsDuration=useJianhuyiLogDOS.stream()
                     .filter(a->a.getStatus()!=null && a.getStatus()==2)
                     .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
@@ -297,12 +224,12 @@ public class GiftController {
             UseJianhuyiLogDO userJianHuYiYouXiao = useJianhuyiLogService.getUserJianHuYiYouXiao(userId,sdf.format(date));
             Double useJianhuyiDuration = userJianHuYiYouXiao.getUseJianhuyiDuration();
             UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
-            userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(avgReadDuration));
-            userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(avgLookPhoneDuration));
-            userTaskLinshiDO.setAvgLookTv(ResultUtils.resultAvgLookTvComputerDuration(avgLookTvComputerDuration));
-            userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(avgReadDistance));
-            userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(avgReadLight));
-            userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(avgSitTilt));
+            userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(map.get("avgReadDuration")));
+            userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(map.get("avgLookPhoneDuration")));
+            userTaskLinshiDO.setAvgLookTv(ResultUtils.resultAvgLookTvComputerDuration(map.get("avgLookTvComputerDuration")));
+            userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(map.get("avgReadDistance")));
+            userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(map.get("avgReadLight")));
+            userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(map.get("avgSitTilt")));
             userTaskLinshiDO.setAvgOut(ResultUtils.resultOutdoorsDuration(outdoorsDuration));
             userTaskLinshiDO.setEffectiveUseTime(ResultUtils.resultUseJianhuyiDuration(useJianhuyiDuration));
             resultMap.put("data", userTaskLinshiDO);
@@ -310,14 +237,14 @@ public class GiftController {
             resultMap.put("msg", "获取成功");
 
             System.out.println(date);
-            System.out.println("平均每次阅读时长 "+avgReadDuration);
+            System.out.println("平均每次阅读时长 "+map.get("avgReadDuration"));
             System.out.println("使用时长 "+useJianhuyiDuration);
             System.out.println("户外时间累计 "+outdoorsDuration);
-            System.out.println("平均阅读距离 "+avgReadDistance);
-            System.out.println("平均阅读光照 "+avgReadLight);
-            System.out.println("平均单次看手机时长 "+avgLookPhoneDuration);
-            System.out.println("平均单次看电脑及电视时长 "+avgLookTvComputerDuration);
-            System.out.println("平均旋转角度 "+avgSitTilt);
+            System.out.println("平均阅读距离 "+map.get("avgReadDistance"));
+            System.out.println("平均阅读光照 "+map.get("avgReadLight"));
+            System.out.println("平均单次看手机时长 "+map.get("avgLookPhoneDuration"));
+            System.out.println("平均单次看电脑及电视时长 "+map.get("avgLookTvComputerDuration"));
+            System.out.println("平均旋转角度 "+map.get("avgSitTilt"));
         }
 
         return resultMap;
@@ -511,16 +438,16 @@ public class GiftController {
     /**
      * pc端礼物列表（老师端，礼物任务自定义）
      * */
-    @ResponseBody
-    @GetMapping("/listPc")
-    public String listPc(@RequestParam("callback") String callback) {
-        Map<String, Object> data = new HashMap<>();
-        Map<String, Object> params = new HashMap<>();
-        params.put("type", 2);
-        List<GiftDO> giftDOList = giftService.list(params);
-        data.put("data", giftDOList);
-        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
-    }
+//    @ResponseBody
+//    @GetMapping("/listPc")
+//    public String listPc(@RequestParam("callback") String callback) {
+//        Map<String, Object> data = new HashMap<>();
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("type", 2);
+//        List<GiftDO> giftDOList = giftService.list(params);
+//        data.put("data", giftDOList);
+//        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
+//    }
 
     /**
      * pc端礼物列表（家长端）

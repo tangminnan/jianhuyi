@@ -35,5 +35,5 @@ public interface UserTaskDao {
 
     UserTaskDO getCurrentTask(Long userId);
 
-    UserTaskDO getCurrentTaskN(Long userId);
+    UserTaskDO getCurrentTaskN(@Param("userId") Long userId,@Param("type") Integer type);
 }

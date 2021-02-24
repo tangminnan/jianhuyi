@@ -66,8 +66,8 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
-    public UserTaskDO getCurrentTaskN(Long userId) {
-        return userTaskDao.getCurrentTaskN(userId);
+    public UserTaskDO getCurrentTaskN(Long userId,Integer type) {
+        return userTaskDao.getCurrentTaskN(userId,type);
     }
 
 }

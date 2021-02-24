@@ -6,6 +6,7 @@ import com.jianhuyi.common.config.BootdoConfig;
 import com.jianhuyi.common.utils.FileUtil;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.common.utils.SpringContextUtil;
+import com.jianhuyi.common.utils.StringUtils;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.*;
 import com.jianhuyi.owneruser.service.OwnerUserService;
@@ -79,7 +80,7 @@ public class UseJianhuyiLogController {
     try {
       if (saveParamsDOList != null) {
         if (saveParamsDOList.getUseRemindsDOList() != null
-            && saveParamsDOList.getUseRemindsDOList().size() > 0) {
+                && saveParamsDOList.getUseRemindsDOList().size() > 0) {
           for (UseRemindsDO useRemindsDO : saveParamsDOList.getUseRemindsDOList()) {
             if (useRemindsDO != null) {
               useRemindsDO.setSaveTime(new Date());
@@ -93,7 +94,7 @@ public class UseJianhuyiLogController {
           useRemindsService.saveList(saveParamsDOList.getUseRemindsDOList());
         }
         if (saveParamsDOList.getUseTimeDOList() != null
-            && saveParamsDOList.getUseTimeDOList().size() > 0) {
+                && saveParamsDOList.getUseTimeDOList().size() > 0) {
           for (UseTimeDO useTimeDO : saveParamsDOList.getUseTimeDOList()) {
             if (useTimeDO != null) {
               useTimeDO.setSaveTime(new Date());
@@ -108,7 +109,7 @@ public class UseJianhuyiLogController {
         }
 
         if (saveParamsDOList.getUseJianhuyiLogDOList() != null
-            && saveParamsDOList.getUseJianhuyiLogDOList().size() > 0) {
+                && saveParamsDOList.getUseJianhuyiLogDOList().size() > 0) {
           for (UseJianhuyiLogDO useJianhuyiLogDO : saveParamsDOList.getUseJianhuyiLogDOList()) {
             useJianhuyiLogDO.setAddTime(new Date());
             useJianhuyiLogDO.setDelFlag(0);
@@ -118,7 +119,7 @@ public class UseJianhuyiLogController {
             }
             if (saveParamsDOList.getUploadId() != null) {
               useJianhuyiLogDO.setUploadId(
-                  Integer.parseInt(saveParamsDOList.getUploadId().toString()));
+                      Integer.parseInt(saveParamsDOList.getUploadId().toString()));
             }
             if (saveParamsDOList.getUserId() != null) {
               useJianhuyiLogDO.setUserId(Integer.parseInt(saveParamsDOList.getUserId().toString()));
@@ -131,66 +132,56 @@ public class UseJianhuyiLogController {
 
       /** 统计分析数据 */
       if (saveParamsDOList.getUseJianhuyiLogDOList() != null
-          && saveParamsDOList.getUseJianhuyiLogDOList().size() > 0) {
-
+              && saveParamsDOList.getUseJianhuyiLogDOList().size() > 0) {
 
         Long userId = saveParamsDOList.getUserId();
         UserDO userDO = userService.getById(userId);
         if (userDO != null && userDO.getTaskId() != null) {
-          UserTaskDO userTaskDO = userTaskService.get(userDO.getTaskId());
-          if (userTaskDO != null) {
-            System.out.println("统计分析数据========="+userId+"================= "+userTaskDO.getId());
-            System.out.println("统计分析数据========="+userId+"================= "+userTaskDO.getId());
-            System.out.println("统计分析数据========="+userId+"================= "+userTaskDO.getId());
-            System.out.println("统计分析数据========="+userId+"================= "+userTaskDO.getId());
-            System.out.println("统计分析数据========="+userId+"================= "+userTaskDO.getId());
-            System.out.println("统计分析数据========="+userId+"================= "+userTaskDO.getId());
-            Date createTime = userTaskDO.getStartTime(); // 最近一次任务的开始时间
-            Integer taskTime = userTaskDO.getTaskTime(); // 最近一次任务的天数
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(createTime);
-            calendar.add(Calendar.DAY_OF_YEAR, taskTime);
-            calendar.add(Calendar.HOUR, 20); // 任务的最大持续时间
-            Date taskDate = calendar.getTime();
-            if (taskDate.compareTo(new Date()) >= 0) { // 最近一次任务的数据统计
-              Map<String, Object> params = new HashMap<>();
-              params.put("userId", userId);
-              params.put("startTime", createTime);
-              params.put("endTime", new Date());
-              List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.getMyData(params);
-              System.out.println("有数据否======================"+useJianhuyiLogDOList.size());
-              System.out.println("有数据否======================"+useJianhuyiLogDOList.size());
-              System.out.println("有数据否======================"+useJianhuyiLogDOList.size());
-
-              if (useJianhuyiLogDOList.size() > 0) { // 创建线程进行统计分析
-                new Thread(
-                        () -> {
-                          System.out.println("创建线程统计分析数据");
-                          System.out.println("创建线程统计分析数据");
-                          System.out.println("创建线程统计分析数据");
-                          System.out.println("创建线程统计分析数据");
-                          System.out.println("创建线程统计分析数据");
-                          System.out.println("创建线程统计分析数据");
-                          System.out.println("创建线程统计分析数据");
-                          try {
-                            countPerDay(userTaskDO, useJianhuyiLogDOList); // 统计任务每天评级
-                            countTotal(userTaskDO, useJianhuyiLogDOList); // /统计最终评级
-                          } catch (ParseException e) {
-                            e.printStackTrace();
-                          }
-                        })
-                    .start();
+          String task = userDO.getTaskId();
+          Map<Integer, Long> map1 = JSONObject.parseObject(task, Map.class);
+          List<Long> values = new ArrayList<>(map1.values());
+          for (Long taskId : values) {
+            UserTaskDO userTaskDO = userTaskService.get(taskId);
+            if (userTaskDO != null) {
+              System.out.println("统计分析数据=========" + userId + "================= " + userTaskDO.getId());
+              Date createTime = userTaskDO.getStartTime(); // 最近一次任务的开始时间
+              Integer taskTime = userTaskDO.getTaskTime(); // 最近一次任务的天数
+              Calendar calendar = Calendar.getInstance();
+              calendar.setTime(createTime);
+              calendar.add(Calendar.DAY_OF_YEAR, taskTime);
+              calendar.add(Calendar.HOUR, 20); // 任务的最大持续时间
+              Date taskDate = calendar.getTime();
+              if (taskDate.compareTo(new Date()) >= 0) { // 最近一次任务的数据统计
+                Map<String, Object> params = new HashMap<>();
+                params.put("userId", userId);
+                params.put("startTime", createTime);
+                params.put("endTime", new Date());
+                List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.getMyData(params);
+                System.out.println("有数据否======================" + useJianhuyiLogDOList.size());
+                if (useJianhuyiLogDOList.size() > 0) { // 创建线程进行统计分析
+                  new Thread(
+                          () -> {
+                            System.out.println("创建线程统计分析数据");
+                            try {
+                              countPerDay(userTaskDO, useJianhuyiLogDOList); // 统计任务每天评级
+                              countTotal(userTaskDO, useJianhuyiLogDOList); // /统计最终评级
+                            } catch (ParseException e) {
+                              e.printStackTrace();
+                            }
+                          })
+                          .start();
+                }
+              } else {
+                System.out.println("上传的数据时间 已经超过最近任务的截止时间，数据不会被统计进入最近一次任务中了");
               }
-            } else {
-              System.out.println("上传的数据时间 已经超过最近任务的截止时间，数据不会被统计进入最近一次任务中了");
             }
           }
         }
       }
+      } catch(Exception e){
+        e.printStackTrace();
+      }
 
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
     return R.ok(map);
   }
 
@@ -202,97 +193,13 @@ public class UseJianhuyiLogController {
   private void countTotal(UserTaskDO userTaskDO, List<UseJianhuyiLogDO> useJianhuyiLogDOList)
       throws ParseException {
     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    Double avgReadDuration = 0.0; // 平均每次阅读时长
     Double outdoorsDuration = 0.0; // 户外时间累计版本
-    Double avgReadDistance = 0.0; // 平均阅读距离
-    Double avgReadLight = 0.0; // 平均阅读光照
-    Double avgLookPhoneDuration = 0.0; // 平均单次看手机时长
-    Double avgLookTvComputerDuration = 0.0; // 平均单次看电脑及电视时长
-    Double avgSitTilt = 0.0; // 平均旋转角度
-    int lookPhoneCount = 0; // 看手机次数
-    int lookScreenCount = 0; // 看电脑屏幕的次数
-    int avgReadLightCount=0;//光照强度次数
-    int avgSitTiltCount=0;//角度次数
-    int  avgReadDistanceCount=0;
-    int count = 0; // 阅读次数
     Double useJianhuyiDuration=0.0;
     List<UseJianhuyiLogDO> sublist =
             useJianhuyiLogDOList.stream()
                     .filter(a -> a.getStatus() != null && a.getStatus() == 1)
                     .collect(Collectors.toList());
-    for (int i = 0; i < sublist.size(); i++) {
-        UseJianhuyiLogDO useJianhuyiLogDO = sublist.get(i);
-
-      if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412) {
-        avgReadLight += 100*ResultUtils.log(useJianhuyiLogDO.getReadLight(),4.3) ;
-        avgReadLightCount++;
-      }
-      if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412
-              &&  useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
-              && useJianhuyiLogDO.getReadDistance()<=60){
-
-
-        avgSitTilt += useJianhuyiLogDO.getSitTilt();
-        avgSitTiltCount++;
-      }
-
-      if(useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
-              && useJianhuyiLogDO.getReadDistance()<=60){
-
-
-        avgReadDistance += useJianhuyiLogDO.getReadDistance();
-        avgReadDistanceCount++;
-      }
-       if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-          avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-        }
-        if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-          avgLookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-        }
-        avgReadDuration += useJianhuyiLogDO.getReadDuration();
-        if (i + 1 < sublist.size()) {
-          UseJianhuyiLogDO useJianhuyiLogDO1 = sublist.get(i + 1);
-          long minute =
-              (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime()
-                    - sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
-                    - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000))
-                / 1000
-                / 60;
-          if (minute >= 3 || i == 0) {
-            if (useJianhuyiLogDO.getLookPhoneDuration() != null
-                && useJianhuyiLogDO.getLookPhoneDuration() > 0) lookPhoneCount++; // 看手机次数
-            if (useJianhuyiLogDO.getLookTvComputerDuration() != null
-                && useJianhuyiLogDO.getLookTvComputerDuration() > 0) lookScreenCount++; // 看电脑屏幕的次数
-            if (useJianhuyiLogDO.getReadDuration() >= 5) {
-              count++; // 阅读次数
-            }
-          }
-        }
-    }
-    DecimalFormat df = new DecimalFormat("#.##");
-    if (avgReadDuration != null && count > 0) {
-      avgReadDuration = Double.parseDouble(df.format(avgReadDuration / count));
-    }
-    if (lookPhoneCount > 0) {
-      avgLookPhoneDuration = Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
-    }
-    if (lookScreenCount > 0) {
-      avgLookTvComputerDuration =
-              Double.parseDouble(df.format(avgLookTvComputerDuration / lookScreenCount));
-    }
-
-    if(avgReadLightCount>0){
-      avgReadLight = Double.parseDouble(df.format(avgReadLight / avgReadLightCount));
-    }
-
-    if(avgSitTiltCount>0){
-      avgSitTilt = Double.parseDouble(df.format(avgSitTilt / avgSitTiltCount));
-    }
-
-    if(avgReadDistanceCount>0){
-      avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
-
-    }
+    Map<String,Double> resultMap = ResultUtils.countData(sublist);
     outdoorsDuration =
             useJianhuyiLogDOList.stream()
                     .filter(a -> a.getStatus() != null && a.getStatus() == 2)
@@ -309,12 +216,12 @@ public class UseJianhuyiLogController {
             1,
             userTaskDO,
             null,
-            avgReadDuration,
-            avgLookPhoneDuration,
-            avgLookTvComputerDuration,
-            avgSitTilt,
-            avgReadLight,
-            avgReadDistance,
+            resultMap.get("avgReadDuration"),
+            resultMap.get("avgLookPhoneDuration"),
+            resultMap.get("avgLookTvComputerDuration"),
+            resultMap.get("avgSitTilt"),
+            resultMap.get("avgReadLight") ,
+            resultMap.get("avgReadDistance"),
             outdoorsDuration,
             useJianhuyiDuration / days);
 
@@ -331,22 +238,10 @@ public class UseJianhuyiLogController {
     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     useJianhuyiLogDOList.forEach(
         a -> {
-          a.setCreateTime(sdf.format(a.getAddTime()));
+          a.setCreateTime(a.getSaveTime().substring(0,10));
         });
     Double outdoorsDuration = 0.0; // 户外时间累计版本
 
-    Double avgReadDuration = 0.0; // 平均每次阅读时长
-    Double avgReadDistance = 0.0; // 平均阅读距离
-    Double avgReadLight = 0.0; // 平均阅读光照
-    Double avgLookPhoneDuration = 0.0; // 平均单次看手机时长
-    Double avgLookTvComputerDuration = 0.0; // 平均单次看电脑及电视时长
-    Double avgSitTilt = 0.0; // 平均旋转角度
-    int lookPhoneCount = 0; // 看手机次数
-    int lookScreenCount = 0; // 看电脑屏幕的次数
-    int count = 0; // 阅读次数
-    int avgReadLightCount=0;//光照强度次数
-    int avgSitTiltCount=0;//角度次数
-    int  avgReadDistanceCount=0;
     Map<String, List<UseJianhuyiLogDO>> map1 =
             useJianhuyiLogDOList.stream()
                     .collect(Collectors.groupingBy(UseJianhuyiLogDO::getCreateTime));
@@ -356,73 +251,8 @@ public class UseJianhuyiLogController {
           entry.getValue().stream()
               .filter(a -> a.getStatus() != null && a.getStatus() == 1)
               .collect(Collectors.toList());
-      for (int i = 0; i < sublist.size(); i++) {
-        UseJianhuyiLogDO useJianhuyiLogDO = sublist.get(i);
-        if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412) {
-          avgReadLight += 100*ResultUtils.log(useJianhuyiLogDO.getReadLight(),4.3) ;
-          avgReadLightCount++;
-        }
-        if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412
-            &&  useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
-                && useJianhuyiLogDO.getReadDistance()<=60){
-          avgSitTilt += useJianhuyiLogDO.getSitTilt();
-          avgSitTiltCount++;
-        }
-        if(useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
-                && useJianhuyiLogDO.getReadDistance()<=60){
-          avgReadDistance += useJianhuyiLogDO.getReadDistance();
-          avgReadDistanceCount++;
-        }
-        if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-          avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-        }
-        if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-          avgLookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-        }
-        avgReadDuration += useJianhuyiLogDO.getReadDuration();
-        if (i + 1 < sublist.size()) {
-          UseJianhuyiLogDO useJianhuyiLogDO1 = sublist.get(i + 1);
-          long minute =
-              (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime()
-                      - sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
-                      - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000))
-                  / 1000
-                  / 60;
-          if (minute >= 3 || i == 0) {
-            if (useJianhuyiLogDO.getLookPhoneDuration() != null
-                && useJianhuyiLogDO.getLookPhoneDuration() > 0) lookPhoneCount++; // 看手机次数
-            if (useJianhuyiLogDO.getLookTvComputerDuration() != null
-                && useJianhuyiLogDO.getLookTvComputerDuration() > 0) lookScreenCount++; // 看电脑屏幕的次数
-            if (useJianhuyiLogDO.getReadDuration() >= 5) {
-              count++; // 阅读次数
-            }
-          }
-        }
-      }
-      DecimalFormat df = new DecimalFormat("#.##");
-      if (avgReadDuration != null && count > 0) {
-        avgReadDuration = Double.parseDouble(df.format(avgReadDuration / count));
-      }
-      if (lookPhoneCount > 0) {
-        avgLookPhoneDuration = Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
-      }
-      if (lookScreenCount > 0) {
-        avgLookTvComputerDuration = Double.parseDouble(df.format(avgLookTvComputerDuration / lookScreenCount));
-      }
-      if(avgReadLightCount>0){
-        avgReadLight = Double.parseDouble(df.format(avgReadLight / avgReadLightCount));
-      }
 
-      if(avgSitTiltCount>0){
-        avgSitTilt = Double.parseDouble(df.format(avgSitTilt / avgSitTiltCount));
-      }
-
-      if(avgReadDistanceCount>0){
-        avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
-
-      }
-
-
+      Map<String,Double> resultMap = ResultUtils.countData(sublist);
       outdoorsDuration =
           entry.getValue().stream()
               .filter(a -> a.getStatus() != null && a.getStatus() == 2)
@@ -436,12 +266,12 @@ public class UseJianhuyiLogController {
               0,
               userTaskDO,
               createTime,
-                  avgReadDuration,
-                  avgLookPhoneDuration,
-                  avgLookTvComputerDuration,
-                  avgSitTilt,
-                  avgReadLight,
-                  avgReadDistance,
+                  resultMap.get("avgReadDuration"),
+              resultMap.get("avgLookPhoneDuration"),
+              resultMap.get("avgLookTvComputerDuration"),
+              resultMap.get("avgSitTilt"),
+                  resultMap.get("avgReadLight") ,
+                  resultMap.get("avgReadDistance"),
                   outdoorsDuration,
               useJianhuyiDuration);
     }
@@ -501,15 +331,17 @@ public class UseJianhuyiLogController {
       Integer score = ResultUtils.countScore(userTaskDO, userTaskLinshiDO);
       userTaskLinshiDO.setScore(score);
       userTaskLinshiDO.setEyeRate(ResultUtils.totalDegree(null, userTaskLinshiDO)); // 当日等级
-      /** t_user_task_linshi表中已经存在的数据来说，更新表最后的一条数据，对于之前的不做任何处理，对于新数据会新增 */
-      Date allreadyDate = userTaskLinshiService.getRecentlyDate(userTaskDO.getUserId());
-      if(allreadyDate==null){
+      /** t_user_task_linshi表中已经存在的数据来说，更新表最后的一条数据，对于之前的数据不做任何处理，对于新数据会新增 */
+      UserTaskLinshiDO userTaskLinshiDO11 = userTaskLinshiService.getRecentlyDate(userTaskDO.getUserId(),userTaskDO.getId());
+      if(userTaskLinshiDO11==null){
           userTaskLinshiService.save(userTaskLinshiDO);
           return score;
       }else{
+        Date allreadyDate = userTaskLinshiDO11.getCreateTime();
         if (userTaskLinshiDO.getCreateTime().compareTo(allreadyDate) == 0) {
           userTaskLinshiService.updateCurrentDay(userTaskLinshiDO);
-          return score;
+          Integer score1 = userTaskLinshiDO11.getScore()==null?0:userTaskLinshiDO11.getScore();
+          return score-score1;
         }
         else if (userTaskLinshiDO.getCreateTime().compareTo(allreadyDate) > 0) {
           userTaskLinshiService.save(userTaskLinshiDO);

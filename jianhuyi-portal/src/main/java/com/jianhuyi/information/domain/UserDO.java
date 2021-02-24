@@ -2,6 +2,8 @@ package com.jianhuyi.information.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -31,7 +33,7 @@ public class UserDO implements Serializable {
     //班级
     private String grade;
     //最近一次的任务id
-    private Long taskId;
+    private String taskId;
 
 
 
@@ -103,11 +105,11 @@ public class UserDO implements Serializable {
         this.scores = scores;
     }
 
-    public Long getTaskId() {
+    public String getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(Long taskId) {
+    public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
 }

@@ -33,5 +33,5 @@ public interface UserTaskService {
 
     UserTaskDO getCurrentTask(Long userId);
 
-    UserTaskDO getCurrentTaskN(Long userId);
+    UserTaskDO getCurrentTaskN(Long userId,Integer type);
 }
