@@ -165,14 +165,16 @@ public class GiftController {
             userTaskDO.setStartTime(calendar.getTime());
             Map<String,Object> map =  getLastTaskResult(userId);
             UserTaskLinshiDO userTaskLinshiDO = (UserTaskLinshiDO)map.get("data");
-            userTaskDO.setLastavgLight(userTaskLinshiDO.getAvgLight());
-            userTaskDO.setLastavgLookPhone(userTaskLinshiDO.getAvgLookPhone());
-            userTaskDO.setLastavgLookTv(userTaskLinshiDO.getAvgLookTv());
-            userTaskDO.setLastavgOut(userTaskLinshiDO.getAvgOut());
-            userTaskDO.setLastavgRead(userTaskLinshiDO.getAvgRead());
-            userTaskDO.setLastavgReadDistance(userTaskLinshiDO.getAvgReadDistance());
-            userTaskDO.setLastavgSitTilt(userTaskLinshiDO.getAvgSitTilt());
-            userTaskDO.setLasteffectiveUseTime(userTaskLinshiDO.getEffectiveUseTime());
+            if(userTaskLinshiDO!=null) {
+                userTaskDO.setLastavgLight(userTaskLinshiDO.getAvgLight());
+                userTaskDO.setLastavgLookPhone(userTaskLinshiDO.getAvgLookPhone());
+                userTaskDO.setLastavgLookTv(userTaskLinshiDO.getAvgLookTv());
+                userTaskDO.setLastavgOut(userTaskLinshiDO.getAvgOut());
+                userTaskDO.setLastavgRead(userTaskLinshiDO.getAvgRead());
+                userTaskDO.setLastavgReadDistance(userTaskLinshiDO.getAvgReadDistance());
+                userTaskDO.setLastavgSitTilt(userTaskLinshiDO.getAvgSitTilt());
+                userTaskDO.setLasteffectiveUseTime(userTaskLinshiDO.getEffectiveUseTime());
+            }
             userTaskService.save(userTaskDO);
             UserDO userDO = userService.getById(userId);
             String taskId = userDO.getTaskId();
