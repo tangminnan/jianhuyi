@@ -66,4 +66,9 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
         userTaskLinshiDao.updateCurrentDay(userTaskLinshiDO);
     }
 
+    @Override
+    public void updateScore(UserTaskLinshiDO userTaskLinshiDO) {
+        userTaskLinshiDao.updateScore(userTaskLinshiDO);
+    }
+
 }

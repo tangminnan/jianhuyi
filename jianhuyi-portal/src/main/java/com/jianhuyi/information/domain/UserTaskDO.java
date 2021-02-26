@@ -252,6 +252,8 @@ public class UserTaskDO implements Serializable {
     private Integer taskType;
 
     private String idCards;
+    //任务来源 PC =任务来自于PC  APP = 任务来来自于A
+    private String pcorapp;
 
     public Long getId() {
         return id;
@@ -693,6 +695,14 @@ public class UserTaskDO implements Serializable {
 
     public void setIdCards(String idCards) {
         this.idCards = idCards;
+    }
+
+    public String getPcorapp() {
+        return pcorapp;
+    }
+
+    public void setPcorapp(String pcorapp) {
+        this.pcorapp = pcorapp;
     }
 
     @Override

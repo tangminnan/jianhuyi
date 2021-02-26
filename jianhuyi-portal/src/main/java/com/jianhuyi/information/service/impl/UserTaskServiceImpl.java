@@ -56,13 +56,13 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
-    public List<UserTaskDO> getAllReadyFinishedTask(Long userId) {
-        return userTaskDao.getAllReadyFinishedTask(userId);
+    public List<UserTaskDO> getAllReadyFinishedTask(Long userId,Integer type) {
+        return userTaskDao.getAllReadyFinishedTask(userId,type);
     }
 
     @Override
-    public UserTaskDO getCurrentTask(Long userId) {
-        return userTaskDao.getCurrentTask(userId);
+    public UserTaskDO getCurrentTask(Long userId,Integer type) {
+        return userTaskDao.getCurrentTask(userId,type);
     }
 
     @Override

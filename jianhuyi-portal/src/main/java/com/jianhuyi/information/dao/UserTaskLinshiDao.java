@@ -35,4 +35,6 @@ public interface UserTaskLinshiDao {
     UserTaskLinshiDO getRecentlyDate(@Param("userId") Long userId,@Param("taskId") Long taskId);
 
     void updateCurrentDay(UserTaskLinshiDO userTaskLinshiDO);
+
+    void updateScore(UserTaskLinshiDO userTaskLinshiDO);
 }

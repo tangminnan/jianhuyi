@@ -171,4 +171,13 @@
         where `user_id` = #{userId} and `task_id` = #{taskId} and `create_time` = #{createTime}
     </update>
 
+    <update id="updateScore" parameterType="com.jianhuyi.information.domain.UserTaskLinshiDO">
+        update t_user_task_linshi
+        set
+
+            score=#{score}
+
+        where `user_id` = #{userId} and `task_id` = #{taskId} and `create_time` = #{createTime}
+    </update>
+
 </mapper>
