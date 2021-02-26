@@ -32,9 +32,10 @@ public class UserDO implements Serializable {
     private String school;
     //班级
     private String grade;
-    //最近一次的任务id
-    private String taskId;
-
+    //个人任务的
+    private Long taskId;
+    //医生或老师下发的任务
+    private Long taskIds;
 
 
 
@@ -105,11 +106,19 @@ public class UserDO implements Serializable {
         this.scores = scores;
     }
 
-    public String getTaskId() {
+    public Long getTaskId() {
         return taskId;
     }
 
-    public void setTaskId(String taskId) {
+    public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public Long getTaskIds() {
+        return taskIds;
+    }
+
+    public void setTaskIds(Long taskIds) {
+        this.taskIds = taskIds;
     }
 }

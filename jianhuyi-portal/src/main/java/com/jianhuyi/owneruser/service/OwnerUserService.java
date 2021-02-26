@@ -41,7 +41,7 @@ public interface OwnerUserService {
 
 	int updateUser(OwnerUserDO ownerUserDO);
 
-    OwnerUserDO getUserByIdCard(String idCard);
+    List<OwnerUserDO> getUserByIdCard(String idCard);
 
     List<UserDO> getStudent(String name);
 
@@ -51,7 +51,7 @@ public interface OwnerUserService {
 
 	void updateScores(UserDO userDO);
 
-	void updateTaskIdInUser(Long userId, String taskId);
+	void updateTaskIdInUser(UserDO userDO);
 
     Integer getMyScore(Long userId);
 }

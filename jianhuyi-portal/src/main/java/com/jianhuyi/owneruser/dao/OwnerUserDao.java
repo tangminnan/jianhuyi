@@ -45,7 +45,7 @@ public interface OwnerUserDao {
 	int updateUser(OwnerUserDO ownerUserDO);
 
 
-    OwnerUserDO getUserByIdCard(String idCard);
+    List<OwnerUserDO> getUserByIdCard(String idCard);
 
     List<UserDO> getStudent(String name);
 
@@ -55,7 +55,7 @@ public interface OwnerUserDao {
 
 	void updateScores(UserDO userDO);
 
-    void updateTaskIdInUser(@Param("userId") Long userId,@Param("taskId") String taskId);
+    void updateTaskIdInUser(UserDO userDO);
 
 	Integer getMyScore(Long userId);
 }

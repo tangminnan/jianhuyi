@@ -1,6 +1,7 @@
 package com.jianhuyi.information.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.common.utils.StringUtils;
@@ -177,16 +178,9 @@ public class GiftController {
             }
             userTaskService.save(userTaskDO);
             UserDO userDO = userService.getById(userId);
-            String taskId = userDO.getTaskId();
-            Map<Integer,Long> map1 = null;
-            if(StringUtils.isNotBlank(taskId)){
-                map1 = JSONObject.parseObject(taskId, Map.class);
-            }else{
-                map1 = new HashMap<Integer,Long>();
-            }
-            map1.put(type,userTaskDO.getId());
-            String s = JSON.toJSONString(map1);
-            userService.updateTaskIdInUser(userId,s);
+            if(type==1) userDO.setTaskIds(userTaskDO.getId());
+            if(type==0) userDO.setTaskId(userTaskDO.getId());
+            userService.updateTaskIdInUser(userDO);
             resultMap.put("code",0);
             resultMap.put("msg","操作成功");
             resultMap.put("data",null);
@@ -503,69 +497,79 @@ public class GiftController {
     /**
      * 老师自定义任务下发给班级
      */
-    /*@ResponseBody
+    @ResponseBody
     @GetMapping("/customTaskPc")
     public String customTask(@RequestParam("callback") String callback,UserTaskDO userTaskDO) {
-        //已有任务的集合
-        List<String> havedTaskuserName = new ArrayList<>();
-        //没有用户的ids
-        List<String> nosavedusername = new ArrayList<>();
-        Map<String,Object> map = new HashMap<>();
-        if(userTaskDO.getIdCards()!=null){
-            //查询用户是否有任务和是否存在
-            //userTaskDO.getIdCards()
-            for (String idCard : userTaskDO.getIdCards()) {
-
-                //截取身份证号
-                idCard = idCard.replace("\"","");
-                idCard = idCard.replace("[","");
-                idCard = idCard.replace("]","");
-                OwnerUserDO userDO = userService.getUserByIdCard(idCard);
-                if(userDO!=null){
-                    Map<String, Object> params = new HashMap<>();
-                    //查询用户 未完成的任务
-                    params.put("userId", userDO.getId());
-                    params.put("finishStatus", "2");
-                    //学校任务
-                    params.put("taskType",1);
-                    List<UserTaskDO> userTaskDOList = userTaskService.list(params);
-                    if(userTaskDOList.size()>0){
-                        havedTaskuserName.add(userDO.getName()+"--"+userDO.getIdentityCard());
-                    }else{
-                        userTaskDO.setUserId(userDO.getId());
-                        userTaskDO.setTaskType(1);
-                        userTaskDO.setFinishStatus("2");
-                        userTaskDO.setCreateTime(new Date());
-                        userTaskDO.setFinishDay(0);
-                        userTaskDO.setUnfinishedDay(0);
-                        userTaskDO.setType(1);
-                        int result = userTaskService.save(userTaskDO);
-                        while (result == 0) {
-                            nosavedusername.add(userDO.getName()+"--"+userDO.getIdentityCard());
-                        }
-                    }
-                }else{
-                    OwnerUserDO userDO1 = new OwnerUserDO();
-                    userDO1.setIdentityCard(idCard);
-                    if(userService.save(userDO1)>0){
-                        userTaskDO.setUserId(userDO1.getId());
-                        userTaskDO.setTaskType(1);
-                        userTaskDO.setFinishStatus("2");
-                        userTaskDO.setCreateTime(new Date());
-                        int result = userTaskService.save(userTaskDO);
-                        while (result == 0) {
-                            nosavedusername.add(userDO1.getName()+"--"+userDO1.getIdentityCard());
-                        }
-                    }
+        List<String> idstrinss = JSONArray.parseArray(userTaskDO.getIdCards(), String.class)
+                .stream().distinct().collect(Collectors.toList());
+        for (String idCard : idstrinss) {
+            OwnerUserDO userDO=null;
+            UserTaskDO userTaskDO1=null;
+            List<OwnerUserDO> list = userService.getUserByIdCard(idCard);
+            if(list.size()==0){
+                userDO = new OwnerUserDO();
+                userDO.setIdentityCard(idCard);
+                userService.save(userDO);
+            }else{
+                userDO=list.get(0);
+                userTaskDO1=userTaskService.getCurrentTaskN(userDO.getId(),1);//1= PC端老师 或App端医生下达的任务
+            }
+            if(userTaskDO1==null){
+                userTaskDO.setUserId(userDO.getId());
+                userTaskDO.setType(1);
+                userTaskDO.setCreateTime(new Date());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(userTaskDO.getCreateTime());
+                calendar.add(Calendar.DAY_OF_YEAR,1);
+                calendar.set(Calendar.HOUR_OF_DAY,0);
+                calendar.set(Calendar.MINUTE,0);
+                calendar.set(Calendar.SECOND,0);
+                userTaskDO.setStartTime(calendar.getTime());//任务的开始时间 为下达 任务的第二天0点
+                userTaskDO.setAvgOutScore(countScore(userTaskDO.getAvgOut()));
+                userTaskDO.setAvgLightScore(countScore(userTaskDO.getAvgLight()));
+                userTaskDO.setAvgLookPhoneScore(countScore(userTaskDO.getAvgLookPhone()));
+                userTaskDO.setAvgLookScore(countScore(userTaskDO.getAvgLookTv()) );
+                userTaskDO.setAvgSitTiltScore(countScore(userTaskDO.getAvgSitTilt()));
+                userTaskDO.setAvgReadDistanceScore(countScore(userTaskDO.getAvgReadDistance()));
+                userTaskDO.setAvgReadScore(countScore(userTaskDO.getAvgRead()));
+                userTaskDO.setEffectiveUseTimeScore(countScore(userTaskDO.getEffectiveUseTime()));
+                int result = userTaskService.save(userTaskDO);
+                if(result>0) {
+                    userDO.setTaskIds(userTaskDO.getId());
+                    userService.update(userDO);
                 }
             }
-            map.put("havedTaskuserName",havedTaskuserName);
-            map.put("nosavedusername",nosavedusername);
-            return callback+"("+JSONObject.toJSONString(R.ok(map))+")";
-        }else{
-            return callback+"("+JSONObject.toJSONString(R.error("请选择用户或班级！"))+")";
         }
-    }*/
+
+            return callback+"("+JSONObject.toJSONString(R.ok())+")";
+
+    }
+
+    /**
+     * PC
+     * @param
+     */
+    private int countScore(String pcX) {
+        int score=0;
+
+        if(StringUtils.isNotBlank(pcX)) {
+            switch (pcX) {
+                case "5":
+                    score = 2;
+                    break;
+                case "4":
+                    score = 1;
+                    break;
+                case "2":
+                    score = 0;
+                    break;
+                case "1":
+                    score = 0;
+                    break;
+            }
+        }
+        return score;
+    }
 
     /**
      * 家长下发给学生

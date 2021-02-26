@@ -119,7 +119,7 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 	}
 
 	@Override
-	public OwnerUserDO getUserByIdCard(String idCard) {
+	public List<OwnerUserDO> getUserByIdCard(String idCard) {
 		return ownerUserMapper.getUserByIdCard(idCard);
 	}
 
@@ -144,8 +144,8 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 	}
 
 	@Override
-	public void updateTaskIdInUser(Long userId, String taskId) {
-		ownerUserMapper.updateTaskIdInUser(userId,taskId);
+	public void updateTaskIdInUser(UserDO userDO) {
+		ownerUserMapper.updateTaskIdInUser(userDO);
 	}
 
 	@Override

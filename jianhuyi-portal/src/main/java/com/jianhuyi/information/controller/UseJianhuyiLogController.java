@@ -136,11 +136,9 @@ public class UseJianhuyiLogController {
 
         Long userId = saveParamsDOList.getUserId();
         UserDO userDO = userService.getById(userId);
-        if (userDO != null && userDO.getTaskId() != null) {
-          String task = userDO.getTaskId();
-          Map<Integer, Long> map1 = JSONObject.parseObject(task, Map.class);
-          List<Long> values = new ArrayList<>(map1.values());
-          for (Long taskId : values) {
+        if (userDO != null) {
+          List<Long> list = Arrays.asList(userDO.getTaskId(),userDO.getTaskIds());
+          for (Long taskId : list) {
             UserTaskDO userTaskDO = userTaskService.get(taskId);
             if (userTaskDO != null) {
               System.out.println("统计分析数据=========" + userId + "================= " + userTaskDO.getId());

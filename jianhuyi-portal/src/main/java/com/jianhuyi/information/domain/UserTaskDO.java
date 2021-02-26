@@ -1,7 +1,9 @@
 package com.jianhuyi.information.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -249,6 +251,7 @@ public class UserTaskDO implements Serializable {
      */
     private Integer taskType;
 
+    private String idCards;
 
     public Long getId() {
         return id;
@@ -681,6 +684,15 @@ public class UserTaskDO implements Serializable {
 
     public void setLastavgLight(String lastavgLight) {
         this.lastavgLight = lastavgLight;
+    }
+
+
+    public String getIdCards() {
+        return idCards;
+    }
+
+    public void setIdCards(String idCards) {
+        this.idCards = idCards;
     }
 
     @Override
