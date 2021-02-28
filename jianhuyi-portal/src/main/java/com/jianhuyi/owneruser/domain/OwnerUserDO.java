@@ -97,6 +97,7 @@ public class OwnerUserDO implements Serializable {
 
     private String studentNum;
 
+
     public Integer getAge() {
         return age;
     }
@@ -212,6 +213,9 @@ public class OwnerUserDO implements Serializable {
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
+
+
+
 
     /**
      * 设置：id
