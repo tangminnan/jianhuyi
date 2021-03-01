@@ -499,6 +499,7 @@ public class ResultUtils {
         System.out.println(userTaskDO);
         System.out.println(userTaskLinshiDO);
         if("APP".equals(userTaskDO.getPcorapp()) || StringUtils.isBlank(userTaskDO.getPcorapp())) {
+            System.out.println("来自于APP的数据");
             Integer score1 = StrC(userTaskDO.getAvgRead(), userTaskLinshiDO.getAvgRead()) == 1 ?
                     (userTaskDO.getAvgReadScore() == null ? 0 : userTaskDO.getAvgReadScore()) : 0;
             Integer score2 = StrC(userTaskDO.getAvgLookPhone(), userTaskLinshiDO.getAvgLookPhone()) == 1 ?
@@ -519,6 +520,8 @@ public class ResultUtils {
             return score1 + score2 + score3 + score4 + score5 + score6 + score7 + score8;
         }
         if("PC".equals(userTaskDO.getPcorapp())){
+            System.out.println("来自于PC的数据");
+
             if(     StrC(userTaskDO.getAvgRead(), userTaskLinshiDO.getAvgRead()) == 1 &&
                     StrC(userTaskDO.getAvgLookPhone(), userTaskLinshiDO.getAvgLookPhone()) == 1 &&
                     StrC(userTaskDO.getAvgLookTv(), userTaskLinshiDO.getAvgLookTv()) == 1 &&
