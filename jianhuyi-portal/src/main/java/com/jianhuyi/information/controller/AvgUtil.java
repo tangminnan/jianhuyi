@@ -203,10 +203,10 @@ public class AvgUtil {
             }
           }
         }
-        useJianhuyiLogDO.setRunningTime(runningTime);
-        useJianhuyiLogDO.setEffectiveTime(effectiveTime);
-        useJianhuyiLogDO.setNoneffectiveTime(noneffectiveTime);
-        useJianhuyiLogDO.setCoverTime(coverTime);
+        useJianhuyiLogDO.setRunningTime(runningTime * 5 / 60);
+        useJianhuyiLogDO.setEffectiveTime(effectiveTime * 5 / 60);
+        useJianhuyiLogDO.setNoneffectiveTime(noneffectiveTime * 5 / 60);
+        useJianhuyiLogDO.setCoverTime(coverTime * 5 / 60);
       }
       // 没有为0的序号，取最大值
       else {
@@ -215,10 +215,10 @@ public class AvgUtil {
                 JSONObject.parseObject(
                     JSON.toJSONString(useTimeDOList.get(useTimeDOList.size() - 1)),
                     UseTimeDO.class);
-        useJianhuyiLogDO.setEffectiveTime(useTimeDO.getEffectiveTime());
-        useJianhuyiLogDO.setNoneffectiveTime(useTimeDO.getNoneffectiveTime());
-        useJianhuyiLogDO.setRunningTime(useTimeDO.getRunningTime());
-        useJianhuyiLogDO.setCoverTime(useTimeDO.getCoverTime());
+        useJianhuyiLogDO.setEffectiveTime(useTimeDO.getEffectiveTime() * 5 / 60);
+        useJianhuyiLogDO.setNoneffectiveTime(useTimeDO.getNoneffectiveTime() * 5 / 60);
+        useJianhuyiLogDO.setRunningTime(useTimeDO.getRunningTime() * 5 / 60);
+        useJianhuyiLogDO.setCoverTime(useTimeDO.getCoverTime() * 5 / 60);
       }
     }
     return useJianhuyiLogDO;
