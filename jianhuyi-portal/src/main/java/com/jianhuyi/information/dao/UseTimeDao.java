@@ -16,21 +16,25 @@ import java.util.Map;
 @Mapper
 public interface UseTimeDao {
 
-    UseTimeDO get(Long id);
+  UseTimeDO get(Long id);
 
-    List<UseTimeDO> list(Map<String, Object> map);
+  List<UseTimeDO> list(Map<String, Object> map);
 
-    int count(Map<String, Object> map);
+  int count(Map<String, Object> map);
 
-    int save(UseTimeDO useTime);
+  int save(UseTimeDO useTime);
 
-    int update(UseTimeDO useTime);
+  int update(UseTimeDO useTime);
 
-    int remove(Long id);
+  int remove(Long id);
 
-    int batchRemove(Long[] ids);
+  int batchRemove(Long[] ids);
 
-    void saveList(@Param("useTimeDOList") List<UseTimeDO> useTimeDOList);
+  void saveList(@Param("useTimeDOList") List<UseTimeDO> useTimeDOList);
 
-    UseJianhuyiLogDO getTodayUse(@Param("userId") Long userId);
+  UseJianhuyiLogDO getTodayUse(@Param("userId") Long userId);
+
+  Map getSNCount(@Param("userId") Long userId);
+
+  List<UseTimeDO> getTodayData(Long userId);
 }

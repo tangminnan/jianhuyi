@@ -1,6 +1,5 @@
 package com.jianhuyi.information.service;
 
-
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseTimeDO;
 
@@ -14,21 +13,25 @@ import java.util.Map;
  */
 public interface UseTimeService {
 
-    UseTimeDO get(Long id);
+  UseTimeDO get(Long id);
 
-    List<UseTimeDO> list(Map<String, Object> map);
+  List<UseTimeDO> list(Map<String, Object> map);
 
-    int count(Map<String, Object> map);
+  int count(Map<String, Object> map);
 
-    int save(UseTimeDO useTime);
+  int save(UseTimeDO useTime);
 
-    int update(UseTimeDO useTime);
+  int update(UseTimeDO useTime);
 
-    int remove(Long id);
+  int remove(Long id);
 
-    int batchRemove(Long[] ids);
+  int batchRemove(Long[] ids);
 
-    void saveList(List<UseTimeDO> useTimeDOList);
+  void saveList(List<UseTimeDO> useTimeDOList);
 
-    UseJianhuyiLogDO getTodayUse(Long userId);
+  UseJianhuyiLogDO getTodayUse(Long userId);
+
+  Map getSNCount(Long userId);
+
+  List<UseTimeDO> getTodayData(Long userId);
 }

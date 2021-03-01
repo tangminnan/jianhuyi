@@ -1,8 +1,10 @@
 package com.jianhuyi.information.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.information.controller.AvgUtil;
 import com.jianhuyi.information.dao.UseJianhuyiLogDao;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import com.jianhuyi.information.domain.UseTimeDO;
 import com.jianhuyi.information.service.UseJianhuyiLogService;
 import com.jianhuyi.information.service.UseRemindsService;
 import com.jianhuyi.information.service.UseTimeService;
@@ -47,6 +49,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
     return useJianhuyiLogDao.update(useJianhuyiLog);
   }
 
+  JSONObject jsonObject = null;
+
   // 今日的数据
   @Override
   public Map<String, Object> getByDayTime(Long userId) {
@@ -58,139 +62,38 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
     UseJianhuyiLogDO newUseJianhuyiLogDO = new UseJianhuyiLogDO();
     newUseJianhuyiLogDO.setUserId(Integer.parseInt(userId.toString()));
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    String date = "";
-    Double allDurtion = 0.0;
-    Double readDistance = 0.0;
-    Double readDuration = 0.0;
-    Double sitTilt = 0.0;
-    Double lookPhoneDuration = 0.0;
-    int lookPhoneCount = 0;
-    Double lookTvComputerDuration = 0.0;
-    int lookScreenCount = 0;
-    Double readLight = 0.0;
-
-    Double outdoorsDuration = 0.0;
-    int count = 0;
-    Double readDurtionNum = 0.0;
-
-    boolean flag = true;
-
     AvgUtil.getINSTANCE().putUserJianhuyi(useJianhuyiLogDOList);
     UseJianhuyiLogDO useJianhuyiLogDO1 = AvgUtil.getINSTANCE().getAvgReadTime();
-    System.out.println("========useJianhuyiLogDO1============" + useJianhuyiLogDO1);
 
-    for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOList) {
-      if (jianhuyiLogDO.getStatus() != null && jianhuyiLogDO.getStatus() == 1) {
-        readDistance += jianhuyiLogDO.getReadDistance() * jianhuyiLogDO.getReadDuration();
-        sitTilt += jianhuyiLogDO.getSitTilt() * jianhuyiLogDO.getReadDuration();
-        readLight += jianhuyiLogDO.getReadLight() * jianhuyiLogDO.getReadDuration();
+    newUseJianhuyiLogDO.setReadDuration(useJianhuyiLogDO1.getReadDuration());
+    newUseJianhuyiLogDO.setLookPhoneDuration(useJianhuyiLogDO1.getLookPhoneDuration());
+    newUseJianhuyiLogDO.setLookTvComputerDuration(useJianhuyiLogDO1.getLookTvComputerDuration());
+    newUseJianhuyiLogDO.setReadDistance(useJianhuyiLogDO1.getReadDistance());
+    newUseJianhuyiLogDO.setReadLight(useJianhuyiLogDO1.getReadLight());
+    newUseJianhuyiLogDO.setSitTilt(useJianhuyiLogDO1.getSitTilt());
+    newUseJianhuyiLogDO.setAllreadDuration(useJianhuyiLogDO1.getAllreadDuration());
+    newUseJianhuyiLogDO.setOutdoorsDuration(useJianhuyiLogDO1.getOutdoorsDuration());
 
-        readDurtionNum += jianhuyiLogDO.getReadDuration();
+    // 序号为0的个数 0的个数代表重新计算和开机
+    Map mappp = useTimeService.getSNCount(userId);
+    List<UseTimeDO> useTimeDOList = useTimeService.getTodayData(userId);
+    Optional.ofNullable(mappp)
+        .ifPresent(
+            m -> {
+              jsonObject = (JSONObject) JSONObject.toJSON(m);
+            });
+    String num = jsonObject.get("num").toString();
+    String sum = jsonObject.get("sum").toString();
+    UseJianhuyiLogDO usetime =
+        AvgUtil.getINSTANCE()
+            .getSNCount(Integer.parseInt(num), Integer.parseInt(sum), useTimeDOList);
 
-        readDuration += jianhuyiLogDO.getReadDuration();
-        lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
-        lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
-        if (!date.equals("")) {
-          try {
-            long getReadDuration = (long) (jianhuyiLogDO.getReadDuration() * 60 * 1000);
-            long difference =
-                (sdf.parse(date).getTime()
-                    - (sdf.parse(jianhuyiLogDO.getSaveTime()).getTime() + getReadDuration));
-            long minute = difference / (1000 * 60);
-            // 间隔大于5分钟，视为2次
-            if (minute >= 3) {
-              if (flag) {
-                count += 2;
-                if (jianhuyiLogDO.getLookPhoneDuration() != null
-                    && jianhuyiLogDO.getLookPhoneDuration() > 0) {
-                  lookPhoneCount += 2;
-                  lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
-                }
-                if (jianhuyiLogDO.getLookTvComputerDuration() != null
-                    && jianhuyiLogDO.getLookTvComputerDuration() > 0) {
-                  lookScreenCount += 2;
-                  lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
-                }
-
-                if (jianhuyiLogDO.getReadDuration() > 5) {
-                  allDurtion += jianhuyiLogDO.getReadDuration();
-                }
-              } else {
-                count++;
-                if (jianhuyiLogDO.getLookPhoneDuration() != null
-                    && jianhuyiLogDO.getLookPhoneDuration() > 0) {
-                  lookPhoneCount++;
-                  lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
-                }
-                if (jianhuyiLogDO.getLookTvComputerDuration() != null
-                    && jianhuyiLogDO.getLookTvComputerDuration() > 0) {
-                  lookScreenCount++;
-                  lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
-                }
-                if (jianhuyiLogDO.getReadDuration() > 5) {
-                  allDurtion += jianhuyiLogDO.getReadDuration();
-                }
-              }
-
-              flag = false;
-            }
-            // 间隔小于5分钟，视为1次
-            else {
-              allDurtion += jianhuyiLogDO.getReadDuration();
-              lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
-              lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
-            }
-          } catch (ParseException e) {
-            e.printStackTrace();
-          }
-        } else {
-          if (flag) {
-            count++;
-            lookPhoneCount++;
-            lookScreenCount++;
-          }
-          allDurtion = jianhuyiLogDO.getReadDuration();
-          lookPhoneDuration = jianhuyiLogDO.getLookPhoneDuration();
-          lookTvComputerDuration = jianhuyiLogDO.getLookTvComputerDuration();
-          flag = false;
-        }
-        date = jianhuyiLogDO.getSaveTime();
-
-      } else {
-        outdoorsDuration += jianhuyiLogDO.getOutdoorsDuration();
-      }
-    }
-
-    DecimalFormat df = new DecimalFormat("#.##");
-    newUseJianhuyiLogDO.setOutdoorsDuration(Double.parseDouble(df.format(outdoorsDuration)));
-    if (allDurtion != null && count > 0) {
-      newUseJianhuyiLogDO.setReadDuration(Double.parseDouble(df.format(allDurtion / count)));
-    }
-
-    if (lookPhoneCount > 0) {
-      newUseJianhuyiLogDO.setLookPhoneDuration(
-          Double.parseDouble(df.format(lookPhoneDuration / lookPhoneCount)));
-    }
-    if (lookScreenCount > 0) {
-      newUseJianhuyiLogDO.setLookTvComputerDuration(
-          Double.parseDouble(df.format(lookTvComputerDuration / lookScreenCount)));
-    }
-
-    newUseJianhuyiLogDO.setAllreadDuration(Double.parseDouble(df.format(allDurtion)));
-    if (readDurtionNum > 0) {
-      newUseJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / readDurtionNum)));
-      newUseJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readDurtionNum)));
-      newUseJianhuyiLogDO.setReadDistance(
-          Double.parseDouble(df.format(readDistance / readDurtionNum)));
-    } else {
-      newUseJianhuyiLogDO.setSitTilt(0.0);
-      newUseJianhuyiLogDO.setReadLight(0.0);
-      newUseJianhuyiLogDO.setReadDistance(0.0);
-    }
+    newUseJianhuyiLogDO.setEffectiveTime(usetime.getEffectiveTime());
+    newUseJianhuyiLogDO.setNoneffectiveTime(usetime.getNoneffectiveTime());
+    newUseJianhuyiLogDO.setCoverTime(usetime.getCoverTime());
+    newUseJianhuyiLogDO.setRunningTime(usetime.getRunningTime());
 
     UseJianhuyiLogDO useJianhuyiLogDO2 = useRemindsService.getTodayReminds(userId);
-    UseJianhuyiLogDO useJianhuyiLogDO3 = useTimeService.getTodayUse(userId);
 
     if (useJianhuyiLogDO2 != null && useJianhuyiLogDO2.getRemind() != null) {
       newUseJianhuyiLogDO.setRemind(useJianhuyiLogDO2.getRemind());
@@ -198,11 +101,6 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
       newUseJianhuyiLogDO.setRemind(0);
     }
 
-    if (useJianhuyiLogDO3 != null && useJianhuyiLogDO3.getUseJianhuyiDuration() != null) {
-      newUseJianhuyiLogDO.setUseJianhuyiDuration(useJianhuyiLogDO3.getUseJianhuyiDuration());
-    } else {
-      newUseJianhuyiLogDO.setUseJianhuyiDuration(0.0);
-    }
     mapP.put("data", newUseJianhuyiLogDO);
     mapP.put("msg", "操作成功");
     mapP.put("code", 0);
@@ -250,8 +148,6 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    System.out.println("============mapData==========================" + mapData);
-
     mapP.put("data", mapData);
     mapP.put("msg", "操作成功");
     mapP.put("code", 0);

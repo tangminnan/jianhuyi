@@ -35,6 +35,37 @@
             substr(use_time, 1, 10)
     </select>
 
+    <select id="getSNCount" resultType="java.util.HashMap">
+        SELECT
+            IFNULL(a.sum, 0) sum,
+            num
+        FROM
+            (
+                SELECT
+                    count(*) num,
+                    SUM(serial_number = 0) sum
+                FROM
+                    t_use_time
+                WHERE
+                    TO_DAYS(use_time) = TO_DAYS(NOW())
+                AND user_id = #{userId}
+            ) a
+    </select>
+
+    <select id="getTodayData" resultType="java.util.HashMap">
+
+        SELECT
+          *
+        FROM
+            t_use_time
+        WHERE
+            TO_DAYS(use_time) = TO_DAYS(NOW())
+        AND user_id = #{userId}
+        ORDER BY
+	      use_time
+    </select>
+
+
     <select id="count" resultType="int">
         select count(*) from t_use_time
         <where>

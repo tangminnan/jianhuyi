@@ -1,6 +1,9 @@
 package com.jianhuyi.information.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import com.jianhuyi.information.domain.UseTimeDO;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -113,18 +116,111 @@ public class AvgUtil {
           Double.parseDouble(df.format(lookPhoneDuration / readCount)));
       useJianhuyiLogDO.setLookTvComputerDuration(
           Double.parseDouble(df.format(lookPhoneDuration / readCount)));
+    } else {
+      useJianhuyiLogDO.setReadDuration(0.0);
+
+      useJianhuyiLogDO.setLookPhoneDuration(0.0);
+      useJianhuyiLogDO.setLookTvComputerDuration(0.0);
     }
     if (readDistanceCount > 0) {
       useJianhuyiLogDO.setReadDistance(
           Double.parseDouble(df.format(readDistance / readDistanceCount)));
+    } else {
+      useJianhuyiLogDO.setReadDistance(0.0);
     }
     if (readLightCount > 0) {
       useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readLightCount)));
       useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / readLightCount)));
+    } else {
+      useJianhuyiLogDO.setReadLight(0.0);
+      useJianhuyiLogDO.setSitTilt(0.0);
     }
-    useJianhuyiLogDO.setAllreadDuration(allDurtion);
+    if (allDurtion > 0) {
+      useJianhuyiLogDO.setAllreadDuration(allDurtion);
+    } else {
+      useJianhuyiLogDO.setAllreadDuration(0.0);
+    }
+
+    if (outdoorsDuration > 0) {
+      useJianhuyiLogDO.setOutdoorsDuration(outdoorsDuration);
+    } else {
+      useJianhuyiLogDO.setOutdoorsDuration(0.0);
+    }
+
     return useJianhuyiLogDO;
   }
 
-  // 有效数据使用（t_use_time）
+  // 有效数据使用（t_use_time） 参数num=总条数 sum=0的个数
+  public static UseJianhuyiLogDO getSNCount(
+      Integer num, Integer sum, List<UseTimeDO> useTimeDOList) {
+    UseJianhuyiLogDO useJianhuyiLogDO = new UseJianhuyiLogDO();
+
+    // 有数据
+    if (num > 0) {
+      int runningTime = 0;
+      int effectiveTime = 0;
+      int coverTime = 0;
+      int noneffectiveTime = 0;
+      // 有为0的序号，判断0的位置
+      if (sum > 0) {
+        for (int i = 0; i < useTimeDOList.size(); i++) {
+          UseTimeDO useTimeDO =
+              (UseTimeDO)
+                  JSONObject.parseObject(JSON.toJSONString(useTimeDOList.get(i)), UseTimeDO.class);
+
+          // 序号为0
+          if (useTimeDO.getSerialNumber().equals(0)) {
+            // 判断位置，如果0在最后一个，取最后一个值
+            if (i == useTimeDOList.size() - 1) {
+              runningTime += useTimeDO.getRunningTime();
+              effectiveTime += useTimeDO.getEffectiveTime();
+              noneffectiveTime += useTimeDO.getNoneffectiveTime();
+              coverTime += useTimeDO.getCoverTime();
+
+            }
+            // 如果不在最后一位，就取0前边的值相加
+            else {
+              if (i > 0) {
+                UseTimeDO lastuseTimeDO =
+                    (UseTimeDO)
+                        JSONObject.parseObject(
+                            JSON.toJSONString(useTimeDOList.get(i - 1)), UseTimeDO.class);
+                runningTime += lastuseTimeDO.getRunningTime();
+                effectiveTime += lastuseTimeDO.getEffectiveTime();
+                noneffectiveTime += lastuseTimeDO.getNoneffectiveTime();
+                coverTime += lastuseTimeDO.getCoverTime();
+              } else {
+                UseTimeDO zuihouUseTime =
+                    (UseTimeDO)
+                        JSONObject.parseObject(
+                            JSON.toJSONString(useTimeDOList.get(useTimeDOList.size() - 1)),
+                            UseTimeDO.class);
+                runningTime += zuihouUseTime.getRunningTime();
+                effectiveTime += zuihouUseTime.getEffectiveTime();
+                noneffectiveTime += zuihouUseTime.getNoneffectiveTime();
+                coverTime += zuihouUseTime.getCoverTime();
+              }
+            }
+          }
+        }
+        useJianhuyiLogDO.setRunningTime(runningTime);
+        useJianhuyiLogDO.setEffectiveTime(effectiveTime);
+        useJianhuyiLogDO.setNoneffectiveTime(noneffectiveTime);
+        useJianhuyiLogDO.setCoverTime(coverTime);
+      }
+      // 没有为0的序号，取最大值
+      else {
+        UseTimeDO useTimeDO =
+            (UseTimeDO)
+                JSONObject.parseObject(
+                    JSON.toJSONString(useTimeDOList.get(useTimeDOList.size() - 1)),
+                    UseTimeDO.class);
+        useJianhuyiLogDO.setEffectiveTime(useTimeDO.getEffectiveTime());
+        useJianhuyiLogDO.setNoneffectiveTime(useTimeDO.getNoneffectiveTime());
+        useJianhuyiLogDO.setRunningTime(useTimeDO.getRunningTime());
+        useJianhuyiLogDO.setCoverTime(useTimeDO.getCoverTime());
+      }
+    }
+    return useJianhuyiLogDO;
+  }
 }

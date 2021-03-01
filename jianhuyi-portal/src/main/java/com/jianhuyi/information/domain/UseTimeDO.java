@@ -26,78 +26,38 @@ public class UseTimeDO implements Serializable {
 
   private Integer userDurtion;
 
-  private int runningTime;
+  private Integer runningTime;
 
-  private int effectiveTime;
+  private Integer effectiveTime;
 
-  private int coverTime;
+  private Integer coverTime;
 
-  private int noneffectiveTime;
+  private Integer noneffectiveTime;
 
-  private int serialNumber;
+  private Integer serialNumber;
 
-  public int getSerialNumber() {
-    return serialNumber;
+  public Long getId() {
+    return id;
   }
 
-  public void setSerialNumber(int serialNumber) {
-    this.serialNumber = serialNumber;
+  public void setId(Long id) {
+    this.id = id;
   }
 
-  public int getRunningTime() {
-    return runningTime;
+  public Date getUseTime() {
+    return useTime;
   }
 
-  public void setRunningTime(int runningTime) {
-    this.runningTime = runningTime;
+  public void setUseTime(Date useTime) {
+    this.useTime = useTime;
   }
 
-  public int getEffectiveTime() {
-    return effectiveTime;
+  public Date getSaveTime() {
+    return saveTime;
   }
 
-  public void setEffectiveTime(int effectiveTime) {
-    this.effectiveTime = effectiveTime;
-  }
-
-  public int getCoverTime() {
-    return coverTime;
-  }
-
-  public void setCoverTime(int coverTime) {
-    this.coverTime = coverTime;
-  }
-
-  public int getNoneffectiveTime() {
-    return noneffectiveTime;
-  }
-
-  public void setNoneffectiveTime(int noneffectiveTime) {
-    this.noneffectiveTime = noneffectiveTime;
-  }
-
-  public Long getUploadId() {
-    return uploadId;
-  }
-
-  public void setUploadId(Long uploadId) {
-    this.uploadId = uploadId;
-  }
-
-  public Integer getUserDurtion() {
-    return userDurtion;
-  }
-
-  public void setUserDurtion(Integer userDurtion) {
-    this.userDurtion = userDurtion;
-  }
-
-  public String getEquipmentId() {
-    return equipmentId;
-  }
-
-  public void setEquipmentId(String equipmentId) {
-    this.equipmentId = equipmentId;
+  public void setSaveTime(Date saveTime) {
+    this.saveTime = saveTime;
   }
 
   public Long getUserId() {
@@ -108,34 +68,68 @@ public class UseTimeDO implements Serializable {
     this.userId = userId;
   }
 
-  /** 设置：ID */
-  public void setId(Long id) {
-    this.id = id;
+  public Long getUploadId() {
+    return uploadId;
   }
 
-  /** 获取：ID */
-  public Long getId() {
-    return id;
+  public void setUploadId(Long uploadId) {
+    this.uploadId = uploadId;
   }
 
-  /** 设置：使用时间点（每节点乘以5s等于使用时长） */
-  public void setUseTime(Date useTime) {
-    this.useTime = useTime;
+  public String getEquipmentId() {
+    return equipmentId;
   }
 
-  /** 获取：使用时间点（每节点乘以5s等于使用时长） */
-  public Date getUseTime() {
-    return useTime;
+  public void setEquipmentId(String equipmentId) {
+    this.equipmentId = equipmentId;
   }
 
-  /** 设置：保存时间 */
-  public void setSaveTime(Date saveTime) {
-    this.saveTime = saveTime;
+  public Integer getUserDurtion() {
+    return userDurtion;
   }
 
-  /** 获取：保存时间 */
-  public Date getSaveTime() {
-    return saveTime;
+  public void setUserDurtion(Integer userDurtion) {
+    this.userDurtion = userDurtion;
+  }
+
+  public Integer getRunningTime() {
+    return runningTime;
+  }
+
+  public void setRunningTime(Integer runningTime) {
+    this.runningTime = runningTime;
+  }
+
+  public Integer getEffectiveTime() {
+    return effectiveTime;
+  }
+
+  public void setEffectiveTime(Integer effectiveTime) {
+    this.effectiveTime = effectiveTime;
+  }
+
+  public Integer getCoverTime() {
+    return coverTime;
+  }
+
+  public void setCoverTime(Integer coverTime) {
+    this.coverTime = coverTime;
+  }
+
+  public Integer getNoneffectiveTime() {
+    return noneffectiveTime;
+  }
+
+  public void setNoneffectiveTime(Integer noneffectiveTime) {
+    this.noneffectiveTime = noneffectiveTime;
+  }
+
+  public Integer getSerialNumber() {
+    return serialNumber;
+  }
+
+  public void setSerialNumber(Integer serialNumber) {
+    this.serialNumber = serialNumber;
   }
 
   @Override
