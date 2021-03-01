@@ -496,7 +496,7 @@ public class GiftController {
 
 
     /**
-     * 老师自定义任务下发给班级
+     * 老师任务下发给班级
      */
     @ResponseBody
     @GetMapping("/customTaskPc")
@@ -506,10 +506,10 @@ public class GiftController {
         for (String idCard : idstrinss) {
             OwnerUserDO userDO=null;
             UserTaskDO userTaskDO1=null;
-            List<OwnerUserDO> list = userService.getUserByIdCard(idCard);
+            List<OwnerUserDO> list = userService.getUserByIdCard(idCard.trim());
             if(list.size()==0){
                 userDO = new OwnerUserDO();
-                userDO.setIdentityCard(idCard);
+                userDO.setIdentityCard(idCard.trim());
                 userService.save(userDO);
             }else{
                 userDO=list.get(0);
@@ -581,10 +581,10 @@ public class GiftController {
     public String addTaskPcByJz(@RequestParam("callback") String callback,String idCard,UserTaskDO userTaskDO) {
         OwnerUserDO userDO = null;
         UserTaskDO userTaskDO1 = null;
-        List<OwnerUserDO> list = userService.getUserByIdCard(idCard);
+        List<OwnerUserDO> list = userService.getUserByIdCard(idCard.trim());
         if (list.size() == 0) {
             userDO = new OwnerUserDO();
-            userDO.setIdentityCard(idCard);
+            userDO.setIdentityCard(idCard.trim());
             userService.save(userDO);
         } else {
             userDO = list.get(0);
