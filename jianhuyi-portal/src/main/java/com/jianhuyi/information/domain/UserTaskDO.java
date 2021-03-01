@@ -1,7 +1,9 @@
 package com.jianhuyi.information.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -249,6 +251,12 @@ public class UserTaskDO implements Serializable {
      */
     private Integer taskType;
 
+    //有效使用时长
+    private Double youxiaotime;
+
+    private String idCards;
+    //任务来源 PC =任务来自于PC  APP = 任务来来自于A
+    private String pcorapp;
 
     public Long getId() {
         return id;
@@ -681,6 +689,31 @@ public class UserTaskDO implements Serializable {
 
     public void setLastavgLight(String lastavgLight) {
         this.lastavgLight = lastavgLight;
+    }
+
+
+    public String getIdCards() {
+        return idCards;
+    }
+
+    public void setIdCards(String idCards) {
+        this.idCards = idCards;
+    }
+
+    public String getPcorapp() {
+        return pcorapp;
+    }
+
+    public Double getYouxiaotime() {
+        return youxiaotime;
+    }
+
+    public void setYouxiaotime(Double youxiaotime) {
+        this.youxiaotime = youxiaotime;
+    }
+
+    public void setPcorapp(String pcorapp) {
+        this.pcorapp = pcorapp;
     }
 
     @Override

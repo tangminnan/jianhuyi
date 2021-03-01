@@ -1,6 +1,6 @@
 package com.jianhuyi.information.controller;
 
-import com.jianhuyi.information.domain.ResultData;
+import com.jianhuyi.common.utils.StringUtils;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UserTaskDO;
 import com.jianhuyi.information.domain.UserTaskLinshiDO;
@@ -9,7 +9,9 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  监护仪等级判断标准
@@ -496,24 +498,51 @@ public class ResultUtils {
     public static int countScore(UserTaskDO userTaskDO, UserTaskLinshiDO userTaskLinshiDO) {
         System.out.println(userTaskDO);
         System.out.println(userTaskLinshiDO);
-        Integer score1 = StrC(userTaskDO.getAvgRead(),userTaskLinshiDO.getAvgRead())==1?
-                (userTaskDO.getAvgReadScore()==null?0 :userTaskDO.getAvgReadScore()):0;
-        Integer score2 = StrC(userTaskDO.getAvgLookPhone(),userTaskLinshiDO.getAvgLookPhone())==1?
-                (userTaskDO.getAvgLookPhoneScore()==null?0:userTaskDO.getAvgLookPhoneScore()):0;
-        Integer score3 = StrC(userTaskDO.getAvgLookTv(),userTaskLinshiDO.getAvgLookTv())==1?
-                (userTaskDO.getAvgLookScore()==null?0:userTaskDO.getAvgLookScore()):0;
-        Integer score4 = StrC(userTaskDO.getAvgLight(),userTaskLinshiDO.getAvgLight())==1?
-                (userTaskDO.getAvgLightScore()==null?0:userTaskDO.getAvgLightScore()):0;
-        Integer score5 = StrC(userTaskDO.getAvgOut(),userTaskLinshiDO.getAvgOut())==1?
-                (userTaskDO.getAvgOutScore()==null?0:userTaskDO.getAvgOutScore()):0;
-        Integer score6 = StrC(userTaskDO.getAvgReadDistance(),userTaskLinshiDO.getAvgReadDistance())==1?
-                (userTaskDO.getAvgReadDistanceScore()==null?0:userTaskDO.getAvgReadDistanceScore()):0;
-        Integer score7 = StrC(userTaskDO.getAvgSitTilt(),userTaskLinshiDO.getAvgSitTilt())==1?
-                (userTaskDO.getAvgSitTiltScore()==null?0:userTaskDO.getAvgSitTiltScore()):0;
-        Integer score8 = StrC(userTaskDO.getEffectiveUseTime(),userTaskLinshiDO.getEffectiveUseTime())==1?
-                (userTaskDO.getEffectiveUseTimeScore()==null?0:userTaskDO.getEffectiveUseTimeScore()):0;
+        if("APP".equals(userTaskDO.getPcorapp()) || StringUtils.isBlank(userTaskDO.getPcorapp())) {
+            Integer score1 = StrC(userTaskDO.getAvgRead(), userTaskLinshiDO.getAvgRead()) == 1 ?
+                    (userTaskDO.getAvgReadScore() == null ? 0 : userTaskDO.getAvgReadScore()) : 0;
+            Integer score2 = StrC(userTaskDO.getAvgLookPhone(), userTaskLinshiDO.getAvgLookPhone()) == 1 ?
+                    (userTaskDO.getAvgLookPhoneScore() == null ? 0 : userTaskDO.getAvgLookPhoneScore()) : 0;
+            Integer score3 = StrC(userTaskDO.getAvgLookTv(), userTaskLinshiDO.getAvgLookTv()) == 1 ?
+                    (userTaskDO.getAvgLookScore() == null ? 0 : userTaskDO.getAvgLookScore()) : 0;
+            Integer score4 = StrC(userTaskDO.getAvgLight(), userTaskLinshiDO.getAvgLight()) == 1 ?
+                    (userTaskDO.getAvgLightScore() == null ? 0 : userTaskDO.getAvgLightScore()) : 0;
+            Integer score5 = StrC(userTaskDO.getAvgOut(), userTaskLinshiDO.getAvgOut()) == 1 ?
+                    (userTaskDO.getAvgOutScore() == null ? 0 : userTaskDO.getAvgOutScore()) : 0;
+            Integer score6 = StrC(userTaskDO.getAvgReadDistance(), userTaskLinshiDO.getAvgReadDistance()) == 1 ?
+                    (userTaskDO.getAvgReadDistanceScore() == null ? 0 : userTaskDO.getAvgReadDistanceScore()) : 0;
+            Integer score7 = StrC(userTaskDO.getAvgSitTilt(), userTaskLinshiDO.getAvgSitTilt()) == 1 ?
+                    (userTaskDO.getAvgSitTiltScore() == null ? 0 : userTaskDO.getAvgSitTiltScore()) : 0;
+            Integer score8 = StrC(userTaskDO.getEffectiveUseTime(), userTaskLinshiDO.getEffectiveUseTime()) == 1 ?
+                    (userTaskDO.getEffectiveUseTimeScore() == null ? 0 : userTaskDO.getEffectiveUseTimeScore()) : 0;
 
-        return score1+score2+score3+score4+score5+score6+score7+score8;
+            return score1 + score2 + score3 + score4 + score5 + score6 + score7 + score8;
+        }
+        if("PC".equals(userTaskDO.getPcorapp())){
+            if(     StrC(userTaskDO.getAvgRead(), userTaskLinshiDO.getAvgRead()) == 1 &&
+                    StrC(userTaskDO.getAvgLookPhone(), userTaskLinshiDO.getAvgLookPhone()) == 1 &&
+                    StrC(userTaskDO.getAvgLookTv(), userTaskLinshiDO.getAvgLookTv()) == 1 &&
+                    StrC(userTaskDO.getAvgLight(), userTaskLinshiDO.getAvgLight()) == 1 &&
+                    StrC(userTaskDO.getAvgOut(), userTaskLinshiDO.getAvgOut()) == 1 &&
+                    StrC(userTaskDO.getAvgReadDistance(), userTaskLinshiDO.getAvgReadDistance()) == 1 &&
+                    StrC(userTaskDO.getAvgSitTilt(), userTaskLinshiDO.getAvgSitTilt()) == 1 &&
+                    StrC(userTaskDO.getEffectiveUseTime(), userTaskLinshiDO.getEffectiveUseTime()) == 1
+                    )
+
+
+            return  (userTaskDO.getAvgReadScore() == null ? 0 : userTaskDO.getAvgReadScore())  +
+                    (userTaskDO.getAvgLookPhoneScore() == null ? 0 : userTaskDO.getAvgLookPhoneScore())+
+                    (userTaskDO.getAvgLookScore() == null ? 0 : userTaskDO.getAvgLookScore()) +
+                    (userTaskDO.getAvgLightScore() == null ? 0 : userTaskDO.getAvgLightScore())+
+                    (userTaskDO.getAvgOutScore() == null ? 0 : userTaskDO.getAvgOutScore()) +
+                    (userTaskDO.getAvgReadDistanceScore() == null ? 0 : userTaskDO.getAvgReadDistanceScore())+
+                    (userTaskDO.getAvgSitTiltScore() == null ? 0 : userTaskDO.getAvgSitTiltScore())+
+                    (userTaskDO.getEffectiveUseTimeScore() == null ? 0 : userTaskDO.getEffectiveUseTimeScore());
+            else
+                return 0;
+
+        }
+        return 0;
     }
 
     public static int StrC(String a,String b){
@@ -539,14 +568,9 @@ public class ResultUtils {
      * @return
      * @throws ParseException
      */
-    public static ResultData countData(List<UseJianhuyiLogDO> useJianhuyiLogDOList)
+    public static Map<String,Double> countData(List<UseJianhuyiLogDO> useJianhuyiLogDOList)
             throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        useJianhuyiLogDOList.forEach(
-                a -> {
-                    a.setCreateTime(sdf.format(a.getAddTime()));
-                });
         Double avgReadDuration = 0.0; // 平均每次阅读时长
         Double avgReadDistance = 0.0; // 平均阅读距离
         Double avgReadLight = 0.0; // 平均阅读光照
@@ -644,13 +668,13 @@ public class ResultUtils {
             avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
         }
 
-        ResultData resultData = new ResultData();
-        resultData.setAvgReadDuration(avgReadDuration);
-        resultData.setAvgLookPhoneDuration(avgLookPhoneDuration);
-        resultData.setAvgLookTvComputerDuration(avgLookTvComputerDuration);
-        resultData.setAvgReadLight(avgReadLight);
-        resultData.setAvgSitTilt(avgSitTilt);
-        resultData.setAvgReadDistance(avgReadDistance);
-        return  resultData;
+        Map<String,Double> resultMap = new HashMap<>();
+        resultMap.put("avgReadDuration",avgReadDuration);
+        resultMap.put("avgLookPhoneDuration",avgLookPhoneDuration);
+        resultMap.put("avgLookTvComputerDuration",avgLookTvComputerDuration);
+        resultMap.put("avgReadLight",avgReadLight);
+        resultMap.put("avgSitTilt",avgSitTilt);
+        resultMap.put("avgReadDistance",avgReadDistance);
+        return  resultMap;
     }
 }

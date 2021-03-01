@@ -91,8 +91,12 @@ public class OwnerUserDO implements Serializable {
     private Double rEyeAxis;
     //所剩积分
     private Integer scores;
+    //最近一次的任务id
+    private Long taskId;
+    private Long taskIds;
 
     private String studentNum;
+
 
     public Integer getAge() {
         return age;
@@ -209,6 +213,9 @@ public class OwnerUserDO implements Serializable {
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
+
+
+
 
     /**
      * 设置：id
@@ -532,6 +539,22 @@ public class OwnerUserDO implements Serializable {
 
     public void setScores(Integer scores) {
         this.scores = scores;
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
+
+    public Long getTaskIds() {
+        return taskIds;
+    }
+
+    public void setTaskIds(Long taskIds) {
+        this.taskIds = taskIds;
     }
 
     @Override

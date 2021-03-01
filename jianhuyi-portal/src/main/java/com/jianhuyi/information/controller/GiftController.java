@@ -1,7 +1,10 @@
 package com.jianhuyi.information.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.common.utils.R;
+import com.jianhuyi.common.utils.StringUtils;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.*;
 import com.jianhuyi.information.service.impl.UseJianhuyiLogServiceImpl;
@@ -150,7 +153,8 @@ public class GiftController {
     public Map<String,Object> submitTask(UserTaskDO userTaskDO) throws ParseException {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         Long userId = userTaskDO.getUserId();
-        UserTaskDO userTaskDO1=userTaskService.getCurrentTaskN(userId);
+        Integer type = userTaskDO.getType();
+        UserTaskDO userTaskDO1=userTaskService.getCurrentTaskN(userId,type);
         if(userTaskDO1==null){//新增任务
             userTaskDO.setCreateTime(new Date());
             Calendar calendar = Calendar.getInstance();
@@ -160,20 +164,24 @@ public class GiftController {
             calendar.set(Calendar.MINUTE,0);
             calendar.set(Calendar.SECOND,0);
             userTaskDO.setStartTime(calendar.getTime());
-            userTaskDO.setTaskType(2);//个人任务
+            userTaskDO.setPcorapp("APP");
             Map<String,Object> map =  getLastTaskResult(userId);
             UserTaskLinshiDO userTaskLinshiDO = (UserTaskLinshiDO)map.get("data");
-            userTaskDO.setLastavgLight(userTaskLinshiDO.getAvgLight());
-            userTaskDO.setLastavgLookPhone(userTaskLinshiDO.getAvgLookPhone());
-            userTaskDO.setLastavgLookTv(userTaskLinshiDO.getAvgLookTv());
-            userTaskDO.setLastavgOut(userTaskLinshiDO.getAvgOut());
-            userTaskDO.setLastavgRead(userTaskLinshiDO.getAvgRead());
-            userTaskDO.setLastavgReadDistance(userTaskLinshiDO.getAvgReadDistance());
-            userTaskDO.setLastavgSitTilt(userTaskLinshiDO.getAvgSitTilt());
-            userTaskDO.setLasteffectiveUseTime(userTaskLinshiDO.getEffectiveUseTime());
+            if(userTaskLinshiDO!=null) {
+                userTaskDO.setLastavgLight(userTaskLinshiDO.getAvgLight());
+                userTaskDO.setLastavgLookPhone(userTaskLinshiDO.getAvgLookPhone());
+                userTaskDO.setLastavgLookTv(userTaskLinshiDO.getAvgLookTv());
+                userTaskDO.setLastavgOut(userTaskLinshiDO.getAvgOut());
+                userTaskDO.setLastavgRead(userTaskLinshiDO.getAvgRead());
+                userTaskDO.setLastavgReadDistance(userTaskLinshiDO.getAvgReadDistance());
+                userTaskDO.setLastavgSitTilt(userTaskLinshiDO.getAvgSitTilt());
+                userTaskDO.setLasteffectiveUseTime(userTaskLinshiDO.getEffectiveUseTime());
+            }
             userTaskService.save(userTaskDO);
-
-            userService.updateTaskIdInUser(userId,userTaskDO.getId());
+            UserDO userDO = userService.getById(userId);
+            if(type==1) userDO.setTaskIds(userTaskDO.getId());
+            if(type==0) userDO.setTaskId(userTaskDO.getId());
+            userService.updateTaskIdInUser(userDO);
             resultMap.put("code",0);
             resultMap.put("msg","操作成功");
             resultMap.put("data",null);
@@ -203,92 +211,8 @@ public class GiftController {
         }else{
             List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.getNearData(userId,date);
             List<UseJianhuyiLogDO> sublist = useJianhuyiLogDOS.stream().filter(a->a.getStatus()!=null && a.getStatus()==1).collect(Collectors.toList());
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Double avgReadDuration = 0.0;//平均每次阅读时长
             Double outdoorsDuration = 0.0;//户外时间累计版本
-            Double avgReadDistance = 0.0;//平均阅读距离
-            Double avgReadLight = 0.0;//平均阅读光照
-            Double avgLookPhoneDuration = 0.0;//平均单次看手机时长
-            Double avgLookTvComputerDuration = 0.0;//平均单次看电脑及电视时长
-            Double avgSitTilt = 0.0;//平均旋转角度
-            int lookPhoneCount = 0;//看手机次数
-            int lookScreenCount = 0;//看电脑屏幕的次数
-            int avgReadLightCount=0;//光照强度次数
-            int avgSitTiltCount=0;//角度次数
-            int  avgReadDistanceCount=0;
-            int count = 0;//阅读次数
-
-            Double readDurtionNum = 0.0;
-            for(int i=0;i<sublist.size();i++) {
-                UseJianhuyiLogDO useJianhuyiLogDO = sublist.get(i);
-
-                if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412) {
-                    avgReadLight += 100*ResultUtils.log(useJianhuyiLogDO.getReadLight(),4.3) ;
-                    avgReadLightCount++;
-                }
-                if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412
-                        &&  useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
-                        && useJianhuyiLogDO.getReadDistance()<=60){
-
-
-                    avgSitTilt += useJianhuyiLogDO.getSitTilt();
-                    avgSitTiltCount++;
-                }
-
-                if(useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
-                        && useJianhuyiLogDO.getReadDistance()<=60){
-
-
-                    avgReadDistance += useJianhuyiLogDO.getReadDistance();
-                    avgReadDistanceCount++;
-                }
-                if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
-                    avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
-                }
-                if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
-                    avgLookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
-                }
-                avgReadDuration += useJianhuyiLogDO.getReadDuration();
-                if (i + 1 < sublist.size()) {
-                    UseJianhuyiLogDO useJianhuyiLogDO1 = sublist.get(i + 1);
-                    long minute = (sdf1.parse(useJianhuyiLogDO1.getSaveTime()).getTime() -
-                            sdf1.parse(useJianhuyiLogDO.getSaveTime()).getTime()
-                            - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000)) / 1000 / 60;
-                    if (minute >= 3 || i == 0) {
-                        if (useJianhuyiLogDO.getLookPhoneDuration() != null && useJianhuyiLogDO.getLookPhoneDuration() > 0)
-                            lookPhoneCount++;//看手机次数
-                        if (useJianhuyiLogDO.getLookTvComputerDuration() != null && useJianhuyiLogDO.getLookTvComputerDuration() > 0)
-                            lookScreenCount++;//看电脑屏幕的次数
-                        if (useJianhuyiLogDO.getReadDuration() >= 5) {
-                            count++;//阅读次数
-                        }
-                    }
-                }
-
-            }
-            DecimalFormat df = new DecimalFormat("#.##");
-            if (avgReadDuration != null && count > 0) {
-                avgReadDuration=Double.parseDouble(df.format(avgReadDuration / count));
-            }
-            if (lookPhoneCount>0) {
-                avgLookPhoneDuration=Double.parseDouble(df.format(avgLookPhoneDuration / lookPhoneCount));
-            }
-            if (lookScreenCount > 0) {
-                avgLookTvComputerDuration=Double.parseDouble(df.format(avgLookTvComputerDuration / lookScreenCount));
-            }
-
-            if(avgReadLightCount>0){
-                avgReadLight = Double.parseDouble(df.format(avgReadLight / avgReadLightCount));
-            }
-
-            if(avgSitTiltCount>0){
-                avgSitTilt = Double.parseDouble(df.format(avgSitTilt / avgSitTiltCount));
-            }
-
-            if(avgReadDistanceCount>0){
-                avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
-
-            }
+            Map<String,Double> map = ResultUtils.countData(sublist);
             outdoorsDuration=useJianhuyiLogDOS.stream()
                     .filter(a->a.getStatus()!=null && a.getStatus()==2)
                     .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
@@ -297,12 +221,12 @@ public class GiftController {
             UseJianhuyiLogDO userJianHuYiYouXiao = useJianhuyiLogService.getUserJianHuYiYouXiao(userId,sdf.format(date));
             Double useJianhuyiDuration = userJianHuYiYouXiao.getUseJianhuyiDuration();
             UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
-            userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(avgReadDuration));
-            userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(avgLookPhoneDuration));
-            userTaskLinshiDO.setAvgLookTv(ResultUtils.resultAvgLookTvComputerDuration(avgLookTvComputerDuration));
-            userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(avgReadDistance));
-            userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(avgReadLight));
-            userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(avgSitTilt));
+            userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(map.get("avgReadDuration")));
+            userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(map.get("avgLookPhoneDuration")));
+            userTaskLinshiDO.setAvgLookTv(ResultUtils.resultAvgLookTvComputerDuration(map.get("avgLookTvComputerDuration")));
+            userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(map.get("avgReadDistance")));
+            userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(map.get("avgReadLight")));
+            userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(map.get("avgSitTilt")));
             userTaskLinshiDO.setAvgOut(ResultUtils.resultOutdoorsDuration(outdoorsDuration));
             userTaskLinshiDO.setEffectiveUseTime(ResultUtils.resultUseJianhuyiDuration(useJianhuyiDuration));
             resultMap.put("data", userTaskLinshiDO);
@@ -310,14 +234,14 @@ public class GiftController {
             resultMap.put("msg", "获取成功");
 
             System.out.println(date);
-            System.out.println("平均每次阅读时长 "+avgReadDuration);
+            System.out.println("平均每次阅读时长 "+map.get("avgReadDuration"));
             System.out.println("使用时长 "+useJianhuyiDuration);
             System.out.println("户外时间累计 "+outdoorsDuration);
-            System.out.println("平均阅读距离 "+avgReadDistance);
-            System.out.println("平均阅读光照 "+avgReadLight);
-            System.out.println("平均单次看手机时长 "+avgLookPhoneDuration);
-            System.out.println("平均单次看电脑及电视时长 "+avgLookTvComputerDuration);
-            System.out.println("平均旋转角度 "+avgSitTilt);
+            System.out.println("平均阅读距离 "+map.get("avgReadDistance"));
+            System.out.println("平均阅读光照 "+map.get("avgReadLight"));
+            System.out.println("平均单次看手机时长 "+map.get("avgLookPhoneDuration"));
+            System.out.println("平均单次看电脑及电视时长 "+map.get("avgLookTvComputerDuration"));
+            System.out.println("平均旋转角度 "+map.get("avgSitTilt"));
         }
 
         return resultMap;
@@ -393,8 +317,8 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/getTask")
-    public Map<String,Object> getTask(Long userId){
-        List<UserTaskDO> list = userTaskService.getAllReadyFinishedTask(userId);//查询已经完成的任务
+    public Map<String,Object> getTask(Long userId,Integer  type){
+        List<UserTaskDO> list = userTaskService.getAllReadyFinishedTask(userId,type);//查询已经完成的任务
         Map<String,Object> resultMap = new HashMap<String,Object>();
         if(list.size()>0) {
             resultMap.put("code", 0);
@@ -413,8 +337,8 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/getCurrentTask")
-    public Map<String,Object> getCurrentTask(Long userId){
-        UserTaskDO userTaskDO = userTaskService.getCurrentTask(userId);
+    public Map<String,Object> getCurrentTask(Long userId,Integer type){
+        UserTaskDO userTaskDO = userTaskService.getCurrentTask(userId,type);
         Map<String,Object> resultMap = new HashMap<>();
         if(userTaskDO!=null){
             long d   =  (new Date().getTime()-userTaskDO.getStartTime().getTime())/1000/60/60/24;
@@ -511,41 +435,41 @@ public class GiftController {
     /**
      * pc端礼物列表（老师端，礼物任务自定义）
      * */
-    @ResponseBody
-    @GetMapping("/listPc")
-    public String listPc(@RequestParam("callback") String callback) {
-        Map<String, Object> data = new HashMap<>();
-        Map<String, Object> params = new HashMap<>();
-        params.put("type", 2);
-        List<GiftDO> giftDOList = giftService.list(params);
-        data.put("data", giftDOList);
-        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
-    }
+//    @ResponseBody
+//    @GetMapping("/listPc")
+//    public String listPc(@RequestParam("callback") String callback) {
+//        Map<String, Object> data = new HashMap<>();
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("type", 2);
+//        List<GiftDO> giftDOList = giftService.list(params);
+//        data.put("data", giftDOList);
+//        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
+//    }
 
     /**
      * pc端礼物列表（家长端）
      * */
-   /* @ResponseBody
-    @GetMapping("/listPcJiazhang")
-    public String listPcJiazhang(@RequestParam("callback") String callback) {
-        Map<String, Object> data = new HashMap<>();
-        Map<String, Object> params = new HashMap<>();
-        params.put("type", 2);
-        List<GiftDO> giftDOList = giftService.list(params);
-        if(giftDOList.size()>0){
-            for (GiftDO giftDO : giftDOList) {
-                if(giftDO!=null){
-                    Map<String,Object> params11 = new HashMap<>();
-                    params11.put("giftId",giftDO.getId());
-                    giftDO.setGiftPc(giftPcService.list(params11).get(0));
-
-
-                }
-            }
-        }
-        data.put("data", giftDOList);
-        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
-    }*/
+//    @ResponseBody
+//    @GetMapping("/listPcJiazhang")
+//    public String listPcJiazhang(@RequestParam("callback") String callback) {
+//        Map<String, Object> data = new HashMap<>();
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("type", 2);
+//        List<GiftDO> giftDOList = giftService.list(params);
+//        if(giftDOList.size()>0){
+//            for (GiftDO giftDO : giftDOList) {
+//                if(giftDO!=null){
+//                    Map<String,Object> params11 = new HashMap<>();
+//                    params11.put("giftId",giftDO.getId());
+//                    giftDO.setGiftPc(giftPcService.list(params11).get(0));
+//
+//
+//                }
+//            }
+//        }
+//        data.put("data", giftDOList);
+//        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
+//    }
     /**
      * 礼物详情
      */
@@ -574,162 +498,221 @@ public class GiftController {
     /**
      * 老师自定义任务下发给班级
      */
-    /*@ResponseBody
+    @ResponseBody
     @GetMapping("/customTaskPc")
     public String customTask(@RequestParam("callback") String callback,UserTaskDO userTaskDO) {
-        //已有任务的集合
-        List<String> havedTaskuserName = new ArrayList<>();
-        //没有用户的ids
-        List<String> nosavedusername = new ArrayList<>();
-        Map<String,Object> map = new HashMap<>();
-        if(userTaskDO.getIdCards()!=null){
-            //查询用户是否有任务和是否存在
-            //userTaskDO.getIdCards()
-            for (String idCard : userTaskDO.getIdCards()) {
-
-                //截取身份证号
-                idCard = idCard.replace("\"","");
-                idCard = idCard.replace("[","");
-                idCard = idCard.replace("]","");
-                OwnerUserDO userDO = userService.getUserByIdCard(idCard);
-                if(userDO!=null){
-                    Map<String, Object> params = new HashMap<>();
-                    //查询用户 未完成的任务
-                    params.put("userId", userDO.getId());
-                    params.put("finishStatus", "2");
-                    //学校任务
-                    params.put("taskType",1);
-                    List<UserTaskDO> userTaskDOList = userTaskService.list(params);
-                    if(userTaskDOList.size()>0){
-                        havedTaskuserName.add(userDO.getName()+"--"+userDO.getIdentityCard());
-                    }else{
-                        userTaskDO.setUserId(userDO.getId());
-                        userTaskDO.setTaskType(1);
-                        userTaskDO.setFinishStatus("2");
-                        userTaskDO.setCreateTime(new Date());
-                        userTaskDO.setFinishDay(0);
-                        userTaskDO.setUnfinishedDay(0);
-                        userTaskDO.setType(1);
-                        int result = userTaskService.save(userTaskDO);
-                        while (result == 0) {
-                            nosavedusername.add(userDO.getName()+"--"+userDO.getIdentityCard());
-                        }
-                    }
-                }else{
-                    OwnerUserDO userDO1 = new OwnerUserDO();
-                    userDO1.setIdentityCard(idCard);
-                    if(userService.save(userDO1)>0){
-                        userTaskDO.setUserId(userDO1.getId());
-                        userTaskDO.setTaskType(1);
-                        userTaskDO.setFinishStatus("2");
-                        userTaskDO.setCreateTime(new Date());
-                        int result = userTaskService.save(userTaskDO);
-                        while (result == 0) {
-                            nosavedusername.add(userDO1.getName()+"--"+userDO1.getIdentityCard());
-                        }
-                    }
+        List<String> idstrinss = JSONArray.parseArray(userTaskDO.getIdCards(), String.class)
+                .stream().distinct().collect(Collectors.toList());
+        for (String idCard : idstrinss) {
+            OwnerUserDO userDO=null;
+            UserTaskDO userTaskDO1=null;
+            List<OwnerUserDO> list = userService.getUserByIdCard(idCard);
+            if(list.size()==0){
+                userDO = new OwnerUserDO();
+                userDO.setIdentityCard(idCard);
+                userService.save(userDO);
+            }else{
+                userDO=list.get(0);
+                userTaskDO1=userTaskService.getCurrentTaskN(userDO.getId(),1);//1= PC端老师 或App端医生下达的任务
+            }
+            if(userTaskDO1==null){
+                userTaskDO.setUserId(userDO.getId());
+                userTaskDO.setType(1);
+                userTaskDO.setCreateTime(new Date());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(userTaskDO.getCreateTime());
+                calendar.add(Calendar.DAY_OF_YEAR,1);
+                calendar.set(Calendar.HOUR_OF_DAY,0);
+                calendar.set(Calendar.MINUTE,0);
+                calendar.set(Calendar.SECOND,0);
+                userTaskDO.setStartTime(calendar.getTime());//任务的开始时间 为下达 任务的第二天0点
+                userTaskDO.setPcorapp("PC");
+                userTaskDO.setAvgOutScore(countScore(userTaskDO.getAvgOut()));
+                userTaskDO.setAvgLightScore(countScore(userTaskDO.getAvgLight()));
+                userTaskDO.setAvgLookPhoneScore(countScore(userTaskDO.getAvgLookPhone()));
+                userTaskDO.setAvgLookScore(countScore(userTaskDO.getAvgLookTv()) );
+                userTaskDO.setAvgSitTiltScore(countScore(userTaskDO.getAvgSitTilt()));
+                userTaskDO.setAvgReadDistanceScore(countScore(userTaskDO.getAvgReadDistance()));
+                userTaskDO.setAvgReadScore(countScore(userTaskDO.getAvgRead()));
+                userTaskDO.setEffectiveUseTimeScore(countScore(userTaskDO.getEffectiveUseTime()));
+                int result = userTaskService.save(userTaskDO);
+                if(result>0) {
+                    userDO.setTaskIds(userTaskDO.getId());
+                    userService.update(userDO);
                 }
             }
-            map.put("havedTaskuserName",havedTaskuserName);
-            map.put("nosavedusername",nosavedusername);
-            return callback+"("+JSONObject.toJSONString(R.ok(map))+")";
-        }else{
-            return callback+"("+JSONObject.toJSONString(R.error("请选择用户或班级！"))+")";
         }
-    }*/
+
+            return callback+"("+JSONObject.toJSONString(R.ok())+")";
+
+    }
+
+    /**
+     * PC
+     * @param
+     */
+    private int countScore(String pcX) {
+        int score=0;
+
+        if(StringUtils.isNotBlank(pcX)) {
+            switch (pcX) {
+                case "5":
+                    score = 2;
+                    break;
+                case "4":
+                    score = 1;
+                    break;
+                case "2":
+                    score = 0;
+                    break;
+                case "1":
+                    score = 0;
+                    break;
+            }
+        }
+        return score;
+    }
 
     /**
      * 家长下发给学生
      */
-    /*@ResponseBody
+    @ResponseBody
     @GetMapping("/addTaskPcByJz")
-    public String addTaskPcByJz(@RequestParam("callback") String callback,String idCard,Long giftId) {
-        Map<String,Object> map = new HashMap<>();
-                OwnerUserDO userDO = userService.getUserByIdCard(idCard);
-                if(userDO!=null){
-                    Map<String, Object> params = new HashMap<>();
-                    //查询用户 未完成的任务
-                    params.put("userId", userDO.getId());
-                    params.put("finishStatus", "2");
-                    //个人任务
-                    params.put("taskType",2);
-                    List<UserTaskDO> userTaskDOList = userTaskService.list(params);
-                    if(userTaskDOList.size()>0){
-                        return callback+"("+JSONObject.toJSONString(R.error("有一个未结束任务，同时只能存在一个任务哦！"))+")";
-                    }else{
-                        map.put("giftId",giftId);
-                        GiftPcDO giftPcDO = new GiftPcDO();
-                        if(giftPcService.list(map).size()>0){
-                            giftPcDO = giftPcService.list(map).get(0);
-                        }
+    public String addTaskPcByJz(@RequestParam("callback") String callback,String idCard,UserTaskDO userTaskDO) {
+        OwnerUserDO userDO = null;
+        UserTaskDO userTaskDO1 = null;
+        List<OwnerUserDO> list = userService.getUserByIdCard(idCard);
+        if (list.size() == 0) {
+            userDO = new OwnerUserDO();
+            userDO.setIdentityCard(idCard);
+            userService.save(userDO);
+        } else {
+            userDO = list.get(0);
+            userTaskDO1 = userTaskService.getCurrentTaskN(userDO.getId(), 0);//1= PC端老师 或App端医生下达的任务
+        }
 
-                        UserTaskDO userTaskDO = new UserTaskDO();
-                        userTaskDO.setUserId(userDO.getId());
-                        userTaskDO.setTaskType(2);
-                        userTaskDO.setFinishStatus("2");
-                        userTaskDO.setCreateTime(new Date());
-                        userTaskDO.setFinishDay(0);
-                        userTaskDO.setUnfinishedDay(0);
-                        userTaskDO.setType(1);
-                        userTaskDO.setEyeRate(giftPcDO.getEyeRate());
-                        userTaskDO.setAvgRead(giftPcDO.getAvgRead());
-                        userTaskDO.setTaskTime(giftPcDO.getTaskTime());
-                        userTaskDO.setAvgOut(giftPcDO.getAvgOut());
-                        userTaskDO.setAvgLight(giftPcDO.getAvgLight());
-                        userTaskDO.setAvgReadDistance(giftPcDO.getAvgReadDistance());
-                        userTaskDO.setAvgSitTilt(giftPcDO.getAvgSitTilt());
-                        userTaskDO.setAvgLookTv(giftPcDO.getAvgLookTv());
-                        userTaskDO.setAvgLookPhone(giftPcDO.getAvgLookPhone());
-                        userTaskDO.setEffectiveUseTime(giftPcDO.getEffectiveUseTime());
-                        userTaskDO.setGiftId(giftId);
+        if (userTaskDO1 == null) {
+            userTaskDO.setUserId(userDO.getId());
+            userTaskDO.setType(0);
+            userTaskDO.setCreateTime(new Date());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(userTaskDO.getCreateTime());
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            userTaskDO.setStartTime(calendar.getTime());//任务的开始时间 为下达 任务的第二天0点
+            userTaskDO.setPcorapp("PC");
+            userTaskDO.setAvgOutScore(countScore(userTaskDO.getAvgOut()));
+            userTaskDO.setAvgLightScore(countScore(userTaskDO.getAvgLight()));
+            userTaskDO.setAvgLookPhoneScore(countScore(userTaskDO.getAvgLookPhone()));
+            userTaskDO.setAvgLookScore(countScore(userTaskDO.getAvgLookTv()));
+            userTaskDO.setAvgSitTiltScore(countScore(userTaskDO.getAvgSitTilt()));
+            userTaskDO.setAvgReadDistanceScore(countScore(userTaskDO.getAvgReadDistance()));
+            userTaskDO.setAvgReadScore(countScore(userTaskDO.getAvgRead()));
+            userTaskDO.setEffectiveUseTimeScore(countScore(userTaskDO.getEffectiveUseTime()));
+            int result = userTaskService.save(userTaskDO);
+            if (result > 0) {
+                userDO.setTaskId(userTaskDO.getId());
+                userService.update(userDO);
+            }
+        }
+        return callback + "(" + JSONObject.toJSONString(R.ok()) + ")";
 
-                        int result = userTaskService.save(userTaskDO);
-                        if(result>0)
-                            return callback+"("+JSONObject.toJSONString(R.ok("保存成功！"))+")";
-                        else
-                            return callback+"("+JSONObject.toJSONString(R.error("保存失败，请重试"))+")";
-                    }
-                }else{
-                    map.put("giftId",giftId);
-                    GiftPcDO giftPcDO = new GiftPcDO();
-                    if(giftPcService.list(map).size()>0){
-                        giftPcDO = giftPcService.list(map).get(0);
-                    }
+    }
 
-                    OwnerUserDO userDO1 = new OwnerUserDO();
-                    userDO1.setIdentityCard(idCard);
-                    if(userService.save(userDO1)>0){
-                        UserTaskDO userTaskDO = new UserTaskDO();
-                        userTaskDO.setUserId(userDO1.getId());
-                        userTaskDO.setTaskType(2);
-                        userTaskDO.setFinishStatus("2");
-                        userTaskDO.setCreateTime(new Date());
-                        userTaskDO.setFinishDay(0);
-                        userTaskDO.setUnfinishedDay(0);
-                        userTaskDO.setType(2);
-                        userTaskDO.setEyeRate(giftPcDO.getEyeRate());
-                        userTaskDO.setAvgRead(giftPcDO.getAvgRead());
-                        userTaskDO.setTaskTime(giftPcDO.getTaskTime());
-                        userTaskDO.setAvgOut(giftPcDO.getAvgOut());
-                        userTaskDO.setAvgLight(giftPcDO.getAvgLight());
-                        userTaskDO.setAvgReadDistance(giftPcDO.getAvgReadDistance());
-                        userTaskDO.setAvgSitTilt(giftPcDO.getAvgSitTilt());
-                        userTaskDO.setAvgLookTv(giftPcDO.getAvgLookTv());
-                        userTaskDO.setAvgLookPhone(giftPcDO.getAvgLookPhone());
-                        userTaskDO.setEffectiveUseTime(giftPcDO.getEffectiveUseTime());
-                        userTaskDO.setGiftId(giftId);
-
-                        int result = userTaskService.save(userTaskDO);
-                        if(result>0)
-                            return callback+"("+JSONObject.toJSONString(R.ok("保存成功！"))+")";
-                        else
-                            return callback+"("+JSONObject.toJSONString(R.error("保存失败，请重试"))+")";
-                    }else{
-                        return callback+"("+JSONObject.toJSONString(R.error("用户不存在且保存失败，请重试"))+")";
-                    }
+    /**
+     *   查看PC端任务详情
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getTaskFromPC")
+    public String getTaskFromPC(String idCard,@RequestParam("callback") String callback,Integer type){
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        List<OwnerUserDO> list = userService.getUserByIdCard(idCard);
+        if(list.size()==0) {
+            resultMap.put("code","-1");
+            resultMap.put("msg","没有找到孩子的信息");
+        }else {
+            OwnerUserDO ownerUserDO = list.get(0);
+            UserTaskDO userTaskDO = userTaskService.getCurrentTask(ownerUserDO.getId(), type);
+            if (userTaskDO == null) {
+                resultMap.put("code", -1);
+                resultMap.put("msg", type == 1 ? "当前没有老师或医生下发的任务" : "当前没有家长下发的任务");
+            } else {
+                long d = (new Date().getTime() - userTaskDO.getStartTime().getTime()) / 1000 / 60 / 60 / 24;
+                userTaskDO.setFinishDay(d);//已完成天数
+                userTaskDO.setUnfinishedDay(userTaskDO.getTaskTime() - d);//未完成天数
+                UseJianhuyiLogDO userJianHuYiYouXiao =
+                        useJianhuyiLogService.getUserJianHuYiYouXiaoAll(ownerUserDO.getId(), userTaskDO.getStartTime(), new Date());
+                if (userJianHuYiYouXiao != null) {
+                    userTaskDO.setYouxiaotime(userJianHuYiYouXiao.getUseJianhuyiDuration());
                 }
+                resultMap.put("code", 0);
+                resultMap.put("msg","获取数据成功");
+                resultMap.put("data", userTaskDO);
+            }
+        }
+        return callback + "(" + JSONObject.toJSONString(R.ok(resultMap)) + ")";
+    }
 
-    }*/
+    /**
+     * pc端任务详情
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getTaskDetailPC")
+    public String getTaskDetailPC(Long taskId,@RequestParam("callback") String callback){
+        Map<String,Object> resultMap=new HashMap<String,Object>();
+        UserTaskDO userTask=userTaskService.get(taskId);
+        if(userTask==null){
+            resultMap.put("code",-1);
+            resultMap.put("data",null);
+            resultMap.put("msg","没有找到任务，输入的参数可能有误...");
+        }else {
+            Map<String, Object> paramsMap = new HashMap<String, Object>();
+            paramsMap.put("taskId", taskId);
+            List<UserTaskLinshiDO> userTaskLinshiDOList = userTaskLinshiService.list(paramsMap);
+            Map<String, UserTaskLinshiDO> utmap = new HashMap<String, UserTaskLinshiDO>();
+            userTaskLinshiDOList.forEach(a -> {
+                a.setDay(simpleDateFormat.format(a.getCreateTime()));
+                utmap.put(simpleDateFormat.format(a.getCreateTime()), a);
+            });
+            Map<String, Object> map = new HashMap<String, Object>();
+            fillMapDays(map, userTask);
+            for (Map.Entry<String, UserTaskLinshiDO> entry : utmap.entrySet()) {
+                map.put(entry.getKey(), entry.getValue());
+            }
+            resultMap.put("data", new ArrayList(map.values()));
+            resultMap.put("code", 0);
+            resultMap.put("msg", "获取数据成功");
+        }
+        return callback + "(" + JSONObject.toJSONString(R.ok(resultMap)) + ")";
+    }
+
+
+    /**
+     * 查看当日任务详情
+     */
+    @ResponseBody
+    @GetMapping("/getDayDetailPC")
+    public String getDayDetailPC(Long id,Long taskId,  @RequestParam("callback") String callback){
+        UserTaskDO userTaskDO = userTaskService.get(taskId);
+        UserTaskLinshiDO userTaskLinshiDO = userTaskLinshiService.get(id);
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        if(userTaskLinshiDO==null){
+            resultMap.put("code",-1);
+            resultMap.put("msg","当天没有数据");
+            resultMap.put("data",null);
+        }else{
+            resultMap.put("code",0);
+            resultMap.put("data",userTaskLinshiDO);
+            resultMap.put("msg","获取数据成功");
+        }
+        resultMap.put("data2",userTaskDO);
+        return callback + "(" + JSONObject.toJSONString(R.ok(resultMap)) + ")";
+    }
+
 
     /**
      * 家长自定义下发给学生
@@ -791,46 +774,47 @@ public class GiftController {
     /**
      * pc端查询我的任务
      */
-  /*  @ResponseBody
-    @GetMapping("/myGiftPc")
-    public String myGiftPc(@RequestParam("callback") String callback,String idCard,int taskType) {
-        Map<String, Object> data = new HashMap<>();
-        Map<String, Object> result = new HashMap<>();
-        Map<String, Object> params = new HashMap<>();
-        Map<String, Object> params11 = new HashMap<>();
-        Map<String, Object> params2 = new HashMap<>();
-        List<RecordDO> recordDOList = new LinkedList<RecordDO>();
-        if(idCard!=null){
-            OwnerUserDO userDO = userService.getUserByIdCard(idCard);
-            params.put("userId",userDO.getId());
-            params.put("taskType",taskType);
-            List<UserTaskDO> taskDOList =  userTaskService.list(params);
-            if(taskDOList!=null && taskDOList.size()==1){
-                if(taskDOList.get(0).getGiftId()!=null){
-                    params11.put("giftId",taskDOList.get(0).getGiftId());
-                    GiftDO giftDO = giftService.get(taskDOList.get(0).getGiftId());
+//    @ResponseBody
+//    @GetMapping("/myGiftPc")
+//    public String myGiftPc(@RequestParam("callback") String callback,String idCard,int taskType) {
+//        Map<String, Object> data = new HashMap<>();
+//        Map<String, Object> result = new HashMap<>();
+//        Map<String, Object> params = new HashMap<>();
+//        Map<String, Object> params11 = new HashMap<>();
+//        Map<String, Object> params2 = new HashMap<>();
+//        List<RecordDO> recordDOList = new LinkedList<RecordDO>();
+//        if(idCard!=null){
+//            List<OwnerUserDO> list = userService.getUserByIdCard(idCard);
+//            if(list.size()>0)
+//            params.put("userId",list.get(0).getId());
+//            params.put("taskType",taskType);
+//            List<UserTaskDO> taskDOList =  userTaskService.list(params);
+//            if(taskDOList!=null && taskDOList.size()==1){
+//                if(taskDOList.get(0).getGiftId()!=null){
+//                    params11.put("giftId",taskDOList.get(0).getGiftId());
+//                    GiftDO giftDO = giftService.get(taskDOList.get(0).getGiftId());
+//
+//                    taskDOList.get(0).setGiftDO(giftDO);
+//                }
+//                result.put("taskIng",taskDOList.get(0));
+//
+//                recordDOList = (List<RecordDO>)getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("recordDOList");
+//
+//                //返回平均等级
+//                UseJianhuyiLogDO useJianhuyiLogDO = (UseJianhuyiLogDO) getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("allUseJianhuyiLogDO");
+//                result.put("overallMerit", getGrade(useJianhuyiLogDO));
+//                result.put("allUseJianhuyi", getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("allUseJianhuyi"));
+//                result.put("recordDOList",recordDOList);
+//            }
+//        }else{
+//            return callback+"("+JSONObject.toJSONString(R.error("学生身份证号为空"))+")";
+//        }
+//
+//        data.put("data",result);
+//
+//        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
+//    }
 
-                    taskDOList.get(0).setGiftDO(giftDO);
-                }
-                result.put("taskIng",taskDOList.get(0));
-
-                recordDOList = (List<RecordDO>)getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("recordDOList");
-
-                //返回平均等级
-                UseJianhuyiLogDO useJianhuyiLogDO = (UseJianhuyiLogDO) getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("allUseJianhuyiLogDO");
-                result.put("overallMerit", getGrade(useJianhuyiLogDO));
-                result.put("allUseJianhuyi", getRecordList(taskDOList.get(0).getId(),userDO.getId()).get("allUseJianhuyi"));
-                result.put("recordDOList",recordDOList);
-            }
-        }else{
-            return callback+"("+JSONObject.toJSONString(R.error("学生身份证号为空"))+")";
-        }
-
-        data.put("data",result);
-
-        return callback+"("+JSONObject.toJSONString(R.ok(data))+")";
-    }
-*/
     /**
      * 自定义任务(保存和修改)
      */
@@ -1012,15 +996,15 @@ public class GiftController {
     }*/
 
     //获取每项结果数组
-    String[] getArray(Map<String, Object> resultData, String fieldName) {
-        String avgLookTvComputerDuration = resultData.get(fieldName).toString();
-        avgLookTvComputerDuration = avgLookTvComputerDuration.replace("[", "");
-        avgLookTvComputerDuration = avgLookTvComputerDuration.replace("]", "");
-        avgLookTvComputerDuration = avgLookTvComputerDuration.replace(" ", "");
-
-        String[] attr = avgLookTvComputerDuration.split(",");
-        return attr;
-    }
+//    String[] getArray(Map<String, Object> resultData, String fieldName) {
+//        String avgLookTvComputerDuration = resultData.get(fieldName).toString();
+//        avgLookTvComputerDuration = avgLookTvComputerDuration.replace("[", "");
+//        avgLookTvComputerDuration = avgLookTvComputerDuration.replace("]", "");
+//        avgLookTvComputerDuration = avgLookTvComputerDuration.replace(" ", "");
+//
+//        String[] attr = avgLookTvComputerDuration.split(",");
+//        return attr;
+//    }
 
 
     /**
@@ -1384,234 +1368,234 @@ public class GiftController {
     }
 */
     //已完成天数计算 type=1 自定义
-    Integer finishDay(Long taskId, List<UseJianhuyiLogDO> useJianhuyiLogDOList) {
-        Integer day = 0;
-        UserTaskDO userTaskDO = userTaskService.get(taskId);
-        for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
+//    Integer finishDay(Long taskId, List<UseJianhuyiLogDO> useJianhuyiLogDOList) {
+//        Integer day = 0;
+//        UserTaskDO userTaskDO = userTaskService.get(taskId);
+//        for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
+//
+//
+//        }
+//
+//        return day;
+//    }
 
-
-        }
-
-        return day;
-    }
-
-    boolean getMinTask(Long taskId, UseJianhuyiLogDO useJianhuyiLogDO) {
-        UserTaskDO userTaskDO = userTaskService.get(taskId);
-        boolean result = false;
-        boolean getAvgRead = false;
-        boolean getAvgOut = false;
-        boolean getAvgReadDistance = false;
-        boolean getAvgLookPhone = false;
-        boolean getAvgLookTv = false;
-
-        /**
-         * 判断阅读时长是否达标
-         * */
-        //极差
-        if (userTaskDO.getAvgRead().equals("1")) {
-            if (useJianhuyiLogDO.getReadDuration() > 90) {
-                getAvgRead = true;
-            }
-        } //差
-        else if (userTaskDO.getAvgRead().equals("2")) {
-            if (useJianhuyiLogDO.getReadDuration() > 40 && useJianhuyiLogDO.getReadDuration() <= 90) {
-                getAvgRead = true;
-            }
-        }//良好
-        else if (userTaskDO.getAvgRead().equals("4")) {
-            if (useJianhuyiLogDO.getReadDuration() > 20 && useJianhuyiLogDO.getReadDuration() <= 40) {
-                getAvgRead = true;
-            }
-        }//优
-        else if (userTaskDO.getAvgRead().equals("5")) {
-            if (useJianhuyiLogDO.getReadDuration() <= 20) {
-                getAvgRead = true;
-            }
-        }
-
-
-        /**
-         * 判断户外时长是否达标
-         * */
-        //极差
-        if (userTaskDO.getAvgOut().equals("1")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
-                getAvgOut = true;
-            }
-        } //差
-        else if (userTaskDO.getAvgOut().equals("2")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
-                getAvgOut = true;
-            }
-        }//良好
-        else if (userTaskDO.getAvgOut().equals("4")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
-                getAvgOut = true;
-            }
-        }//优
-        else if (userTaskDO.getAvgOut().equals("5")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
-                getAvgOut = true;
-            }
-        }
-
-
-        /**
-         * 判断阅读距离是否达标
-         * */
-        //极差
-        if (userTaskDO.getAvgReadDistance().equals("1")) {
-            if (useJianhuyiLogDO.getReadDistance() < 20) {
-                getAvgReadDistance = true;
-            }
-        } //差
-        else if (userTaskDO.getAvgReadDistance().equals("2")) {
-            if (useJianhuyiLogDO.getReadDistance() > 20 && useJianhuyiLogDO.getReadDistance() <= 30) {
-                getAvgReadDistance = true;
-            }
-        }//良好
-        else if (userTaskDO.getAvgReadDistance().equals("4")) {
-            if (useJianhuyiLogDO.getReadDistance() >= 30 && useJianhuyiLogDO.getReadDistance() < 33) {
-                getAvgReadDistance = true;
-            }
-        }//优
-        else if (userTaskDO.getAvgReadDistance().equals("5")) {
-            if (useJianhuyiLogDO.getReadDistance() >= 33) {
-                getAvgReadDistance = true;
-            }
-        }
-
-
-        /**
-         * 判断看手机是否达标
-         * */
-        //极差
-        if (userTaskDO.getAvgLookPhone().equals("1")) {
-            if (useJianhuyiLogDO.getLookPhoneDuration() > 40) {
-                getAvgLookPhone = true;
-            }
-        } //差
-        else if (userTaskDO.getAvgLookPhone().equals("2")) {
-            if (useJianhuyiLogDO.getLookPhoneDuration() > 20 && useJianhuyiLogDO.getLookPhoneDuration() <= 40) {
-                getAvgLookPhone = true;
-            }
-        }//良好
-        else if (userTaskDO.getAvgLookPhone().equals("4")) {
-            if (useJianhuyiLogDO.getLookPhoneDuration() > 10 && useJianhuyiLogDO.getLookPhoneDuration() <= 20) {
-                getAvgLookPhone = true;
-            }
-        }//优
-        else if (userTaskDO.getAvgLookPhone().equals("5")) {
-            if (useJianhuyiLogDO.getLookPhoneDuration() <= 10) {
-                getAvgLookPhone = true;
-            }
-        }
-
-
-        /**
-         * 判断户外时长是否达标
-         * */
-        //极差
-        if (userTaskDO.getAvgLookTv().equals("1")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
-                getAvgOut = true;
-            }
-        } //差
-        else if (userTaskDO.getAvgOut().equals("2")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
-                getAvgOut = true;
-            }
-        }//良好
-        else if (userTaskDO.getAvgOut().equals("4")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
-                getAvgOut = true;
-            }
-        }//优
-        else if (userTaskDO.getAvgOut().equals("5")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
-                getAvgOut = true;
-            }
-        }
-
-
-        /**
-         * 判断户外时长是否达标
-         * */
-        //极差
-        if (userTaskDO.getAvgOut().equals("1")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
-                getAvgOut = true;
-            }
-        } //差
-        else if (userTaskDO.getAvgOut().equals("2")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
-                getAvgOut = true;
-            }
-        }//良好
-        else if (userTaskDO.getAvgOut().equals("4")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
-                getAvgOut = true;
-            }
-        }//优
-        else if (userTaskDO.getAvgOut().equals("5")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
-                getAvgOut = true;
-            }
-        }
-
-
-        /**
-         * 判断户外时长是否达标
-         * */
-        //极差
-        if (userTaskDO.getAvgOut().equals("1")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
-                getAvgOut = true;
-            }
-        } //差
-        else if (userTaskDO.getAvgOut().equals("2")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
-                getAvgOut = true;
-            }
-        }//良好
-        else if (userTaskDO.getAvgOut().equals("4")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
-                getAvgOut = true;
-            }
-        }//优
-        else if (userTaskDO.getAvgOut().equals("5")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
-                getAvgOut = true;
-            }
-        }
-
-
-        /**
-         * 判断户外时长是否达标
-         * */
-        //极差
-        if (userTaskDO.getAvgOut().equals("1")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
-                getAvgOut = true;
-            }
-        } //差
-        else if (userTaskDO.getAvgOut().equals("2")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
-                getAvgOut = true;
-            }
-        }//良好
-        else if (userTaskDO.getAvgOut().equals("4")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
-                getAvgOut = true;
-            }
-        }//优
-        else if (userTaskDO.getAvgOut().equals("5")) {
-            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
-                getAvgOut = true;
-            }
-        }
-        return result;
-    }
+//    boolean getMinTask(Long taskId, UseJianhuyiLogDO useJianhuyiLogDO) {
+//        UserTaskDO userTaskDO = userTaskService.get(taskId);
+//        boolean result = false;
+//        boolean getAvgRead = false;
+//        boolean getAvgOut = false;
+//        boolean getAvgReadDistance = false;
+//        boolean getAvgLookPhone = false;
+//        boolean getAvgLookTv = false;
+//
+//        /**
+//         * 判断阅读时长是否达标
+//         * */
+//        //极差
+//        if (userTaskDO.getAvgRead().equals("1")) {
+//            if (useJianhuyiLogDO.getReadDuration() > 90) {
+//                getAvgRead = true;
+//            }
+//        } //差
+//        else if (userTaskDO.getAvgRead().equals("2")) {
+//            if (useJianhuyiLogDO.getReadDuration() > 40 && useJianhuyiLogDO.getReadDuration() <= 90) {
+//                getAvgRead = true;
+//            }
+//        }//良好
+//        else if (userTaskDO.getAvgRead().equals("4")) {
+//            if (useJianhuyiLogDO.getReadDuration() > 20 && useJianhuyiLogDO.getReadDuration() <= 40) {
+//                getAvgRead = true;
+//            }
+//        }//优
+//        else if (userTaskDO.getAvgRead().equals("5")) {
+//            if (useJianhuyiLogDO.getReadDuration() <= 20) {
+//                getAvgRead = true;
+//            }
+//        }
+//
+//
+//        /**
+//         * 判断户外时长是否达标
+//         * */
+//        //极差
+//        if (userTaskDO.getAvgOut().equals("1")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
+//                getAvgOut = true;
+//            }
+//        } //差
+//        else if (userTaskDO.getAvgOut().equals("2")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
+//                getAvgOut = true;
+//            }
+//        }//良好
+//        else if (userTaskDO.getAvgOut().equals("4")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
+//                getAvgOut = true;
+//            }
+//        }//优
+//        else if (userTaskDO.getAvgOut().equals("5")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
+//                getAvgOut = true;
+//            }
+//        }
+//
+//
+//        /**
+//         * 判断阅读距离是否达标
+//         * */
+//        //极差
+//        if (userTaskDO.getAvgReadDistance().equals("1")) {
+//            if (useJianhuyiLogDO.getReadDistance() < 20) {
+//                getAvgReadDistance = true;
+//            }
+//        } //差
+//        else if (userTaskDO.getAvgReadDistance().equals("2")) {
+//            if (useJianhuyiLogDO.getReadDistance() > 20 && useJianhuyiLogDO.getReadDistance() <= 30) {
+//                getAvgReadDistance = true;
+//            }
+//        }//良好
+//        else if (userTaskDO.getAvgReadDistance().equals("4")) {
+//            if (useJianhuyiLogDO.getReadDistance() >= 30 && useJianhuyiLogDO.getReadDistance() < 33) {
+//                getAvgReadDistance = true;
+//            }
+//        }//优
+//        else if (userTaskDO.getAvgReadDistance().equals("5")) {
+//            if (useJianhuyiLogDO.getReadDistance() >= 33) {
+//                getAvgReadDistance = true;
+//            }
+//        }
+//
+//
+//        /**
+//         * 判断看手机是否达标
+//         * */
+//        //极差
+//        if (userTaskDO.getAvgLookPhone().equals("1")) {
+//            if (useJianhuyiLogDO.getLookPhoneDuration() > 40) {
+//                getAvgLookPhone = true;
+//            }
+//        } //差
+//        else if (userTaskDO.getAvgLookPhone().equals("2")) {
+//            if (useJianhuyiLogDO.getLookPhoneDuration() > 20 && useJianhuyiLogDO.getLookPhoneDuration() <= 40) {
+//                getAvgLookPhone = true;
+//            }
+//        }//良好
+//        else if (userTaskDO.getAvgLookPhone().equals("4")) {
+//            if (useJianhuyiLogDO.getLookPhoneDuration() > 10 && useJianhuyiLogDO.getLookPhoneDuration() <= 20) {
+//                getAvgLookPhone = true;
+//            }
+//        }//优
+//        else if (userTaskDO.getAvgLookPhone().equals("5")) {
+//            if (useJianhuyiLogDO.getLookPhoneDuration() <= 10) {
+//                getAvgLookPhone = true;
+//            }
+//        }
+//
+//
+//        /**
+//         * 判断户外时长是否达标
+//         * */
+//        //极差
+//        if (userTaskDO.getAvgLookTv().equals("1")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
+//                getAvgOut = true;
+//            }
+//        } //差
+//        else if (userTaskDO.getAvgOut().equals("2")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
+//                getAvgOut = true;
+//            }
+//        }//良好
+//        else if (userTaskDO.getAvgOut().equals("4")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
+//                getAvgOut = true;
+//            }
+//        }//优
+//        else if (userTaskDO.getAvgOut().equals("5")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
+//                getAvgOut = true;
+//            }
+//        }
+//
+//
+//        /**
+//         * 判断户外时长是否达标
+//         * */
+//        //极差
+//        if (userTaskDO.getAvgOut().equals("1")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
+//                getAvgOut = true;
+//            }
+//        } //差
+//        else if (userTaskDO.getAvgOut().equals("2")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
+//                getAvgOut = true;
+//            }
+//        }//良好
+//        else if (userTaskDO.getAvgOut().equals("4")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
+//                getAvgOut = true;
+//            }
+//        }//优
+//        else if (userTaskDO.getAvgOut().equals("5")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
+//                getAvgOut = true;
+//            }
+//        }
+//
+//
+//        /**
+//         * 判断户外时长是否达标
+//         * */
+//        //极差
+//        if (userTaskDO.getAvgOut().equals("1")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
+//                getAvgOut = true;
+//            }
+//        } //差
+//        else if (userTaskDO.getAvgOut().equals("2")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
+//                getAvgOut = true;
+//            }
+//        }//良好
+//        else if (userTaskDO.getAvgOut().equals("4")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
+//                getAvgOut = true;
+//            }
+//        }//优
+//        else if (userTaskDO.getAvgOut().equals("5")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
+//                getAvgOut = true;
+//            }
+//        }
+//
+//
+//        /**
+//         * 判断户外时长是否达标
+//         * */
+//        //极差
+//        if (userTaskDO.getAvgOut().equals("1")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() < 0.5) {
+//                getAvgOut = true;
+//            }
+//        } //差
+//        else if (userTaskDO.getAvgOut().equals("2")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 0.5 && useJianhuyiLogDO.getOutdoorsDuration() < 1) {
+//                getAvgOut = true;
+//            }
+//        }//良好
+//        else if (userTaskDO.getAvgOut().equals("4")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 1 && useJianhuyiLogDO.getOutdoorsDuration() < 2) {
+//                getAvgOut = true;
+//            }
+//        }//优
+//        else if (userTaskDO.getAvgOut().equals("5")) {
+//            if (useJianhuyiLogDO.getOutdoorsDuration() >= 2) {
+//                getAvgOut = true;
+//            }
+//        }
+//        return result;
+ //  }
 
 
     //获取任务记录的日期和完成度

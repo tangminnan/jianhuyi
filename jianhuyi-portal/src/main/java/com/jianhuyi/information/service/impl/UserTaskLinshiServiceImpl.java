@@ -57,13 +57,18 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
     }
 
     @Override
-    public Date getRecentlyDate(Long userId) {
-        return userTaskLinshiDao.getRecentlyDate(userId);
+    public UserTaskLinshiDO getRecentlyDate(Long userId,Long taskId) {
+        return userTaskLinshiDao.getRecentlyDate(userId,taskId);
     }
 
     @Override
     public void updateCurrentDay(UserTaskLinshiDO userTaskLinshiDO) {
         userTaskLinshiDao.updateCurrentDay(userTaskLinshiDO);
+    }
+
+    @Override
+    public void updateScore(UserTaskLinshiDO userTaskLinshiDO) {
+        userTaskLinshiDao.updateScore(userTaskLinshiDO);
     }
 
 }
