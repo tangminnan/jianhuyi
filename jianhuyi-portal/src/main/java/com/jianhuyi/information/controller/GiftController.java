@@ -410,6 +410,7 @@ public class GiftController {
             resultMap.put("data",userTaskLinshiDO);
             resultMap.put("msg","获取数据成功");
         }
+        System.out.println(resultMap);
         return resultMap;
     }
 

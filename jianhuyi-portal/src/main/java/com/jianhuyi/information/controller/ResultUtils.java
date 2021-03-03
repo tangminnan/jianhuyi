@@ -591,7 +591,9 @@ public class ResultUtils {
             /**
              *  光照强度
              */
-            if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412) {
+            if(useJianhuyiLogDO.getReadLight()!=null && useJianhuyiLogDO.getReadLight()>0 && useJianhuyiLogDO.getReadLight()<=412
+                    &&  useJianhuyiLogDO.getReadDistance()!=null && useJianhuyiLogDO.getReadDistance()>15
+                    && useJianhuyiLogDO.getReadDistance()<=60){
                 avgReadLight += 100*ResultUtils.log(useJianhuyiLogDO.getReadLight(),4.3) ;
                 avgReadLightCount++;
             }
@@ -613,7 +615,7 @@ public class ResultUtils {
                 avgReadDistanceCount++;
             }
             /**
-             *  看电脑时长
+             *  看手机时长
              */
             if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
                 avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
@@ -644,9 +646,9 @@ public class ResultUtils {
                             && useJianhuyiLogDO.getLookPhoneDuration() > 0) lookPhoneCount++; // 看手机次数
                     if (useJianhuyiLogDO.getLookTvComputerDuration() != null
                             && useJianhuyiLogDO.getLookTvComputerDuration() > 0) lookScreenCount++; // 看电脑屏幕的次数
-                    if (useJianhuyiLogDO.getReadDuration() >= 5) {
+ //                   if (useJianhuyiLogDO.getReadDuration() >= 5) {
                         count++; // 阅读次数
-                    }
+ //                   }
                 }
             }
         }

@@ -158,17 +158,17 @@ public class UseJianhuyiLogController {
                 System.out.println("有数据否======================" + useJianhuyiLogDOList.size());
                 if (useJianhuyiLogDOList.size() > 0) { // 创建线程进行统计分析
                   new Thread(
-                          () -> {
-                            System.out.println("创建线程统计分析数据");
-                            try {
-                              countPerDay(userTaskDO, useJianhuyiLogDOList); // 统计任务每天评级
-                              countTotal(userTaskDO, useJianhuyiLogDOList); // /统计最终评级
-                            } catch (ParseException e) {
-                              e.printStackTrace();
-                            }
-                          })
-                          .start();
-                }
+                        () -> {
+                          System.out.println("创建线程统计分析数据");
+                          try {
+                            countPerDay(userTaskDO, useJianhuyiLogDOList); // 统计任务每天评级
+                            countTotal(userTaskDO, useJianhuyiLogDOList); // /统计最终评级
+                          } catch (ParseException e) {
+                            e.printStackTrace();
+                          }
+                        })
+                        .start();
+              }
               } else {
                 System.out.println("上传的数据时间 已经超过最近任务的截止时间，数据不会被统计进入最近一次任务中了");
               }
