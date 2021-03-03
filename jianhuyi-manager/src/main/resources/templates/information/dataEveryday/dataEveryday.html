@@ -20,7 +20,19 @@
                         </button>
                     </div>
                     <div class="columns pull-right">
+                        <button class="btn btn-success" onclick="daochu()">导出</button>
+                    </div>
+                    <div class="columns pull-right">
                         <button class="btn btn-success" onclick="reLoad()">查询</button>
+                    </div>
+
+                    <div class="columns pull-right col-md-2 nopadding">
+                        <input id="endTime" name="endTime"
+                               class="form-control" type="text" placeholder="结束日期">
+                    </div>
+                    <div class="columns pull-right col-md-2 nopadding">
+                        <input id="startTime" name="startTime"
+                               class="form-control" type="text" placeholder="开始日期">
                     </div>
                     <div class="columns pull-right col-md-2 nopadding">
                         <input id="equipmentId" type="text" class="form-control"
@@ -63,5 +75,15 @@
 </div>
 <div th:include="include :: footer"></div>
 <script type="text/javascript" src="/js/appjs/information/dataEveryday/dataEveryday.js"></script>
+<script>
+   laydate.render({
+      elem: '#startTime',
+      type: 'date'
+   });
+   laydate.render({
+      elem: '#endTime',
+      type: 'date'
+   });
+</script>
 </body>
 </html>

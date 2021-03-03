@@ -33,7 +33,9 @@ function load() {
                   limit: params.limit,
                   offset: params.offset,
                   userId: $('#userId').val(),
-                  equipmentId: $('#equipmentId').val()
+                  equipmentId: $('#equipmentId').val(),
+                  startTime: $('#startTime').val(),
+                  endTime: $('#endTime').val()
                   // name:$('#searchName').val(),
                   // username:$('#searchName').val()
                };
@@ -205,6 +207,17 @@ function edit(id) {
       content: prefix + '/edit/' + id // iframe的url
    });
 }
+
+function daochu() {
+   var userId = $('#userId').val()
+   var equipmentId = $('#equipmentId').val()
+   var startTime = $('#startTime').val()
+   var endTime = $('#endTime').val()
+
+   layer.msg("正在导出请耐心等待...")
+   window.location.href = prefix + '/daochu?userId=' + userId + '&equipmentId=' + equipmentId + '&startTime=' + startTime + '&endTime=' + endTime
+}
+
 
 function remove(id) {
    layer.confirm('确定要删除选中的记录？', {
