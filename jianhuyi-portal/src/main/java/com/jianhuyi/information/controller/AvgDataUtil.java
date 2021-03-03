@@ -142,7 +142,7 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setLookPhoneDuration(
           Double.parseDouble(df.format(lookPhoneDuration / readCount)));
       useJianhuyiLogDO.setLookTvComputerDuration(
-          Double.parseDouble(df.format(lookPhoneDuration / readCount)));
+          Double.parseDouble(df.format(lookTvComputerDuration / readCount)));
     } else {
       useJianhuyiLogDO.setReadDuration(0.0);
 

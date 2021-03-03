@@ -1,25 +1,34 @@
 package com.jianhuyi.information.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.common.utils.StringUtils;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import com.jianhuyi.information.domain.UseTimeDO;
 import com.jianhuyi.information.domain.UserTaskDO;
 import com.jianhuyi.information.domain.UserTaskLinshiDO;
+import com.jianhuyi.information.service.UseTimeService;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *  监护仪等级判断标准
  */
+@Component
 public class ResultUtils {
 
+    private static UseTimeService useTimeService;
+    static JSONObject jsonObject = null;
 
-
+    @Autowired
+    public void setUseTimeService(UseTimeService useTimeService) {
+        ResultUtils.useTimeService = useTimeService;
+    }
 
     /**
      *  平均单次阅读时长判断
@@ -571,7 +580,7 @@ public class ResultUtils {
      * @return
      * @throws ParseException
      */
-    public static Map<String,Double> countData(List<UseJianhuyiLogDO> useJianhuyiLogDOList)
+    public static Map<String,Double> countData(Long userId, List<UseJianhuyiLogDO> useJianhuyiLogDOList,String time)
             throws ParseException {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Double avgReadDuration = 0.0; // 平均每次阅读时长
@@ -580,9 +589,9 @@ public class ResultUtils {
         Double avgLookPhoneDuration = 0.0; // 平均单次看手机时长
         Double avgLookTvComputerDuration = 0.0; // 平均单次看电脑及电视时长
         Double avgSitTilt = 0.0; // 平均旋转角度
-        int lookPhoneCount = 0; // 看手机次数
-        int lookScreenCount = 0; // 看电脑屏幕的次数
-        int count = 0; // 阅读次数
+        int lookPhoneCount = 1; // 看手机次数
+        int lookScreenCount = 1; // 看电脑屏幕的次数
+        int count = 1; // 阅读次数
         int avgReadLightCount=0;//光照强度次数
         int avgSitTiltCount=0;//角度次数
         int  avgReadDistanceCount=0;
@@ -643,12 +652,11 @@ public class ResultUtils {
                                 / 60;
                 if (minute >= 3 || i == 0) {
                     if (useJianhuyiLogDO.getLookPhoneDuration() != null
-                            && useJianhuyiLogDO.getLookPhoneDuration() > 0) lookPhoneCount++; // 看手机次数
+                           ) lookPhoneCount++; // 看手机次数
                     if (useJianhuyiLogDO.getLookTvComputerDuration() != null
-                            && useJianhuyiLogDO.getLookTvComputerDuration() > 0) lookScreenCount++; // 看电脑屏幕的次数
- //                   if (useJianhuyiLogDO.getReadDuration() >= 5) {
-                        count++; // 阅读次数
- //                   }
+                            ) lookScreenCount++; // 看电脑屏幕的次数
+                    count++; // 阅读次数
+
                 }
             }
         }
@@ -673,6 +681,32 @@ public class ResultUtils {
             avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
         }
 
+        /**
+         *  获取有效使用时长
+         */
+        Double effectiveTime=null;
+        if(userId!=null && time!=null) {
+            System.out.println(useTimeService);
+            System.out.println(useTimeService);
+
+            System.out.println(useTimeService);
+
+            Map mappp = useTimeService.getSNCount(userId, time);
+            List<UseTimeDO> useTimeDOList = useTimeService.getTodayData(userId, time);
+
+
+            Optional.ofNullable(mappp)
+                    .ifPresent(
+                            m -> {
+                                jsonObject = (JSONObject) JSONObject.toJSON(m);
+                            });
+            String num = jsonObject.get("num").toString();
+            String sum = jsonObject.get("sum").toString();
+            UseJianhuyiLogDO usetime =
+                    AvgDataUtil.getSNCount(Integer.parseInt(num), Integer.parseInt(sum), useTimeDOList);
+
+            effectiveTime = usetime.getEffectiveTime();
+        }
         Map<String,Double> resultMap = new HashMap<>();
         resultMap.put("avgReadDuration",avgReadDuration);
         resultMap.put("avgLookPhoneDuration",avgLookPhoneDuration);
@@ -680,6 +714,7 @@ public class ResultUtils {
         resultMap.put("avgReadLight",avgReadLight);
         resultMap.put("avgSitTilt",avgSitTilt);
         resultMap.put("avgReadDistance",avgReadDistance);
+        resultMap.put("effectiveTime",effectiveTime);
         return  resultMap;
     }
 }

@@ -3,7 +3,6 @@ package com.jianhuyi.information.service;
 
 import com.jianhuyi.information.domain.UserTaskLinshiDO;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ public interface UserTaskLinshiService {
 
     int batchRemove(Long[] ids);
 
-    Integer getTotalScore(Long id);
+    List<UserTaskLinshiDO> getTotalScore(Long id);
 
     UserTaskLinshiDO getRecentlyDate(Long userId,Long taskId);
 

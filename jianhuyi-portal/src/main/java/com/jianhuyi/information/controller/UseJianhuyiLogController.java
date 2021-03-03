@@ -6,6 +6,7 @@ import com.jianhuyi.common.config.BootdoConfig;
 import com.jianhuyi.common.utils.FileUtil;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.common.utils.SpringContextUtil;
+import com.jianhuyi.information.dao.UserTaskLinshiDao;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.*;
 import com.jianhuyi.owneruser.service.OwnerUserService;
@@ -210,18 +211,11 @@ public class UseJianhuyiLogController {
         useJianhuyiLogDOList.stream()
             .filter(a -> a.getStatus() != null && a.getStatus() == 1)
             .collect(Collectors.toList());
-    Map<String, Double> resultMap = ResultUtils.countData(sublist);
+    Map<String, Double> resultMap = ResultUtils.countData(null,sublist,null);
     outdoorsDuration =
         useJianhuyiLogDOList.stream()
             .filter(a -> a.getStatus() != null && a.getStatus() == 2)
             .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
-    UseJianhuyiLogDO userJianHuYiYouXiao =
-        useJianhuyiLogService.getUserJianHuYiYouXiaoAll(
-            userTaskDO.getUserId(), userTaskDO.getCreateTime(), new Date());
-
-    useJianhuyiDuration = userJianHuYiYouXiao.getUseJianhuyiDuration(); // 监护仪总的使用时长
-    userTaskDO.setTotaluser(useJianhuyiDuration);
-    long days = (new Date().getTime() - userTaskDO.getCreateTime().getTime()) / 1000 / 60 / 60 / 24;
     resultScore(
         1,
         userTaskDO,
@@ -233,7 +227,7 @@ public class UseJianhuyiLogController {
         resultMap.get("avgReadLight"),
         resultMap.get("avgReadDistance"),
         outdoorsDuration,
-        useJianhuyiDuration / days);
+        0.0);
   }
 
   /**
@@ -261,15 +255,12 @@ public class UseJianhuyiLogController {
               .filter(a -> a.getStatus() != null && a.getStatus() == 1)
               .collect(Collectors.toList());
 
-      Map<String, Double> resultMap = ResultUtils.countData(sublist);
+      Map<String, Double> resultMap = ResultUtils.countData(userTaskDO.getUserId(),sublist,entry.getKey());
       outdoorsDuration =
           entry.getValue().stream()
               .filter(a -> a.getStatus() != null && a.getStatus() == 2)
               .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
       String createTime = entry.getKey();
-      UseJianhuyiLogDO userJianHuYiYouXiao =
-          useJianhuyiLogService.getUserJianHuYiYouXiao(userTaskDO.getUserId(), createTime);
-      Double useJianhuyiDuration = userJianHuYiYouXiao.getUseJianhuyiDuration();
       scores +=
           resultScore(
               0,
@@ -282,7 +273,7 @@ public class UseJianhuyiLogController {
               resultMap.get("avgReadLight"),
               resultMap.get("avgReadDistance"),
               outdoorsDuration,
-              useJianhuyiDuration);
+              resultMap.get("effectiveTime"));
     }
     UserDO userDO = userService.getById(userTaskDO.getUserId());
     userDO.setScores(userDO.getScores() + scores);
@@ -360,11 +351,22 @@ public class UseJianhuyiLogController {
       }
 
     } else if (flag == 1) {
-      Integer totalScore = userTaskLinshiService.getTotalScore(userTaskDO.getId());
+      List<UserTaskLinshiDO> l = userTaskLinshiService.getTotalScore(userTaskDO.getId());
+      Integer totalScore = 0;
+
+      for(UserTaskLinshiDO userTaskLinshiDO :l){
+        totalScore+=userTaskLinshiDO.getScore();
+        useJianhuyiDuration+=Double.parseDouble(userTaskLinshiDO.getHourtime());
+      }
+
       System.out.println(userTaskDO.getId() + "=============" + totalScore);
       System.out.println(userTaskDO.getId() + "=============" + totalScore);
       System.out.println(userTaskDO.getId() + "=============" + totalScore);
+      System.out.println(userTaskDO.getId() + "=============" + useJianhuyiDuration);
+      System.out.println(userTaskDO.getId() + "=============" + useJianhuyiDuration);
+      System.out.println(userTaskDO.getId() + "=============" + useJianhuyiDuration);
       userTaskDO.setTotalScore(totalScore); // 总积分
+      userTaskDO.setTotaluser(useJianhuyiDuration);//监护仪使用时长
       userTaskDO.setAvgReadResult(ResultUtils.resultAvgReadDuration(avgReadDuration));
       userTaskDO.setAvgLookPhoneResult(
           ResultUtils.resultAvgLookPhoneDuration(avgLookPhoneDuration));

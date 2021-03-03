@@ -212,14 +212,12 @@ public class GiftController {
             List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.getNearData(userId,date);
             List<UseJianhuyiLogDO> sublist = useJianhuyiLogDOS.stream().filter(a->a.getStatus()!=null && a.getStatus()==1).collect(Collectors.toList());
             Double outdoorsDuration = 0.0;//户外时间累计版本
-            Map<String,Double> map = ResultUtils.countData(sublist);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+            Map<String,Double> map = ResultUtils.countData(userId,sublist,sdf.format(date));
             outdoorsDuration=useJianhuyiLogDOS.stream()
                     .filter(a->a.getStatus()!=null && a.getStatus()==2)
                     .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            UseJianhuyiLogDO userJianHuYiYouXiao = useJianhuyiLogService.getUserJianHuYiYouXiao(userId,sdf.format(date));
-            Double useJianhuyiDuration = userJianHuYiYouXiao.getUseJianhuyiDuration();
             UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
             userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(map.get("avgReadDuration")));
             userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(map.get("avgLookPhoneDuration")));
@@ -228,14 +226,14 @@ public class GiftController {
             userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(map.get("avgReadLight")));
             userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(map.get("avgSitTilt")));
             userTaskLinshiDO.setAvgOut(ResultUtils.resultOutdoorsDuration(outdoorsDuration));
-            userTaskLinshiDO.setEffectiveUseTime(ResultUtils.resultUseJianhuyiDuration(useJianhuyiDuration));
+            userTaskLinshiDO.setEffectiveUseTime(ResultUtils.resultUseJianhuyiDuration( map.get("effectiveTime")));
             resultMap.put("data", userTaskLinshiDO);
             resultMap.put("code", 0);
             resultMap.put("msg", "获取成功");
 
             System.out.println(date);
             System.out.println("平均每次阅读时长 "+map.get("avgReadDuration"));
-            System.out.println("使用时长 "+useJianhuyiDuration);
+            System.out.println("使用时长 "+ map.get("effectiveTime"));
             System.out.println("户外时间累计 "+outdoorsDuration);
             System.out.println("平均阅读距离 "+map.get("avgReadDistance"));
             System.out.println("平均阅读光照 "+map.get("avgReadLight"));
