@@ -138,8 +138,8 @@
         </foreach>
     </delete>
 
-    <select id="getTotalScore" resultType="int">
-        select sum(score) from t_user_task_linshi where  task_id=#{taskId}
+    <select id="getTotalScore" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
+        select * from t_user_task_linshi where  task_id=#{taskId}
     </select>
 
     <select id="getRecentlyDate" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
