@@ -34,7 +34,7 @@ public interface UseTimeDao {
 
   UseJianhuyiLogDO getTodayUse(@Param("userId") Long userId);
 
-  Map getSNCount(@Param("userId") Long userId);
+  Map getSNCount(@Param("userId") Long userId, @Param("time") String time);
 
-  List<UseTimeDO> getTodayData(Long userId);
+  List<UseTimeDO> getTodayData(@Param("userId") Long userId, @Param("time") String time);
 }

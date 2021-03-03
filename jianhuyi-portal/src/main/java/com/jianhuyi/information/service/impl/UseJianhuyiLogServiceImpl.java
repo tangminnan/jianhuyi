@@ -1,10 +1,9 @@
 package com.jianhuyi.information.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jianhuyi.information.controller.AvgUtil;
+import com.jianhuyi.information.controller.AvgDataUtil;
 import com.jianhuyi.information.dao.UseJianhuyiLogDao;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
-import com.jianhuyi.information.domain.UseTimeDO;
 import com.jianhuyi.information.service.UseJianhuyiLogService;
 import com.jianhuyi.information.service.UseRemindsService;
 import com.jianhuyi.information.service.UseTimeService;
@@ -51,57 +50,14 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
 
   JSONObject jsonObject = null;
 
+  SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   // 今日的数据
   @Override
   public Map<String, Object> getByDayTime(Long userId) {
     Map<String, Object> mapP = new HashMap<String, Object>();
-    Map<String, Object> params = new HashMap<String, Object>();
-    UseJianhuyiLogDO useJianhuyiLogDO = new UseJianhuyiLogDO();
-    params.put("userId", userId);
-    List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogDao.selectAllData(params);
-    UseJianhuyiLogDO newUseJianhuyiLogDO = new UseJianhuyiLogDO();
-    newUseJianhuyiLogDO.setUserId(Integer.parseInt(userId.toString()));
 
-    AvgUtil.getINSTANCE().putUserJianhuyi(useJianhuyiLogDOList);
-    UseJianhuyiLogDO useJianhuyiLogDO1 = AvgUtil.getINSTANCE().getAvgReadTime();
-
-    newUseJianhuyiLogDO.setReadDuration(useJianhuyiLogDO1.getReadDuration());
-    newUseJianhuyiLogDO.setLookPhoneDuration(useJianhuyiLogDO1.getLookPhoneDuration());
-    newUseJianhuyiLogDO.setLookTvComputerDuration(useJianhuyiLogDO1.getLookTvComputerDuration());
-    newUseJianhuyiLogDO.setReadDistance(useJianhuyiLogDO1.getReadDistance());
-    newUseJianhuyiLogDO.setReadLight(useJianhuyiLogDO1.getReadLight());
-    newUseJianhuyiLogDO.setSitTilt(useJianhuyiLogDO1.getSitTilt());
-    newUseJianhuyiLogDO.setAllreadDuration(useJianhuyiLogDO1.getAllreadDuration());
-    newUseJianhuyiLogDO.setOutdoorsDuration(useJianhuyiLogDO1.getOutdoorsDuration());
-
-    // 序号为0的个数 0的个数代表重新计算和开机
-    Map mappp = useTimeService.getSNCount(userId);
-    List<UseTimeDO> useTimeDOList = useTimeService.getTodayData(userId);
-    Optional.ofNullable(mappp)
-        .ifPresent(
-            m -> {
-              jsonObject = (JSONObject) JSONObject.toJSON(m);
-            });
-    String num = jsonObject.get("num").toString();
-    String sum = jsonObject.get("sum").toString();
-    UseJianhuyiLogDO usetime =
-        AvgUtil.getINSTANCE()
-            .getSNCount(Integer.parseInt(num), Integer.parseInt(sum), useTimeDOList);
-
-    newUseJianhuyiLogDO.setEffectiveTime(usetime.getEffectiveTime());
-    newUseJianhuyiLogDO.setNoneffectiveTime(usetime.getNoneffectiveTime());
-    newUseJianhuyiLogDO.setCoverTime(usetime.getCoverTime());
-    newUseJianhuyiLogDO.setRunningTime(usetime.getRunningTime());
-
-    UseJianhuyiLogDO useJianhuyiLogDO2 = useRemindsService.getTodayReminds(userId);
-
-    if (useJianhuyiLogDO2 != null && useJianhuyiLogDO2.getRemind() != null) {
-      newUseJianhuyiLogDO.setRemind(useJianhuyiLogDO2.getRemind());
-    } else {
-      newUseJianhuyiLogDO.setRemind(0);
-    }
-
-    mapP.put("data", newUseJianhuyiLogDO);
+    mapP.put(
+        "data", AvgDataUtil.getAvgReadTime(userId, formatter.format(new Date()).substring(0, 10)));
     mapP.put("msg", "操作成功");
     mapP.put("code", 0);
     return mapP;
@@ -1242,6 +1198,16 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
   @Override
   public List<UseJianhuyiLogDO> getNearData(Long userId, Date date) {
     return useJianhuyiLogDao.getNearData(userId, date);
+  }
+
+  @Override
+  public List<UseJianhuyiLogDO> selectAllData(Map<String, Object> params) {
+    return useJianhuyiLogDao.selectAllData(params);
+  }
+
+  @Override
+  public List<UseJianhuyiLogDO> countByUserIdAndDate() {
+    return useJianhuyiLogDao.countByUserIdAndDate();
   }
 
   // 获取时间段内统计数据

@@ -25,7 +25,10 @@
         sit_tilt
         FROM
         t_use_jianhuyi_log
-        WHERE user_id = #{userId} and TO_DAYS(save_time) = TO_DAYS(NOW())
+        <where>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="time != null and time != ''">and save_time like CONCAT("%",#{time},"%")</if>
+        </where>
         ORDER BY
         save_time DESC
     </select>
@@ -612,5 +615,22 @@
     <select id="getNearData" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         select * from t_use_jianhuyi_log where user_id=#{userId}
         and add_time=#{date}
+    </select>
+
+
+    <select id="countByUserIdAndDate" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        SELECT
+            user_id,
+            upload_id,
+            equipment_id,
+            substr(save_time, 1, 10) save_time
+        FROM
+            t_use_jianhuyi_log
+        GROUP BY
+            substr(save_time, 1, 10),
+            user_id,
+            equipment_id
+        ORDER BY
+            substr(save_time, 1, 10) DESC
     </select>
 </mapper>

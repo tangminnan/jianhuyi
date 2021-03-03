@@ -14,25 +14,7 @@ import java.util.List;
 public class AvgUtil {
   public static AvgUtil INSTANCE;
   public static List<UseJianhuyiLogDO> useJianhuyiLogDOList;
-
-  private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-  private static DecimalFormat df = new DecimalFormat("#.##");
-  private static String date = ""; // 上一次的时间
-  private static Double allDurtion = 0.0; // 总阅读时长
-  private static Double readDuration = 0.0; // 单次阅读时长
-  private static int readCount = 0; // 总阅读次数
-  private static Double readDistance = 0.0; // 阅读距离
-  private static int readDistanceCount = 0; // 符合阅读距离条件的条数
-  private static Double sitTilt = 0.0; // 坐姿角度
-  private static Double lookPhoneDuration = 0.0; // 看手机时长
-  private static int lookPhoneCount = 0; // 看手机次数
-  private static Double lookTvComputerDuration = 0.0; // 看屏幕时长
-  private static int lookScreenCount = 0; // 看屏幕次数
-  private static Double readLight = 0.0; // 阅读光照
-  private static int readLightCount = 0;
-  private static boolean flag = true; // 第一次进入时，次数加2
-
-  private static Double outdoorsDuration = 0.0; // 户外时长
+  static DecimalFormat df = new DecimalFormat("#.##");
 
   // 单例，实现每次new的是同一个对象
   public static AvgUtil getINSTANCE() {
@@ -52,6 +34,26 @@ public class AvgUtil {
 
   // 某日统计数(t_use_jianhuyi_log)
   public static UseJianhuyiLogDO getAvgReadTime() {
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+    String date = ""; // 上一次的时间
+    Double allDurtion = 0.0; // 总阅读时长
+    Double readDuration = 0.0; // 单次阅读时长
+    int readCount = 0; // 总阅读次数
+    Double readDistance = 0.0; // 阅读距离
+    int readDistanceCount = 0; // 符合阅读距离条件的条数
+    Double sitTilt = 0.0; // 坐姿角度
+    Double lookPhoneDuration = 0.0; // 看手机时长
+    int lookPhoneCount = 0; // 看手机次数
+    Double lookTvComputerDuration = 0.0; // 看屏幕时长
+    int lookScreenCount = 0; // 看屏幕次数
+    Double readLight = 0.0; // 阅读光照
+    int readLightCount = 0;
+    boolean flag = true; // 第一次进入时，次数加2
+
+    Double outdoorsDuration = 0.0; // 户外时长
+
     UseJianhuyiLogDO useJianhuyiLogDO = new UseJianhuyiLogDO();
     for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOList) {
       if (jianhuyiLogDO.getStatus() != null && jianhuyiLogDO.getStatus() == 1) {
@@ -157,10 +159,10 @@ public class AvgUtil {
 
     // 有数据
     if (num > 0) {
-      int runningTime = 0;
-      int effectiveTime = 0;
-      int coverTime = 0;
-      int noneffectiveTime = 0;
+      Double runningTime = 0.0;
+      Double effectiveTime = 0.0;
+      Double coverTime = 0.0;
+      Double noneffectiveTime = 0.0;
       // 有为0的序号，判断0的位置
       if (sum > 0) {
         for (int i = 0; i < useTimeDOList.size(); i++) {
@@ -203,10 +205,13 @@ public class AvgUtil {
             }
           }
         }
-        useJianhuyiLogDO.setRunningTime(runningTime * 5 / 60);
-        useJianhuyiLogDO.setEffectiveTime(effectiveTime * 5 / 60);
-        useJianhuyiLogDO.setNoneffectiveTime(noneffectiveTime * 5 / 60);
-        useJianhuyiLogDO.setCoverTime(coverTime * 5 / 60);
+
+        useJianhuyiLogDO.setEffectiveTime(
+            Double.parseDouble(df.format(effectiveTime * 5 / 60 / 60)));
+        useJianhuyiLogDO.setNoneffectiveTime(
+            Double.parseDouble(df.format(noneffectiveTime * 5 / 60)));
+        useJianhuyiLogDO.setRunningTime(Double.parseDouble(df.format(runningTime * 5 / 60)));
+        useJianhuyiLogDO.setCoverTime(Double.parseDouble(df.format(coverTime * 5 / 60)));
       }
       // 没有为0的序号，取最大值
       else {
@@ -215,10 +220,14 @@ public class AvgUtil {
                 JSONObject.parseObject(
                     JSON.toJSONString(useTimeDOList.get(useTimeDOList.size() - 1)),
                     UseTimeDO.class);
-        useJianhuyiLogDO.setEffectiveTime(useTimeDO.getEffectiveTime() * 5 / 60);
-        useJianhuyiLogDO.setNoneffectiveTime(useTimeDO.getNoneffectiveTime() * 5 / 60);
-        useJianhuyiLogDO.setRunningTime(useTimeDO.getRunningTime() * 5 / 60);
-        useJianhuyiLogDO.setCoverTime(useTimeDO.getCoverTime() * 5 / 60);
+        useJianhuyiLogDO.setEffectiveTime(
+            Double.parseDouble(df.format(useTimeDO.getEffectiveTime() * 5 / 60 / 60)));
+        useJianhuyiLogDO.setNoneffectiveTime(
+            Double.parseDouble(df.format(useTimeDO.getNoneffectiveTime() * 5 / 60)));
+        useJianhuyiLogDO.setRunningTime(
+            Double.parseDouble(df.format(useTimeDO.getRunningTime() * 5 / 60)));
+        useJianhuyiLogDO.setCoverTime(
+            Double.parseDouble(df.format(useTimeDO.getCoverTime() * 5 / 60)));
       }
     }
     return useJianhuyiLogDO;

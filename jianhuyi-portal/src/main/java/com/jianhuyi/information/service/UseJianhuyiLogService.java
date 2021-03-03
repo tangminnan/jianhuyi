@@ -15,37 +15,41 @@ import java.util.Map;
  */
 public interface UseJianhuyiLogService {
 
-    UseJianhuyiLogDO get(Integer id);
+  UseJianhuyiLogDO get(Integer id);
 
-    List<UseJianhuyiLogDO> list(Map<String, Object> map);
+  List<UseJianhuyiLogDO> list(Map<String, Object> map);
 
-    int count(Map<String, Object> map);
+  int count(Map<String, Object> map);
 
-    int save(UseJianhuyiLogDO useJianhuyiLog);
+  int save(UseJianhuyiLogDO useJianhuyiLog);
 
-    int update(UseJianhuyiLogDO useJianhuyiLog);
+  int update(UseJianhuyiLogDO useJianhuyiLog);
 
-    Map<String, Object> getByDayTime(Long userId);
+  Map<String, Object> getByDayTime(Long userId);
 
-    Map<String, Object> queryUserWeekHistory(Date start, Date end, Long userId);
+  Map<String, Object> queryUserWeekHistory(Date start, Date end, Long userId);
 
-    Map<String, Object> queryUserMonthHistory(Date start, Date end, Long userId);
+  Map<String, Object> queryUserMonthHistory(Date start, Date end, Long userId);
 
-    Map<String, Object> queryUserSeasonHistory(Date start, Date end, Long userId);
+  Map<String, Object> queryUserSeasonHistory(Date start, Date end, Long userId);
 
-    Map<String, Object> queryUserYearHistory(Date start, Date end, Long userId);
+  Map<String, Object> queryUserYearHistory(Date start, Date end, Long userId);
 
-    void saveList(List<UseJianhuyiLogDO> useJianhuyiLogDOList);
+  void saveList(List<UseJianhuyiLogDO> useJianhuyiLogDOList);
 
-    List<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
+  List<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
 
-    List<UseJianhuyiLogDO> getMyData(Map<String, Object> map);
+  List<UseJianhuyiLogDO> getMyData(Map<String, Object> map);
 
-    UseJianhuyiLogDO getUserJianHuYiYouXiao(Long userId,String createTime);
+  UseJianhuyiLogDO getUserJianHuYiYouXiao(Long userId, String createTime);
 
-    UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(Long userId, Date createTime, Date endTime);
+  UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(Long userId, Date createTime, Date endTime);
 
-    Date getMaxDate(Long userId);
+  Date getMaxDate(Long userId);
 
-    List<UseJianhuyiLogDO> getNearData(Long userId, Date date);
+  List<UseJianhuyiLogDO> getNearData(Long userId, Date date);
+
+  List<UseJianhuyiLogDO> selectAllData(Map<String, Object> params);
+
+  List<UseJianhuyiLogDO> countByUserIdAndDate();
 }

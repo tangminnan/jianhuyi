@@ -67,13 +67,13 @@ public class UseJianhuyiLogDO implements Serializable {
   /** 创建时间 */
   private String createTime;
 
-  private int runningTime;
+  private Double runningTime;
 
-  private int effectiveTime;
+  private Double effectiveTime;
 
-  private int coverTime;
+  private Double coverTime;
 
-  private int noneffectiveTime;
+  private Double noneffectiveTime;
 
   private int serialNumber;
 
@@ -85,35 +85,35 @@ public class UseJianhuyiLogDO implements Serializable {
     this.serialNumber = serialNumber;
   }
 
-  public int getRunningTime() {
+  public Double getRunningTime() {
     return runningTime;
   }
 
-  public void setRunningTime(int runningTime) {
+  public void setRunningTime(Double runningTime) {
     this.runningTime = runningTime;
   }
 
-  public int getEffectiveTime() {
+  public Double getEffectiveTime() {
     return effectiveTime;
   }
 
-  public void setEffectiveTime(int effectiveTime) {
+  public void setEffectiveTime(Double effectiveTime) {
     this.effectiveTime = effectiveTime;
   }
 
-  public int getCoverTime() {
+  public Double getCoverTime() {
     return coverTime;
   }
 
-  public void setCoverTime(int coverTime) {
+  public void setCoverTime(Double coverTime) {
     this.coverTime = coverTime;
   }
 
-  public int getNoneffectiveTime() {
+  public Double getNoneffectiveTime() {
     return noneffectiveTime;
   }
 
-  public void setNoneffectiveTime(int noneffectiveTime) {
+  public void setNoneffectiveTime(Double noneffectiveTime) {
     this.noneffectiveTime = noneffectiveTime;
   }
 
