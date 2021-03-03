@@ -25,14 +25,16 @@
 
     <select id="getTodayReminds" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         SELECT
-            user_id,
-            COUNT(*) remind
+        user_id,
+        COUNT(*) remind
         FROM
-            t_use_reminds
-        WHERE
-            user_id = #{userId} and TO_DAYS(reminds_time) = TO_DAYS(NOW())
+        t_use_reminds
+        <where>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="time != null and time != ''">and reminds_time like CONCAT("%",#{time},"%")</if>
+        </where>
         GROUP BY
-            substr(reminds_time, 1, 10)
+        substr(reminds_time, 1, 10)
     </select>
 
     <select id="count" resultType="int">

@@ -21,75 +21,87 @@ import java.util.Map;
 @Mapper
 public interface UseJianhuyiLogDao {
 
-    UseJianhuyiLogDO get(Integer id);
+  UseJianhuyiLogDO get(Integer id);
 
-    List<UseJianhuyiLogDO> list(Map<String, Object> map);
+  List<UseJianhuyiLogDO> list(Map<String, Object> map);
 
-    int count(Map<String, Object> map);
+  int count(Map<String, Object> map);
 
-    int save(UseJianhuyiLogDO useJianhuyiLog);
+  int save(UseJianhuyiLogDO useJianhuyiLog);
 
-    int update(UseJianhuyiLogDO useJianhuyiLog);
+  int update(UseJianhuyiLogDO useJianhuyiLog);
 
-    UseJianhuyiLogDO getByTime(@Param("userId") Long userId);
+  UseJianhuyiLogDO getByTime(@Param("userId") Long userId);
 
-    UseJianhuyiLogDO getDayRemind(@Param("userId") Long userId);
+  UseJianhuyiLogDO getDayRemind(@Param("userId") Long userId);
 
-    List<UseJianhuyiLogDO> getMonthAndWeekByTime(@Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
+  List<UseJianhuyiLogDO> getMonthAndWeekByTime(
+      @Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
 
-    List<UseJianhuyiLogDO> getMonthAndWeekOutduration(@Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
+  List<UseJianhuyiLogDO> getMonthAndWeekOutduration(
+      @Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
 
-    List<UseJianhuyiLogDO> getMonthAndWeekRemind(@Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
+  List<UseJianhuyiLogDO> getMonthAndWeekRemind(
+      @Param("start") Date start, @Param("end") Date end, @Param("userId") Long userId);
 
-    UseJianhuyiLogDO getOutduration(@Param("userId") Long userId);
+  UseJianhuyiLogDO getOutduration(@Param("userId") Long userId);
 
+  UseJianhuyiLogDO queryUserWeekRecord(
+      @Param("saveTime") String saveTime, @Param("userId") Long userId);
 
-    UseJianhuyiLogDO queryUserWeekRecord(@Param("saveTime") String saveTime, @Param("userId") Long userId);
+  List<UseJianhuyiLogDO> queryUserWeekRecordBetween(
+      @Param("start") Date startTime, @Param("end") Date endTime, @Param("userId") Long userId);
 
-    List<UseJianhuyiLogDO> queryUserWeekRecordBetween(@Param("start") Date startTime, @Param("end") Date endTime,
-                                                      @Param("userId") Long userId);
+  List<UseJianhuyiLogDO> queryUserRecordBetweenSum(
+      @Param("start") Date startTime, @Param("end") Date endTime, @Param("userId") Long userId);
 
-    List<UseJianhuyiLogDO> queryUserRecordBetweenSum(@Param("start") Date startTime, @Param("end") Date endTime,
-                                                     @Param("userId") Long userId);
+  UseJianhuyiLogDO queryOutdoorsDuration(
+      @Param("saveTime") String saveTime, @Param("userId") Long userId);
 
-    UseJianhuyiLogDO queryOutdoorsDuration(@Param("saveTime") String saveTime, @Param("userId") Long userId);
+  UseRemindsDO queryRemind(@Param("remindsTime") String string, @Param("userId") Long userId);
 
-    UseRemindsDO queryRemind(@Param("remindsTime") String string, @Param("userId") Long userId);
+  UseTimeDO queryUseTime(@Param("use_time") String string, @Param("userId") Long userId);
 
-    UseTimeDO queryUseTime(@Param("use_time") String string, @Param("userId") Long userId);
+  List<UseJianhuyiLogDO> getOutdurationYear(
+      @Param("start") Date startTime, @Param("end") Date endTime, @Param("userId") Long userId);
 
-    List<UseJianhuyiLogDO> getOutdurationYear(@Param("start") Date startTime, @Param("end") Date endTime,
-                                              @Param("userId") Long userId);
+  List<UseTimeDO> getUseJianhuyiTimeYear(
+      @Param("start") Date startTime, @Param("end") Date endTime, @Param("userId") Long userId);
 
-    List<UseTimeDO> getUseJianhuyiTimeYear(@Param("start") Date startTime, @Param("end") Date endTime,
-                                           @Param("userId") Long userId);
+  List<UseRemindsDO> getRemindYear(
+      @Param("start") Date startTime, @Param("end") Date endTime, @Param("userId") Long userId);
 
-    List<UseRemindsDO> getRemindYear(@Param("start") Date startTime, @Param("end") Date endTime,
-                                     @Param("userId") Long userId);
+  void saveList(@Param("useJianhuyiLogDOList") List<UseJianhuyiLogDO> useJianhuyiLogDOList);
 
-    void saveList(@Param("useJianhuyiLogDOList") List<UseJianhuyiLogDO> useJianhuyiLogDOList);
+  LinkedList<UseJianhuyiLogDO> selectAllData(Map<String, Object> map);
 
-    LinkedList<UseJianhuyiLogDO> selectAllData(Map<String, Object> map);
+  List<UseJianhuyiLogDO> getByDay(@Param("date") String string, @Param("userId") Long userId);
 
-    List<UseJianhuyiLogDO> getByDay(@Param("date") String string, @Param("userId") Long userId);
+  UseJianhuyiLogDO getRemindByUseidByday(
+      @Param("date") String string, @Param("userId") Long userId);
 
-    UseJianhuyiLogDO getRemindByUseidByday(@Param("date") String string, @Param("userId") Long userId);
+  UseJianhuyiLogDO getUseByUseidByday(@Param("date") String string, @Param("userId") Long userId);
 
-    UseJianhuyiLogDO getUseByUseidByday(@Param("date") String string, @Param("userId") Long userId);
+  List<UseJianhuyiLogDO> getAllDate(
+      @Param("start") Date parse, @Param("end") Date end, @Param("userId") Long userId);
 
-    List<UseJianhuyiLogDO> getAllDate(@Param("start") Date parse, @Param("end") Date end, @Param("userId") Long userId);
+  LinkedList<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
 
-    LinkedList<UseJianhuyiLogDO> selectPersonAndDate(Map<String, Object> map);
+  LinkedList<UseJianhuyiLogDO> selectDataEvery(Map<String, Object> map);
 
-    LinkedList<UseJianhuyiLogDO> selectDataEvery(Map<String, Object> map);
+  List<UseJianhuyiLogDO> getMyData(Map<String, Object> map);
 
-    List<UseJianhuyiLogDO> getMyData(Map<String, Object> map);
+  UseJianhuyiLogDO getUserJianHuYiYouXiao(
+      @Param("userId") Long userId, @Param("createTime") String createTime);
 
-    UseJianhuyiLogDO getUserJianHuYiYouXiao(@Param("userId") Long userId,@Param("createTime") String createTime);
+  UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(
+      @Param("userId") Long userId,
+      @Param("createTime") Date createTime,
+      @Param("endTime") Date endTime);
 
-    UseJianhuyiLogDO getUserJianHuYiYouXiaoAll(@Param("userId") Long userId,@Param("createTime") Date createTime,@Param("endTime") Date endTime);
+  Date getMaxDate(Long userId);
 
-    Date getMaxDate(Long userId);
+  List<UseJianhuyiLogDO> getNearData(@Param("userId") Long userId, @Param("date") Date date);
 
-    List<UseJianhuyiLogDO> getNearData(@Param("userId") Long userId,@Param("date") Date date);
+  List<UseJianhuyiLogDO> countByUserIdAndDate();
 }

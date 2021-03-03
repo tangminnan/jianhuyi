@@ -60,12 +60,12 @@ public class UseTimeServiceImpl implements UseTimeService {
   }
 
   @Override
-  public Map getSNCount(Long userId) {
-    return useTimeDao.getSNCount(userId);
+  public Map getSNCount(Long userId, String time) {
+    return useTimeDao.getSNCount(userId, time);
   }
 
   @Override
-  public List<UseTimeDO> getTodayData(Long userId) {
-    return useTimeDao.getTodayData(userId);
+  public List<UseTimeDO> getTodayData(Long userId, String time) {
+    return useTimeDao.getTodayData(userId, time);
   }
 }

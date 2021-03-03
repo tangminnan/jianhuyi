@@ -3,7 +3,9 @@ package com.jianhuyi.information.service.impl;
 import com.jianhuyi.information.dao.UseJianhuyiLogDao;
 import com.jianhuyi.information.domain.UploadRecordDO;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import com.jianhuyi.information.domain.UseTimeDO;
 import com.jianhuyi.information.service.UseJianhuyiLogService;
+import com.jianhuyi.information.service.UseTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import static com.jianhuyi.common.utils.DateUtils.format;
 @Service
 public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
   @Autowired private UseJianhuyiLogDao useJianhuyiLogDao;
+  @Autowired private UseTimeService useTimeService;
 
   @Override
   public UseJianhuyiLogDO get(Integer id) {
@@ -77,62 +80,69 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
       Double outdoorsDuration = 0.0; // 户外时长
 
       for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOS) {
+        Map mappp =
+            useTimeService.getSNCount(jianhuyiLogDO.getUserId(), useJianhuyiLogDO.getSaveTime());
+        List<UseTimeDO> useTimeDOList =
+            useTimeService.getTodayData(jianhuyiLogDO.getUserId(), useJianhuyiLogDO.getSaveTime());
         if ((useJianhuyiLogDO.getUserId().equals(jianhuyiLogDO.getUserId()))
             && (jianhuyiLogDO.getSaveTime().contains(useJianhuyiLogDO.getSaveTime()))
             && (jianhuyiLogDO.getEquipmentId().equals(useJianhuyiLogDO.getEquipmentId()))) {
-          // 平均阅读距离（cm）：阅读1状态下 15<=阅读距离<=60和 / 该条件下数据条数
-          if (jianhuyiLogDO.getReadDistance() >= 15 && jianhuyiLogDO.getReadDistance() <= 60) {
-            readDistance += jianhuyiLogDO.getReadDistance();
-            readDistanceCount++;
-          }
-          // (1)筛选：0＜L≤412  and  15＜D≤60                 (2)调整：L = L * LOG(L , 4.3)
-          if ((jianhuyiLogDO.getReadLight() > 0 && jianhuyiLogDO.getReadLight() <= 412)
-              && (jianhuyiLogDO.getReadDistance() > 15 && jianhuyiLogDO.getReadDistance() <= 60)) {
-            Double linshilight = jianhuyiLogDO.getReadLight();
-            // 4.3为底数原始值的对数
-            readLight += 100 * (Math.log(linshilight) / Math.log(4.3));
-            sitTilt += jianhuyiLogDO.getSitTilt();
+          if (jianhuyiLogDO.getStatus() == 1) {
+            // 平均阅读距离（cm）：阅读1状态下 15<=阅读距离<=60和 / 该条件下数据条数
+            if (jianhuyiLogDO.getReadDistance() >= 15 && jianhuyiLogDO.getReadDistance() <= 60) {
+              readDistance += jianhuyiLogDO.getReadDistance();
+              readDistanceCount++;
+            }
+            // (1)筛选：0＜L≤412  and  15＜D≤60                 (2)调整：L = L * LOG(L , 4.3)
+            if ((jianhuyiLogDO.getReadLight() > 0 && jianhuyiLogDO.getReadLight() <= 412)
+                && (jianhuyiLogDO.getReadDistance() > 15
+                    && jianhuyiLogDO.getReadDistance() <= 60)) {
+              Double linshilight = jianhuyiLogDO.getReadLight();
+              // 4.3为底数原始值的对数
+              readLight += 100 * (Math.log(linshilight) / Math.log(4.3));
+              sitTilt += jianhuyiLogDO.getSitTilt();
 
-            readLightCount++;
-          }
+              readLightCount++;
+            }
 
-          // 判断上一条时间
-          if (!date.equals("")) {
-            try {
-              // 用本次和上一次的时间对比
-              long getReadDuration = (long) (jianhuyiLogDO.getReadDuration() * 60 * 1000);
-              long difference =
-                  (sdf.parse(date).getTime()
-                      - (sdf.parse(jianhuyiLogDO.getSaveTime()).getTime() + getReadDuration));
-              long minute = difference / (1000 * 60);
-              // 间隔大于3分钟，视为2次
-              if (minute >= 3) {
-                // 第一次进来加2
-                if (flag) {
-                  readCount += 2;
-                } else {
-                  readCount++;
+            // 判断上一条时间
+            if (!date.equals("")) {
+              try {
+                // 用本次和上一次的时间对比
+                long getReadDuration = (long) (jianhuyiLogDO.getReadDuration() * 60 * 1000);
+                long difference =
+                    (sdf.parse(date).getTime()
+                        - (sdf.parse(jianhuyiLogDO.getSaveTime()).getTime() + getReadDuration));
+                long minute = difference / (1000 * 60);
+                // 间隔大于3分钟，视为2次
+                if (minute >= 3) {
+                  // 第一次进来加2
+                  if (flag) {
+                    readCount += 2;
+                  } else {
+                    readCount++;
+                  }
+                  flag = false;
                 }
-                flag = false;
+                // 间隔小于3分钟，视为1次
+              } catch (ParseException e) {
+                e.printStackTrace();
               }
-              // 间隔小于3分钟，视为1次
-            } catch (ParseException e) {
-              e.printStackTrace();
+            } else {
+              if (flag) {
+                readCount++;
+              }
+              flag = false;
             }
+            date = jianhuyiLogDO.getSaveTime();
+            allDurtion += jianhuyiLogDO.getReadDuration();
+            lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
+            lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
           } else {
-            if (flag) {
-              readCount++;
+            // 2状态户外累加
+            if (jianhuyiLogDO.getOutdoorsDuration() != null) {
+              outdoorsDuration += jianhuyiLogDO.getOutdoorsDuration();
             }
-            flag = false;
-          }
-          date = jianhuyiLogDO.getSaveTime();
-          allDurtion += jianhuyiLogDO.getReadDuration();
-          lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
-          lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
-        } else {
-          // 2状态户外累加
-          if (jianhuyiLogDO.getOutdoorsDuration() != null) {
-            outdoorsDuration += jianhuyiLogDO.getOutdoorsDuration();
           }
         }
       }

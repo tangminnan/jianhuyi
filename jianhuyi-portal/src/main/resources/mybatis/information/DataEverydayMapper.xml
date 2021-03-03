@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.information.dao.DataEverydayDao">
+
+    <select id="get" resultType="com.jianhuyi.information.domain.DataEverydayDO">
+		select `id`,`upload_id`,`user_id`,`equipment_id`,`use_time`,`add_time`,`all_read_duration`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,`remind`,`running_time`,`effective_time`,`cover_time`,`noneffective_time` from t_data_everyday where id = #{value}
+	</select>
+
+    <select id="list" resultType="com.jianhuyi.information.domain.DataEverydayDO">
+        select
+        `id`,`upload_id`,`user_id`,`equipment_id`,`use_time`,`add_time`,`all_read_duration`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,`remind`,`running_time`,`effective_time`,`cover_time`,`noneffective_time`
+        from t_data_everyday
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="uploadId != null and uploadId != ''">and upload_id = #{uploadId}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
+            <if test="useTime != null and useTime != ''">and use_time = #{useTime}</if>
+            <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
+            <if test="allReadDuration != null and allReadDuration != ''">and all_read_duration = #{allReadDuration}</if>
+            <if test="readDuration != null and readDuration != ''">and read_duration = #{readDuration}</if>
+            <if test="outdoorsDuration != null and outdoorsDuration != ''">and outdoors_duration = #{outdoorsDuration}
+            </if>
+            <if test="readDistance != null and readDistance != ''">and read_distance = #{readDistance}</if>
+            <if test="readLight != null and readLight != ''">and read_light = #{readLight}</if>
+            <if test="lookPhoneDuration != null and lookPhoneDuration != ''">and look_phone_duration =
+                #{lookPhoneDuration}
+            </if>
+            <if test="lookTvComputerDuration != null and lookTvComputerDuration != ''">and look_tv_computer_duration =
+                #{lookTvComputerDuration}
+            </if>
+            <if test="sitTilt != null and sitTilt != ''">and sit_tilt = #{sitTilt}</if>
+            <if test="remind != null and remind != ''">and remind = #{remind}</if>
+            <if test="runningTime != null and runningTime != ''">and running_time = #{runningTime}</if>
+            <if test="effectiveTime != null and effectiveTime != ''">and effective_time = #{effectiveTime}</if>
+            <if test="coverTime != null and coverTime != ''">and cover_time = #{coverTime}</if>
+            <if test="noneffectiveTime != null and noneffectiveTime != ''">and noneffective_time = #{noneffectiveTime}
+            </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from t_data_everyday
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="uploadId != null and uploadId != ''">and upload_id = #{uploadId}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
+            <if test="useTime != null and useTime != ''">and use_time = #{useTime}</if>
+            <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
+            <if test="allReadDuration != null and allReadDuration != ''">and all_read_duration = #{allReadDuration}</if>
+            <if test="readDuration != null and readDuration != ''">and read_duration = #{readDuration}</if>
+            <if test="outdoorsDuration != null and outdoorsDuration != ''">and outdoors_duration = #{outdoorsDuration}
+            </if>
+            <if test="readDistance != null and readDistance != ''">and read_distance = #{readDistance}</if>
+            <if test="readLight != null and readLight != ''">and read_light = #{readLight}</if>
+            <if test="lookPhoneDuration != null and lookPhoneDuration != ''">and look_phone_duration =
+                #{lookPhoneDuration}
+            </if>
+            <if test="lookTvComputerDuration != null and lookTvComputerDuration != ''">and look_tv_computer_duration =
+                #{lookTvComputerDuration}
+            </if>
+            <if test="sitTilt != null and sitTilt != ''">and sit_tilt = #{sitTilt}</if>
+            <if test="remind != null and remind != ''">and remind = #{remind}</if>
+            <if test="runningTime != null and runningTime != ''">and running_time = #{runningTime}</if>
+            <if test="effectiveTime != null and effectiveTime != ''">and effective_time = #{effectiveTime}</if>
+            <if test="coverTime != null and coverTime != ''">and cover_time = #{coverTime}</if>
+            <if test="noneffectiveTime != null and noneffectiveTime != ''">and noneffective_time = #{noneffectiveTime}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.jianhuyi.information.domain.DataEverydayDO" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into t_data_everyday
+		(
+			`upload_id`, 
+			`user_id`, 
+			`equipment_id`, 
+			`use_time`, 
+			`add_time`, 
+			`all_read_duration`, 
+			`read_duration`, 
+			`outdoors_duration`, 
+			`read_distance`, 
+			`read_light`, 
+			`look_phone_duration`, 
+			`look_tv_computer_duration`, 
+			`sit_tilt`, 
+			`remind`, 
+			`running_time`, 
+			`effective_time`, 
+			`cover_time`, 
+			`noneffective_time`
+		)
+		values
+		(
+			#{uploadId}, 
+			#{userId}, 
+			#{equipmentId}, 
+			#{useTime}, 
+			#{addTime}, 
+			#{allReadDuration}, 
+			#{readDuration}, 
+			#{outdoorsDuration}, 
+			#{readDistance}, 
+			#{readLight}, 
+			#{lookPhoneDuration}, 
+			#{lookTvComputerDuration}, 
+			#{sitTilt}, 
+			#{remind}, 
+			#{runningTime}, 
+			#{effectiveTime}, 
+			#{coverTime}, 
+			#{noneffectiveTime}
+		)
+	</insert>
+
+
+    <insert id="saveList">
+        insert into t_data_everyday
+        (
+        `upload_id`,
+        `user_id`,
+        `equipment_id`,
+        `use_time`,
+        `add_time`,
+        `all_read_duration`,
+        `read_duration`,
+        `outdoors_duration`,
+        `read_distance`,
+        `read_light`,
+        `look_phone_duration`,
+        `look_tv_computer_duration`,
+        `sit_tilt`,
+        `remind`,
+        `running_time`,
+        `effective_time`,
+        `cover_time`,
+        `noneffective_time`
+        )
+        values
+        <foreach collection="everydayDOList" item="item" separator=",">
+            (
+            #{item.uploadId},
+            #{item.userId},
+            #{item.equipmentId},
+            #{item.useTime},
+            #{item.addTime},
+            #{item.allReadDuration},
+            #{item.readDuration},
+            #{item.outdoorsDuration},
+            #{item.readDistance},
+            #{item.readLight},
+            #{item.lookPhoneDuration},
+            #{item.lookTvComputerDuration},
+            #{item.sitTilt},
+            #{item.remind},
+            #{item.runningTime},
+            #{item.effectiveTime},
+            #{item.coverTime},
+            #{item.noneffectiveTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.jianhuyi.information.domain.DataEverydayDO">
+        update t_data_everyday
+        <set>
+            <if test="uploadId != null">`upload_id` = #{uploadId},</if>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="equipmentId != null">`equipment_id` = #{equipmentId},</if>
+            <if test="useTime != null">`use_time` = #{useTime},</if>
+            <if test="addTime != null">`add_time` = #{addTime},</if>
+            <if test="allReadDuration != null">`all_read_duration` = #{allReadDuration},</if>
+            <if test="readDuration != null">`read_duration` = #{readDuration},</if>
+            <if test="outdoorsDuration != null">`outdoors_duration` = #{outdoorsDuration},</if>
+            <if test="readDistance != null">`read_distance` = #{readDistance},</if>
+            <if test="readLight != null">`read_light` = #{readLight},</if>
+            <if test="lookPhoneDuration != null">`look_phone_duration` = #{lookPhoneDuration},</if>
+            <if test="lookTvComputerDuration != null">`look_tv_computer_duration` = #{lookTvComputerDuration},</if>
+            <if test="sitTilt != null">`sit_tilt` = #{sitTilt},</if>
+            <if test="remind != null">`remind` = #{remind},</if>
+            <if test="runningTime != null">`running_time` = #{runningTime},</if>
+            <if test="effectiveTime != null">`effective_time` = #{effectiveTime},</if>
+            <if test="coverTime != null">`cover_time` = #{coverTime},</if>
+            <if test="noneffectiveTime != null">`noneffective_time` = #{noneffectiveTime}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="remove">
+		delete from t_data_everyday where id = #{value}
+	</delete>
+
+    <delete id="batchRemove">
+        delete from t_data_everyday where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

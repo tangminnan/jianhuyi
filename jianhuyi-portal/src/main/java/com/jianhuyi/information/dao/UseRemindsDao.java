@@ -16,21 +16,21 @@ import java.util.Map;
 @Mapper
 public interface UseRemindsDao {
 
-    UseRemindsDO get(Long id);
+  UseRemindsDO get(Long id);
 
-    List<UseRemindsDO> list(Map<String, Object> map);
+  List<UseRemindsDO> list(Map<String, Object> map);
 
-    int count(Map<String, Object> map);
+  int count(Map<String, Object> map);
 
-    int save(UseRemindsDO useReminds);
+  int save(UseRemindsDO useReminds);
 
-    int update(UseRemindsDO useReminds);
+  int update(UseRemindsDO useReminds);
 
-    int remove(Long id);
+  int remove(Long id);
 
-    int batchRemove(Long[] ids);
+  int batchRemove(Long[] ids);
 
-    void saveList(@Param("useRemindsDOList") List<UseRemindsDO> useRemindsDOList);
+  void saveList(@Param("useRemindsDOList") List<UseRemindsDO> useRemindsDOList);
 
-    UseJianhuyiLogDO getTodayReminds(@Param("userId") Long userId);
+  UseJianhuyiLogDO getTodayReminds(@Param("userId") Long userId, @Param("time") String time);
 }

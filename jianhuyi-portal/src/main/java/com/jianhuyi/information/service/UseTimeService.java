@@ -31,7 +31,7 @@ public interface UseTimeService {
 
   UseJianhuyiLogDO getTodayUse(Long userId);
 
-  Map getSNCount(Long userId);
+  List<UseTimeDO> getTodayData(Long userId, String time);
 
-  List<UseTimeDO> getTodayData(Long userId);
+  Map getSNCount(Long userId, String time);
 }

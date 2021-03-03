@@ -1,6 +1,5 @@
 package com.jianhuyi.information.service;
 
-
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseRemindsDO;
 
@@ -14,21 +13,21 @@ import java.util.Map;
  */
 public interface UseRemindsService {
 
-    UseRemindsDO get(Long id);
+  UseRemindsDO get(Long id);
 
-    List<UseRemindsDO> list(Map<String, Object> map);
+  List<UseRemindsDO> list(Map<String, Object> map);
 
-    int count(Map<String, Object> map);
+  int count(Map<String, Object> map);
 
-    int save(UseRemindsDO useReminds);
+  int save(UseRemindsDO useReminds);
 
-    int update(UseRemindsDO useReminds);
+  int update(UseRemindsDO useReminds);
 
-    int remove(Long id);
+  int remove(Long id);
 
-    int batchRemove(Long[] ids);
+  int batchRemove(Long[] ids);
 
-    void saveList(List<UseRemindsDO> useRemindsDOList);
+  void saveList(List<UseRemindsDO> useRemindsDOList);
 
-    UseJianhuyiLogDO getTodayReminds(Long userId);
+  UseJianhuyiLogDO getTodayReminds(Long userId, String time);
 }

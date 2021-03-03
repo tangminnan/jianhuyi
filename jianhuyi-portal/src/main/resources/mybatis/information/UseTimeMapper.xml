@@ -37,32 +37,34 @@
 
     <select id="getSNCount" resultType="java.util.HashMap">
         SELECT
-            IFNULL(a.sum, 0) sum,
-            num
+        IFNULL(a.sum, 0) sum,
+        num
         FROM
-            (
-                SELECT
-                    count(*) num,
-                    SUM(serial_number = 0) sum
-                FROM
-                    t_use_time
-                WHERE
-                    TO_DAYS(use_time) = TO_DAYS(NOW())
-                AND user_id = #{userId}
-            ) a
+        (
+        SELECT
+        count(*) num,
+        SUM(serial_number = 0) sum
+        FROM
+        t_use_time
+        <where>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="time != null and time != ''">and use_time like CONCAT("%",#{time},"%")</if>
+        </where>
+        ) a
     </select>
 
     <select id="getTodayData" resultType="java.util.HashMap">
 
         SELECT
-          *
+        *
         FROM
-            t_use_time
-        WHERE
-            TO_DAYS(use_time) = TO_DAYS(NOW())
-        AND user_id = #{userId}
+        t_use_time
+        <where>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="time != null and time != ''">and use_time like CONCAT("%",#{time},"%")</if>
+        </where>
         ORDER BY
-	      use_time
+        use_time
     </select>
 
 
