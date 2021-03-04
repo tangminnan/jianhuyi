@@ -38,13 +38,16 @@
             <if test="coverTime != null and coverTime != ''">and cover_time = #{coverTime}</if>
             <if test="noneffectiveTime != null and noneffectiveTime != ''">and noneffective_time = #{noneffectiveTime}
             </if>
+            <if test="startTime != null and startTime != ''">and use_time &gt;= #{startTime}</if>
+            <if test="endTime != null and endTime != ''">and use_time &lt;= #{endTime}</if>
+
         </where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
                 order by ${sort} ${order}
             </when>
             <otherwise>
-                order by id desc
+                order by use_time desc
             </otherwise>
         </choose>
         <if test="offset != null and limit != null">
@@ -58,7 +61,8 @@
             <if test="id != null and id != ''">and id = #{id}</if>
             <if test="uploadId != null and uploadId != ''">and upload_id = #{uploadId}</if>
             <if test="userId != null and userId != ''">and user_id = #{userId}</if>
-            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id like CONCAT('%',#{equipmentId},'%')
+            </if>
             <if test="useTime != null and useTime != ''">and use_time = #{useTime}</if>
             <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
             <if test="allReadDuration != null and allReadDuration != ''">and all_read_duration = #{allReadDuration}</if>
@@ -80,6 +84,9 @@
             <if test="coverTime != null and coverTime != ''">and cover_time = #{coverTime}</if>
             <if test="noneffectiveTime != null and noneffectiveTime != ''">and noneffective_time = #{noneffectiveTime}
             </if>
+            <if test="startTime != null and startTime != ''">and use_time &gt;= #{startTime}</if>
+            <if test="endTime != null and endTime != ''">and use_time &lt;= #{endTime}</if>
+
         </where>
     </select>
 

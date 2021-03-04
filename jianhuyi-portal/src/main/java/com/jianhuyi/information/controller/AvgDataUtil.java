@@ -13,7 +13,6 @@ import com.jianhuyi.information.service.UseTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
@@ -81,29 +80,41 @@ public class AvgDataUtil {
       for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOList) {
         if (jianhuyiLogDO.getStatus() != null && jianhuyiLogDO.getStatus() == 1) {
           // 平均阅读距离（cm）：阅读1状态下 15<=阅读距离<=60和 / 该条件下数据条数
-          if (jianhuyiLogDO.getReadDistance() >= 15 && jianhuyiLogDO.getReadDistance() <= 60) {
+
+          if (jianhuyiLogDO.getReadDistance() != null
+              && jianhuyiLogDO.getReadDistance() >= 15
+              && jianhuyiLogDO.getReadDistance() <= 60) {
             readDistance += jianhuyiLogDO.getReadDistance();
             readDistanceCount++;
           }
           // (1)筛选：0＜L≤412  and  15＜D≤60                 (2)调整：L = L * LOG(L , 4.3)
-          if ((jianhuyiLogDO.getReadLight() > 0 && jianhuyiLogDO.getReadLight() <= 412)
-              && (jianhuyiLogDO.getReadDistance() > 15 && jianhuyiLogDO.getReadDistance() <= 60)) {
-            Double linshilight = jianhuyiLogDO.getReadLight();
-            // 4.3为底数原始值的对数
-            readLight += 100 * (Math.log(linshilight) / Math.log(4.3));
-            sitTilt += jianhuyiLogDO.getSitTilt();
+          if (jianhuyiLogDO.getReadLight() != null && jianhuyiLogDO.getReadDistance() != null) {
+            if ((jianhuyiLogDO.getReadLight() > 0 && jianhuyiLogDO.getReadLight() <= 412)
+                && (jianhuyiLogDO.getReadDistance() > 15
+                    && jianhuyiLogDO.getReadDistance() <= 60)) {
+              Double linshilight = jianhuyiLogDO.getReadLight();
+              // 4.3为底数原始值的对数
+              readLight += 100 * (Math.log(linshilight) / Math.log(4.3));
+              sitTilt += jianhuyiLogDO.getSitTilt();
 
-            readLightCount++;
+              readLightCount++;
+            }
           }
 
           // 判断上一条时间
           if (!date.equals("")) {
             try {
               // 用本次和上一次的时间对比
-              long getReadDuration = (long) (jianhuyiLogDO.getReadDuration() * 60 * 1000);
-              long difference =
-                  (sdf.parse(date).getTime()
-                      - (sdf.parse(jianhuyiLogDO.getSaveTime()).getTime() + getReadDuration));
+              long getReadDuration = 0;
+              long difference = 0;
+              if (jianhuyiLogDO.getReadDuration() != null) {
+                getReadDuration = (long) (jianhuyiLogDO.getReadDuration() * 60 * 1000);
+              }
+              if (jianhuyiLogDO.getSaveTime() != null) {
+                difference =
+                    (sdf.parse(date).getTime()
+                        - (sdf.parse(jianhuyiLogDO.getSaveTime()).getTime() + getReadDuration));
+              }
               long minute = difference / (1000 * 60);
               // 间隔大于3分钟，视为2次
               if (minute >= 3) {
@@ -125,17 +136,22 @@ public class AvgDataUtil {
             }
             flag = false;
           }
-          date = jianhuyiLogDO.getSaveTime();
-          allDurtion += jianhuyiLogDO.getReadDuration();
-          lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
-          lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
+          if (jianhuyiLogDO.getSaveTime() != null) date = jianhuyiLogDO.getSaveTime();
+          if (jianhuyiLogDO.getReadDuration() != null)
+            allDurtion += jianhuyiLogDO.getReadDuration();
+          if (jianhuyiLogDO.getLookPhoneDuration() != null)
+            lookPhoneDuration += jianhuyiLogDO.getLookPhoneDuration();
+          if (jianhuyiLogDO.getLookTvComputerDuration() != null)
+            lookTvComputerDuration += jianhuyiLogDO.getLookTvComputerDuration();
         } else {
           // 2状态户外累加
-          outdoorsDuration += jianhuyiLogDO.getOutdoorsDuration();
+          if (jianhuyiLogDO.getOutdoorsDuration() != null)
+            outdoorsDuration += jianhuyiLogDO.getOutdoorsDuration();
         }
       }
     }
 
+    System.out.println("==============阅读次数============" + readCount);
     if (readCount > 0) {
       useJianhuyiLogDO.setReadDuration(Double.parseDouble(df.format(allDurtion / readCount)));
 
@@ -360,7 +376,7 @@ public class AvgDataUtil {
     return useJianhuyiLogDO;
   }
 
-  // 添加或更新某日数据    参数：时间，用户，设备号
+  // 添加或更新某日数据（app上传数据后计算数据添加或更新到统计表）    参数：时间，用户，设备号
   public static void addOrUpdateData(SaveParamsDO saveParamsDOList) {
     System.out.println("===========开始添加或更新数据=============");
     Map<String, Object> params = new HashMap<>();
@@ -420,8 +436,9 @@ public class AvgDataUtil {
     System.out.println("保存完毕");
   }
 
-  // 添加数据到新表
-  @GetMapping("/addData")
+  // 添加数据到新表 用于添加以前的记录，以后的由app上传后自动更新，不再使用本接口
+  /*@GetMapping("/addData")
+  @ResponseBody
   public static void addData() {
     System.out.println("=============开始查询=============");
     List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.countByUserIdAndDate();
@@ -435,21 +452,21 @@ public class AvgDataUtil {
       dataEverydayDO.setUserId(useJianhuyiLogDO.getUserId());
       dataEverydayDO.setEquipmentId(useJianhuyiLogDO.getEquipmentId());
       dataEverydayDO.setAddTime(new Date());
-      dataEverydayDO.setUseTime(useJianhuyiLogDO.getSaveTime());
-      dataEverydayDO.setAllReadDuration(useJianhuyiLogDO.getAllreadDuration());
-      dataEverydayDO.setReadDuration(useJianhuyiLogDO.getReadDuration());
-      dataEverydayDO.setLookPhoneDuration(useJianhuyiLogDO.getLookPhoneDuration());
-      dataEverydayDO.setLookTvComputerDuration(useJianhuyiLogDO.getLookTvComputerDuration());
-      dataEverydayDO.setReadDistance(useJianhuyiLogDO.getReadDistance());
-      dataEverydayDO.setReadLight(useJianhuyiLogDO.getReadLight());
-      dataEverydayDO.setSitTilt(useJianhuyiLogDO.getSitTilt());
-      dataEverydayDO.setEffectiveTime(useJianhuyiLogDO.getEffectiveTime());
-      dataEverydayDO.setNoneffectiveTime(useJianhuyiLogDO.getNoneffectiveTime());
-      dataEverydayDO.setOutdoorsDuration(useJianhuyiLogDO.getOutdoorsDuration());
-      dataEverydayDO.setCoverTime(useJianhuyiLogDO.getCoverTime());
-      dataEverydayDO.setRunningTime(useJianhuyiLogDO.getRunningTime());
+      dataEverydayDO.setUseTime(useJianhuyiLogDO1.getSaveTime());
+      dataEverydayDO.setAllReadDuration(useJianhuyiLogDO1.getAllreadDuration());
+      dataEverydayDO.setReadDuration(useJianhuyiLogDO1.getReadDuration());
+      dataEverydayDO.setLookPhoneDuration(useJianhuyiLogDO1.getLookPhoneDuration());
+      dataEverydayDO.setLookTvComputerDuration(useJianhuyiLogDO1.getLookTvComputerDuration());
+      dataEverydayDO.setReadDistance(useJianhuyiLogDO1.getReadDistance());
+      dataEverydayDO.setReadLight(useJianhuyiLogDO1.getReadLight());
+      dataEverydayDO.setSitTilt(useJianhuyiLogDO1.getSitTilt());
+      dataEverydayDO.setEffectiveTime(useJianhuyiLogDO1.getEffectiveTime());
+      dataEverydayDO.setNoneffectiveTime(useJianhuyiLogDO1.getNoneffectiveTime());
+      dataEverydayDO.setOutdoorsDuration(useJianhuyiLogDO1.getOutdoorsDuration());
+      dataEverydayDO.setCoverTime(useJianhuyiLogDO1.getCoverTime());
+      dataEverydayDO.setRunningTime(useJianhuyiLogDO1.getRunningTime());
       dataEverydayDO.setUploadId(useJianhuyiLogDO.getUploadId());
-      dataEverydayDO.setRemind(useJianhuyiLogDO.getRemind());
+      dataEverydayDO.setRemind(useJianhuyiLogDO1.getRemind());
 
       everydayDOList.add(dataEverydayDO);
     }
@@ -457,5 +474,5 @@ public class AvgDataUtil {
     int result = everydayService.saveList(everydayDOList);
 
     System.out.println("result============" + result);
-  }
+  }*/
 }
