@@ -47,13 +47,6 @@ function load() {
             // 返回false将会终止请求
             columns: [
                [
-                  /*{
-                      field: 'id',
-                      title: 'id',
-                      align: 'center',
-                      valign: 'middle',
-                      rowspan: 2
-                  },*/
                   {
                      field: 'userId',
                      title: '用户Id',
@@ -68,32 +61,7 @@ function load() {
                      align: 'center',
                      valign: 'middle',
                      rowspan: 2
-                  }, /* {
-                  field: 'addTime',
-                  title: '上传时间',
-                  align: 'center',
-                  valign: 'middle',
-                  rowspan: 2
-               }, {
-                  field: 'equipmentId',
-                  title: '设备号',
-                  align: 'center',
-                  valign: 'middle',
-                  rowspan: 2
-               },*/ /* {
-                        field: 'status',
-                        title: '状态',
-                        formatter:function (value) {
-                            if(value == 1){
-                                return "阅读"
-                            }else if(value == 2){
-                                return "非阅读"
-                            }else{
-                                return ""
-                            }
-
-                        }
-                    },*/
+                  },
                   {
                      title: '总评价',
                      align: 'center',
@@ -196,22 +164,9 @@ function load() {
                            return "极差"
                         }
 
-
-                        /*else if(){
-
-                        } else if (row.readDuration > 20 && row.readDuration <= 40) {
-                            return "良"
-                        } else if (row.readDuration == 20) {
-                            return "标准"
-                        } else if (row.readDuration > 40 && row.readDuration <= 90) {
-                            return "差"
-                        } else if (row.readDuration > 90) {
-                            return "极差"
-                        }*/
                      }
                   },
                   {
-                     /*field : 'readDuration', */
                      title: '阅读时长(分钟)',
                      align:
                         'center',
@@ -305,11 +260,7 @@ function load() {
                         2
                   }
                   ,
-                  /*								{
-                      field : 'delFlag',
-                      title : '删除标志(1:删除 0：未删除)'
-                  },
-                       */
+
                   {
                      title: '操作',
                      field:

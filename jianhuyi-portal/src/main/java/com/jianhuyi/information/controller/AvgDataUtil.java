@@ -13,6 +13,7 @@ import com.jianhuyi.information.service.UseTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
@@ -151,7 +152,6 @@ public class AvgDataUtil {
       }
     }
 
-    System.out.println("==============阅读次数============" + readCount);
     if (readCount > 0) {
       useJianhuyiLogDO.setReadDuration(Double.parseDouble(df.format(allDurtion / readCount)));
 
@@ -437,7 +437,7 @@ public class AvgDataUtil {
   }
 
   // 添加数据到新表 用于添加以前的记录，以后的由app上传后自动更新，不再使用本接口
-  /*@GetMapping("/addData")
+  @GetMapping("/addData")
   @ResponseBody
   public static void addData() {
     System.out.println("=============开始查询=============");
@@ -474,5 +474,5 @@ public class AvgDataUtil {
     int result = everydayService.saveList(everydayDOList);
 
     System.out.println("result============" + result);
-  }*/
+  }
 }

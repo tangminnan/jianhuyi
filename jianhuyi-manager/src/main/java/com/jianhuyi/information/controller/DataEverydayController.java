@@ -52,6 +52,13 @@ public class DataEverydayController {
     return pageUtils;
   }
 
+  @GetMapping("/detail/{id}")
+  @RequiresPermissions("information:dataEveryday:dataEveryday")
+  String detail(@PathVariable("id") Long userId, Model model) {
+    model.addAttribute("userId", userId);
+    return "information/dataEveryday/dataEverydayByUser";
+  }
+
   @GetMapping("/daochu")
   void daochu(
       @RequestParam Map<String, Object> params,

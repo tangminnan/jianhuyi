@@ -8,17 +8,6 @@
         <div class="ibox">
             <div class="ibox-body">
                 <div class="fixed-table-toolbar">
-                    <div class="columns pull-left">
-                        <button shiro:hasPermission="information:dataEveryday:add" type="button"
-                                class="btn  btn-primary" onclick="add()">
-                            <i class="fa fa-plus" aria-hidden="true"></i>添加
-                        </button>
-                        <button shiro:hasPermission="information:dataEveryday:batchRemove" type="button"
-                                class="btn  btn-danger"
-                                onclick="batchRemove()">
-                            <i class="fa fa-trash" aria-hidden="true"></i>删除
-                        </button>
-                    </div>
                     <div class="columns pull-right">
                         <button class="btn btn-success" onclick="daochu()">导出</button>
                     </div>
@@ -38,10 +27,7 @@
                         <input id="equipmentId" type="text" class="form-control"
                                placeholder="设备号">
                     </div>
-                    <div class="columns pull-right col-md-2 nopadding">
-                        <input id="userId" type="text" class="form-control"
-                               placeholder="用户id">
-                    </div>
+                    <input type="hidden" th:value="${userId}" id="userId">
 
                 </div>
                 <table id="exampleTable" data-mobile-responsive="true">
@@ -75,7 +61,7 @@
 </div>
 </div>
 <div th:include="include :: footer"></div>
-<script type="text/javascript" src="/js/appjs/information/dataEveryday/dataEveryday.js"></script>
+<script type="text/javascript" src="/js/appjs/information/dataEveryday/dataEverydayByUser.js"></script>
 <script>
    laydate.render({
       elem: '#startTime',
