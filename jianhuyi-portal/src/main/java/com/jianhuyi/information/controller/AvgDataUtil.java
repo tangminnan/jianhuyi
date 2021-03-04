@@ -51,7 +51,7 @@ public class AvgDataUtil {
   public static UseJianhuyiLogDO getAvgReadTime(Long userId, String time) {
     Map<String, Object> params = new HashMap<String, Object>();
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     String date = ""; // 上一次的时间
     Double allDurtion = 0.0; // 总阅读时长

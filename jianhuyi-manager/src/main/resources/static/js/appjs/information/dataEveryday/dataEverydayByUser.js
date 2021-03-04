@@ -57,7 +57,7 @@ function load() {
                   },
 
                   {
-                     field: 'saveTime',
+                     field: 'useTime',
                      title: '开始时间',
                      align: 'center',
                      valign: 'middle',
@@ -77,7 +77,7 @@ function load() {
                      formatter: function (value, row) {
                         if ((row.readDuration <= 20 && row.outdoorsDuration >= 2 && row.readDistance >= 33) &&
                            ((row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.lookTvComputerDuration <= 20 && row.sitTilt <= 5) || (row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.lookTvComputerDuration <= 20) || (row.readLight >= 300 && row.lookPhoneDuration <= 10 && row.sitTilt <= 5) || (row.lookTvComputerDuration <= 20 && row.lookPhoneDuration <= 10 && row.sitTilt <= 5))
-                           && (row.userDurtion >= 10 || row.userDurtion <= 8 && row.userDurtion < 10)) {
+                           && (row.effectiveTime >= 10 || row.effectiveTime <= 8 && row.effectiveTime < 10)) {
                            return "优"
                         } else if (
                            ((row.readDuration <= 20) || (row.readDuration > 20 && row.readDuration <= 40)) && ((row.outdoorsDuration >= 2 || (row.outdoorsDuration >= 1 && row.outdoorsDuration < 2))) && ((row.readDistance >= 33) || (row.readDistance >= 30 && row.readDistance < 33))
@@ -106,7 +106,7 @@ function load() {
                                     && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10) || (row.sitTilt > 10 && row.sitTilt <= 15))
                                  )
                               )
-                           ) && (row.userDurtion >= 10 || (row.userDurtion >= 8 && row.userDurtion < 10))
+                           ) && (row.effectiveTime >= 10 || (row.effectiveTime >= 8 && row.effectiveTime < 10))
                         ) {
                            return "良"
                         } else if (
@@ -126,7 +126,7 @@ function load() {
                               (((row.readLight >= 300) || (row.readLight >= 250 && row.readLight < 300)) && (((row.lookPhoneDuration <= 10) || (row.lookPhoneDuration > 10 && row.lookPhoneDuration <= 20))) && ((row.lookTvComputerDuration <= 20) || (row.lookTvComputerDuration > 20 && row.lookTvComputerDuration <= 40)) && ((row.sitTilt <= 5) || (row.sitTilt > 5 && row.sitTilt <= 10)) || (row.sitTilt > 10 && row.sitTilt <= 15))
                            )
                            && (
-                              ((row.userDurtion >= 10) || (row.userDurtion >= 8 && row.userDurtion < 10) || (row.userDurtion >= 5 < 8))
+                              ((row.effectiveTime >= 10) || (row.effectiveTime >= 8 && row.effectiveTime < 10) || (row.effectiveTime >= 5 < 8))
                            )
                         ) {
                            return "不太好"
@@ -157,7 +157,7 @@ function load() {
                               )
                            ) &&
                            (
-                              (row.userDurtion >= 10) || (row.userDurtion >= 8 && row.userDurtion < 10) || (row.userDurtion >= 5 && row.userDurtion < 8) || (row.userDurtion < 5)
+                              (row.effectiveTime >= 10) || (row.effectiveTime >= 8 && row.effectiveTime < 10) || (row.effectiveTime >= 5 && row.effectiveTime < 8) || (row.effectiveTime < 5)
                            )
                         ) {
                            return "差"
@@ -250,7 +250,7 @@ function load() {
                   }
                   ,
                   {
-                     field: 'userDurtion',
+                     field: 'effectiveTime',
                      title:
                         '使用监护仪时长<br>(小时)',
                      align:
@@ -271,8 +271,8 @@ function load() {
                      formatter:
 
                         function (value, row, index) {
-                           var e = '<a class="btn btn-success btn-sm" href="#" mce_href="#" title="当日统计数据" onclick="detaildata(\'' + row.userId + '\',\'' + row.saveTime + '\')"><i class="fa fa-bar-chart-o"></i></a> ';
-                           var d = '<a class="btn btn-warning btn-sm" href="#" title="当日原始数据"  mce_href="#" onclick="historyData(\'' + row.userId + '\',\'' + row.saveTime + '\')"><i class="fa fa-navicon"></i></a> ';
+                           var e = '<a class="btn btn-success btn-sm" href="#" mce_href="#" title="当日统计数据" onclick="detaildata(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-bar-chart-o"></i></a> ';
+                           var d = '<a class="btn btn-warning btn-sm" href="#" title="当日原始数据"  mce_href="#" onclick="historyData(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-navicon"></i></a> ';
                            return e + d;
                         }
                   }
@@ -545,7 +545,7 @@ function load() {
                   },
 
                   {
-                     field: 'userDurtion',
+                     field: 'effectiveTime',
                      title: '使用时长',
                      sortable: true,
                      valign: 'middle',
@@ -568,15 +568,15 @@ function load() {
                         }
                      },
                      formatter: function (value, row) {
-                        if (row.userDurtion > 10) {
+                        if (row.effectiveTime > 10) {
                            return "优"
-                        } else if (row.userDurtion >= 8 && row.userDurtion < 10) {
+                        } else if (row.effectiveTime >= 8 && row.effectiveTime < 10) {
                            return "良"
-                        } else if (row.userDurtion == 10) {
+                        } else if (row.effectiveTime == 10) {
                            return "标准"
-                        } else if (row.userDurtion >= 5 && row.userDurtion < 8) {
+                        } else if (row.effectiveTime >= 5 && row.effectiveTime < 8) {
                            return "差"
-                        } else if (row.userDurtion < 5) {
+                        } else if (row.effectiveTime < 5) {
                            return "极差"
                         } else {
                            return "暂无"
@@ -603,14 +603,14 @@ function add() {
    });
 }
 
-function detaildata(userId, saveTime) {
+function detaildata(userId, useTime) {
    var page = layer.open({
       type: 2,
       title: '当日数据详情',
       maxmin: true,
       shadeClose: false, // 点击遮罩关闭层
       area: ['800px', '520px'],
-      content: '/information/useJianhuyiLog/useJianhuyiLogDetail?userId=' + userId + '&saveTime=' + saveTime // iframe的url
+      content: '/information/useJianhuyiLog/useJianhuyiLogDetail?userId=' + userId + '&saveTime=' + useTime // iframe的url
    });
    layer.full(page)
 }

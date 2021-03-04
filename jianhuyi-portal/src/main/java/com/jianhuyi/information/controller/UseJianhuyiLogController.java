@@ -237,8 +237,6 @@ public class UseJianhuyiLogController {
    */
   private void countPerDay(UserTaskDO userTaskDO, List<UseJianhuyiLogDO> useJianhuyiLogDOList)
       throws ParseException {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     useJianhuyiLogDOList.forEach(
         a -> {
           a.setCreateTime(a.getSaveTime().substring(0, 10));
