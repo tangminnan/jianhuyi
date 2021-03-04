@@ -186,6 +186,45 @@ function reLoad() {
    $('#exampleTable').bootstrapTable('refresh');
 }
 
+
+function treeDetail(index, row) {
+   var alldate = {
+      userId: row.userId,
+      useTime: row.useTime
+   };
+   var str = "";
+   var cggys = "";
+   $.ajax({
+      url: prefix + "/list",
+      method: 'get',                      //请求方式（*）
+//            contentType: 'application/json; charset=utf-8',
+      dataType: "json",
+      data: alldate,
+      beforeSend: function () {
+         close = layer.load(2);
+      },
+      success: function (data) {
+         layer.close(close);
+         $.each(data, function (index, DesignEchartsDetail) {
+            var num = index + 1;
+            cggys = DesignEchartsDetail.cggys == null ? "-" : DesignEchartsDetail.cggys;
+            var ondblclick = "dblclick" + num;
+            tree = "tree" + num;
+            str += "<tr id=" + "'" + ondblclick + "'" + " class='detail-view'>";
+            str += "<td style='width: 50px' align='center'></td>";
+            str += "<td style='width: 50px' align='center'>" + num + "</td>";
+            str += "<td class='colStyle' align='center'>" + DesignEchartsDetail.shareorderno + "</td>";
+            str += "<td class='colStyle' align='center'>" + DesignEchartsDetail.putype + "</td>";
+            str += "<td class='colStyle' align='center'>" + DesignEchartsDetail.planstarttime + "</td>";
+            str += "</tr>";
+         });
+         //获取到加减号的class .detail-icon，然后获取第index个  拿到他的父亲的父亲（也就是当前行）
+         $(".detail-icon").eq(index).parent().parent().after(str);
+      }
+   })
+   return '';
+}
+
 function add() {
    layer.open({
       type: 2,

@@ -379,60 +379,58 @@ public class AvgDataUtil {
   // 添加或更新某日数据（app上传数据后计算数据添加或更新到统计表）    参数：时间，用户，设备号
   public static void addOrUpdateData(SaveParamsDO saveParamsDOList) {
     System.out.println("===========开始添加或更新数据=============");
-    Map<String, Object> params = new HashMap<>();
-    params.put("userId", saveParamsDOList.getUserId());
-    params.put("equipmentId", saveParamsDOList.getEquipmentId());
-    params.put(
-        "useTime",
-        saveParamsDOList
-            .getUseJianhuyiLogDOList()
-            .get(0)
-            .getSaveTime()
-            .toString()
-            .substring(0, 10));
-    List<DataEverydayDO> everydayDOList = everydayService.list(params);
-    UseJianhuyiLogDO useJianhuyiLogDO =
-        getAvgReadTime(
-            saveParamsDOList.getUserId(),
-            saveParamsDOList
-                .getUseJianhuyiLogDOList()
-                .get(0)
-                .getSaveTime()
-                .toString()
-                .substring(0, 10));
-    DataEverydayDO dataEverydayDO = new DataEverydayDO();
-    dataEverydayDO.setUserId(Integer.parseInt(saveParamsDOList.getUserId().toString()));
-    dataEverydayDO.setEquipmentId(saveParamsDOList.getEquipmentId());
-    dataEverydayDO.setAddTime(new Date());
-    dataEverydayDO.setUseTime(
-        saveParamsDOList
-            .getUseJianhuyiLogDOList()
-            .get(0)
-            .getSaveTime()
-            .toString()
-            .substring(0, 10));
-    dataEverydayDO.setAllReadDuration(useJianhuyiLogDO.getAllreadDuration());
-    dataEverydayDO.setReadDuration(useJianhuyiLogDO.getReadDuration());
-    dataEverydayDO.setLookPhoneDuration(useJianhuyiLogDO.getLookPhoneDuration());
-    dataEverydayDO.setLookTvComputerDuration(useJianhuyiLogDO.getLookTvComputerDuration());
-    dataEverydayDO.setReadDistance(useJianhuyiLogDO.getReadDistance());
-    dataEverydayDO.setReadLight(useJianhuyiLogDO.getReadLight());
-    dataEverydayDO.setSitTilt(useJianhuyiLogDO.getSitTilt());
-    dataEverydayDO.setEffectiveTime(useJianhuyiLogDO.getEffectiveTime());
-    dataEverydayDO.setNoneffectiveTime(useJianhuyiLogDO.getNoneffectiveTime());
-    dataEverydayDO.setOutdoorsDuration(useJianhuyiLogDO.getOutdoorsDuration());
-    dataEverydayDO.setCoverTime(useJianhuyiLogDO.getCoverTime());
-    dataEverydayDO.setRunningTime(useJianhuyiLogDO.getRunningTime());
-    dataEverydayDO.setUploadId(Integer.parseInt(saveParamsDOList.getUploadId().toString()));
-    dataEverydayDO.setRemind(useJianhuyiLogDO.getRemind());
-
-    if (everydayDOList.size() > 0) {
-      dataEverydayDO.setId(everydayDOList.get(0).getId());
-      everydayService.update(dataEverydayDO);
-    } else {
-      everydayService.save(dataEverydayDO);
+    List<DataEverydayDO> everydayDOListadd = new ArrayList<>();
+    List<DataEverydayDO> everydayDOListupdate = new ArrayList<>();
+    List<String> datess = new ArrayList<>();
+    List<UseJianhuyiLogDO> useJianhuyiLogDOList = saveParamsDOList.getUseJianhuyiLogDOList();
+    for (int i = 0; i < useJianhuyiLogDOList.size(); i++) {
+      if (i == 0) {
+        datess.add(useJianhuyiLogDOList.get(i).getSaveTime().toString().substring(0, 10));
+      } else {
+        if ((useJianhuyiLogDOList.get(i).getSaveTime().toString().substring(0, 10))
+            .equals(useJianhuyiLogDOList.get(i - 1).getSaveTime().toString().substring(0, 10))) {
+          datess.add(useJianhuyiLogDOList.get(i).getSaveTime().toString().substring(0, 10));
+        }
+      }
     }
-    System.out.println("==========dataEverydayDO======================" + dataEverydayDO);
+    for (String date : datess) {
+      Map<String, Object> params = new HashMap<>();
+      params.put("userId", saveParamsDOList.getUserId());
+      params.put("equipmentId", saveParamsDOList.getEquipmentId());
+      params.put("useTime", date);
+      List<DataEverydayDO> everydayDOList = everydayService.list(params);
+
+      UseJianhuyiLogDO useJianhuyiLogDO = getAvgReadTime(saveParamsDOList.getUserId(), date);
+
+      DataEverydayDO dataEverydayDO = new DataEverydayDO();
+      dataEverydayDO.setUserId(Integer.parseInt(saveParamsDOList.getUserId().toString()));
+      dataEverydayDO.setEquipmentId(saveParamsDOList.getEquipmentId());
+      dataEverydayDO.setAddTime(new Date());
+      dataEverydayDO.setUseTime(date);
+      dataEverydayDO.setAllReadDuration(useJianhuyiLogDO.getAllreadDuration());
+      dataEverydayDO.setReadDuration(useJianhuyiLogDO.getReadDuration());
+      dataEverydayDO.setLookPhoneDuration(useJianhuyiLogDO.getLookPhoneDuration());
+      dataEverydayDO.setLookTvComputerDuration(useJianhuyiLogDO.getLookTvComputerDuration());
+      dataEverydayDO.setReadDistance(useJianhuyiLogDO.getReadDistance());
+      dataEverydayDO.setReadLight(useJianhuyiLogDO.getReadLight());
+      dataEverydayDO.setSitTilt(useJianhuyiLogDO.getSitTilt());
+      dataEverydayDO.setEffectiveTime(useJianhuyiLogDO.getEffectiveTime());
+      dataEverydayDO.setNoneffectiveTime(useJianhuyiLogDO.getNoneffectiveTime());
+      dataEverydayDO.setOutdoorsDuration(useJianhuyiLogDO.getOutdoorsDuration());
+      dataEverydayDO.setCoverTime(useJianhuyiLogDO.getCoverTime());
+      dataEverydayDO.setRunningTime(useJianhuyiLogDO.getRunningTime());
+      dataEverydayDO.setUploadId(Integer.parseInt(saveParamsDOList.getUploadId().toString()));
+      dataEverydayDO.setRemind(useJianhuyiLogDO.getRemind());
+
+      if (everydayDOList.size() > 0) {
+        dataEverydayDO.setId(everydayDOList.get(0).getId());
+        everydayService.update(dataEverydayDO);
+      } else {
+        everydayDOListadd.add(dataEverydayDO);
+      }
+    }
+
+    int result = everydayService.saveList(everydayDOListadd);
     System.out.println("保存完毕");
   }
 
@@ -468,7 +466,18 @@ public class AvgDataUtil {
       dataEverydayDO.setUploadId(useJianhuyiLogDO.getUploadId());
       dataEverydayDO.setRemind(useJianhuyiLogDO1.getRemind());
 
-      everydayDOList.add(dataEverydayDO);
+      Map<String, Object> params = new HashMap<>();
+      params.put("userId", useJianhuyiLogDO.getUserId());
+      params.put("equipmentId", useJianhuyiLogDO.getEquipmentId());
+      params.put("useTime", useJianhuyiLogDO1.getSaveTime());
+      List<DataEverydayDO> everydayDOList11 = everydayService.list(params);
+
+      if (everydayDOList11.size() > 0) {
+        dataEverydayDO.setId(everydayDOList11.get(0).getId());
+        everydayService.update(dataEverydayDO);
+      } else {
+        everydayDOList.add(dataEverydayDO);
+      }
     }
     System.out.println("=============开始添加=============");
     int result = everydayService.saveList(everydayDOList);
