@@ -582,20 +582,25 @@ public class ResultUtils {
      */
     public static Map<String,Double> countData(Long userId, List<UseJianhuyiLogDO> useJianhuyiLogDOList,String time)
             throws ParseException {
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Double avgReadDuration = 0.0; // 平均每次阅读时长
         Double avgReadDistance = 0.0; // 平均阅读距离
         Double avgReadLight = 0.0; // 平均阅读光照
         Double avgLookPhoneDuration = 0.0; // 平均单次看手机时长
         Double avgLookTvComputerDuration = 0.0; // 平均单次看电脑及电视时长
         Double avgSitTilt = 0.0; // 平均旋转角度
-        int lookPhoneCount = 1; // 看手机次数
-        int lookScreenCount = 1; // 看电脑屏幕的次数
-        int count = 1; // 阅读次数
+        int lookPhoneCount = 0; // 看手机次数
+        int lookScreenCount = 0; // 看电脑屏幕的次数
+        int count = 0; // 阅读次数
         int avgReadLightCount=0;//光照强度次数
         int avgSitTiltCount=0;//角度次数
         int  avgReadDistanceCount=0;
         for (int i = 0; i < useJianhuyiLogDOList.size(); i++) {
+            if(i==0){
+                lookPhoneCount++;
+                lookScreenCount++;
+                count++;
+            }
             UseJianhuyiLogDO useJianhuyiLogDO = useJianhuyiLogDOList.get(i);
             /**
              *  光照强度
@@ -650,9 +655,16 @@ public class ResultUtils {
                                 - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000))
                                 / 1000
                                 / 60;
-                if (minute >= 3 || i == 0) {
+//                System.out.println("===========================================");
+//                System.out.println("第 "+(i+1) +" 与第 "+i+" 次比较  "+(minute));
+//                System.out.println(sdf1.parse(useJianhuyiLogDO1.getSaveTime()));
+//                System.out.println(sdf1.parse(useJianhuyiLogDO.getSaveTime()));
+//                System.out.println("===========================================");
+
+
+                if (minute >= 3) {
                     if (useJianhuyiLogDO.getLookPhoneDuration() != null
-                           ) lookPhoneCount++; // 看手机次数
+                            ) lookPhoneCount++; // 看手机次数
                     if (useJianhuyiLogDO.getLookTvComputerDuration() != null
                             ) lookScreenCount++; // 看电脑屏幕的次数
                     count++; // 阅读次数
@@ -715,6 +727,12 @@ public class ResultUtils {
         resultMap.put("avgSitTilt",avgSitTilt);
         resultMap.put("avgReadDistance",avgReadDistance);
         resultMap.put("effectiveTime",effectiveTime);
+        System.out.println("=================================");
+        System.out.println(lookPhoneCount);
+        System.out.println(lookScreenCount);
+        System.out.println(count);
+        System.out.println("=================================");
+
         return  resultMap;
     }
 }
