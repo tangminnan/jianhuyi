@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.access.method.P;
 
 /**
  * 
@@ -58,4 +59,6 @@ public interface OwnerUserDao {
     void updateTaskIdInUser(UserDO userDO);
 
 	Integer getMyScore(Long userId);
+
+    List<OwnerUserDO> getUserByIdCardAndSchoolAndGrade(@Param("identityCard") String identityCard,@Param("name") String name,@Param("grade") String grade);
 }

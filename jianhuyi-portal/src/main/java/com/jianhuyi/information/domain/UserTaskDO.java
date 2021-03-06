@@ -233,6 +233,10 @@ public class UserTaskDO implements Serializable {
 
     private Integer flag;
     /**
+     * 1 任务已结束  2 任务进行中
+     */
+    private String finishStatus;
+    /**
      * 总积分
      */
 
@@ -255,8 +259,10 @@ public class UserTaskDO implements Serializable {
     private Double youxiaotime;
 
     private String idCards;
-    //任务来源 PC =任务来自于PC  APP = 任务来来自于A
+    //班级ID
     private String pcorapp;
+    //任务的起止时间
+    private String sstime;
 
     public Long getId() {
         return id;
@@ -714,6 +720,22 @@ public class UserTaskDO implements Serializable {
 
     public void setPcorapp(String pcorapp) {
         this.pcorapp = pcorapp;
+    }
+
+    public String getFinishStatus() {
+        return finishStatus;
+    }
+
+    public void setFinishStatus(String finishStatus) {
+        this.finishStatus = finishStatus;
+    }
+
+    public String getSstime() {
+        return sstime;
+    }
+
+    public void setSstime(String sstime) {
+        this.sstime = sstime;
     }
 
     @Override

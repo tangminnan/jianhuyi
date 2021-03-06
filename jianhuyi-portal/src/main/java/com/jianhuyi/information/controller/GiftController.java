@@ -38,8 +38,6 @@ public class GiftController {
     @Autowired
     private GiftService giftService;
     @Autowired
-    private GiftTaskService giftTaskService;
-    @Autowired
     private UserTaskLinshiService userTaskLinshiService;
     @Autowired
     private UserTaskService userTaskService;
@@ -47,13 +45,11 @@ public class GiftController {
     private UseJianhuyiLogService useJianhuyiLogService;
 
     @Autowired
-    private UseJianhuyiLogServiceImpl useJianhuyiLogServiceimpl;
-
-    @Autowired
     private OwnerUserService userService;
     @Autowired
     private GiftPcService giftPcService;
     public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月dd日");
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 礼物列表
@@ -154,7 +150,7 @@ public class GiftController {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         Long userId = userTaskDO.getUserId();
         Integer type = userTaskDO.getType();
-        UserTaskDO userTaskDO1=userTaskService.getCurrentTaskN(userId,type);
+        UserTaskDO userTaskDO1=userTaskService.getCurrentTaskN(userId,2);
         if(userTaskDO1==null){//新增任务
             userTaskDO.setCreateTime(new Date());
             Calendar calendar = Calendar.getInstance();
@@ -164,7 +160,7 @@ public class GiftController {
             calendar.set(Calendar.MINUTE,0);
             calendar.set(Calendar.SECOND,0);
             userTaskDO.setStartTime(calendar.getTime());
-            userTaskDO.setPcorapp("APP");
+            userTaskDO.setTaskType(2);
             Map<String,Object> map =  getLastTaskResult(userId);
             UserTaskLinshiDO userTaskLinshiDO = (UserTaskLinshiDO)map.get("data");
             if(userTaskLinshiDO!=null) {
@@ -212,8 +208,6 @@ public class GiftController {
             List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.getNearData(userId,date);
             List<UseJianhuyiLogDO> sublist = useJianhuyiLogDOS.stream().filter(a->a.getStatus()!=null && a.getStatus()==1).collect(Collectors.toList());
             Double outdoorsDuration = 0.0;//户外时间累计版本
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
             Map<String,Double> map = ResultUtils.countData(userId,sublist,sdf.format(date));
             outdoorsDuration=useJianhuyiLogDOS.stream()
                     .filter(a->a.getStatus()!=null && a.getStatus()==2)
@@ -420,7 +414,7 @@ public class GiftController {
         Date endDate = calendar.getTime();
         if(endDate.compareTo(new Date())>0)
             endDate=new Date();
-        while(startDate.compareTo(endDate)<=0){
+        while(startDate.compareTo(endDate)<0){
             UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
             userTaskLinshiDO.setDay(simpleDateFormat.format(startDate));
             map.put(simpleDateFormat.format(startDate),userTaskLinshiDO);
@@ -498,52 +492,58 @@ public class GiftController {
      * 老师任务下发给班级
      */
     @ResponseBody
-    @GetMapping("/customTaskPc")
-    public String customTask(@RequestParam("callback") String callback,UserTaskDO userTaskDO) {
-        List<String> idstrinss = JSONArray.parseArray(userTaskDO.getIdCards(), String.class)
-                .stream().distinct().collect(Collectors.toList());
-        for (String idCard : idstrinss) {
-            OwnerUserDO userDO=null;
-            UserTaskDO userTaskDO1=null;
-            List<OwnerUserDO> list = userService.getUserByIdCard(idCard.trim());
-            if(list.size()==0){
-                userDO = new OwnerUserDO();
-                userDO.setIdentityCard(idCard.trim());
-                userService.save(userDO);
-            }else{
-                userDO=list.get(0);
-                userTaskDO1=userTaskService.getCurrentTaskN(userDO.getId(),1);//1= PC端老师 或App端医生下达的任务
+    @PostMapping("/customTaskPc")
+    public R customTask(UserTaskDO userTaskDO, String idCardsInfo) {
+        UserTaskDO userTaskDO1 = userTaskService.getCurrentTaskNT(userTaskDO.getPcorapp(), 1);//1= PC端老师批量任务
+        if(userTaskDO1!=null) {
+            System.out.println(userTaskDO.getPcorapp() + "=======================");
+            return R.ok("当前有任务正在进行中...");
+        }
+        JSONArray jsonArray = JSONArray.parseArray(idCardsInfo);
+        if(jsonArray.size()==0)
+            return R.ok("学生信息为空");
+        Date date = new Date();
+        for(int i=0;i<jsonArray.size();i++) {
+            OwnerUserDO ownerUserDO = null;
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            ownerUserDO = jsonObject.toJavaObject(OwnerUserDO.class);
+            String identityCard = ownerUserDO.getIdentityCard();
+            String grade = ownerUserDO.getGrade()+ownerUserDO.getStudentClass();
+            String name = ownerUserDO.getStudentName();
+            List<OwnerUserDO> list = userService.getUserByIdCardAndSchoolAndGrade(identityCard,name,grade);
+            if (list.size() == 0) {
+                ownerUserDO.setName(name);
+                ownerUserDO.setGrade(grade);
+                userService.save(ownerUserDO);
+            } else {
+                ownerUserDO = list.get(0);
             }
-            if(userTaskDO1==null){
-                userTaskDO.setUserId(userDO.getId());
-                userTaskDO.setType(1);
-                userTaskDO.setCreateTime(new Date());
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(userTaskDO.getCreateTime());
-                calendar.add(Calendar.DAY_OF_YEAR,1);
-                calendar.set(Calendar.HOUR_OF_DAY,0);
-                calendar.set(Calendar.MINUTE,0);
-                calendar.set(Calendar.SECOND,0);
-                userTaskDO.setStartTime(calendar.getTime());//任务的开始时间 为下达 任务的第二天0点
-                userTaskDO.setPcorapp("PC");
-                userTaskDO.setAvgOutScore(countScore(userTaskDO.getAvgOut()));
-                userTaskDO.setAvgLightScore(countScore(userTaskDO.getAvgLight()));
-                userTaskDO.setAvgLookPhoneScore(countScore(userTaskDO.getAvgLookPhone()));
-                userTaskDO.setAvgLookScore(countScore(userTaskDO.getAvgLookTv()) );
-                userTaskDO.setAvgSitTiltScore(countScore(userTaskDO.getAvgSitTilt()));
-                userTaskDO.setAvgReadDistanceScore(countScore(userTaskDO.getAvgReadDistance()));
-                userTaskDO.setAvgReadScore(countScore(userTaskDO.getAvgRead()));
-                userTaskDO.setEffectiveUseTimeScore(countScore(userTaskDO.getEffectiveUseTime()));
-                int result = userTaskService.save(userTaskDO);
-                if(result>0) {
-                    userDO.setTaskIds(userTaskDO.getId());
-                    userService.update(userDO);
-                }
+            userTaskDO.setUserId(ownerUserDO.getId());
+            userTaskDO.setType(2);//老师下达的任务（批量）
+            userTaskDO.setTaskType(1);//批量任务
+            userTaskDO.setCreateTime(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(userTaskDO.getCreateTime());
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            userTaskDO.setStartTime(calendar.getTime());//任务的开始时间 为下达 任务的第二天0点
+            userTaskDO.setAvgOutScore(countScore(userTaskDO.getAvgOut()));
+            userTaskDO.setAvgLightScore(countScore(userTaskDO.getAvgLight()));
+            userTaskDO.setAvgLookPhoneScore(countScore(userTaskDO.getAvgLookPhone()));
+            userTaskDO.setAvgLookScore(countScore(userTaskDO.getAvgLookTv()));
+            userTaskDO.setAvgSitTiltScore(countScore(userTaskDO.getAvgSitTilt()));
+            userTaskDO.setAvgReadDistanceScore(countScore(userTaskDO.getAvgReadDistance()));
+            userTaskDO.setAvgReadScore(countScore(userTaskDO.getAvgRead()));
+            userTaskDO.setEffectiveUseTimeScore(countScore(userTaskDO.getEffectiveUseTime()));
+            int result = userTaskService.save(userTaskDO);
+            if (result > 0) {
+                ownerUserDO.setTaskIds(userTaskDO.getId());
+                userService.update(ownerUserDO);
             }
         }
-
-            return callback+"("+JSONObject.toJSONString(R.ok())+")";
-
+        return R.ok("成功下达任务");
     }
 
     /**
@@ -577,22 +577,27 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/addTaskPcByJz")
-    public String addTaskPcByJz(@RequestParam("callback") String callback,String idCard,UserTaskDO userTaskDO) {
+    public String addTaskPcByJz(@RequestParam("callback") String callback,String idCard,String name,UserTaskDO userTaskDO) {
         OwnerUserDO userDO = null;
         UserTaskDO userTaskDO1 = null;
-        List<OwnerUserDO> list = userService.getUserByIdCard(idCard.trim());
+        List<OwnerUserDO> list = userService.getUserByIdCardAndSchoolAndGrade(idCard,name,null);
         if (list.size() == 0) {
             userDO = new OwnerUserDO();
-            userDO.setIdentityCard(idCard.trim());
+            userDO.setIdentityCard(idCard);
+            userDO.setName(name);
             userService.save(userDO);
         } else {
             userDO = list.get(0);
-            userTaskDO1 = userTaskService.getCurrentTaskN(userDO.getId(), 0);//1= PC端老师 或App端医生下达的任务
+            userTaskDO1 = userTaskService.getCurrentTaskN(userDO.getId(), 2);
+        }
+        if(userTaskDO1!=null){
+            return callback + "(" + JSONObject.toJSONString(R.ok("当前任务进行中...")) + ")";
         }
 
-        if (userTaskDO1 == null) {
+        else if (userTaskDO1 == null) {
             userTaskDO.setUserId(userDO.getId());
-            userTaskDO.setType(0);
+            userTaskDO.setType(0);//家长下发的任务
+            userTaskDO.setTaskType(2);//个人任务
             userTaskDO.setCreateTime(new Date());
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(userTaskDO.getCreateTime());
@@ -601,7 +606,6 @@ public class GiftController {
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
             userTaskDO.setStartTime(calendar.getTime());//任务的开始时间 为下达 任务的第二天0点
-            userTaskDO.setPcorapp("PC");
             userTaskDO.setAvgOutScore(countScore(userTaskDO.getAvgOut()));
             userTaskDO.setAvgLightScore(countScore(userTaskDO.getAvgLight()));
             userTaskDO.setAvgLookPhoneScore(countScore(userTaskDO.getAvgLookPhone()));
@@ -616,8 +620,124 @@ public class GiftController {
                 userService.update(userDO);
             }
         }
-        return callback + "(" + JSONObject.toJSONString(R.ok()) + ")";
+        return callback + "(" + JSONObject.toJSONString(R.ok("任务下达成功")) + ")";
 
+    }
+
+    /**
+     *  PC端查看任务记录
+     * @param pcorapp
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getBatchRenwu")
+    public Map<String,Object> getBatchRenwu(String pcorapp){
+        List<UserTaskDO> list = userTaskService.getBatchRenwu(pcorapp);
+        Map<String,Object> map = new HashMap<>();
+        if(list.size()>0) {
+            list = list.stream().map(userTaskDO -> {
+                Calendar calendar = Calendar.getInstance();
+                Date startDate = userTaskDO.getStartTime();
+                calendar.setTime(startDate);
+                calendar.add(Calendar.DAY_OF_YEAR, userTaskDO.getTaskTime());
+                Date endDate = calendar.getTime();
+                calendar.add(Calendar.HOUR, 20);
+                if (calendar.getTime().compareTo(new Date()) >= 0) {//任务尚未完成
+                    userTaskDO.setFinishStatus("2");
+                } else {
+                    userTaskDO.setFinishStatus("1");
+                }
+                userTaskDO.setSstime(simpleDateFormat.format(startDate)+" - "+simpleDateFormat.format(endDate));
+                return userTaskDO;
+            }).collect(Collectors.toList());
+            map.put("code",0);
+            map.put("data",list);
+        }else{
+            map.put("code",-1);
+            map.put("data",null);
+        }
+        return map;
+    }
+
+    /**
+     *  PC端查看所有人的任务完成情况
+     * @return
+     */
+
+    @ResponseBody
+    @GetMapping("/getRenwuDetail")
+    public Map<String,Object> getRenwuDetail(String pcorapp,Date startTime,Integer taskTime){
+        List<UserTaskDO> userTaskDOS = userTaskService.getRenwuDetail(pcorapp,startTime,taskTime);
+        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+        Calendar calendar  = Calendar.getInstance();
+        calendar.setTime(startTime);
+        calendar.add(Calendar.DAY_OF_YEAR,taskTime);
+        Date endDate = calendar.getTime();
+        for(UserTaskDO u:userTaskDOS){
+            Long taskId = u.getId();
+            Long userId = u.getUserId();
+            Map<String, Object> subMap = new HashMap<>();
+            subMap.put("userDO", userService.get(userId));
+            subMap.put("data",fillMapDays2(startTime,endDate, userTaskLinshiService.getTotalScore(taskId)));
+
+            list.add(subMap);
+        }
+
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("code",0);
+        resultMap.put("data",list);
+        resultMap.put("length",taskTime);
+        resultMap.put("time",simpleDateFormat.format(startTime)+"——"+simpleDateFormat.format(endDate));
+        System.out.println(resultMap);
+        return resultMap;
+    }
+    public List<UserTaskLinshiDO> fillMapDays2(Date startTime,Date endDate,List<UserTaskLinshiDO> userTaskLinshiDOS){
+        List<UserTaskLinshiDO> list = new ArrayList<>();
+        Calendar calendar  = Calendar.getInstance();
+        while(startTime.compareTo(endDate)<0){
+            boolean flag=false;
+            for(UserTaskLinshiDO userTaskLinshiDO :userTaskLinshiDOS){
+                if(sdf.format(startTime).equals(sdf.format(userTaskLinshiDO.getCreateTime()))){
+                    list.add(userTaskLinshiDO);
+                    flag=true;
+                    break;
+                }
+            }
+
+            if(!flag){
+                UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
+                userTaskLinshiDO.setIffinish(1);
+                list.add(userTaskLinshiDO);
+            }
+            calendar.setTime(startTime);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            startTime=calendar.getTime();
+        }
+
+        return list;
+    }
+
+    /**
+     * PC端查看具体某个人的完成情况
+     * @param taskIds
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/getMainData")
+    public Map<String,Object> getMainData(Long taskIds,String name,String time){
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        List<UserTaskLinshiDO> userTaskLinshiDOS = userTaskLinshiService.getTotalScore(taskIds);
+        userTaskLinshiDOS=userTaskLinshiDOS.stream().map(userTaskLinshiDO -> {
+            userTaskLinshiDO.setDay(simpleDateFormat.format(userTaskLinshiDO.getCreateTime()));
+            return userTaskLinshiDO;
+        }).collect(Collectors.toList());
+       Map<String,Object> map = new HashMap<>();
+       map.put("name",name);
+       map.put("time",time);
+       map.put("userTaskLinshiDOS",userTaskLinshiDOS);
+       resultMap.put("data",map);
+       resultMap.put("code",0);
+        return resultMap;
     }
 
     /**

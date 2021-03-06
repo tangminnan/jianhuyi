@@ -4,7 +4,7 @@
 <mapper namespace="com.jianhuyi.owneruser.dao.OwnerUserDao">
 
     <select id="get" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
-		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday` from t_user where id = #{value}	
+		select `id`,`user_id`,task_ids,task_id,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday` from t_user where id = #{value}
 	</select>
 
     <select id="getbyname" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
@@ -69,6 +69,12 @@
 
     <select id="getMyScore" resultType="int">
         select scores from t_user where  id=#{userId}
+    </select>
+    
+    <select id="getUserByIdCardAndSchoolAndGrade" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
+        select * from t_user where identity_card = #{identityCard}
+        and name=#{name}
+        <if test="grade != null and grade != ''">and grade = #{grade}</if>
     </select>
 
     <!--==========================================end=======================================================-->
@@ -154,7 +160,9 @@
 			`password`, 
 			`phone`, 
 			`heard_url`, 
-			`name`, 
+			`name`,
+		     school,
+		     grade,
 			`identity_card`, 
 			`register_time`, 
 			`pay_num`, 
@@ -181,7 +189,9 @@
 			#{password}, 
 			#{phone}, 
 			#{heardUrl}, 
-			#{name}, 
+			#{name},
+			#{school},
+		    #{grade},
 			#{identityCard}, 
 			#{registerTime}, 
 			#{payNum}, 

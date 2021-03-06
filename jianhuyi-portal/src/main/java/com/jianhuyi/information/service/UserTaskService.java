@@ -3,6 +3,7 @@ package com.jianhuyi.information.service;
 
 import com.jianhuyi.information.domain.UserTaskDO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,5 +34,11 @@ public interface UserTaskService {
 
     UserTaskDO getCurrentTask(Long userId,Integer type);
 
-    UserTaskDO getCurrentTaskN(Long userId,Integer type);
+    UserTaskDO getCurrentTaskN(Long userId,Integer taskType);
+
+    UserTaskDO getCurrentTaskNT(String pcorapp,Integer  taskType);
+
+    List<UserTaskDO> getBatchRenwu(String pcorapp);
+
+    List<UserTaskDO> getRenwuDetail(String pcorapp, Date startTime, Integer taskTime);
 }

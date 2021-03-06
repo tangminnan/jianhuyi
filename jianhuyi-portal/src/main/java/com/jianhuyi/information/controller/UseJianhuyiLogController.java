@@ -356,13 +356,6 @@ public class UseJianhuyiLogController {
         totalScore+=userTaskLinshiDO.getScore();
         useJianhuyiDuration+=Double.parseDouble(userTaskLinshiDO.getHourtime());
       }
-
-      System.out.println(userTaskDO.getId() + "=============" + totalScore);
-      System.out.println(userTaskDO.getId() + "=============" + totalScore);
-      System.out.println(userTaskDO.getId() + "=============" + totalScore);
-      System.out.println(userTaskDO.getId() + "=============" + useJianhuyiDuration);
-      System.out.println(userTaskDO.getId() + "=============" + useJianhuyiDuration);
-      System.out.println(userTaskDO.getId() + "=============" + useJianhuyiDuration);
       userTaskDO.setTotalScore(totalScore); // 总积分
       userTaskDO.setTotaluser(useJianhuyiDuration);//监护仪使用时长
       userTaskDO.setAvgReadResult(ResultUtils.resultAvgReadDuration(avgReadDuration));

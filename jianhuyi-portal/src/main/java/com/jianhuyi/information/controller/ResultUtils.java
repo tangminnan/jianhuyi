@@ -499,16 +499,37 @@ public class ResultUtils {
     }
 
     /**
+     * 判断当天的任务是否已经完成
+     * @param userTaskDO
+     * @param userTaskLinshiDO
+     * @return 0 已完成  1 = 未完成
+     */
+    public static Integer checkTaskIfFinished(UserTaskDO userTaskDO, UserTaskLinshiDO userTaskLinshiDO){
+        System.out.println("判断当天的任务是否已经完成");
+        if(     StrC(userTaskDO.getAvgRead(), userTaskLinshiDO.getAvgRead()) == 1 &&
+                StrC(userTaskDO.getAvgLookPhone(), userTaskLinshiDO.getAvgLookPhone()) == 1 &&
+                StrC(userTaskDO.getAvgLookTv(), userTaskLinshiDO.getAvgLookTv()) == 1 &&
+                StrC(userTaskDO.getAvgLight(), userTaskLinshiDO.getAvgLight()) == 1 &&
+                StrC(userTaskDO.getAvgOut(), userTaskLinshiDO.getAvgOut()) == 1 &&
+                StrC(userTaskDO.getAvgReadDistance(), userTaskLinshiDO.getAvgReadDistance()) == 1 &&
+                StrC(userTaskDO.getAvgSitTilt(), userTaskLinshiDO.getAvgSitTilt()) == 1 &&
+                StrC(userTaskDO.getEffectiveUseTime(), userTaskLinshiDO.getEffectiveUseTime()) == 1
+                )
+            return 0;
+        else
+            return 1;
+    }
+
+    /**
      * 计算每日的积分
      * @param userTaskDO
      * @param userTaskLinshiDO
      * @return
      */
     public static int countScore(UserTaskDO userTaskDO, UserTaskLinshiDO userTaskLinshiDO) {
-        System.out.println(userTaskDO);
-        System.out.println(userTaskLinshiDO);
-        if("APP".equals(userTaskDO.getPcorapp()) || StringUtils.isBlank(userTaskDO.getPcorapp())) {
-            System.out.println("来自于APP的数据");
+        userTaskLinshiDO.setIffinish(checkTaskIfFinished(userTaskDO,userTaskLinshiDO));
+        if(userTaskDO.getTaskType()==null || userTaskDO.getTaskType()==2) {
+            System.out.println("统计个人任务的分值");
             Integer score1 = StrC(userTaskDO.getAvgRead(), userTaskLinshiDO.getAvgRead()) == 1 ?
                     (userTaskDO.getAvgReadScore() == null ? 0 : userTaskDO.getAvgReadScore()) : 0;
             Integer score2 = StrC(userTaskDO.getAvgLookPhone(), userTaskLinshiDO.getAvgLookPhone()) == 1 ?
@@ -528,30 +549,21 @@ public class ResultUtils {
 
             return score1 + score2 + score3 + score4 + score5 + score6 + score7 + score8;
         }
-        if("PC".equals(userTaskDO.getPcorapp())){
-            System.out.println("来自于PC的数据");
-
-            if(     StrC(userTaskDO.getAvgRead(), userTaskLinshiDO.getAvgRead()) == 1 &&
-                    StrC(userTaskDO.getAvgLookPhone(), userTaskLinshiDO.getAvgLookPhone()) == 1 &&
-                    StrC(userTaskDO.getAvgLookTv(), userTaskLinshiDO.getAvgLookTv()) == 1 &&
-                    StrC(userTaskDO.getAvgLight(), userTaskLinshiDO.getAvgLight()) == 1 &&
-                    StrC(userTaskDO.getAvgOut(), userTaskLinshiDO.getAvgOut()) == 1 &&
-                    StrC(userTaskDO.getAvgReadDistance(), userTaskLinshiDO.getAvgReadDistance()) == 1 &&
-                    StrC(userTaskDO.getAvgSitTilt(), userTaskLinshiDO.getAvgSitTilt()) == 1 &&
-                    StrC(userTaskDO.getEffectiveUseTime(), userTaskLinshiDO.getEffectiveUseTime()) == 1
-                    )
-
-
-            return  (userTaskDO.getAvgReadScore() == null ? 0 : userTaskDO.getAvgReadScore())  +
-                    (userTaskDO.getAvgLookPhoneScore() == null ? 0 : userTaskDO.getAvgLookPhoneScore())+
-                    (userTaskDO.getAvgLookScore() == null ? 0 : userTaskDO.getAvgLookScore()) +
-                    (userTaskDO.getAvgLightScore() == null ? 0 : userTaskDO.getAvgLightScore())+
-                    (userTaskDO.getAvgOutScore() == null ? 0 : userTaskDO.getAvgOutScore()) +
-                    (userTaskDO.getAvgReadDistanceScore() == null ? 0 : userTaskDO.getAvgReadDistanceScore())+
-                    (userTaskDO.getAvgSitTiltScore() == null ? 0 : userTaskDO.getAvgSitTiltScore())+
-                    (userTaskDO.getEffectiveUseTimeScore() == null ? 0 : userTaskDO.getEffectiveUseTimeScore());
+        if(userTaskDO.getTaskType()==1){
+            System.out.println("统计批量任务的分值");
+            if(userTaskLinshiDO.getIffinish()==0) {
+                return (userTaskDO.getAvgReadScore() == null ? 0 : userTaskDO.getAvgReadScore()) +
+                        (userTaskDO.getAvgLookPhoneScore() == null ? 0 : userTaskDO.getAvgLookPhoneScore()) +
+                        (userTaskDO.getAvgLookScore() == null ? 0 : userTaskDO.getAvgLookScore()) +
+                        (userTaskDO.getAvgLightScore() == null ? 0 : userTaskDO.getAvgLightScore()) +
+                        (userTaskDO.getAvgOutScore() == null ? 0 : userTaskDO.getAvgOutScore()) +
+                        (userTaskDO.getAvgReadDistanceScore() == null ? 0 : userTaskDO.getAvgReadDistanceScore()) +
+                        (userTaskDO.getAvgSitTiltScore() == null ? 0 : userTaskDO.getAvgSitTiltScore()) +
+                        (userTaskDO.getEffectiveUseTimeScore() == null ? 0 : userTaskDO.getEffectiveUseTimeScore());
+            }
             else
                 return 0;
+
 
         }
         return 0;
@@ -655,13 +667,6 @@ public class ResultUtils {
                                 - (long) (useJianhuyiLogDO.getReadDuration() * 60 * 1000))
                                 / 1000
                                 / 60;
-//                System.out.println("===========================================");
-//                System.out.println("第 "+(i+1) +" 与第 "+i+" 次比较  "+(minute));
-//                System.out.println(sdf1.parse(useJianhuyiLogDO1.getSaveTime()));
-//                System.out.println(sdf1.parse(useJianhuyiLogDO.getSaveTime()));
-//                System.out.println("===========================================");
-
-
                 if (minute >= 3) {
                     if (useJianhuyiLogDO.getLookPhoneDuration() != null
                             ) lookPhoneCount++; // 看手机次数

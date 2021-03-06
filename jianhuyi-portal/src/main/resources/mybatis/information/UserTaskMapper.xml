@@ -369,13 +369,49 @@ WHERE
         t_user_task
         WHERE
         user_id = #{userId}
-        and type = #{type}
+        and task_type = #{taskType}
         ) rtask
         WHERE
         sdate &gt; now()
         ORDER BY
         sdate DESC
         LIMIT 1
+    </select>
+    
+    <select id="getCurrentTaskNT" resultType="com.jianhuyi.information.domain.UserTaskDO">
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        DISTINCT
+        task_time,
+        start_time,
+        date_add(
+        start_time,
+        INTERVAL task_time DAY
+        ) sdate
+        FROM
+        t_user_task
+        WHERE
+        pcorapp = #{pcorapp}
+        and task_type = #{taskType}
+        ) rtask
+        WHERE
+        sdate &gt; now()
+        ORDER BY
+        sdate DESC
+        LIMIT 1
+    </select>
+    
+    <select id="getBatchRenwu" resultType="com.jianhuyi.information.domain.UserTaskDO">
+        select DISTINCT pcorapp,task_time,task_type,start_time from  t_user_task where   pcorapp =#{pcorapp}
+        and task_type =  1
+    </select>
+    
+    <select id="getRenwuDetail" resultType="com.jianhuyi.information.domain.UserTaskDO">
+        select id,user_id from  t_user_task where   pcorapp =#{pcorapp}
+                and task_type =  1 and start_time=#{startTime} and task_time=#{taskTime}
     </select>
 
 </mapper>

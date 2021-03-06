@@ -3,9 +3,11 @@ package com.jianhuyi.information.service.impl;
 import com.jianhuyi.information.dao.UserTaskDao;
 import com.jianhuyi.information.domain.UserTaskDO;
 import com.jianhuyi.information.service.UserTaskService;
+import org.activiti.bpmn.model.UserTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -66,8 +68,23 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
-    public UserTaskDO getCurrentTaskN(Long userId,Integer type) {
-        return userTaskDao.getCurrentTaskN(userId,type);
+    public UserTaskDO getCurrentTaskN(Long userId,Integer taskType) {
+        return userTaskDao.getCurrentTaskN(userId,taskType);
+    }
+
+    @Override
+    public UserTaskDO getCurrentTaskNT(String pcorapp, Integer  taskType) {
+        return userTaskDao.getCurrentTaskNT(pcorapp,taskType);
+    }
+
+    @Override
+    public List<UserTaskDO> getBatchRenwu(String pcorapp) {
+        return userTaskDao.getBatchRenwu(pcorapp);
+    }
+
+    @Override
+    public List<UserTaskDO> getRenwuDetail(String pcorapp, Date startTime, Integer taskTime) {
+        return userTaskDao.getRenwuDetail(pcorapp,startTime,taskTime);
     }
 
 }
