@@ -5,6 +5,7 @@ import com.jianhuyi.information.domain.UseTimeDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,5 +37,5 @@ public interface UseTimeDao {
 
   Map getSNCount(@Param("userId") Long userId, @Param("time") String time);
 
-  List<UseTimeDO> getTodayData(@Param("userId") Long userId, @Param("time") String time);
+  LinkedList<UseTimeDO> getTodayData(@Param("userId") Long userId, @Param("time") String time);
 }

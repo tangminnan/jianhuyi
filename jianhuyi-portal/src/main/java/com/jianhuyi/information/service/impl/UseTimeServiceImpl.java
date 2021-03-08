@@ -7,6 +7,7 @@ import com.jianhuyi.information.service.UseTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class UseTimeServiceImpl implements UseTimeService {
   }
 
   @Override
-  public List<UseTimeDO> getTodayData(Long userId, String time) {
+  public LinkedList<UseTimeDO> getTodayData(Long userId, String time) {
     return useTimeDao.getTodayData(userId, time);
   }
 }

@@ -15,19 +15,21 @@ import java.util.Map;
 @Mapper
 public interface DataDao {
 
-    DataDO get(Long id);
+  DataDO get(Long id);
 
-    List<DataDO> list(Map<String, Object> map);
+  List<DataDO> list(Map<String, Object> map);
 
-    int count(Map<String, Object> map);
+  int count(Map<String, Object> map);
 
-    int save(DataDO data);
+  int save(DataDO data);
 
-    int update(DataDO data);
+  int update(DataDO data);
 
-    int remove(Long id);
+  int remove(Long id);
 
-    int batchRemove(Long[] ids);
+  int batchRemove(Long[] ids);
 
-    int saveList(@Param("dataDOList") List<DataDO> dataDOList);
+  int saveList(@Param("dataDOList") List<DataDO> dataDOList);
+
+  List<DataDO> getList(@Param("userId") Long userId, @Param("startTime") String time);
 }

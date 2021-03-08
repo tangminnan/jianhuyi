@@ -3,6 +3,7 @@ package com.jianhuyi.information.service;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
 import com.jianhuyi.information.domain.UseTimeDO;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public interface UseTimeService {
 
   UseJianhuyiLogDO getTodayUse(Long userId);
 
-  List<UseTimeDO> getTodayData(Long userId, String time);
+  LinkedList<UseTimeDO> getTodayData(Long userId, String time);
 
   Map getSNCount(Long userId, String time);
 }

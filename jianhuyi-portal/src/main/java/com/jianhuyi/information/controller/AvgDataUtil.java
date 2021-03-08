@@ -2,14 +2,8 @@ package com.jianhuyi.information.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.jianhuyi.information.domain.DataEverydayDO;
-import com.jianhuyi.information.domain.SaveParamsDO;
-import com.jianhuyi.information.domain.UseJianhuyiLogDO;
-import com.jianhuyi.information.domain.UseTimeDO;
-import com.jianhuyi.information.service.DataEverydayService;
-import com.jianhuyi.information.service.UseJianhuyiLogService;
-import com.jianhuyi.information.service.UseRemindsService;
-import com.jianhuyi.information.service.UseTimeService;
+import com.jianhuyi.information.domain.*;
+import com.jianhuyi.information.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -31,12 +25,14 @@ public class AvgDataUtil {
   @Autowired private static UseJianhuyiLogService useJianhuyiLogService;
   @Autowired private static UseRemindsService useRemindsService;
   @Autowired private static DataEverydayService everydayService;
+  @Autowired private static DataService tdataService;
   static JSONObject jsonObject = null;
 
   @Autowired private UseJianhuyiLogService jianhuyiLogService;
   @Autowired private UseTimeService timeService;
   @Autowired private UseRemindsService remindsService;
   @Autowired private DataEverydayService dataEverydayService;
+  @Autowired private DataService dataService;
 
   @PostConstruct
   public void init() {
@@ -44,6 +40,7 @@ public class AvgDataUtil {
     useTimeService = timeService;
     useRemindsService = remindsService;
     everydayService = dataEverydayService;
+    tdataService = dataService;
   }
 
   // 某日统计数(t_use_jianhuyi_log)
@@ -80,14 +77,6 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setUserId(useJianhuyiLogDOList.get(0).getUserId());
       for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOList) {
         if (jianhuyiLogDO.getStatus() != null && jianhuyiLogDO.getStatus() == 1) {
-          // 平均阅读距离（cm）：阅读1状态下 15<=阅读距离<=60和 / 该条件下数据条数
-
-          if (jianhuyiLogDO.getReadDistance() != null
-              && jianhuyiLogDO.getReadDistance() >= 15
-              && jianhuyiLogDO.getReadDistance() <= 60) {
-            readDistance += jianhuyiLogDO.getReadDistance();
-            readDistanceCount++;
-          }
           // (1)筛选：0＜L≤412  and  15＜D≤60                 (2)调整：L = L * LOG(L , 4.3)
           if (jianhuyiLogDO.getReadLight() != null && jianhuyiLogDO.getReadDistance() != null) {
             if ((jianhuyiLogDO.getReadLight() > 0 && jianhuyiLogDO.getReadLight() <= 412)
@@ -165,12 +154,7 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setLookPhoneDuration(0.0);
       useJianhuyiLogDO.setLookTvComputerDuration(0.0);
     }
-    if (readDistanceCount > 0) {
-      useJianhuyiLogDO.setReadDistance(
-          Double.parseDouble(df.format(readDistance / readDistanceCount)));
-    } else {
-      useJianhuyiLogDO.setReadDistance(0.0);
-    }
+
     if (readLightCount > 0) {
       useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readLightCount)));
       useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / readLightCount)));
@@ -189,9 +173,14 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setOutdoorsDuration(0.0);
     }
 
+    // 计算距离
+    readDistance = selectDisList(userId, time);
+    System.out.println("=======平均距离===============" + readDistance);
+    useJianhuyiLogDO.setReadDistance(readDistance);
+
     // 获取有效无效等数据
     Map mappp = useTimeService.getSNCount(userId, time);
-    List<UseTimeDO> useTimeDOList = useTimeService.getTodayData(userId, time);
+    LinkedList<UseTimeDO> useTimeDOList = useTimeService.getTodayData(userId, time);
     Optional.ofNullable(mappp)
         .ifPresent(
             m -> {
@@ -235,12 +224,10 @@ public class AvgDataUtil {
           int j = 0;
           for (int i = 0; i < useTimeDOList.size(); i++) {
             // 判断0的位置
-
             UseTimeDO useTimeDO =
                 (UseTimeDO)
                     JSONObject.parseObject(
                         JSON.toJSONString(useTimeDOList.get(i)), UseTimeDO.class);
-
             // 序号为0
             if (useTimeDO != null && useTimeDO.getSerialNumber() != null) {
               if (useTimeDO.getSerialNumber().equals(0)) {
@@ -250,84 +237,61 @@ public class AvgDataUtil {
                   effectiveTime += useTimeDO.getEffectiveTime();
                   noneffectiveTime += useTimeDO.getNoneffectiveTime();
                   coverTime += useTimeDO.getCoverTime();
-
-                }
-                // 如果前边是0就累加，如果是第一个就不加
-                else {
-
-                  if (i > 0) {
+                } else {
+                  if (i > 0) { // 判断当前位置都是不是第一个，不是第一个就取上一个对比
                     UseTimeDO lastuseTimeDO =
                         (UseTimeDO)
                             JSONObject.parseObject(
                                 JSON.toJSONString(useTimeDOList.get(i - 1)), UseTimeDO.class);
                     if (lastuseTimeDO != null && lastuseTimeDO.getSerialNumber() != null) {
-                      if (!lastuseTimeDO.getSerialNumber().equals(0)) {
+                      if (lastuseTimeDO
+                          .getSerialNumber()
+                          .equals(0)) { // 判断上一个序号是否为0，如果是0就加上一条的值，否则就不加
                         runningTime += lastuseTimeDO.getRunningTime();
                         effectiveTime += lastuseTimeDO.getEffectiveTime();
                         noneffectiveTime += lastuseTimeDO.getNoneffectiveTime();
                         coverTime += lastuseTimeDO.getCoverTime();
-                      } else {
-                        runningTime += useTimeDO.getRunningTime();
-                        effectiveTime += useTimeDO.getEffectiveTime();
-                        noneffectiveTime += useTimeDO.getNoneffectiveTime();
-                        coverTime += useTimeDO.getCoverTime();
                       }
                     }
-                  } else {
-                    runningTime += useTimeDO.getRunningTime();
-                    effectiveTime += useTimeDO.getEffectiveTime();
-                    noneffectiveTime += useTimeDO.getNoneffectiveTime();
-                    coverTime += useTimeDO.getCoverTime();
                   }
                 }
               } else {
                 if (useTimeDO.getSerialNumber() > serialNumber) {
                   serialNumber = useTimeDO.getSerialNumber();
                   j = i;
+                } else {
+                  UseTimeDO useTimeDO11 =
+                      (UseTimeDO)
+                          JSONObject.parseObject(
+                              JSON.toJSONString(useTimeDOList.get(j)), UseTimeDO.class);
+                  runningTime += useTimeDO11.getRunningTime();
+                  effectiveTime += useTimeDO11.getEffectiveTime();
+                  noneffectiveTime += useTimeDO11.getNoneffectiveTime();
+                  coverTime += useTimeDO11.getCoverTime();
+                  j = 0;
+                  serialNumber = 0;
                 }
               }
             }
           }
-          UseTimeDO useTimeDO =
-              (UseTimeDO)
-                  JSONObject.parseObject(JSON.toJSONString(useTimeDOList.get(j)), UseTimeDO.class);
 
-          if (useTimeDO != null) {
-            if (useTimeDO.getEffectiveTime() != null) {
-              useJianhuyiLogDO.setEffectiveTime(
-                  Double.parseDouble(
-                      df.format((useTimeDO.getEffectiveTime() + effectiveTime) * 5 / 60 / 60)));
-            } else {
-              useJianhuyiLogDO.setEffectiveTime(0.0);
-            }
-            if (useTimeDO.getNoneffectiveTime() != null) {
-              useJianhuyiLogDO.setNoneffectiveTime(
-                  Double.parseDouble(
-                      df.format((useTimeDO.getNoneffectiveTime() + noneffectiveTime) * 5 / 60)));
-            } else {
-              useJianhuyiLogDO.setNoneffectiveTime(0.0);
-            }
-            if (useTimeDO.getRunningTime() != null) {
-              useJianhuyiLogDO.setRunningTime(
-                  Double.parseDouble(
-                      df.format((useTimeDO.getRunningTime() + runningTime) * 5 / 60)));
-            } else {
-              useJianhuyiLogDO.setRunningTime(0.0);
-            }
-
-            if (useTimeDO.getCoverTime() != null) {
-              useJianhuyiLogDO.setCoverTime(
-                  Double.parseDouble(df.format((useTimeDO.getCoverTime() + coverTime) * 5 / 60)));
-            } else {
-              useJianhuyiLogDO.setCoverTime(0.0);
-            }
-
-          } else {
-            useJianhuyiLogDO.setEffectiveTime(0.0);
-            useJianhuyiLogDO.setNoneffectiveTime(0.0);
-            useJianhuyiLogDO.setRunningTime(0.0);
-            useJianhuyiLogDO.setCoverTime(0.0);
+          if (j > 0) {
+            UseTimeDO useTimeDO11 =
+                (UseTimeDO)
+                    JSONObject.parseObject(
+                        JSON.toJSONString(useTimeDOList.get(j)), UseTimeDO.class);
+            runningTime += useTimeDO11.getRunningTime();
+            effectiveTime += useTimeDO11.getEffectiveTime();
+            noneffectiveTime += useTimeDO11.getNoneffectiveTime();
+            coverTime += useTimeDO11.getCoverTime();
           }
+          useJianhuyiLogDO.setEffectiveTime(
+              Double.parseDouble(df.format((effectiveTime) * 5 / 60 / 60)));
+          useJianhuyiLogDO.setNoneffectiveTime(
+              Double.parseDouble(df.format((noneffectiveTime) * 5 / 60)));
+          useJianhuyiLogDO.setRunningTime(
+              Double.parseDouble(df.format((runningTime) * 5 / 60 / 60)));
+          useJianhuyiLogDO.setCoverTime(Double.parseDouble(df.format((coverTime) * 5 / 60)));
 
         }
         // 没有为0的序号，取最大值
@@ -352,7 +316,7 @@ public class AvgDataUtil {
             }
             if (useTimeDO.getRunningTime() != null) {
               useJianhuyiLogDO.setRunningTime(
-                  Double.parseDouble(df.format(useTimeDO.getRunningTime() * 5 / 60)));
+                  Double.parseDouble(df.format(useTimeDO.getRunningTime() * 5 / 60 / 60)));
             } else {
               useJianhuyiLogDO.setRunningTime(0.0);
             }
@@ -380,14 +344,13 @@ public class AvgDataUtil {
   public static void addOrUpdateData(SaveParamsDO saveParamsDOList) {
     System.out.println("===========开始添加或更新数据=============");
     List<DataEverydayDO> everydayDOListadd = new ArrayList<>();
-    List<DataEverydayDO> everydayDOListupdate = new ArrayList<>();
     List<String> datess = new ArrayList<>();
     List<UseJianhuyiLogDO> useJianhuyiLogDOList = saveParamsDOList.getUseJianhuyiLogDOList();
     for (int i = 0; i < useJianhuyiLogDOList.size(); i++) {
       if (i == 0) {
         datess.add(useJianhuyiLogDOList.get(i).getSaveTime().toString().substring(0, 10));
       } else {
-        if ((useJianhuyiLogDOList.get(i).getSaveTime().toString().substring(0, 10))
+        if (!(useJianhuyiLogDOList.get(i).getSaveTime().toString().substring(0, 10))
             .equals(useJianhuyiLogDOList.get(i - 1).getSaveTime().toString().substring(0, 10))) {
           datess.add(useJianhuyiLogDOList.get(i).getSaveTime().toString().substring(0, 10));
         }
@@ -396,7 +359,7 @@ public class AvgDataUtil {
     for (String date : datess) {
       Map<String, Object> params = new HashMap<>();
       params.put("userId", saveParamsDOList.getUserId());
-      params.put("equipmentId", saveParamsDOList.getEquipmentId());
+      // params.put("equipmentId", saveParamsDOList.getEquipmentId());
       params.put("useTime", date);
       List<DataEverydayDO> everydayDOList = everydayService.list(params);
 
@@ -430,7 +393,9 @@ public class AvgDataUtil {
       }
     }
 
-    int result = everydayService.saveList(everydayDOListadd);
+    if (everydayDOListadd.size() > 0) {
+      int result = everydayService.saveList(everydayDOListadd);
+    }
     System.out.println("保存完毕");
   }
 
@@ -468,7 +433,7 @@ public class AvgDataUtil {
 
       Map<String, Object> params = new HashMap<>();
       params.put("userId", useJianhuyiLogDO.getUserId());
-      params.put("equipmentId", useJianhuyiLogDO.getEquipmentId());
+      // params.put("equipmentId", useJianhuyiLogDO.getEquipmentId());
       params.put("useTime", useJianhuyiLogDO1.getSaveTime());
       List<DataEverydayDO> everydayDOList11 = everydayService.list(params);
 
@@ -480,8 +445,109 @@ public class AvgDataUtil {
       }
     }
     System.out.println("=============开始添加=============");
-    int result = everydayService.saveList(everydayDOList);
+    if (everydayDOList.size() > 0) {
+      int result = everydayService.saveList(everydayDOList);
+    }
+  }
 
-    System.out.println("result============" + result);
+  @GetMapping("/selectDisList")
+  @ResponseBody
+  public static Double selectDisList(Long userId, String time) {
+    Double distances = 0.0;
+    int distancesCount = 0;
+    List<DataDO> dataDOList = tdataService.getList(userId, time);
+    List<List<BaseDataDO>> data = new ArrayList<>();
+    List<BaseDataDO> olddata = new ArrayList<>();
+    List<BaseDataDO> allData = new ArrayList<>();
+    for (DataDO dataDO : dataDOList) {
+      String baseData = dataDO.getBaseData();
+      olddata = JSON.parseArray(baseData, BaseDataDO.class);
+      data.add(olddata);
+    }
+    for (List<BaseDataDO> datum : data) {
+      for (BaseDataDO baseDataDO : datum) {
+        allData.add(baseDataDO);
+      }
+    }
+
+    List<BaseDataDO> baseDataDOList = countDistance(allData);
+    for (BaseDataDO baseDataDO : baseDataDOList) {
+      if (baseDataDO.getDistances() >= 10 && baseDataDO.getDistances() <= 60) {
+        distances += baseDataDO.getDistances();
+        distancesCount++;
+      }
+    }
+    if (distancesCount > 0) {
+      return distances / distancesCount;
+    } else {
+      return 0.0;
+    }
+  }
+
+  // 调整数据范围
+  public static List<BaseDataDO> countDistance(List<BaseDataDO> dataDOList) {
+    List<BaseDataDO> newData = new ArrayList<>();
+    // 筛选距离范围 光强值L ＜2000； 距离 10≤D≤80；
+    for (BaseDataDO datum : dataDOList) {
+      if (datum.getLights() < 2000 && (datum.getDistances() >= 10 && datum.getDistances() <= 80)) {
+        newData.add(datum);
+      }
+    }
+    // 计算均值mean，标准差std
+    Double mean = 0.0;
+    Double dis = 0.0;
+    for (BaseDataDO newDatum : newData) {
+      dis += newDatum.getDistances();
+    }
+    if (newData.size() > 0) {
+      mean = dis / newData.size();
+    }
+    Double std = 0.0;
+    for (BaseDataDO newDatum : newData) {
+      std += (newDatum.getDistances() - mean) * (newDatum.getDistances() - mean);
+    }
+    std = Math.sqrt(std / newData.size());
+    // 计算远近中组
+    Double f1 = 1.433 * mean + 1.011 * std - 22.136; // 近组
+    Double f2 = 2.076 * mean + 1.54 * std - 46.346; // 中组
+    Double f3 = 2.829 * mean + 1.483 * std - 73.809; // 远组
+
+    // 调整距离原值
+    DecimalFormat df = new DecimalFormat("#.#");
+    if (f1 > f2 && f1 > f3) { // 近组
+      // (1)近组调整：  IF(D<=30） D = ROUND(D*LOG(D,6.5),1)    10-30的数据log(6.5) 放大, 1位小数
+      for (BaseDataDO newDatum : newData) {
+        if (newDatum.getDistances() <= 30) {
+          Double dd = newDatum.getDistances() * getLog(newDatum.getDistances(), 6.5);
+          newDatum.setDistances(Double.parseDouble(df.format(dd)));
+        }
+      }
+
+    } else if (f3 > f1 && f3 > f2) { // 远组
+      // (2)远组调整：  IF(D>=40） D = ROUND(25+0.875*(D-40),1)    40-80映射到25-60, 1位小数
+      for (BaseDataDO newDatum : newData) {
+        if (newDatum.getDistances() >= 40) {
+          Double dd = 25 + 0.875 * (newDatum.getDistances() - 40);
+          newDatum.setDistances(Double.parseDouble(df.format(dd)));
+        }
+      }
+    }
+
+    // 总体调整  IF(10≤D≤60)  D = 20+0.75*(D-20)       20-60映射到20-50，15-20部分相应调整
+    for (BaseDataDO newDatum : newData) {
+      if (newDatum.getDistances() >= 10 && newDatum.getDistances() <= 60) {
+        newDatum.setDistances(20 + 0.75 * (newDatum.getDistances() - 20));
+      }
+    }
+    return newData;
+  }
+
+  // 计算对数Log(logarithm,background)   对数，底数
+  public static Double getLog(Double logarithm, Double background) {
+    if (background != 0) {
+      return Math.log(logarithm) / Math.log(background);
+    } else {
+      return 0.0;
+    }
   }
 }

@@ -626,11 +626,11 @@
             substr(save_time, 1, 10) save_time
         FROM
             t_use_jianhuyi_log
-        WHERE save_time BETWEEN '2021-03-01' and '2021-03-05'
+
         GROUP BY
             substr(save_time, 1, 10),
             user_id
         ORDER BY
-            substr(save_time, 1, 10) DESC
+            substr(save_time, 1, 10)
     </select>
 </mapper>
