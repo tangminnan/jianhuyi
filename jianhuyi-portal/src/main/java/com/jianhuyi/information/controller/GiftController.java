@@ -757,7 +757,7 @@ public class GiftController {
             UserTaskDO userTaskDO = userTaskService.getCurrentTask(ownerUserDO.getId(), type);
             if (userTaskDO == null) {
                 resultMap.put("code", -1);
-                resultMap.put("msg", type == 1 ? "当前没有老师或医生下发的任务" : "当前没有家长下发的任务");
+                resultMap.put("msg", type == 2 ? "当前没有老师或医生下发的任务" : "当前没有家长下发的任务");
             } else {
                 long d = (new Date().getTime() - userTaskDO.getStartTime().getTime()) / 1000 / 60 / 60 / 24;
                 userTaskDO.setFinishDay(d);//已完成天数

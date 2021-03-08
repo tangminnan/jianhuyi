@@ -535,7 +535,6 @@ public class ResultUtils {
     int count = 0; // 阅读次数
     int avgReadLightCount = 0; // 光照强度次数
     int avgSitTiltCount = 0; // 角度次数
-    int avgReadDistanceCount = 0;
     for (int i = 0; i < useJianhuyiLogDOList.size(); i++) {
       if (i == 0) {
         lookPhoneCount++;
@@ -562,13 +561,6 @@ public class ResultUtils {
           && useJianhuyiLogDO.getReadDistance() <= 60) {
         avgSitTilt += useJianhuyiLogDO.getSitTilt();
         avgSitTiltCount++;
-      }
-      /** 阅读距离 */
-      if (useJianhuyiLogDO.getReadDistance() != null
-          && useJianhuyiLogDO.getReadDistance() > 15
-          && useJianhuyiLogDO.getReadDistance() <= 60) {
-        avgReadDistance += useJianhuyiLogDO.getReadDistance();
-        avgReadDistanceCount++;
       }
       /** 看手机时长 */
       if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
@@ -614,18 +606,10 @@ public class ResultUtils {
     if (avgSitTiltCount > 0) {
       avgSitTilt = Double.parseDouble(df.format(avgSitTilt / avgSitTiltCount));
     }
-    if (avgReadDistanceCount > 0) {
-      avgReadDistance = Double.parseDouble(df.format(avgReadDistance / avgReadDistanceCount));
-    }
 
     /** 获取有效使用时长 */
     Double effectiveTime = null;
     if (userId != null && time != null) {
-      System.out.println(useTimeService);
-      System.out.println(useTimeService);
-
-      System.out.println(useTimeService);
-
       Map mappp = useTimeService.getSNCount(userId, time);
       List<UseTimeDO> useTimeDOList = useTimeService.getTodayData(userId, time);
 
@@ -641,6 +625,13 @@ public class ResultUtils {
 
       effectiveTime = usetime.getEffectiveTime();
     }
+    /**
+     *  平均阅读距离
+     */
+
+     avgReadDistance = AvgDataUtil.selectDisList(userId, time);
+
+
     Map<String, Double> resultMap = new HashMap<>();
     resultMap.put("avgReadDuration", avgReadDuration);
     resultMap.put("avgLookPhoneDuration", avgLookPhoneDuration);
@@ -649,11 +640,6 @@ public class ResultUtils {
     resultMap.put("avgSitTilt", avgSitTilt);
     resultMap.put("avgReadDistance", avgReadDistance);
     resultMap.put("effectiveTime", effectiveTime);
-    System.out.println("=================================");
-    System.out.println(lookPhoneCount);
-    System.out.println(lookScreenCount);
-    System.out.println(count);
-    System.out.println("=================================");
 
     return resultMap;
   }
