@@ -153,4 +153,9 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 		return ownerUserMapper.getMyScore(userId);
 	}
 
+	@Override
+	public List<OwnerUserDO> getUserByIdCardAndSchoolAndGrade(String identityCard, String name, String grade) {
+		return ownerUserMapper.getUserByIdCardAndSchoolAndGrade(identityCard,name,grade);
+	}
+
 }

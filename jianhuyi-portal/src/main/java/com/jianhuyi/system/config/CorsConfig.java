@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -25,23 +27,14 @@ import java.util.regex.Pattern;
  * 跨域过滤拦截器
  */
 @Configuration
-public class CorsConfig {
-	@Bean
-	public CorsFilter remoteIpFilter() {
-		return new CorsFilter();
-	}
+public class CorsConfig  extends WebMvcConfigurerAdapter {
 
-	/**
-	 * 跨域过滤拦截器
-	 *//*
-	@Bean
-	public FilterRegistrationBean xssFilterRegistrationBean() {
-		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-		filterRegistrationBean.setFilter(new CorsFilter());
-		filterRegistrationBean.addUrlPatterns("/*");
-		Map<String, String> initParameters = Maps.newHashMap();
-		initParameters.put("excludes", "/favicon.ico,/img/*,/js/*,/css/*");
-		filterRegistrationBean.setInitParameters(initParameters);
-		return filterRegistrationBean;
-	}*/
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+				.allowedOrigins("*")
+				.allowCredentials(true)
+				.allowedMethods("GET", "POST", "DELETE", "PUT")
+				.maxAge(3600);
+	}
 }  

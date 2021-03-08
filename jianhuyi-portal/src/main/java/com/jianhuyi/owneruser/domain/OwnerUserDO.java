@@ -33,6 +33,8 @@ public class OwnerUserDO implements Serializable {
     private MultipartFile fileImg;
     //真实姓名
     private String name;
+    private String studentName;
+    private String studentClass;
     //身份证号
     private String identityCard;
     //注册时间
@@ -509,6 +511,22 @@ public class OwnerUserDO implements Serializable {
      */
     public Integer getSex() {
         return sex;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getStudentClass() {
+        return studentClass;
+    }
+
+    public void setStudentClass(String studentClass) {
+        this.studentClass = studentClass;
     }
 
     /**

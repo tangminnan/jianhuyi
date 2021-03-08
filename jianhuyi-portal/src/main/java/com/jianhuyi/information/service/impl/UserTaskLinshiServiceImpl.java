@@ -71,4 +71,6 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
         userTaskLinshiDao.updateScore(userTaskLinshiDO);
     }
 
+
+
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.jianhuyi.information.domain.UserDO;
+import org.activiti.bpmn.model.UserTask;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,4 +55,7 @@ public interface OwnerUserService {
 	void updateTaskIdInUser(UserDO userDO);
 
     Integer getMyScore(Long userId);
+
+    List<OwnerUserDO> getUserByIdCardAndSchoolAndGrade(String identityCard, String name, String grade);
+
 }

@@ -37,4 +37,6 @@ public interface UserTaskLinshiDao {
     void updateCurrentDay(UserTaskLinshiDO userTaskLinshiDO);
 
     void updateScore(UserTaskLinshiDO userTaskLinshiDO);
+
+
 }
