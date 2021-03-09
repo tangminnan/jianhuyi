@@ -208,7 +208,7 @@ function historyData(userId, saveTime) {
 }
 
 
-function treeDetail(index, row) {
+/*function treeDetail(index, row) {
    var alldate = {
       userId: row.userId,
       useTime: row.useTime
@@ -244,7 +244,7 @@ function treeDetail(index, row) {
       }
    })
    return '';
-}
+}*/
 
 function add() {
    layer.open({

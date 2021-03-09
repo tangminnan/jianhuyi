@@ -4,11 +4,11 @@
 <mapper namespace="com.jianhuyi.owneruser.dao.OwnerUserDao">
 
     <select id="get" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
-		select `id`,`user_id`,task_ids,task_id,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday` from t_user where id = #{value}
+		select `id`,`user_id`,task_ids,task_id,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,manager_id,bind_type from t_user where id = #{value}
 	</select>
 
     <select id="getbyname" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
-		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday` from t_user where username = #{value}
+		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,manager_id,bind_type from t_user where username = #{value}
 	</select>
 
     <select id="getUserByIdCard" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
@@ -16,11 +16,11 @@
 	</select>
 
     <select id="getbyunionid" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
-		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday` from t_user where unionid = #{unionid}
+		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,manager_id,bind_type from t_user where unionid = #{unionid}
 	</select>
 
     <select id="getbyopenid" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
-		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday` from t_user where open_id = #{openId}
+		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,manager_id,bind_type from t_user where open_id = #{openId}
 	</select>
 
     <!-- <select id="getopenId" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
@@ -34,7 +34,7 @@
     <select id="getUserByphone" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
 		select * from t_user where username = #{phone}
 	</select>
-<!--==============================================begin===================================================-->
+    <!--==============================================begin===================================================-->
     <select id="getStudent" resultType="com.jianhuyi.information.domain.UserDO">
       select id,name,sex,scores,birthday,age,school,grade from t_user where name like concat('%',#{name},'%')
     </select>
@@ -50,7 +50,7 @@
     <update id="updateScores" parameterType="com.jianhuyi.information.domain.UserDO">
         update t_user set scores=#{scores} where id=#{id}
     </update>
-    
+
     <update id="updateTaskIdInUser" parameterType="com.jianhuyi.information.domain.UserDO">
         update t_user
 
@@ -60,9 +60,7 @@
             <if test="taskId != null">`task_id` = #{taskId},</if>
             <if test="taskIds != null">`task_ids` = #{taskIds}</if>
         </set>
-        where  id = #{id}
-
-
+        where id = #{id}
 
 
     </update>
@@ -70,7 +68,7 @@
     <select id="getMyScore" resultType="int">
         select scores from t_user where  id=#{userId}
     </select>
-    
+
     <select id="getUserByIdCardAndSchoolAndGrade" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
         select * from t_user where identity_card = #{identityCard}
         and name=#{name}
@@ -81,7 +79,7 @@
 
     <select id="list" resultType="com.jianhuyi.owneruser.domain.OwnerUserDO">
         select
-        `id`,`user_id`,scores,`open_id`,`nickname`,`password`,`phone`,`unionid`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`age`,`school`,`grade`,student_num,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`
+        `id`,`user_id`,scores,`open_id`,`nickname`,`password`,`phone`,`unionid`,`heard_url`,`name`,`identity_card`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`age`,`school`,`grade`,student_num,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`,manager_id,bind_type
         from t_user
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>
@@ -106,6 +104,9 @@
             <if test="username != null and username != ''">and username = #{username}</if>
             <if test="sex != null and sex != ''">and sex = #{sex}</if>
             <if test="birthday != null and birthday != ''">and birthday = #{birthday}</if>
+
+            <if test="bindType != null and bindType != ''">and bind_type = #{bindType}</if>
+            <if test="managerId != null and managerId != ''">and manager_id = #{managerId}</if>
             and delete_flag = 1
         </where>
         <choose>

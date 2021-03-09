@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">管理员ID：</label>
+                            <div class="col-sm-8">
+                                <!-- <input id="forIds" name="forIds" class="form-control" type="text"> -->
+                                <select name="managerId" id="managerId" class="selectpicker  form-control"
+                                        data-live-search="true">
+                                    <option value="">请选择</option>
+                                    <option th:each="manager:${managerList}" th:value="${manager.id}"
+                                            th:text="'id:'+${manager.id}+'&nbsp&nbsp姓名:'+${manager.name}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用户ID：</label>
+                            <div class="col-sm-8">
+                                <select name="ids" id="userIds" class="selectpicker show-tick form-control" multiple
+                                        data-live-search="true">
+                                    <option th:each="user:${userDOList}" th:value="${user.id}"
+                                            th:text="'id:'+${user.id}+'&nbsp&nbsp姓名:'+${user.name}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <button onclick="daoru()" class="btn btn-primary">绑定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="/js/appjs/users/addBind.js"></script>
+</body>
+</html>

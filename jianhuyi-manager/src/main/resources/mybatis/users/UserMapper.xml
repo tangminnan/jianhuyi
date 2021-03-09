@@ -4,11 +4,11 @@
 <mapper namespace="com.jianhuyi.users.dao.UserDao">
 
     <select id="get" resultType="com.jianhuyi.users.domain.UserDO">
-		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`unionid`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`flag`,`age`,`school`,`grade`,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis` from t_user where id = #{value}
+		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`unionid`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`flag`,`age`,`school`,`grade`,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`,bind_type,manager_id from t_user where id = #{value}
 	</select>
     <select id="list" resultType="com.jianhuyi.users.domain.UserDO">
         select
-        `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`unionid`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`flag`,`age`,`school`,`grade`,student_num,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`
+        `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`unionid`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`flag`,`age`,`school`,`grade`,student_num,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`,bind_type,manager_id
         from t_user
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>
@@ -50,6 +50,9 @@
             <if test="rColumnDiameter != null and rColumnDiameter != ''">and R_column_diameter = #{rColumnDiameter}</if>
             <if test="lEyeAxis != null and lEyeAxis != ''">and L_eye_axis = #{lEyeAxis}</if>
             <if test="rEyeAxis != null and rEyeAxis != ''">and R_eye_axis = #{rEyeAxis}</if>
+            <if test="bindType != null and bindType != ''">and bind_type = #{bindType}</if>
+            <if test="managerId != null and managerId != ''">and manager_id = #{managerId}</if>
+
             and delete_flag = 1
         </where>
         <choose>
@@ -160,7 +163,8 @@
 			`L_column_diameter`,
 			`R_column_diameter`,
 			`L_eye_axis`,
-			`R_eye_axis`
+			`R_eye_axis`,
+			manager_id
 		)
 		values
 		(
@@ -199,7 +203,8 @@
 			#{lColumnDiameter},
 			#{rColumnDiameter},
 			#{lEyeAxis},
-			#{rEyeAxis}
+			#{rEyeAxis},
+			#{managerId}
 		)
 	</insert>
 
@@ -240,7 +245,10 @@
             <if test="lColumnDiameter != null">`L_column_diameter` = #{lColumnDiameter},</if>
             <if test="rColumnDiameter != null">`R_column_diameter` = #{rColumnDiameter},</if>
             <if test="lEyeAxis != null">`L_eye_axis` = #{lEyeAxis},</if>
-            <if test="rEyeAxis != null">`R_eye_axis` = #{rEyeAxis}</if>
+            <if test="rEyeAxis != null">`R_eye_axis` = #{rEyeAxis},</if>
+            <if test="bindType != null and bindType !=''">bind_type = #{bindType},</if>
+            <if test="managerId != null">manager_id = #{managerId}</if>
+
         </set>
         where id = #{id}
     </update>
