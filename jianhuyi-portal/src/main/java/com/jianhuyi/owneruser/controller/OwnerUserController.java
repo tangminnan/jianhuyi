@@ -31,13 +31,15 @@ public class OwnerUserController extends BaseController {
    */
   @Log("获取用户信息")
   @GetMapping("/userInfo")
-  Map<String, Object> user() {
+  R user() {
     Map<String, Object> map = new HashMap<>();
     OwnerUserDO udo = userService.get(getUserId());
-    map.put("data", udo);
-    map.put("msg", "success");
-    map.put("code", 0);
-    return map;
+    if (udo != null) {
+      map.put("data", udo);
+      return R.ok(map);
+    } else {
+      return R.sessionOut();
+    }
   }
 
   /**
@@ -106,10 +108,11 @@ public class OwnerUserController extends BaseController {
 
   @Log("获取用户列表")
   @GetMapping("/getUserByName")
-  R getUserByName(String name) {
+  R getUserByName(String name, int managerId) {
     Map<String, Object> map = new HashMap<>();
     Map<String, Object> params = new HashMap<>();
     params.put("name", name);
+    params.put("managerId", managerId);
 
     List<OwnerUserDO> ownerUserDOList = userService.list(params);
     map.put("data", ownerUserDOList);

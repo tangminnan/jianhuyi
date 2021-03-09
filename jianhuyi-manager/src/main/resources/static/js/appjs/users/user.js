@@ -193,6 +193,27 @@ function load() {
                */                                {
                   field: 'loginTime',
                   title: '最后登录时间'
+               }, {
+                  field: 'bindType',
+                  title: '绑定类型',
+                  formatter: function (value) {
+                     console.log(value)
+                     if (value == 1) {
+                        return "管理员"
+                     } else {
+                        return "普通用户"
+                     }
+                  }
+               }, {
+                  field: 'managerId',
+                  title: '所属管理id',
+                  formatter: function (value) {
+                     if (value == 0) {
+                        return "无"
+                     } else {
+                        return value;
+                     }
+                  }
                },
                /*								{
                    field : 'addTime',
@@ -242,7 +263,20 @@ function load() {
                         var f = '<a class="btn btn-success btn-sm" title="历史记录详情"  mce_href="#" onclick="showdetail(\''
                            + row.id
                            + '\')"><i class="fa fa-list"></i></a> ';
-                        return e + d + f;
+
+                        var b = '<a class="btn btn-danger btn-sm" title="设置为管理员"  mce_href="#" onclick="setManager(\''
+                           + row.id
+                           + '\')"><i class="fa fa-list">设为管理员</i></a> ';
+
+                        var c = '<a class="btn btn-danger btn-sm getUser" title="查看我的用户"  mce_href="#" ><i class="fa fa-list">查看我的用户</i></a> ';
+
+                        if (row.bindType != 1 && row.managerId == 0) {
+                           return e + d + f + b;
+                        } else {
+                           return e + d + f
+                           /*+ c;*/
+                        }
+
 
                      }
                }
@@ -277,6 +311,47 @@ function batchAdd() {
       content: prefix + '/importtemplate' // iframe的url
    });
 }
+
+
+function setManager(id) {
+   $.ajax({
+      cache: true,
+      type: "POST",
+      url: "/information/users/update",
+      data: {
+         id: id,
+         bindType: 1
+      },// 你的formid
+      async: false,
+      error: function (request) {
+         layer.alert("Connection error");
+      },
+      success: function (data) {
+         if (data.code == 0) {
+            layer.msg("操作成功");
+            reLoad();
+            /*var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+            parent.layer.close(index);*/
+
+         } else {
+            layer.alert(data.msg)
+         }
+
+      }
+   });
+}
+
+function batchBind() {
+   layer.open({
+      type: 2,
+      title: '批量绑定',
+      maxmin: true,
+      shadeClose: false, // 点击遮罩关闭层
+      area: ['800px', '520px'],
+      content: prefix + '/batchBind' // iframe的url
+   });
+}
+
 
 function details(id) {
    layer.open({

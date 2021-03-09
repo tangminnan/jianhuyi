@@ -175,7 +175,7 @@ public class AvgDataUtil {
 
     // 计算距离
     readDistance = selectDisList(userId, time);
-    System.out.println("=======平均距离===============" + readDistance);
+    System.out.println("=======平均距离222===============" + readDistance);
     useJianhuyiLogDO.setReadDistance(readDistance);
 
     // 获取有效无效等数据
