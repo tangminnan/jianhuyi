@@ -629,7 +629,7 @@ public class UserServiceImpl implements UserService {
                     if (deviceDao.list(params1).size() > 0) {
                       // 如果设备已经绑定，则提示设备已绑定
                       if (deviceDao.list(params1).get(0).getUserId() != null) {
-                        errnum.add(rowNum);
+   //                     errnum.add(rowNum);
                       } else {
                         deviceDO.setUserId(list(params).get(0).getId());
                         deviceDO.setId(deviceDao.list(params1).get(0).getId());
@@ -658,7 +658,7 @@ public class UserServiceImpl implements UserService {
                   if (deviceDao.list(params1).size() > 0) {
                     // 如果设备已经绑定，则提示设备已绑定
                     if (deviceDao.list(params1).get(0).getUserId() != null) {
-                      errnum.add(rowNum);
+ //                     errnum.add(rowNum);
                     } else {
                       deviceDO.setUserId(list(params).get(0).getId());
                       deviceDO.setId(deviceDao.list(params1).get(0).getId());
@@ -666,7 +666,7 @@ public class UserServiceImpl implements UserService {
                       deviceDao.update(deviceDO);
                     }
                   } else {
-                    errnum.add(rowNum);
+ //                   errnum.add(rowNum);
                   }
                   num++;
                 }
@@ -674,8 +674,8 @@ public class UserServiceImpl implements UserService {
                 params1.put("userId", list(params).get(0).getId());
                 // 如果用户已绑定设备号，就继续走
                 if (deviceDao.list(params1).size() > 0) {
-                  errnum.add(rowNum);
-                  continue;
+ //                   errnum.add(rowNum);
+                    continue;
                 } else {
                   params1.remove("userId");
                   params1.put("identity", identity);
@@ -684,7 +684,7 @@ public class UserServiceImpl implements UserService {
                     // 如果设备已绑定用户
                     if (deviceDao.list(params1).get(0).getUserId() != null
                         && !deviceDao.list(params1).get(0).getUserId().equals("")) {
-                      errnum.add(rowNum);
+  //                    errnum.add(rowNum);
                       continue;
                     } else {
                       deviceDO.setUserId(list(params).get(0).getId());
