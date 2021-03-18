@@ -112,7 +112,7 @@ public class OwnerUserController extends BaseController {
     Map<String, Object> map = new HashMap<>();
     Map<String, Object> params = new HashMap<>();
     params.put("name", name);
-    params.put("managerId", managerId);
+ //   params.put("managerId", managerId);
 
     List<OwnerUserDO> ownerUserDOList = userService.list(params);
     map.put("data", ownerUserDOList);

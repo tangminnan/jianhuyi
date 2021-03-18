@@ -291,8 +291,13 @@ public class GiftController {
         Map<String,Object> resultMap = new HashMap<>();
         if(userTaskDO!=null){
             long d   =  (new Date().getTime()-userTaskDO.getStartTime().getTime())/1000/60/60/24;
-            userTaskDO.setFinishDay(d);//已完成天数
-            userTaskDO.setUnfinishedDay(userTaskDO.getTaskTime()-d);//未完成天数
+            if(d>=userTaskDO.getTaskTime()){
+                userTaskDO.setFinishDay((long)userTaskDO.getTaskTime());//已完成天数
+                userTaskDO.setUnfinishedDay(0L);//未完成天数
+            }else{
+                userTaskDO.setFinishDay(d);//已完成天数
+                userTaskDO.setUnfinishedDay(userTaskDO.getTaskTime()-d);//未完成天数
+            }
             resultMap.put("code",0);
             resultMap.put("data",userTaskDO);
             resultMap.put("msg","获取数据成功");
