@@ -129,6 +129,11 @@ function load() {
                   align: 'center'
                },
                {
+                  field: 'isWearGlasses',
+                  title: '是否戴镜',
+                  align: 'center'
+               },
+               {
                   field: 'studentNum',
                   title: '学号',
                   align: 'center'

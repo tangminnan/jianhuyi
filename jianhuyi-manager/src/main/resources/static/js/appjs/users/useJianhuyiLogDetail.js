@@ -334,6 +334,14 @@ function edit(id) {
    });
 }
 
+function exportExcel() {
+   var userId = $('#userId').val()
+   var saveTime = $('#saveTime').val()
+
+   layer.msg("正在导出请耐心等待...")
+   window.location.href = prefix + '/kaishidaochu?userId=' + userId + '&saveTime=' + saveTime
+}
+
 //周折线统计图
 function weekEchart() {
    $('#weekEchart').show()

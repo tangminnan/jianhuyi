@@ -626,7 +626,7 @@
             substr(save_time, 1, 10) save_time
         FROM
             t_use_jianhuyi_log
-
+        where save_time like CONCAT('%','2021-03-17','%')
         GROUP BY
             substr(save_time, 1, 10),
             user_id

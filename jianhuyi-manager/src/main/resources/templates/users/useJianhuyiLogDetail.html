@@ -9,6 +9,9 @@
             <div class="ibox-body">
                 <div class="fixed-table-toolbar">
                     <div class="columns pull-right">
+                        <button class="btn btn-success" onclick="exportExcel()">导出</button>
+                    </div>
+                    <!--<div class="columns pull-right">
                         <button class="btn btn-success" onclick="reLoad()">查询</button>
                     </div>
                     <div class="columns pull-right col-md-2 nopadding ">
@@ -16,12 +19,12 @@
                     </div>
                     <div class="columns pull-right col-md-2 nopadding">
                         <input id="startTime" name="startTime" class="form-control" placeholder="开始时间：" type="text">
-                    </div>
+                    </div>-->
 
 
-                        <input id="userId" type="hidden" class="form-control" th:value="${userId}"
-                            placeholder="">
-                        <input id="saveTime" type="hidden" class="form-control" th:value="${saveTime}"
+                    <input id="userId" type="hidden" class="form-control" th:value="${userId}"
+                           placeholder="">
+                    <input id="saveTime" type="hidden" class="form-control" th:value="${saveTime}"
                            placeholder="">
 
                 </div>
@@ -36,24 +39,24 @@
     <!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
     <div>
         <script type="text/javascript">
-            var s_edit_h = 'hidden';
-            var s_remove_h = 'hidden';
-            var s_resetPwd_h = 'hidden';
+           var s_edit_h = 'hidden';
+           var s_remove_h = 'hidden';
+           var s_resetPwd_h = 'hidden';
         </script>
     </div>
     <div shiro:hasPermission="information:useJianhuyiLog:edit">
         <script type="text/javascript">
-            s_edit_h = '';
+           s_edit_h = '';
         </script>
     </div>
     <div shiro:hasPermission="information:useJianhuyiLog:remove">
         <script type="text/javascript">
-            var s_remove_h = '';
+           var s_remove_h = '';
         </script>
     </div>
     <div shiro:hasPermission="information:useJianhuyiLog:resetPwd">
         <script type="text/javascript">
-            var s_resetPwd_h = '';
+           var s_resetPwd_h = '';
         </script>
     </div>
 </div>
@@ -65,15 +68,14 @@
 <script type="text/javascript" src="/js/moment.min.js"></script>
 <script type="text/javascript">
 
-    laydate.render({
-        elem: '#startTime',
-        type: 'datetime'
-    });
-    laydate.render({
-        elem: '#endTime',
-        type: 'datetime'
-    });
-
+   laydate.render({
+      elem: '#startTime',
+      type: 'datetime'
+   });
+   laydate.render({
+      elem: '#endTime',
+      type: 'datetime'
+   });
 
 
 </script>

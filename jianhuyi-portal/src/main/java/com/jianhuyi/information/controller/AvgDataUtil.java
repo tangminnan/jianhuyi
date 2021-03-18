@@ -206,6 +206,21 @@ public class AvgDataUtil {
     return useJianhuyiLogDO;
   }
 
+  @GetMapping("/getSHuju")
+  @ResponseBody
+  public static UseJianhuyiLogDO getSHuju(Long userId, String time) {
+    Map mappp = useTimeService.getSNCount(userId, time);
+    LinkedList<UseTimeDO> useTimeDOList = useTimeService.getTodayData(userId, time);
+    Optional.ofNullable(mappp)
+        .ifPresent(
+            m -> {
+              jsonObject = (JSONObject) JSONObject.toJSON(m);
+            });
+    String num = jsonObject.get("num").toString();
+    String sum = jsonObject.get("sum").toString();
+    return getSNCount(Integer.parseInt(num), Integer.parseInt(sum), useTimeDOList);
+  }
+
   // 有效数据使用（t_use_time） 参数num=总条数 sum=0的个数
   public static UseJianhuyiLogDO getSNCount(
       Integer num, Integer sum, List<UseTimeDO> useTimeDOList) {
