@@ -175,6 +175,7 @@ public class UseJianhuyiLogController {
 
               } else {
                 System.out.println("上传的数据时间 已经超过最近任务的截止时间，数据不会被统计进入最近一次任务中了");
+                userService.updateTaskIdNullInUser(userId);
               }
             }
           }

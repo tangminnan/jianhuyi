@@ -286,5 +286,13 @@
             #{id}
         </foreach>
     </delete>
+    
+    <update id="updateTaskIdNullInUser" parameterType="int">
+        update t_user set
+        `task_id` = null,
+        `task_ids` = null
+
+    where id = #{id}
+    </update>
 
 </mapper>

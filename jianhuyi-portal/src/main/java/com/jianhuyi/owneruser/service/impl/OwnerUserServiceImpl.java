@@ -158,4 +158,9 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 		return ownerUserMapper.getUserByIdCardAndSchoolAndGrade(identityCard,name,grade);
 	}
 
+	@Override
+	public void updateTaskIdNullInUser(Long userId) {
+		ownerUserMapper.updateTaskIdNullInUser(userId);
+	}
+
 }
