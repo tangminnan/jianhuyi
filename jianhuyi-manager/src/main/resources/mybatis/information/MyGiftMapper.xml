@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.information.dao.MyGiftDao">
+
+	<select id="get" resultType="com.jianhuyi.information.domain.MyGiftDO">
+		select `id`,`user_id`,`gift_id`,`create_time` from t_my_gift where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.jianhuyi.information.domain.MyGiftDO">
+		select m.`id`,m.`user_id`,m.`gift_id`,m.`create_time`,m.flag,g.cover_img,g.gift_name,t.name from t_my_gift m join t_gift g
+		on m.gift_id=g.id join t_user t on m.user_id=t.id
+        <where>  
+		  		  <if test="id != null and id != ''"> and m.id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and m.user_id = #{userId} </if>
+		  		  <if test="giftId != null and giftId != ''"> and m.gift_id = #{giftId} </if>
+		  		  <if test="createTime != null and createTime != ''"> and m.create_time = #{createTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from t_my_gift
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="giftId != null and giftId != ''"> and gift_id = #{giftId} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<update id="update" parameterType="com.jianhuyi.information.domain.MyGiftDO">
+		update t_my_gift 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="giftId != null">`gift_id` = #{giftId}, </if>
+			<if test="createTime != null">`create_time` = #{createTime},</if>
+			<if test="flag != null">`flag` = #{flag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+
+	
+
+
+</mapper>
