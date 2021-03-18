@@ -92,6 +92,16 @@ public class UserDO implements Serializable {
 
   private int bindType;
 
+  private String isWearGlasses;
+
+  public String getIsWearGlasses() {
+    return isWearGlasses;
+  }
+
+  public void setIsWearGlasses(String isWearGlasses) {
+    this.isWearGlasses = isWearGlasses;
+  }
+
   public int getManagerId() {
     return managerId;
   }
@@ -498,6 +508,9 @@ public class UserDO implements Serializable {
         + managerId
         + ", bindType="
         + bindType
+        + ", isWearGlasses='"
+        + isWearGlasses
+        + '\''
         + '}';
   }
 }

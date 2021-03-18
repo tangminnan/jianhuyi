@@ -510,6 +510,7 @@ public class UserServiceImpl implements UserService {
             String rEyeAxis = ExcelUtils.getCellFormatValue(row.getCell((short) 15)); // 右眼轴
             String identity = ExcelUtils.getCellFormatValue(row.getCell((short) 16)); // 设备号
             String managerId = ExcelUtils.getCellFormatValue(row.getCell((short) 17)); // 设备号
+            String isWearGlasses = ExcelUtils.getCellFormatValue(row.getCell((short) 18)); // 设备号
 
             UserDO user = new UserDO();
             DeviceDO deviceDO = new DeviceDO();
@@ -595,6 +596,7 @@ public class UserServiceImpl implements UserService {
             }
             user.setDeleteFlag(1);
             user.setRegisterTime(new Date());
+            user.setIsWearGlasses(isWearGlasses);
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 

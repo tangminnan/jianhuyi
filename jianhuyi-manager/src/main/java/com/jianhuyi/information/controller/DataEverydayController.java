@@ -77,9 +77,31 @@ public class DataEverydayController {
         mapp.put("用户id", ujl.getUserId());
         if (ujl.getUserId() != null) {
           UserDO userDO = userService.get(ujl.getUserId());
-          mapp.put("姓名", userDO.getName());
-          mapp.put("学校", userDO.getSchool());
-          mapp.put("年级", userDO.getGrade());
+          if (userDO != null) {
+            mapp.put("姓名", userDO.getName());
+            mapp.put("学校", userDO.getSchool());
+            mapp.put("年级", userDO.getGrade());
+
+            if (userDO.getSex() == 1) {
+              mapp.put("性别", "男");
+            } else if (userDO.getSex() == 2) {
+              mapp.put("性别", "女");
+            } else {
+              mapp.put("性别", "未知");
+            }
+
+            if (userDO.getIsWearGlasses() != null) {
+              mapp.put("戴镜", userDO.getIsWearGlasses());
+            } else {
+              mapp.put("戴镜", "未填");
+            }
+          } else {
+            mapp.put("姓名", "");
+            mapp.put("学校", "");
+            mapp.put("年级", "");
+            mapp.put("性别", "未知");
+            mapp.put("戴镜", "未填");
+          }
         }
         mapp.put("上传人id", ujl.getUploadId());
         mapp.put("设备号", ujl.getEquipmentId());
