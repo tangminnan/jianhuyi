@@ -3,124 +3,362 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-<div class="wrapper wrapper-content ">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-content">
-                    <form class="form-horizontal m-t" id="signupForm">
-                        <input id="id" name="id" th:value="${userTask.id}" type="hidden">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">用户id：</label>
-                            <div class="col-sm-8">
-                                <input id="userId" name="userId" th:value="${userTask.userId}" class="form-control"
-                                       type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">礼物id：</label>
-                            <div class="col-sm-8">
-                                <input id="giftId" name="giftId" th:value="${userTask.giftId}" class="form-control"
-                                       type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">任务时长：</label>
-                            <div class="col-sm-8">
-                                <input id="taskTime" name="taskTime" th:value="${userTask.taskTime}"
-                                       class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">健康用眼评级：</label>
-                            <div class="col-sm-8">
-                                <input id="eyeRate" name="eyeRate" th:value="${userTask.eyeRate}" class="form-control"
-                                       type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">平均单次阅读时长：</label>
-                            <div class="col-sm-8">
-                                <input id="avgRead" name="avgRead" th:value="${userTask.avgRead}" class="form-control"
-                                       type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">平均户外时长：</label>
-                            <div class="col-sm-8">
-                                <input id="avgOut" name="avgOut" th:value="${userTask.avgOut}" class="form-control"
-                                       type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">平均阅读距离：</label>
-                            <div class="col-sm-8">
-                                <input id="avgReadDistance" name="avgReadDistance"
-                                       th:value="${userTask.avgReadDistance}" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">平均单次看手机时长：</label>
-                            <div class="col-sm-8">
-                                <input id="avgLookPhone" name="avgLookPhone" th:value="${userTask.avgLookPhone}"
-                                       class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">平均坐姿倾斜度：</label>
-                            <div class="col-sm-8">
-                                <input id="avgSitTilt" name="avgSitTilt" th:value="${userTask.avgSitTilt}"
-                                       class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">有效使用时长：</label>
-                            <div class="col-sm-8">
-                                <input id="effectiveUseTime" name="effectiveUseTime"
-                                       th:value="${userTask.effectiveUseTime}" class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">完成状态（1=已完成，2=未完成，3=失败）：</label>
-                            <div class="col-sm-8">
-                                <input id="finishStatus" name="finishStatus" th:value="${userTask.finishStatus}"
-                                       class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">已完成天数：</label>
-                            <div class="col-sm-8">
-                                <input id="finishDay" name="finishDay" th:value="${userTask.finishDay}"
-                                       class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">未完成天数：</label>
-                            <div class="col-sm-8">
-                                <input id="unfinishedDay" name="unfinishedDay" th:value="${userTask.unfinishedDay}"
-                                       class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">创建时间：</label>
-                            <div class="col-sm-8">
-                                <input id="createTime" name="createTime" th:value="${userTask.createTime}"
-                                       class="form-control" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-8 col-sm-offset-3">
-                                <button type="submit" class="btn btn-primary">提交</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div th:include="include::footer"></div>
-<script type="text/javascript" src="/js/appjs/information/userTask/edit.js">
-</script>
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${userTask.id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">用户id：</label>
+								<div class="col-sm-8">
+									<input id="userId" name="userId" th:value="${userTask.userId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">任务天数 7=7天  15=15天  30=30天：</label>
+								<div class="col-sm-8">
+									<input id="taskTime" name="taskTime" th:value="${userTask.taskTime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">健康用眼评级：</label>
+								<div class="col-sm-8">
+									<input id="eyeRate" name="eyeRate" th:value="${userTask.eyeRate}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均单次阅读时长：</label>
+								<div class="col-sm-8">
+									<input id="avgRead" name="avgRead" th:value="${userTask.avgRead}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均户外时长：</label>
+								<div class="col-sm-8">
+									<input id="avgOut" name="avgOut" th:value="${userTask.avgOut}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均阅读距离：</label>
+								<div class="col-sm-8">
+									<input id="avgReadDistance" name="avgReadDistance" th:value="${userTask.avgReadDistance}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均单次看手机时长：</label>
+								<div class="col-sm-8">
+									<input id="avgLookPhone" name="avgLookPhone" th:value="${userTask.avgLookPhone}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">看电子屏：</label>
+								<div class="col-sm-8">
+									<input id="avgLookTv" name="avgLookTv" th:value="${userTask.avgLookTv}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均坐姿倾斜度：</label>
+								<div class="col-sm-8">
+									<input id="avgSitTilt" name="avgSitTilt" th:value="${userTask.avgSitTilt}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">有效使用时长：</label>
+								<div class="col-sm-8">
+									<input id="effectiveUseTime" name="effectiveUseTime" th:value="${userTask.effectiveUseTime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">完成状态（1=已完成，2=未完成，3=失败）：</label>
+								<div class="col-sm-8">
+									<input id="finishStatus" name="finishStatus" th:value="${userTask.finishStatus}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">已完成天数：</label>
+								<div class="col-sm-8">
+									<input id="finishDay" name="finishDay" th:value="${userTask.finishDay}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">未完成天数：</label>
+								<div class="col-sm-8">
+									<input id="unfinishedDay" name="unfinishedDay" th:value="${userTask.unfinishedDay}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均阅读光照：</label>
+								<div class="col-sm-8">
+									<input id="avgLight" name="avgLight" th:value="${userTask.avgLight}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">创建时间：</label>
+								<div class="col-sm-8">
+									<input id="createTime" name="createTime" th:value="${userTask.createTime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">类型 0=家长模式，1=医生模式 2=老师模式(批量）：</label>
+								<div class="col-sm-8">
+									<input id="type" name="type" th:value="${userTask.type}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">1=学校，2=个人：</label>
+								<div class="col-sm-8">
+									<input id="taskType" name="taskType" th:value="${userTask.taskType}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">最终结果：平均每次阅读时长 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="avgReadResult" name="avgReadResult" th:value="${userTask.avgReadResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">本次平均每次阅读时长目标积分：</label>
+								<div class="col-sm-8">
+									<input id="avgReadScore" name="avgReadScore" th:value="${userTask.avgReadScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">本次平均每次阅读时长最终积分：</label>
+								<div class="col-sm-8">
+									<input id="avgReadScoreResult" name="avgReadScoreResult" th:value="${userTask.avgReadScoreResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">最终结果：平均户外时长 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="avgOutResult" name="avgOutResult" th:value="${userTask.avgOutResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">本次户外时长  目标积分：</label>
+								<div class="col-sm-8">
+									<input id="avgOutScore" name="avgOutScore" th:value="${userTask.avgOutScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">本次户外时长  最终积分：</label>
+								<div class="col-sm-8">
+									<input id="avgOutScoreResult" name="avgOutScoreResult" th:value="${userTask.avgOutScoreResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">最终结果：平均阅读距离 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="avgReadDistanceResult" name="avgReadDistanceResult" th:value="${userTask.avgReadDistanceResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均阅读距离 目标积分：</label>
+								<div class="col-sm-8">
+									<input id="avgReadDistanceScore" name="avgReadDistanceScore" th:value="${userTask.avgReadDistanceScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均阅读距离 最终积分：</label>
+								<div class="col-sm-8">
+									<input id="avgReadDistanceScoreResult" name="avgReadDistanceScoreResult" th:value="${userTask.avgReadDistanceScoreResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">最终结果：平均单次看手机时长 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="avgLookPhoneResult" name="avgLookPhoneResult" th:value="${userTask.avgLookPhoneResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均单次看手机  目标积分：</label>
+								<div class="col-sm-8">
+									<input id="avgLookPhoneScore" name="avgLookPhoneScore" th:value="${userTask.avgLookPhoneScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均单次看手机  最终积分：</label>
+								<div class="col-sm-8">
+									<input id="avgLookPhoneScoreResult" name="avgLookPhoneScoreResult" th:value="${userTask.avgLookPhoneScoreResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">最终结果：平均单次看电脑电视时长 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="avgLookTvResult" name="avgLookTvResult" th:value="${userTask.avgLookTvResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均单次看电脑电视时长 目标积分：</label>
+								<div class="col-sm-8">
+									<input id="avgLookScore" name="avgLookScore" th:value="${userTask.avgLookScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均单次看电脑电视时长最终积分：</label>
+								<div class="col-sm-8">
+									<input id="avgLookScoreResult" name="avgLookScoreResult" th:value="${userTask.avgLookScoreResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">最终结果：平均阅读旋转角度 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="avgSitTiltResult" name="avgSitTiltResult" th:value="${userTask.avgSitTiltResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均阅读旋转角度目标积分：</label>
+								<div class="col-sm-8">
+									<input id="avgSitTiltScore" name="avgSitTiltScore" th:value="${userTask.avgSitTiltScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均阅读旋转角度最终积分：</label>
+								<div class="col-sm-8">
+									<input id="avgSitTiltScoreResult" name="avgSitTiltScoreResult" th:value="${userTask.avgSitTiltScoreResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">最终结果：有效使用时长 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="effectiveUseTimeResult" name="effectiveUseTimeResult" th:value="${userTask.effectiveUseTimeResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">有效使用时长 目标积分：</label>
+								<div class="col-sm-8">
+									<input id="effectiveUseTimeScore" name="effectiveUseTimeScore" th:value="${userTask.effectiveUseTimeScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">有效使用时长 最终积分：</label>
+								<div class="col-sm-8">
+									<input id="effectiveUseTimeScoreResult" name="effectiveUseTimeScoreResult" th:value="${userTask.effectiveUseTimeScoreResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">最终结果：平均每次阅读光照 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="avgLightResult" name="avgLightResult" th:value="${userTask.avgLightResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均每次阅读光照  目标积分：</label>
+								<div class="col-sm-8">
+									<input id="avgLightScore" name="avgLightScore" th:value="${userTask.avgLightScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">平均每次阅读光照  最终积分：</label>
+								<div class="col-sm-8">
+									<input id="avgLightScoreResult" name="avgLightScoreResult" th:value="${userTask.avgLightScoreResult}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">用眼评级 YOU=优 LIANG=良  CHA=差  JICHA=极差：</label>
+								<div class="col-sm-8">
+									<input id="countGrade" name="countGrade" th:value="${userTask.countGrade}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">家长模式下礼品详情：</label>
+								<div class="col-sm-8">
+									<input id="gift" name="gift" th:value="${userTask.gift}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">本次任务总积分：</label>
+								<div class="col-sm-8">
+									<input id="totalScore" name="totalScore" th:value="${userTask.totalScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">0=任务进行中  1=任务已完成，数据未上传  2=任务已完成  数据已上传：</label>
+								<div class="col-sm-8">
+									<input id="flag" name="flag" th:value="${userTask.flag}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">任务开始时间：</label>
+								<div class="col-sm-8">
+									<input id="startTime" name="startTime" th:value="${userTask.startTime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">user表中的积分：</label>
+								<div class="col-sm-8">
+									<input id="addreadyScore" name="addreadyScore" th:value="${userTask.addreadyScore}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上次评级：</label>
+								<div class="col-sm-8">
+									<input id="lastavgread" name="lastavgread" th:value="${userTask.lastavgread}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上次评级：</label>
+								<div class="col-sm-8">
+									<input id="lastavgout" name="lastavgout" th:value="${userTask.lastavgout}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上次评级：</label>
+								<div class="col-sm-8">
+									<input id="lastavgreaddistance" name="lastavgreaddistance" th:value="${userTask.lastavgreaddistance}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上次评级：</label>
+								<div class="col-sm-8">
+									<input id="lastavglooktv" name="lastavglooktv" th:value="${userTask.lastavglooktv}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上次评级：</label>
+								<div class="col-sm-8">
+									<input id="lastavgsittilt" name="lastavgsittilt" th:value="${userTask.lastavgsittilt}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上次评级：</label>
+								<div class="col-sm-8">
+									<input id="lasteffectiveusetime" name="lasteffectiveusetime" th:value="${userTask.lasteffectiveusetime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上次评级：</label>
+								<div class="col-sm-8">
+									<input id="lastavglight" name="lastavglight" th:value="${userTask.lastavglight}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">上次评级：</label>
+								<div class="col-sm-8">
+									<input id="lastavglookphone" name="lastavglookphone" th:value="${userTask.lastavglookphone}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">APP=app端任务  PC=pc端任务：</label>
+								<div class="col-sm-8">
+									<input id="pcorapp" name="pcorapp" th:value="${userTask.pcorapp}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/information/userTask/edit.js">
+	</script>
 </body>
 </html>

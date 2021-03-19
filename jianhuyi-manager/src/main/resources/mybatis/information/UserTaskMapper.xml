@@ -3,137 +3,354 @@
 
 <mapper namespace="com.jianhuyi.information.dao.UserTaskDao">
 
-    <select id="get" resultType="com.jianhuyi.information.domain.UserTaskDO">
-		select `id`,`user_id`,`gift_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`create_time` from t_user_task where id = #{value}
+	<select id="get" resultType="com.jianhuyi.information.domain.UserTaskDO">
+		select `id`,`user_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`avg_light`,`create_time`,`type`,`task_type`,`avg_read_result`,`avg_read_score`,`avg_read_score_result`,`avg_out_result`,`avg_out_score`,`avg_out_score_result`,`avg_read_distance_result`,`avg_read_distance_score`,`avg_read_distance_score_result`,`avg_look_phone_result`,`avg_look_phone_score`,`avg_look_phone_score_result`,`avg_look_tv_result`,`avg_look_score`,`avg_look_score_result`,`avg_sit_tilt_result`,`avg_sit_tilt_score`,`avg_sit_tilt_score_result`,`effective_use_time_result`,`effective_use_time_score`,`effective_use_time_score_result`,`avg_light_result`,`avg_light_score`,`avg_light_score_result`,`count_grade`,`gift`,`total_score`,`flag`,`start_time`,`addready_score`,`lastavgRead`,`lastavgOut`,`lastavgReadDistance`,`lastavgLookTv`,`lastavgSitTilt`,`lasteffectiveUseTime`,`lastavgLight`,`lastavgLookPhone`,`pcorapp` from t_user_task where id = #{value}
 	</select>
 
-    <select id="list" resultType="com.jianhuyi.information.domain.UserTaskDO">
-        select
-        `id`,`user_id`,`gift_id`,`task_time`,`eye_rate`,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_sit_tilt`,`effective_use_time`,`finish_status`,`finish_day`,`unfinished_day`,`create_time`
-        from t_user_task
-        <where>
-            <if test="id != null and id != ''">and id = #{id}</if>
-            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
-            <if test="giftId != null and giftId != ''">and gift_id = #{giftId}</if>
-            <if test="taskTime != null and taskTime != ''">and task_time = #{taskTime}</if>
-            <if test="eyeRate != null and eyeRate != ''">and eye_rate = #{eyeRate}</if>
-            <if test="avgRead != null and avgRead != ''">and avg_read = #{avgRead}</if>
-            <if test="avgOut != null and avgOut != ''">and avg_out = #{avgOut}</if>
-            <if test="avgReadDistance != null and avgReadDistance != ''">and avg_read_distance = #{avgReadDistance}</if>
-            <if test="avgLookPhone != null and avgLookPhone != ''">and avg_look_phone = #{avgLookPhone}</if>
-            <if test="avgSitTilt != null and avgSitTilt != ''">and avg_sit_tilt = #{avgSitTilt}</if>
-            <if test="effectiveUseTime != null and effectiveUseTime != ''">and effective_use_time =
-                #{effectiveUseTime}
-            </if>
-            <if test="finishStatus != null and finishStatus != ''">and finish_status = #{finishStatus}</if>
-            <if test="finishDay != null and finishDay != ''">and finish_day = #{finishDay}</if>
-            <if test="unfinishedDay != null and unfinishedDay != ''">and unfinished_day = #{unfinishedDay}</if>
-            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
-        </where>
+	<select id="list" resultType="com.jianhuyi.information.domain.UserTaskDO">
+		select t.`id`,t.`user_id`,u.name,t.`task_time`,t.`avg_read`,
+		t.`avg_out`,t.`avg_read_distance`,t.`avg_look_phone`,t.`avg_look_tv`,
+		t.`avg_sit_tilt`,t.`effective_use_time`,t.`finish_status`,t.`finish_day`,
+		t.`unfinished_day`,t.`avg_light`,t.`create_time`,t.`type`,t.`task_type`,
+		t.`avg_read_result`,t.`avg_read_score`,t.`avg_read_score_result`,
+		t.`avg_out_result`,t.`avg_out_score`,t.`avg_out_score_result`,t.`avg_read_distance_result`,
+		t.`avg_read_distance_score`,t.`avg_read_distance_score_result`,t.`avg_look_phone_result`,
+		t.`avg_look_phone_score`,t.`avg_look_phone_score_result`,t.`avg_look_tv_result`,t.`avg_look_score`,
+		t.`avg_look_score_result`,t.`avg_sit_tilt_result`,t.`avg_sit_tilt_score`,
+		t.`avg_sit_tilt_score_result`,t.`effective_use_time_result`,t.`effective_use_time_score`,
+		t.`effective_use_time_score_result`,t.`avg_light_result`,t.`avg_light_score`,
+		t.`avg_light_score_result`,t.`count_grade`,t.`gift`,t.`total_score`,t.`flag`,
+		t.`start_time`,t.`addready_score`,t.`lastavgRead`,t.`lastavgOut`,t.`lastavgReadDistance`,
+		t.`lastavgLookTv`,t.`lastavgSitTilt`,t.`lasteffectiveUseTime`,t.`lastavgLight`,t.`lastavgLookPhone`,t.`pcorapp` from t_user_task t
+		join t_user u on t.user_id=u.id
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="taskTime != null and taskTime != ''"> and task_time = #{taskTime} </if>
+		  		  <if test="eyeRate != null and eyeRate != ''"> and eye_rate = #{eyeRate} </if>
+		  		  <if test="avgRead != null and avgRead != ''"> and avg_read = #{avgRead} </if>
+		  		  <if test="avgOut != null and avgOut != ''"> and avg_out = #{avgOut} </if>
+		  		  <if test="avgReadDistance != null and avgReadDistance != ''"> and avg_read_distance = #{avgReadDistance} </if>
+		  		  <if test="avgLookPhone != null and avgLookPhone != ''"> and avg_look_phone = #{avgLookPhone} </if>
+		  		  <if test="avgLookTv != null and avgLookTv != ''"> and avg_look_tv = #{avgLookTv} </if>
+		  		  <if test="avgSitTilt != null and avgSitTilt != ''"> and avg_sit_tilt = #{avgSitTilt} </if>
+		  		  <if test="effectiveUseTime != null and effectiveUseTime != ''"> and effective_use_time = #{effectiveUseTime} </if>
+		  		  <if test="finishStatus != null and finishStatus != ''"> and finish_status = #{finishStatus} </if>
+		  		  <if test="finishDay != null and finishDay != ''"> and finish_day = #{finishDay} </if>
+		  		  <if test="unfinishedDay != null and unfinishedDay != ''"> and unfinished_day = #{unfinishedDay} </if>
+		  		  <if test="avgLight != null and avgLight != ''"> and avg_light = #{avgLight} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="taskType != null and taskType != ''"> and task_type = #{taskType} </if>
+		  		  <if test="avgReadResult != null and avgReadResult != ''"> and avg_read_result = #{avgReadResult} </if>
+		  		  <if test="avgReadScore != null and avgReadScore != ''"> and avg_read_score = #{avgReadScore} </if>
+		  		  <if test="avgReadScoreResult != null and avgReadScoreResult != ''"> and avg_read_score_result = #{avgReadScoreResult} </if>
+		  		  <if test="avgOutResult != null and avgOutResult != ''"> and avg_out_result = #{avgOutResult} </if>
+		  		  <if test="avgOutScore != null and avgOutScore != ''"> and avg_out_score = #{avgOutScore} </if>
+		  		  <if test="avgOutScoreResult != null and avgOutScoreResult != ''"> and avg_out_score_result = #{avgOutScoreResult} </if>
+		  		  <if test="avgReadDistanceResult != null and avgReadDistanceResult != ''"> and avg_read_distance_result = #{avgReadDistanceResult} </if>
+		  		  <if test="avgReadDistanceScore != null and avgReadDistanceScore != ''"> and avg_read_distance_score = #{avgReadDistanceScore} </if>
+		  		  <if test="avgReadDistanceScoreResult != null and avgReadDistanceScoreResult != ''"> and avg_read_distance_score_result = #{avgReadDistanceScoreResult} </if>
+		  		  <if test="avgLookPhoneResult != null and avgLookPhoneResult != ''"> and avg_look_phone_result = #{avgLookPhoneResult} </if>
+		  		  <if test="avgLookPhoneScore != null and avgLookPhoneScore != ''"> and avg_look_phone_score = #{avgLookPhoneScore} </if>
+		  		  <if test="avgLookPhoneScoreResult != null and avgLookPhoneScoreResult != ''"> and avg_look_phone_score_result = #{avgLookPhoneScoreResult} </if>
+		  		  <if test="avgLookTvResult != null and avgLookTvResult != ''"> and avg_look_tv_result = #{avgLookTvResult} </if>
+		  		  <if test="avgLookScore != null and avgLookScore != ''"> and avg_look_score = #{avgLookScore} </if>
+		  		  <if test="avgLookScoreResult != null and avgLookScoreResult != ''"> and avg_look_score_result = #{avgLookScoreResult} </if>
+		  		  <if test="avgSitTiltResult != null and avgSitTiltResult != ''"> and avg_sit_tilt_result = #{avgSitTiltResult} </if>
+		  		  <if test="avgSitTiltScore != null and avgSitTiltScore != ''"> and avg_sit_tilt_score = #{avgSitTiltScore} </if>
+		  		  <if test="avgSitTiltScoreResult != null and avgSitTiltScoreResult != ''"> and avg_sit_tilt_score_result = #{avgSitTiltScoreResult} </if>
+		  		  <if test="effectiveUseTimeResult != null and effectiveUseTimeResult != ''"> and effective_use_time_result = #{effectiveUseTimeResult} </if>
+		  		  <if test="effectiveUseTimeScore != null and effectiveUseTimeScore != ''"> and effective_use_time_score = #{effectiveUseTimeScore} </if>
+		  		  <if test="effectiveUseTimeScoreResult != null and effectiveUseTimeScoreResult != ''"> and effective_use_time_score_result = #{effectiveUseTimeScoreResult} </if>
+		  		  <if test="avgLightResult != null and avgLightResult != ''"> and avg_light_result = #{avgLightResult} </if>
+		  		  <if test="avgLightScore != null and avgLightScore != ''"> and avg_light_score = #{avgLightScore} </if>
+		  		  <if test="avgLightScoreResult != null and avgLightScoreResult != ''"> and avg_light_score_result = #{avgLightScoreResult} </if>
+		  		  <if test="countGrade != null and countGrade != ''"> and count_grade = #{countGrade} </if>
+		  		  <if test="gift != null and gift != ''"> and gift = #{gift} </if>
+		  		  <if test="totalScore != null and totalScore != ''"> and total_score = #{totalScore} </if>
+		  		  <if test="flag != null and flag != ''"> and flag = #{flag} </if>
+		  		  <if test="startTime != null and startTime != ''"> and start_time = #{startTime} </if>
+		  		  <if test="addreadyScore != null and addreadyScore != ''"> and addready_score = #{addreadyScore} </if>
+		  		  <if test="lastavgread != null and lastavgread != ''"> and lastavgRead = #{lastavgread} </if>
+		  		  <if test="lastavgout != null and lastavgout != ''"> and lastavgOut = #{lastavgout} </if>
+		  		  <if test="lastavgreaddistance != null and lastavgreaddistance != ''"> and lastavgReadDistance = #{lastavgreaddistance} </if>
+		  		  <if test="lastavglooktv != null and lastavglooktv != ''"> and lastavgLookTv = #{lastavglooktv} </if>
+		  		  <if test="lastavgsittilt != null and lastavgsittilt != ''"> and lastavgSitTilt = #{lastavgsittilt} </if>
+		  		  <if test="lasteffectiveusetime != null and lasteffectiveusetime != ''"> and lasteffectiveUseTime = #{lasteffectiveusetime} </if>
+		  		  <if test="lastavglight != null and lastavglight != ''"> and lastavgLight = #{lastavglight} </if>
+		  		  <if test="lastavglookphone != null and lastavglookphone != ''"> and lastavgLookPhone = #{lastavglookphone} </if>
+		  		  <if test="pcorapp != null and pcorapp != ''"> and pcorapp = #{pcorapp} </if>
+		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
                 order by ${sort} ${order}
             </when>
-            <otherwise>
+			<otherwise>
                 order by id desc
-            </otherwise>
+			</otherwise>
         </choose>
-        <if test="offset != null and limit != null">
-            limit #{offset}, #{limit}
-        </if>
-    </select>
-
-    <select id="count" resultType="int">
-        select count(*) from t_user_task
-        <where>
-            <if test="id != null and id != ''">and id = #{id}</if>
-            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
-            <if test="giftId != null and giftId != ''">and gift_id = #{giftId}</if>
-            <if test="taskTime != null and taskTime != ''">and task_time = #{taskTime}</if>
-            <if test="eyeRate != null and eyeRate != ''">and eye_rate = #{eyeRate}</if>
-            <if test="avgRead != null and avgRead != ''">and avg_read = #{avgRead}</if>
-            <if test="avgOut != null and avgOut != ''">and avg_out = #{avgOut}</if>
-            <if test="avgReadDistance != null and avgReadDistance != ''">and avg_read_distance = #{avgReadDistance}</if>
-            <if test="avgLookPhone != null and avgLookPhone != ''">and avg_look_phone = #{avgLookPhone}</if>
-            <if test="avgSitTilt != null and avgSitTilt != ''">and avg_sit_tilt = #{avgSitTilt}</if>
-            <if test="effectiveUseTime != null and effectiveUseTime != ''">and effective_use_time =
-                #{effectiveUseTime}
-            </if>
-            <if test="finishStatus != null and finishStatus != ''">and finish_status = #{finishStatus}</if>
-            <if test="finishDay != null and finishDay != ''">and finish_day = #{finishDay}</if>
-            <if test="unfinishedDay != null and unfinishedDay != ''">and unfinished_day = #{unfinishedDay}</if>
-            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
-        </where>
-    </select>
-
-    <insert id="save" parameterType="com.jianhuyi.information.domain.UserTaskDO" useGeneratedKeys="true"
-            keyProperty="id">
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from t_user_task
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="taskTime != null and taskTime != ''"> and task_time = #{taskTime} </if>
+		  		  <if test="eyeRate != null and eyeRate != ''"> and eye_rate = #{eyeRate} </if>
+		  		  <if test="avgRead != null and avgRead != ''"> and avg_read = #{avgRead} </if>
+		  		  <if test="avgOut != null and avgOut != ''"> and avg_out = #{avgOut} </if>
+		  		  <if test="avgReadDistance != null and avgReadDistance != ''"> and avg_read_distance = #{avgReadDistance} </if>
+		  		  <if test="avgLookPhone != null and avgLookPhone != ''"> and avg_look_phone = #{avgLookPhone} </if>
+		  		  <if test="avgLookTv != null and avgLookTv != ''"> and avg_look_tv = #{avgLookTv} </if>
+		  		  <if test="avgSitTilt != null and avgSitTilt != ''"> and avg_sit_tilt = #{avgSitTilt} </if>
+		  		  <if test="effectiveUseTime != null and effectiveUseTime != ''"> and effective_use_time = #{effectiveUseTime} </if>
+		  		  <if test="finishStatus != null and finishStatus != ''"> and finish_status = #{finishStatus} </if>
+		  		  <if test="finishDay != null and finishDay != ''"> and finish_day = #{finishDay} </if>
+		  		  <if test="unfinishedDay != null and unfinishedDay != ''"> and unfinished_day = #{unfinishedDay} </if>
+		  		  <if test="avgLight != null and avgLight != ''"> and avg_light = #{avgLight} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="taskType != null and taskType != ''"> and task_type = #{taskType} </if>
+		  		  <if test="avgReadResult != null and avgReadResult != ''"> and avg_read_result = #{avgReadResult} </if>
+		  		  <if test="avgReadScore != null and avgReadScore != ''"> and avg_read_score = #{avgReadScore} </if>
+		  		  <if test="avgReadScoreResult != null and avgReadScoreResult != ''"> and avg_read_score_result = #{avgReadScoreResult} </if>
+		  		  <if test="avgOutResult != null and avgOutResult != ''"> and avg_out_result = #{avgOutResult} </if>
+		  		  <if test="avgOutScore != null and avgOutScore != ''"> and avg_out_score = #{avgOutScore} </if>
+		  		  <if test="avgOutScoreResult != null and avgOutScoreResult != ''"> and avg_out_score_result = #{avgOutScoreResult} </if>
+		  		  <if test="avgReadDistanceResult != null and avgReadDistanceResult != ''"> and avg_read_distance_result = #{avgReadDistanceResult} </if>
+		  		  <if test="avgReadDistanceScore != null and avgReadDistanceScore != ''"> and avg_read_distance_score = #{avgReadDistanceScore} </if>
+		  		  <if test="avgReadDistanceScoreResult != null and avgReadDistanceScoreResult != ''"> and avg_read_distance_score_result = #{avgReadDistanceScoreResult} </if>
+		  		  <if test="avgLookPhoneResult != null and avgLookPhoneResult != ''"> and avg_look_phone_result = #{avgLookPhoneResult} </if>
+		  		  <if test="avgLookPhoneScore != null and avgLookPhoneScore != ''"> and avg_look_phone_score = #{avgLookPhoneScore} </if>
+		  		  <if test="avgLookPhoneScoreResult != null and avgLookPhoneScoreResult != ''"> and avg_look_phone_score_result = #{avgLookPhoneScoreResult} </if>
+		  		  <if test="avgLookTvResult != null and avgLookTvResult != ''"> and avg_look_tv_result = #{avgLookTvResult} </if>
+		  		  <if test="avgLookScore != null and avgLookScore != ''"> and avg_look_score = #{avgLookScore} </if>
+		  		  <if test="avgLookScoreResult != null and avgLookScoreResult != ''"> and avg_look_score_result = #{avgLookScoreResult} </if>
+		  		  <if test="avgSitTiltResult != null and avgSitTiltResult != ''"> and avg_sit_tilt_result = #{avgSitTiltResult} </if>
+		  		  <if test="avgSitTiltScore != null and avgSitTiltScore != ''"> and avg_sit_tilt_score = #{avgSitTiltScore} </if>
+		  		  <if test="avgSitTiltScoreResult != null and avgSitTiltScoreResult != ''"> and avg_sit_tilt_score_result = #{avgSitTiltScoreResult} </if>
+		  		  <if test="effectiveUseTimeResult != null and effectiveUseTimeResult != ''"> and effective_use_time_result = #{effectiveUseTimeResult} </if>
+		  		  <if test="effectiveUseTimeScore != null and effectiveUseTimeScore != ''"> and effective_use_time_score = #{effectiveUseTimeScore} </if>
+		  		  <if test="effectiveUseTimeScoreResult != null and effectiveUseTimeScoreResult != ''"> and effective_use_time_score_result = #{effectiveUseTimeScoreResult} </if>
+		  		  <if test="avgLightResult != null and avgLightResult != ''"> and avg_light_result = #{avgLightResult} </if>
+		  		  <if test="avgLightScore != null and avgLightScore != ''"> and avg_light_score = #{avgLightScore} </if>
+		  		  <if test="avgLightScoreResult != null and avgLightScoreResult != ''"> and avg_light_score_result = #{avgLightScoreResult} </if>
+		  		  <if test="countGrade != null and countGrade != ''"> and count_grade = #{countGrade} </if>
+		  		  <if test="gift != null and gift != ''"> and gift = #{gift} </if>
+		  		  <if test="totalScore != null and totalScore != ''"> and total_score = #{totalScore} </if>
+		  		  <if test="flag != null and flag != ''"> and flag = #{flag} </if>
+		  		  <if test="startTime != null and startTime != ''"> and start_time = #{startTime} </if>
+		  		  <if test="addreadyScore != null and addreadyScore != ''"> and addready_score = #{addreadyScore} </if>
+		  		  <if test="lastavgread != null and lastavgread != ''"> and lastavgRead = #{lastavgread} </if>
+		  		  <if test="lastavgout != null and lastavgout != ''"> and lastavgOut = #{lastavgout} </if>
+		  		  <if test="lastavgreaddistance != null and lastavgreaddistance != ''"> and lastavgReadDistance = #{lastavgreaddistance} </if>
+		  		  <if test="lastavglooktv != null and lastavglooktv != ''"> and lastavgLookTv = #{lastavglooktv} </if>
+		  		  <if test="lastavgsittilt != null and lastavgsittilt != ''"> and lastavgSitTilt = #{lastavgsittilt} </if>
+		  		  <if test="lasteffectiveusetime != null and lasteffectiveusetime != ''"> and lasteffectiveUseTime = #{lasteffectiveusetime} </if>
+		  		  <if test="lastavglight != null and lastavglight != ''"> and lastavgLight = #{lastavglight} </if>
+		  		  <if test="lastavglookphone != null and lastavglookphone != ''"> and lastavgLookPhone = #{lastavglookphone} </if>
+		  		  <if test="pcorapp != null and pcorapp != ''"> and pcorapp = #{pcorapp} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.jianhuyi.information.domain.UserTaskDO" useGeneratedKeys="true" keyProperty="id">
 		insert into t_user_task
 		(
 			`user_id`, 
-			`gift_id`, 
 			`task_time`, 
 			`eye_rate`, 
 			`avg_read`, 
 			`avg_out`, 
 			`avg_read_distance`, 
 			`avg_look_phone`, 
+			`avg_look_tv`, 
 			`avg_sit_tilt`, 
 			`effective_use_time`, 
 			`finish_status`, 
 			`finish_day`, 
 			`unfinished_day`, 
-			`create_time`
+			`avg_light`, 
+			`create_time`, 
+			`type`, 
+			`task_type`, 
+			`avg_read_result`, 
+			`avg_read_score`, 
+			`avg_read_score_result`, 
+			`avg_out_result`, 
+			`avg_out_score`, 
+			`avg_out_score_result`, 
+			`avg_read_distance_result`, 
+			`avg_read_distance_score`, 
+			`avg_read_distance_score_result`, 
+			`avg_look_phone_result`, 
+			`avg_look_phone_score`, 
+			`avg_look_phone_score_result`, 
+			`avg_look_tv_result`, 
+			`avg_look_score`, 
+			`avg_look_score_result`, 
+			`avg_sit_tilt_result`, 
+			`avg_sit_tilt_score`, 
+			`avg_sit_tilt_score_result`, 
+			`effective_use_time_result`, 
+			`effective_use_time_score`, 
+			`effective_use_time_score_result`, 
+			`avg_light_result`, 
+			`avg_light_score`, 
+			`avg_light_score_result`, 
+			`count_grade`, 
+			`gift`, 
+			`total_score`, 
+			`flag`, 
+			`start_time`, 
+			`addready_score`, 
+			`lastavgRead`, 
+			`lastavgOut`, 
+			`lastavgReadDistance`, 
+			`lastavgLookTv`, 
+			`lastavgSitTilt`, 
+			`lasteffectiveUseTime`, 
+			`lastavgLight`, 
+			`lastavgLookPhone`, 
+			`pcorapp`
 		)
 		values
 		(
 			#{userId}, 
-			#{giftId}, 
 			#{taskTime}, 
 			#{eyeRate}, 
 			#{avgRead}, 
 			#{avgOut}, 
 			#{avgReadDistance}, 
 			#{avgLookPhone}, 
+			#{avgLookTv}, 
 			#{avgSitTilt}, 
 			#{effectiveUseTime}, 
 			#{finishStatus}, 
 			#{finishDay}, 
 			#{unfinishedDay}, 
-			#{createTime}
+			#{avgLight}, 
+			#{createTime}, 
+			#{type}, 
+			#{taskType}, 
+			#{avgReadResult}, 
+			#{avgReadScore}, 
+			#{avgReadScoreResult}, 
+			#{avgOutResult}, 
+			#{avgOutScore}, 
+			#{avgOutScoreResult}, 
+			#{avgReadDistanceResult}, 
+			#{avgReadDistanceScore}, 
+			#{avgReadDistanceScoreResult}, 
+			#{avgLookPhoneResult}, 
+			#{avgLookPhoneScore}, 
+			#{avgLookPhoneScoreResult}, 
+			#{avgLookTvResult}, 
+			#{avgLookScore}, 
+			#{avgLookScoreResult}, 
+			#{avgSitTiltResult}, 
+			#{avgSitTiltScore}, 
+			#{avgSitTiltScoreResult}, 
+			#{effectiveUseTimeResult}, 
+			#{effectiveUseTimeScore}, 
+			#{effectiveUseTimeScoreResult}, 
+			#{avgLightResult}, 
+			#{avgLightScore}, 
+			#{avgLightScoreResult}, 
+			#{countGrade}, 
+			#{gift}, 
+			#{totalScore}, 
+			#{flag}, 
+			#{startTime}, 
+			#{addreadyScore}, 
+			#{lastavgread}, 
+			#{lastavgout}, 
+			#{lastavgreaddistance}, 
+			#{lastavglooktv}, 
+			#{lastavgsittilt}, 
+			#{lasteffectiveusetime}, 
+			#{lastavglight}, 
+			#{lastavglookphone}, 
+			#{pcorapp}
 		)
 	</insert>
-
-    <update id="update" parameterType="com.jianhuyi.information.domain.UserTaskDO">
-        update t_user_task
-        <set>
-            <if test="userId != null">`user_id` = #{userId},</if>
-            <if test="giftId != null">`gift_id` = #{giftId},</if>
-            <if test="taskTime != null">`task_time` = #{taskTime},</if>
-            <if test="eyeRate != null">`eye_rate` = #{eyeRate},</if>
-            <if test="avgRead != null">`avg_read` = #{avgRead},</if>
-            <if test="avgOut != null">`avg_out` = #{avgOut},</if>
-            <if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance},</if>
-            <if test="avgLookPhone != null">`avg_look_phone` = #{avgLookPhone},</if>
-            <if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt},</if>
-            <if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime},</if>
-            <if test="finishStatus != null">`finish_status` = #{finishStatus},</if>
-            <if test="finishDay != null">`finish_day` = #{finishDay},</if>
-            <if test="unfinishedDay != null">`unfinished_day` = #{unfinishedDay},</if>
-            <if test="createTime != null">`create_time` = #{createTime}</if>
-        </set>
-        where id = #{id}
-    </update>
-
-    <delete id="remove">
+	 
+	<update id="update" parameterType="com.jianhuyi.information.domain.UserTaskDO">
+		update t_user_task 
+		<set>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="taskTime != null">`task_time` = #{taskTime}, </if>
+			<if test="eyeRate != null">`eye_rate` = #{eyeRate}, </if>
+			<if test="avgRead != null">`avg_read` = #{avgRead}, </if>
+			<if test="avgOut != null">`avg_out` = #{avgOut}, </if>
+			<if test="avgReadDistance != null">`avg_read_distance` = #{avgReadDistance}, </if>
+			<if test="avgLookPhone != null">`avg_look_phone` = #{avgLookPhone}, </if>
+			<if test="avgLookTv != null">`avg_look_tv` = #{avgLookTv}, </if>
+			<if test="avgSitTilt != null">`avg_sit_tilt` = #{avgSitTilt}, </if>
+			<if test="effectiveUseTime != null">`effective_use_time` = #{effectiveUseTime}, </if>
+			<if test="finishStatus != null">`finish_status` = #{finishStatus}, </if>
+			<if test="finishDay != null">`finish_day` = #{finishDay}, </if>
+			<if test="unfinishedDay != null">`unfinished_day` = #{unfinishedDay}, </if>
+			<if test="avgLight != null">`avg_light` = #{avgLight}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="taskType != null">`task_type` = #{taskType}, </if>
+			<if test="avgReadResult != null">`avg_read_result` = #{avgReadResult}, </if>
+			<if test="avgReadScore != null">`avg_read_score` = #{avgReadScore}, </if>
+			<if test="avgReadScoreResult != null">`avg_read_score_result` = #{avgReadScoreResult}, </if>
+			<if test="avgOutResult != null">`avg_out_result` = #{avgOutResult}, </if>
+			<if test="avgOutScore != null">`avg_out_score` = #{avgOutScore}, </if>
+			<if test="avgOutScoreResult != null">`avg_out_score_result` = #{avgOutScoreResult}, </if>
+			<if test="avgReadDistanceResult != null">`avg_read_distance_result` = #{avgReadDistanceResult}, </if>
+			<if test="avgReadDistanceScore != null">`avg_read_distance_score` = #{avgReadDistanceScore}, </if>
+			<if test="avgReadDistanceScoreResult != null">`avg_read_distance_score_result` = #{avgReadDistanceScoreResult}, </if>
+			<if test="avgLookPhoneResult != null">`avg_look_phone_result` = #{avgLookPhoneResult}, </if>
+			<if test="avgLookPhoneScore != null">`avg_look_phone_score` = #{avgLookPhoneScore}, </if>
+			<if test="avgLookPhoneScoreResult != null">`avg_look_phone_score_result` = #{avgLookPhoneScoreResult}, </if>
+			<if test="avgLookTvResult != null">`avg_look_tv_result` = #{avgLookTvResult}, </if>
+			<if test="avgLookScore != null">`avg_look_score` = #{avgLookScore}, </if>
+			<if test="avgLookScoreResult != null">`avg_look_score_result` = #{avgLookScoreResult}, </if>
+			<if test="avgSitTiltResult != null">`avg_sit_tilt_result` = #{avgSitTiltResult}, </if>
+			<if test="avgSitTiltScore != null">`avg_sit_tilt_score` = #{avgSitTiltScore}, </if>
+			<if test="avgSitTiltScoreResult != null">`avg_sit_tilt_score_result` = #{avgSitTiltScoreResult}, </if>
+			<if test="effectiveUseTimeResult != null">`effective_use_time_result` = #{effectiveUseTimeResult}, </if>
+			<if test="effectiveUseTimeScore != null">`effective_use_time_score` = #{effectiveUseTimeScore}, </if>
+			<if test="effectiveUseTimeScoreResult != null">`effective_use_time_score_result` = #{effectiveUseTimeScoreResult}, </if>
+			<if test="avgLightResult != null">`avg_light_result` = #{avgLightResult}, </if>
+			<if test="avgLightScore != null">`avg_light_score` = #{avgLightScore}, </if>
+			<if test="avgLightScoreResult != null">`avg_light_score_result` = #{avgLightScoreResult}, </if>
+			<if test="countGrade != null">`count_grade` = #{countGrade}, </if>
+			<if test="gift != null">`gift` = #{gift}, </if>
+			<if test="totalScore != null">`total_score` = #{totalScore}, </if>
+			<if test="flag != null">`flag` = #{flag}, </if>
+			<if test="startTime != null">`start_time` = #{startTime}, </if>
+			<if test="addreadyScore != null">`addready_score` = #{addreadyScore}, </if>
+			<if test="lastavgread != null">`lastavgRead` = #{lastavgread}, </if>
+			<if test="lastavgout != null">`lastavgOut` = #{lastavgout}, </if>
+			<if test="lastavgreaddistance != null">`lastavgReadDistance` = #{lastavgreaddistance}, </if>
+			<if test="lastavglooktv != null">`lastavgLookTv` = #{lastavglooktv}, </if>
+			<if test="lastavgsittilt != null">`lastavgSitTilt` = #{lastavgsittilt}, </if>
+			<if test="lasteffectiveusetime != null">`lasteffectiveUseTime` = #{lasteffectiveusetime}, </if>
+			<if test="lastavglight != null">`lastavgLight` = #{lastavglight}, </if>
+			<if test="lastavglookphone != null">`lastavgLookPhone` = #{lastavglookphone}, </if>
+			<if test="pcorapp != null">`pcorapp` = #{pcorapp}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
 		delete from t_user_task where id = #{value}
 	</delete>
-
-    <delete id="batchRemove">
-        delete from t_user_task where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
+	
+	<delete id="batchRemove">
+		delete from t_user_task where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
 
 </mapper>

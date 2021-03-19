@@ -13,10 +13,11 @@ public class CorsConfig  extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
+		System.out.println("跨域请求中....");
 		registry.addMapping("/**")
 				.allowedOrigins("*")
 				.allowedHeaders("*")
-				.allowedMethods("*")
-				.maxAge(300*1000);
+				.allowedMethods("*");
+	//			.maxAge(300*1000);
 	}
 }  

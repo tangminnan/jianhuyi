@@ -31,9 +31,9 @@ import static com.jianhuyi.common.utils.DateUtils.format;
  * @email bushuo@163.com
  * @date 2020-08-18 11:44:12
  */
-
 @Controller
 @RequestMapping("/api/gift")
+//@CrossOrigin(origins = "http://124.70.65.236:8062")//表示只允许这一个url可以跨域访问这个controller
 public class GiftController {
     @Autowired
     private GiftService giftService;

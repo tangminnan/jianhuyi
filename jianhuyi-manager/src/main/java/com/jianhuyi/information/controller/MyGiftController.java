@@ -6,6 +6,8 @@ import java.util.Map;
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
+import io.swagger.models.auth.In;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -39,6 +41,14 @@ public class MyGiftController {
 	@RequiresPermissions("information:myGift:myGift")
 	String MyGift(){
 	    return "information/myGift/myGift";
+	}
+
+
+	@GetMapping("/duihuanjilu/{id}")
+	@RequiresPermissions("information:myGift:myGift")
+	String duihuanjilu(@PathVariable("id") Integer userId,Model model){
+		model.addAttribute("userId",userId);
+		return "information/myGift/myGift";
 	}
 	
 	@ResponseBody
