@@ -417,9 +417,10 @@ public class AvgDataUtil {
   // 添加数据到新表 用于添加以前的记录，以后的由app上传后自动更新，不再使用本接口
   @GetMapping("/addData")
   @ResponseBody
-  public static void addData() {
+  public static void addData(long userId, String time) {
     System.out.println("=============开始查询=============");
-    List<UseJianhuyiLogDO> useJianhuyiLogDOList = useJianhuyiLogService.countByUserIdAndDate();
+    List<UseJianhuyiLogDO> useJianhuyiLogDOList =
+        useJianhuyiLogService.countByUserIdAndDate(userId, time);
     List<DataEverydayDO> everydayDOList = new ArrayList<>();
     for (UseJianhuyiLogDO useJianhuyiLogDO : useJianhuyiLogDOList) {
       UseJianhuyiLogDO useJianhuyiLogDO1 =

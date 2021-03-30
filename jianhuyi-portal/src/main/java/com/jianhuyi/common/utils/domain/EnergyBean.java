@@ -1,92 +1,124 @@
 package com.jianhuyi.common.utils.domain;
 
-/***
- * 电量信息
- */
+/** * 电量信息 */
 public class EnergyBean {
-    private Integer power;//电量
-    private Integer usbStatus;//usb状态
-    private String time;//时间
-    private Integer effectiveTime;//有效时长
-    private Integer readTime;//阅读时长
-    private Integer unreadTime;//非阅读时长
-    private Integer coverTime;//遮挡时长
-    private Integer runningTime;//开机时长
+  private Integer power; // 电量
+  private Integer usbStatus; // usb状态
+  private String time; // 时间
+  private Integer effectiveTime; // 有效时长
+  private Integer readTime; // 阅读时长
+  private Integer unreadTime; // 非阅读时长
+  private Integer coverTime; // 遮挡时长
+  private Integer runningTime; // 开机时长
 
+  private Integer noneffectiveTime; // 无效时长
 
-    public Integer getCoverTime() {
-        return coverTime;
-    }
+  private Integer serialNumber;
 
-    public void setCoverTime(Integer coverTime) {
-        this.coverTime = coverTime;
-    }
+  public Integer getSerialNumber() {
+    return serialNumber;
+  }
 
-    public Integer getRunningTime() {
-        return runningTime;
-    }
+  public void setSerialNumber(Integer serialNumber) {
+    this.serialNumber = serialNumber;
+  }
 
-    public void setRunningTime(Integer runningTime) {
-        this.runningTime = runningTime;
-    }
+  public Integer getNoneffectiveTime() {
+    return noneffectiveTime;
+  }
 
-    public Integer getPower() {
-        return power;
-    }
+  public void setNoneffectiveTime(Integer noneffectiveTime) {
+    this.noneffectiveTime = noneffectiveTime;
+  }
 
-    public void setPower(Integer power) {
-        this.power = power;
-    }
+  public Integer getCoverTime() {
+    return coverTime;
+  }
 
-    public Integer getUsbStatus() {
-        return usbStatus;
-    }
+  public void setCoverTime(Integer coverTime) {
+    this.coverTime = coverTime;
+  }
 
-    public void setUsbStatus(Integer usbStatus) {
-        this.usbStatus = usbStatus;
-    }
+  public Integer getRunningTime() {
+    return runningTime;
+  }
 
-    public String getTime() {
-        return time;
-    }
+  public void setRunningTime(Integer runningTime) {
+    this.runningTime = runningTime;
+  }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
+  public Integer getPower() {
+    return power;
+  }
 
-    public Integer getEffectiveTime() {
-        return effectiveTime;
-    }
+  public void setPower(Integer power) {
+    this.power = power;
+  }
 
-    public void setEffectiveTime(Integer effectiveTime) {
-        this.effectiveTime = effectiveTime;
-    }
+  public Integer getUsbStatus() {
+    return usbStatus;
+  }
 
-    public Integer getReadTime() {
-        return readTime;
-    }
+  public void setUsbStatus(Integer usbStatus) {
+    this.usbStatus = usbStatus;
+  }
 
-    public void setReadTime(Integer readTime) {
-        this.readTime = readTime;
-    }
+  public String getTime() {
+    return time;
+  }
 
-    public Integer getUnreadTime() {
-        return unreadTime;
-    }
+  public void setTime(String time) {
+    this.time = time;
+  }
 
-    public void setUnreadTime(Integer unreadTime) {
-        this.unreadTime = unreadTime;
-    }
+  public Integer getEffectiveTime() {
+    return effectiveTime;
+  }
 
-    @Override
-    public String toString() {
-        return "EnergyBean{" +
-                "power=" + power +
-                ", usbStatus=" + usbStatus +
-                ", time='" + time + '\'' +
-                ", effectiveTime=" + effectiveTime +
-                ", readTime=" + readTime +
-                ", unreadTime=" + unreadTime +
-                '}';
-    }
+  public void setEffectiveTime(Integer effectiveTime) {
+    this.effectiveTime = effectiveTime;
+  }
+
+  public Integer getReadTime() {
+    return readTime;
+  }
+
+  public void setReadTime(Integer readTime) {
+    this.readTime = readTime;
+  }
+
+  public Integer getUnreadTime() {
+    return unreadTime;
+  }
+
+  public void setUnreadTime(Integer unreadTime) {
+    this.unreadTime = unreadTime;
+  }
+
+  @Override
+  public String toString() {
+    return "EnergyBean{"
+        + "power="
+        + power
+        + ", usbStatus="
+        + usbStatus
+        + ", time='"
+        + time
+        + '\''
+        + ", effectiveTime="
+        + effectiveTime
+        + ", readTime="
+        + readTime
+        + ", unreadTime="
+        + unreadTime
+        + ", coverTime="
+        + coverTime
+        + ", runningTime="
+        + runningTime
+        + ", noneffectiveTime="
+        + noneffectiveTime
+        + ", serialNumber="
+        + serialNumber
+        + '}';
+  }
 }

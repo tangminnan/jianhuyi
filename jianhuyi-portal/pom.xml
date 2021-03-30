@@ -261,6 +261,31 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--网络请求httpclient-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+
+        <!-- httpclient3.1版本 -->
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.3.13.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
         <!--war包部署需要-->
         <!--&lt;!&ndash; 移除嵌入式tomcat插件 &ndash;&gt;-->
         <!--<dependency>

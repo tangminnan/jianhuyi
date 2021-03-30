@@ -4,11 +4,11 @@
     <!--输出到控制台-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 
-        <!-- 增加过滤器，控制日志级别-->
+        <!--&lt;!&ndash; 增加过滤器，控制日志级别&ndash;&gt;
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>error</level>
         </filter>
-
+-->
 
 
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
