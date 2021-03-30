@@ -269,6 +269,10 @@ function load() {
                            + row.id
                            + '\')"><i class="fa fa-list"></i></a> ';
 
+
+                         var g = '<a class="btn btn-primary btn-sm" title="兑换记录"  mce_href="#" onclick="duihuanjilu(\''
+                             + row.id
+                             + '\')"><i class="fa fa-list"></i></a> ';
                         var b = '<a class="btn btn-danger btn-sm" title="设置为管理员"  mce_href="#" onclick="setManager(\''
                            + row.id
                            + '\')"><i class="fa fa-list">设为管理员</i></a> ';
@@ -276,9 +280,9 @@ function load() {
                         var c = '<a class="btn btn-danger btn-sm getUser" title="查看我的用户"  mce_href="#" ><i class="fa fa-list">查看我的用户</i></a> ';
 
                         if (row.bindType != 1 && row.managerId == 0) {
-                           return e + d + f + b;
+                           return e + d + f +g+ b;
                         } else {
-                           return e + d + f
+                           return e + d + f+g
                            /*+ c;*/
                         }
 
@@ -304,6 +308,10 @@ function add() {
       area: ['1000px', '800px'],
       content: prefix + '/add' // iframe的url
    });
+}
+
+function duihuanjilu(id){
+   window.location.href="/information/myGift/duihuanjilu/"+id;
 }
 
 function batchAdd() {

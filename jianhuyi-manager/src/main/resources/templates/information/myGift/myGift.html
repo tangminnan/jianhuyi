@@ -9,10 +9,10 @@
 				<div class="ibox-body">
 					<div class="fixed-table-toolbar">
 						<div class="columns pull-left">
-							<button shiro:hasPermission="information:userTask:add" type="button" class="btn  btn-primary" onclick="add()">
+							<button shiro:hasPermission="information:myGift:add" type="button" class="btn  btn-primary" onclick="add()">
 								<i class="fa fa-plus" aria-hidden="true"></i>添加
 							</button>
-							<button shiro:hasPermission="information:userTask:batchRemove" type="button" class="btn  btn-danger"
+							<button shiro:hasPermission="information:myGift:batchRemove" type="button" class="btn  btn-danger"
 								onclick="batchRemove()">
 								<i class="fa fa-trash" aria-hidden="true"></i>删除
 							</button>
@@ -27,6 +27,7 @@
 					</div>
 					<table id="exampleTable" data-mobile-responsive="true">
 					</table>
+					<input type="hidden" th:value="${userId}" id="userId">
 				</div>
 			</div>
 		</div>
@@ -34,12 +35,17 @@
 	<!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
 		<div>
 			<script type="text/javascript">
-				var s_edit_h = '';
+				var s_edit_h = 'hidden';
+			</script>
 
+		</div>
+		<div shiro:hasPermission="information:myGift:myGift">
+			<script type="text/javascript">
+				var s_edit_h = '';
 			</script>
 		</div>
 	</div>
 	<div th:include="include :: footer"></div>
-	<script type="text/javascript" src="/js/appjs/information/userTask/userTask.js"></script>
+	<script type="text/javascript" src="/js/appjs/information/myGift/myGift.js"></script>
 </body>
 </html>

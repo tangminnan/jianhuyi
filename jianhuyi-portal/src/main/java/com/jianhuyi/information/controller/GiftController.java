@@ -14,6 +14,7 @@ import org.activiti.bpmn.model.UserTask;
 import org.apache.ibatis.mapping.ResultMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
@@ -31,9 +32,9 @@ import static com.jianhuyi.common.utils.DateUtils.format;
  * @email bushuo@163.com
  * @date 2020-08-18 11:44:12
  */
-
 @Controller
 @RequestMapping("/api/gift")
+//@CrossOrigin(origins = "http://124.70.65.236:8062")//表示只允许这一个url可以跨域访问这个controller
 public class GiftController {
     @Autowired
     private GiftService giftService;
@@ -498,6 +499,7 @@ public class GiftController {
      */
     @ResponseBody
     @PostMapping("/customTaskPc")
+    @Transactional
     public R customTask(UserTaskDO userTaskDO, String idCardsInfo) {
         UserTaskDO userTaskDO1 = userTaskService.getCurrentTaskNT(userTaskDO.getPcorapp(), 1);//1= PC端老师批量任务
         if(userTaskDO1!=null) {
@@ -582,6 +584,7 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/addTaskPcByJz")
+    @Transactional
     public String addTaskPcByJz(@RequestParam("callback") String callback,String idCard,String name,UserTaskDO userTaskDO) {
         OwnerUserDO userDO = null;
         UserTaskDO userTaskDO1 = null;
@@ -636,6 +639,7 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/getBatchRenwu")
+    @Transactional
     public Map<String,Object> getBatchRenwu(String pcorapp){
         List<UserTaskDO> list = userTaskService.getBatchRenwu(pcorapp);
         Map<String,Object> map = new HashMap<>();
@@ -671,6 +675,7 @@ public class GiftController {
 
     @ResponseBody
     @GetMapping("/getRenwuDetail")
+    @Transactional
     public Map<String,Object> getRenwuDetail(String pcorapp,Date startTime,Integer taskTime){
         List<UserTaskDO> userTaskDOS = userTaskService.getRenwuDetail(pcorapp,startTime,taskTime);
         List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
@@ -729,6 +734,7 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/getMainData")
+    @Transactional
     public Map<String,Object> getMainData(Long taskIds,String name,String time){
         Map<String,Object> resultMap = new HashMap<String,Object>();
         List<UserTaskLinshiDO> userTaskLinshiDOS = userTaskLinshiService.getTotalScore(taskIds);
@@ -751,6 +757,7 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/getTaskFromPC")
+    @Transactional
     public String getTaskFromPC(String idCard,@RequestParam("callback") String callback,Integer type){
         Map<String,Object> resultMap = new HashMap<String,Object>();
         List<OwnerUserDO> list = userService.getUserByIdCard(idCard);
@@ -786,6 +793,7 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/getTaskDetailPC")
+    @Transactional
     public String getTaskDetailPC(Long taskId,@RequestParam("callback") String callback){
         Map<String,Object> resultMap=new HashMap<String,Object>();
         UserTaskDO userTask=userTaskService.get(taskId);
@@ -820,6 +828,7 @@ public class GiftController {
      */
     @ResponseBody
     @GetMapping("/getDayDetailPC")
+    @Transactional
     public String getDayDetailPC(Long id,Long taskId,  @RequestParam("callback") String callback){
         UserTaskDO userTaskDO = userTaskService.get(taskId);
         UserTaskLinshiDO userTaskLinshiDO = userTaskLinshiService.get(id);

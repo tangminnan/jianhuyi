@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jianhuyi.information.dao.UserTaskLinshiDao">
-
+    <cache eviction="LRU" flushInterval="600000" size="1024"/>
     <select id="get" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
 		select `id`,`user_id`,`eye_rate`,score,`avg_read`,`avg_out`,`avg_read_distance`,`avg_look_phone`,`avg_look_tv`,`avg_sit_tilt`,`effective_use_time`,`avg_light`,`create_time` from t_user_task_linshi where id = #{value}
 	</select>

@@ -30,6 +30,10 @@ public class MyGiftDO {
      *  封面主要图
      */
     private String coverImg;
+    /**
+     *  0=兑换中 1=已兑换
+     */
+    private Integer flag;
 
     public Long getId() {
         return id;
@@ -85,5 +89,13 @@ public class MyGiftDO {
 
     public void setCoverImg(String coverImg) {
         this.coverImg = coverImg;
+    }
+
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
     }
 }
