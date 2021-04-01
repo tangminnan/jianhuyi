@@ -526,28 +526,28 @@ public class GiftController {
                 ownerUserDO = list.get(0);
             }
             userTaskDO.setUserId(ownerUserDO.getId());
-            userTaskDO.setType(2);//老师下达的任务（批量）
-            userTaskDO.setTaskType(1);//批量任务
-            userTaskDO.setCreateTime(date);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(userTaskDO.getCreateTime());
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            userTaskDO.setStartTime(calendar.getTime());//任务的开始时间 为下达 任务的第二天0点
-            userTaskDO.setAvgOutScore(countScore(userTaskDO.getAvgOut()));
-            userTaskDO.setAvgLightScore(countScore(userTaskDO.getAvgLight()));
-            userTaskDO.setAvgLookPhoneScore(countScore(userTaskDO.getAvgLookPhone()));
-            userTaskDO.setAvgLookScore(countScore(userTaskDO.getAvgLookTv()));
-            userTaskDO.setAvgSitTiltScore(countScore(userTaskDO.getAvgSitTilt()));
-            userTaskDO.setAvgReadDistanceScore(countScore(userTaskDO.getAvgReadDistance()));
-            userTaskDO.setAvgReadScore(countScore(userTaskDO.getAvgRead()));
-            userTaskDO.setEffectiveUseTimeScore(countScore(userTaskDO.getEffectiveUseTime()));
-            int result = userTaskService.save(userTaskDO);
-            if (result > 0) {
-                ownerUserDO.setTaskIds(userTaskDO.getId());
-                userService.update(ownerUserDO);
+                userTaskDO.setType(2);//老师下达的任务（批量）
+                userTaskDO.setTaskType(1);//批量任务
+                userTaskDO.setCreateTime(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(userTaskDO.getCreateTime());
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                userTaskDO.setStartTime(calendar.getTime());//任务的开始时间 为下达 任务的第二天0点
+                userTaskDO.setAvgOutScore(countScore(userTaskDO.getAvgOut()));
+                userTaskDO.setAvgLightScore(countScore(userTaskDO.getAvgLight()));
+                userTaskDO.setAvgLookPhoneScore(countScore(userTaskDO.getAvgLookPhone()));
+                userTaskDO.setAvgLookScore(countScore(userTaskDO.getAvgLookTv()));
+                userTaskDO.setAvgSitTiltScore(countScore(userTaskDO.getAvgSitTilt()));
+                userTaskDO.setAvgReadDistanceScore(countScore(userTaskDO.getAvgReadDistance()));
+                userTaskDO.setAvgReadScore(countScore(userTaskDO.getAvgRead()));
+                userTaskDO.setEffectiveUseTimeScore(countScore(userTaskDO.getEffectiveUseTime()));
+                int result = userTaskService.save(userTaskDO);
+                if (result > 0) {
+                    ownerUserDO.setTaskIds(userTaskDO.getId());
+                    userService.update(ownerUserDO);
             }
         }
         return R.ok("成功下达任务");

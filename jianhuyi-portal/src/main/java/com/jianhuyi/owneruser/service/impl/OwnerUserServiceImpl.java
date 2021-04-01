@@ -163,4 +163,9 @@ public class OwnerUserServiceImpl implements OwnerUserService {
 		ownerUserMapper.updateTaskIdNullInUser(userId);
 	}
 
+	@Override
+	public void updateTaskIdsNullInUser(Long userId) {
+		ownerUserMapper.updateTaskIdsNullInUser(userId);
+	}
+
 }

@@ -63,4 +63,6 @@ public interface OwnerUserDao {
     List<OwnerUserDO> getUserByIdCardAndSchoolAndGrade(@Param("identityCard") String identityCard,@Param("name") String name,@Param("grade") String grade);
 
 	void updateTaskIdNullInUser(Long userId);
+
+	void updateTaskIdsNullInUser(Long userId);
 }
