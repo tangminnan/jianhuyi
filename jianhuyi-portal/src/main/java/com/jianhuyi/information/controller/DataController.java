@@ -52,7 +52,6 @@ public class DataController {
   R saveInit(@RequestBody MultipartFile initFile, int type) {
     // 刷新token，24小时过期
     String token = getToken();
-
     System.out.println("=========刷新token===========");
     String filename = initFile.getOriginalFilename();
     String[] str = filename.split("_");
@@ -90,6 +89,9 @@ public class DataController {
       new Thread(
               () -> {
                 try {
+                  long startTime = System.nanoTime();
+
+                  System.out.println("============计时开始=============");
                   // 图片预测及计算
                   List<UseJianhuyiLogDO> useJianhuyiLogDOList =
                       yuceAnddetail(finalHistoryDataBean, type, token);
@@ -115,6 +117,12 @@ public class DataController {
 
                   AvgDataUtil.addOrUpdateData(saveParamsDOList);
                   System.out.println("=============今日数据已更新=======================");
+                  long endTime = System.nanoTime();
+                  long duration = (endTime - startTime);
+                  System.out.println(
+                      "============计时结束=============共"
+                          + duration / (1000 * 60 * 60 * 24 * 60 * 60)
+                          + "s");
                 } catch (Exception e) {
                   e.printStackTrace();
                 }
@@ -173,7 +181,10 @@ public class DataController {
 
             if (localFile.exists()) {
               // 图片预测
-              String result = getYuceResult(serialDataBean.getStatus(), multipartFile, token);
+              String result = "";
+              if (serialDataBean.getStatus() == 1 || serialDataBean.getStatus() == 2) {
+                result = getYuceResult(serialDataBean.getStatus(), multipartFile, token);
+              }
               if (serialDataBean.getStatus() == 1) {
 
                 if (result.equals("phone")) { // 看手机

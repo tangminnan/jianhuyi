@@ -95,7 +95,6 @@ public class DateUtil {
     try {
       String currentDates = YYYY_MM_DD_MM_HH_SS.format(new Date());
       Date date = YYYY_MM_DD_MM_HH_SS.parse(currentDates);
-      System.out.println("========date========" + date);
       return date;
     } catch (Exception e) {
       return new Date();

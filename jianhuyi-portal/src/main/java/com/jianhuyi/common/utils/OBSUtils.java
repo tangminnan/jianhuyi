@@ -25,7 +25,6 @@ public class OBSUtils {
       InputStream inputStream = multipartFile.getInputStream();
       PutObjectResult putObject = obsClient.putObject(bucketname, urlName + ".jpeg", inputStream);
       url = putObject.getObjectUrl();
-      System.out.println(url);
       // 使用访问OBS
 
       // 关闭obsClient
