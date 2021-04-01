@@ -37,21 +37,25 @@ public class DataParseUtil {
    * @param file
    */
   public static HistoryDataBean readFileTo(File file) {
-
+    Integer uploadId = 0;
     String hexString = readFile(file.getAbsolutePath());
     if (hexString.contains("sourceData")) {
       JSONObject jsonObject = JSONObject.parseObject(hexString);
+      uploadId = (Integer) jsonObject.get("uploadId");
       hexString = jsonObject.get("sourceData").toString();
       hexString = hexString.replace(" ", "");
     } else {
       hexString = hexString.replace(" ", "");
     }
-    return parseData(hexStringToByteArray(hexString));
+    return parseData(hexStringToByteArray(hexString), uploadId);
   }
 
-  private static HistoryDataBean parseData(byte[] bytes) {
+  private static HistoryDataBean parseData(byte[] bytes, Integer uploadId) {
 
     HistoryDataBean historyDataBean = new HistoryDataBean();
+    if (uploadId > 0) {
+      historyDataBean.setUploadId(uploadId);
+    }
     try {
 
       List<SerialDataBean> datas = new ArrayList();

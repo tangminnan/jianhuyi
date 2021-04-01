@@ -625,12 +625,8 @@ public class ResultUtils {
 
       effectiveTime = usetime.getEffectiveTime();
     }
-    /**
-     *  平均阅读距离
-     */
-
-     avgReadDistance = AvgDataUtil.selectDisList(userId, time);
-
+    /** 平均阅读距离 */
+    avgReadDistance = AvgDataUtil.selectDisList(userId, time);
 
     Map<String, Double> resultMap = new HashMap<>();
     resultMap.put("avgReadDuration", avgReadDuration);

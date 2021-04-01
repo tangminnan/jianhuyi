@@ -146,7 +146,7 @@ public class UseJianhuyiLogController {
               Integer taskTime = userTaskDO.getTaskTime(); // 最近一次任务的天数
               Calendar calendar = Calendar.getInstance();
               calendar.setTime(createTime);
-              calendar.add(Calendar.DAY_OF_YEAR, taskTime-1);
+              calendar.add(Calendar.DAY_OF_YEAR, taskTime - 1);
               calendar.add(Calendar.HOUR, 20); // 任务的最大持续时间
               Date taskDate = calendar.getTime();
               if (taskDate.compareTo(new Date()) >= 0) { // 最近一次任务的数据统计

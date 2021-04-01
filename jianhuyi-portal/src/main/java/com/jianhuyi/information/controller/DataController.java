@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -25,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author chglee
@@ -45,14 +45,17 @@ public class DataController {
   @Autowired private UseRemindsService useRemindsService;
   @Autowired private UseTimeService useTimeService;
 
-  private String token = null;
+  @Autowired HttpSession session;
 
   @ResponseBody
   @PostMapping("/saveInit")
   R saveInit(@RequestBody MultipartFile initFile, int type) {
+    // 刷新token，24小时过期
+    String token = getToken();
+
+    System.out.println("=========刷新token===========");
     String filename = initFile.getOriginalFilename();
     String[] str = filename.split("_");
-    AtomicReference<String> token = null;
     try {
       FileUtil.uploadFile(
           initFile.getBytes(), bootdoConfig.getUploadPath() + "/initFile/", filename);
@@ -63,6 +66,9 @@ public class DataController {
         historyDataBean = DataParseUtil.readFileTo(file);
         historyDataBean.setEquipmentId(str[0]);
         historyDataBean.setUserId(Integer.parseInt(str[1]));
+        if (historyDataBean.getUploadId() == null) {
+          historyDataBean.setUploadId(Integer.parseInt(str[1]));
+        }
       }
       for (SerialDataBean serialDataBean : historyDataBean.getDataDOList()) {
         serialDataBean.setEquipmentId(str[0]);
@@ -86,13 +92,13 @@ public class DataController {
                 try {
                   // 图片预测及计算
                   List<UseJianhuyiLogDO> useJianhuyiLogDOList =
-                      yuceAnddetail(finalHistoryDataBean, type);
+                      yuceAnddetail(finalHistoryDataBean, type, token);
                   useJianhuyiLogService.saveList(useJianhuyiLogDOList);
-                  System.out.println("==========统计数据保存完成=============");
+                  System.out.println("=============统计数据保存完成=======================");
 
                   List<UseRemindsDO> useRemindsDOList = getRemindsList(finalHistoryDataBean);
                   useRemindsService.saveList(useRemindsDOList);
-                  System.out.println("===============震动数据保存完成==============");
+                  System.out.println("=============震动数据保存完成=======================");
 
                   List<UseTimeDO> useTimeDOList = getUseTime(finalHistoryDataBean);
                   useTimeService.saveList(useTimeDOList);
@@ -102,8 +108,13 @@ public class DataController {
                   saveParamsDOList.setUseJianhuyiLogDOList(useJianhuyiLogDOList);
                   saveParamsDOList.setUseRemindsDOList(useRemindsDOList);
                   saveParamsDOList.setUseTimeDOList(useTimeDOList);
+                  saveParamsDOList.setEquipmentId(finalHistoryDataBean.getEquipmentId());
+                  saveParamsDOList.setUploadId(
+                      Long.parseLong(finalHistoryDataBean.getUploadId().toString()));
+                  saveParamsDOList.setUserId(Long.parseLong(finalHistoryDataBean.getUserId() + ""));
 
                   AvgDataUtil.addOrUpdateData(saveParamsDOList);
+                  System.out.println("=============今日数据已更新=======================");
                 } catch (Exception e) {
                   e.printStackTrace();
                 }
@@ -120,7 +131,8 @@ public class DataController {
   }
 
   // 1和2状态的数据预测及统计
-  public List<UseJianhuyiLogDO> yuceAnddetail(HistoryDataBean finalHistoryDataBean, int type) {
+  public List<UseJianhuyiLogDO> yuceAnddetail(
+      HistoryDataBean finalHistoryDataBean, int type, String token) {
     List<UseJianhuyiLogDO> useJianhuyiLogDOList = new LinkedList<>();
     DecimalFormat df = new DecimalFormat("#.##");
 
@@ -161,7 +173,7 @@ public class DataController {
 
             if (localFile.exists()) {
               // 图片预测
-              String result = getYuceResult(serialDataBean.getStatus(), multipartFile);
+              String result = getYuceResult(serialDataBean.getStatus(), multipartFile, token);
               if (serialDataBean.getStatus() == 1) {
 
                 if (result.equals("phone")) { // 看手机
@@ -319,43 +331,45 @@ public class DataController {
 
   /** 获取token */
   public String getToken() {
-    if (token == null) {
-      String url = "https://iam.myhuaweicloud.com/v3/auth/tokens";
-      try {
-        String request =
-            "{\n"
-                + "\t\"auth\": {\n"
-                + "\t\t\"identity\": {\n"
-                + "\t\t\t\"methods\": [\n"
-                + "\t\t\t\t\"password\"\n"
-                + "\t\t\t],\n"
-                + "\t\t\t\"password\": {\n"
-                + "\t\t\t\t\"user\": {\n"
-                + "\t\t\t\t\t\"domain\": {\n"
-                + "\t\t\t\t\t\t\"name\": \"dddmaker\"\n"
-                + "\t\t\t\t\t},\n"
-                + "\t\t\t\t\t\"name\": \"jiasj\",\n"
-                + "\t\t\t\t\t\"password\": \"Dm2020jsj\"\n"
-                + "\t\t\t\t}\n"
-                + "\t\t\t}\n"
-                + "\t\t},\n"
-                + "\t\t\"scope\": {\n"
-                + "\t\t\t\"project\": {\n"
-                + "\t\t\t\t\"name\": \"cn-north-4\"\n"
-                + "\t\t\t}\n"
-                + "\t\t}\n"
-                + "\t}\n"
-                + "}";
-        token = HttpRequestUtils.getData(url, request, "POST").get("token").toString();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    String url = "https://iam.myhuaweicloud.com/v3/auth/tokens";
+
+    String token = "";
+    try {
+      String request =
+          "{\n"
+              + "\t\"auth\": {\n"
+              + "\t\t\"identity\": {\n"
+              + "\t\t\t\"methods\": [\n"
+              + "\t\t\t\t\"password\"\n"
+              + "\t\t\t],\n"
+              + "\t\t\t\"password\": {\n"
+              + "\t\t\t\t\"user\": {\n"
+              + "\t\t\t\t\t\"domain\": {\n"
+              + "\t\t\t\t\t\t\"name\": \"dddmaker\"\n"
+              + "\t\t\t\t\t},\n"
+              + "\t\t\t\t\t\"name\": \"jiasj\",\n"
+              + "\t\t\t\t\t\"password\": \"Dm2020jsj\"\n"
+              + "\t\t\t\t}\n"
+              + "\t\t\t}\n"
+              + "\t\t},\n"
+              + "\t\t\"scope\": {\n"
+              + "\t\t\t\"project\": {\n"
+              + "\t\t\t\t\"name\": \"cn-north-4\"\n"
+              + "\t\t\t}\n"
+              + "\t\t}\n"
+              + "\t}\n"
+              + "}";
+      token = HttpRequestUtils.getData(url, request, "POST").get("token").toString();
+      session.setMaxInactiveInterval(60 * 60 * 24);
+      session.setAttribute("token", token);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    return token;
+    return session.getAttribute("token").toString();
   }
 
   /** 获取预测结果 */
-  public String getYuceResult(int status, MultipartFile fileUrl) {
+  public String getYuceResult(int status, MultipartFile fileUrl, String token) {
     String result = "";
     String url = "";
     if (status == 1) {
@@ -364,9 +378,6 @@ public class DataController {
     } else if (status == 2) {
       url =
           "https://a47c3c80e1e541b4804f42c0ada01103.apig.cn-north-4.huaweicloudapis.com/v1/infers/fd2a6094-d1e5-4554-9f7c-fcce11397cd6";
-    }
-    if (token == null) {
-      token = getToken();
     }
     String respJson = HttpRequestUtils.upload(url, fileUrl, token);
     if (respJson != null && !respJson.equals("")) {
