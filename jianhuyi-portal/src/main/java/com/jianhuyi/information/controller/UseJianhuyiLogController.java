@@ -6,7 +6,6 @@ import com.jianhuyi.common.config.BootdoConfig;
 import com.jianhuyi.common.utils.FileUtil;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.common.utils.SpringContextUtil;
-import com.jianhuyi.information.dao.UserTaskLinshiDao;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.*;
 import com.jianhuyi.owneruser.service.OwnerUserService;
@@ -160,18 +159,17 @@ public class UseJianhuyiLogController {
                 System.out.println("有数据否======================" + useJianhuyiLogDOList.size());
                 if (useJianhuyiLogDOList.size() > 0) { // 创建线程进行统计分析
                   new Thread(
-                        () -> {
-                          System.out.println("创建线程统计分析数据");
-                          try {
-                            countPerDay(userTaskDO, useJianhuyiLogDOList); // 统计任务每天评级
-                            countTotal(userTaskDO, useJianhuyiLogDOList); // /统计最终评级
-                          } catch (ParseException e) {
-                            e.printStackTrace();
-                          }
-                        })
-                        .start();
-              }
-
+                          () -> {
+                            System.out.println("创建线程统计分析数据");
+                            try {
+                              countPerDay(userTaskDO, useJianhuyiLogDOList); // 统计任务每天评级
+                              countTotal(userTaskDO, useJianhuyiLogDOList); // /统计最终评级
+                            } catch (ParseException e) {
+                              e.printStackTrace();
+                            }
+                          })
+                      .start();
+                }
 
               } else {
                 System.out.println("上传的数据时间 已经超过最近任务的截止时间，数据不会被统计进入最近一次任务中了");
@@ -184,16 +182,6 @@ public class UseJianhuyiLogController {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-    new Thread(
-            () -> {
-              try {
-                AvgDataUtil.addOrUpdateData(saveParamsDOList);
-              } catch (Exception e) {
-                e.printStackTrace();
-              }
-            })
-        .start();
 
     return R.ok(map);
   }
@@ -212,7 +200,7 @@ public class UseJianhuyiLogController {
         useJianhuyiLogDOList.stream()
             .filter(a -> a.getStatus() != null && a.getStatus() == 1)
             .collect(Collectors.toList());
-    Map<String, Double> resultMap = ResultUtils.countData(null,sublist,null);
+    Map<String, Double> resultMap = ResultUtils.countData(null, sublist, null);
     outdoorsDuration =
         useJianhuyiLogDOList.stream()
             .filter(a -> a.getStatus() != null && a.getStatus() == 2)
@@ -254,7 +242,8 @@ public class UseJianhuyiLogController {
               .filter(a -> a.getStatus() != null && a.getStatus() == 1)
               .collect(Collectors.toList());
 
-      Map<String, Double> resultMap = ResultUtils.countData(userTaskDO.getUserId(),sublist,entry.getKey());
+      Map<String, Double> resultMap =
+          ResultUtils.countData(userTaskDO.getUserId(), sublist, entry.getKey());
       outdoorsDuration =
           entry.getValue().stream()
               .filter(a -> a.getStatus() != null && a.getStatus() == 2)
@@ -353,12 +342,12 @@ public class UseJianhuyiLogController {
       List<UserTaskLinshiDO> l = userTaskLinshiService.getTotalScore(userTaskDO.getId());
       Integer totalScore = 0;
 
-      for(UserTaskLinshiDO userTaskLinshiDO :l){
-        totalScore+=userTaskLinshiDO.getScore();
-        useJianhuyiDuration+=Double.parseDouble(userTaskLinshiDO.getHourtime());
+      for (UserTaskLinshiDO userTaskLinshiDO : l) {
+        totalScore += userTaskLinshiDO.getScore();
+        useJianhuyiDuration += Double.parseDouble(userTaskLinshiDO.getHourtime());
       }
       userTaskDO.setTotalScore(totalScore); // 总积分
-      userTaskDO.setTotaluser(useJianhuyiDuration);//监护仪使用时长
+      userTaskDO.setTotaluser(useJianhuyiDuration); // 监护仪使用时长
       userTaskDO.setAvgReadResult(ResultUtils.resultAvgReadDuration(avgReadDuration));
       userTaskDO.setAvgLookPhoneResult(
           ResultUtils.resultAvgLookPhoneDuration(avgLookPhoneDuration));

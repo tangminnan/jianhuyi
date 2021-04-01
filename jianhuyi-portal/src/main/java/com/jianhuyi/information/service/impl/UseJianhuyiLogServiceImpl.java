@@ -1206,8 +1206,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
   }
 
   @Override
-  public List<UseJianhuyiLogDO> countByUserIdAndDate() {
-    return useJianhuyiLogDao.countByUserIdAndDate();
+  public List<UseJianhuyiLogDO> countByUserIdAndDate(Long userId, String time) {
+    return useJianhuyiLogDao.countByUserIdAndDate(userId, time);
   }
 
   // 获取时间段内统计数据

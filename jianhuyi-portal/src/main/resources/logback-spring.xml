@@ -6,9 +6,8 @@
 
         <!-- 增加过滤器，控制日志级别-->
         <!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
-            <!--<level>error</level>-->
+        <!--<level>error</level>-->
         <!--</filter>-->
-
 
 
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">

@@ -103,5 +103,6 @@ public interface UseJianhuyiLogDao {
 
   List<UseJianhuyiLogDO> getNearData(@Param("userId") Long userId, @Param("date") Date date);
 
-  List<UseJianhuyiLogDO> countByUserIdAndDate();
+  List<UseJianhuyiLogDO> countByUserIdAndDate(
+      @Param("userId") Long userId, @Param("date") String time);
 }

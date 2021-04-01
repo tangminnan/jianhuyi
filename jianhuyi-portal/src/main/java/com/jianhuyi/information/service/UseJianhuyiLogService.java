@@ -51,5 +51,5 @@ public interface UseJianhuyiLogService {
 
   List<UseJianhuyiLogDO> selectAllData(Map<String, Object> params);
 
-  List<UseJianhuyiLogDO> countByUserIdAndDate();
+  List<UseJianhuyiLogDO> countByUserIdAndDate(Long userId, String time);
 }

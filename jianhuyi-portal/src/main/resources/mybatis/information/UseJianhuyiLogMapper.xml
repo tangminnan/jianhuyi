@@ -620,17 +620,20 @@
 
     <select id="countByUserIdAndDate" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
         SELECT
-            user_id,
-            upload_id,
-            equipment_id,
-            substr(save_time, 1, 10) save_time
+        user_id,
+        upload_id,
+        equipment_id,
+        substr(save_time, 1, 10) save_time
         FROM
-            t_use_jianhuyi_log
-        where save_time like CONCAT('%','2021-03-17','%')
+        t_use_jianhuyi_log
+        <where>
+            <if test="userId !=null ">and user_id = #{userId}</if>
+            <if test="date !=null ">and save_time like CONCAT('%',#{date},'%')</if>
+        </where>
         GROUP BY
-            substr(save_time, 1, 10),
-            user_id
+        substr(save_time, 1, 10),
+        user_id
         ORDER BY
-            substr(save_time, 1, 10)
+        substr(save_time, 1, 10)
     </select>
 </mapper>

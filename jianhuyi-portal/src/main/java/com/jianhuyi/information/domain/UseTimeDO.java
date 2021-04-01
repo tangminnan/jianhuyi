@@ -18,9 +18,9 @@ public class UseTimeDO implements Serializable {
   // 保存时间
   private Date saveTime;
   // 用户id
-  private Long userId;
+  private int userId;
   // 用户id
-  private Long uploadId;
+  private int uploadId;
   // 设备id
   private String equipmentId;
 
@@ -60,19 +60,19 @@ public class UseTimeDO implements Serializable {
     this.saveTime = saveTime;
   }
 
-  public Long getUserId() {
+  public int getUserId() {
     return userId;
   }
 
-  public void setUserId(Long userId) {
+  public void setUserId(int userId) {
     this.userId = userId;
   }
 
-  public Long getUploadId() {
+  public int getUploadId() {
     return uploadId;
   }
 
-  public void setUploadId(Long uploadId) {
+  public void setUploadId(int uploadId) {
     this.uploadId = uploadId;
   }
 
