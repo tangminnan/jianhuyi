@@ -22,7 +22,7 @@
         look_phone_duration,
         look_tv_computer_count,
         look_tv_computer_duration,
-        sit_tilt
+        sit_tilt,sit_num,light_num
         FROM
         t_use_jianhuyi_log
         <where>
@@ -428,7 +428,7 @@
         status,
         remind,
         upload_id,
-        type
+        type,light_num,sit_num
         )
         values
         <foreach collection="useJianhuyiLogDOList" item="item" separator=",">
@@ -452,7 +452,7 @@
             #{item.status},
             #{item.remind},
             #{item.uploadId},
-            #{item.type}
+            #{item.type},#{item.lightNum},#{item.sitNum}
             )
         </foreach>
     </insert>

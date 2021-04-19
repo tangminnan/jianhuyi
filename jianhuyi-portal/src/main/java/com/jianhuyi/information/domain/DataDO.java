@@ -182,6 +182,10 @@ public class DataDO implements Serializable {
         + updateTime
         + ", status="
         + status
+        + ", userId="
+        + userId
+        + ", uploadId="
+        + uploadId
         + ", equipmentId='"
         + equipmentId
         + '\''
@@ -200,6 +204,12 @@ public class DataDO implements Serializable {
         + '\''
         + ", errorsDB='"
         + errorsDB
+        + '\''
+        + ", imgs='"
+        + imgs
+        + '\''
+        + ", baseData='"
+        + baseData
         + '\''
         + ", pictures="
         + pictures

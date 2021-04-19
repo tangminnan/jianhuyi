@@ -60,13 +60,9 @@
             var time = data[i].time.split(' ')[1];
             timeData.push(time);
             anglesData.push(data[i].angles);
-            distancesData.push(data[i].distances);
+            distancesData.push(data[i].distances / 10);
 
-            if (data[i].lights >= 1200) {
-               lightsData.push(1200);
-            } else {
-               lightsData.push(data[i].lights);
-            }
+            lightsData.push(data[i].lights / 10);
          }
 
          var myChart = echarts.init(document.getElementById('main'));

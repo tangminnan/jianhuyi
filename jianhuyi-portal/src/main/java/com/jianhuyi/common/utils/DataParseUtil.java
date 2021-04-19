@@ -194,7 +194,7 @@ public class DataParseUtil {
 
     int startIndex = -1;
     int endIndex = -1;
-    for (int i = 0; i < bytes.length; i++) {
+    for (int i = index; i < bytes.length; i++) {
       if (i < bytes.length - 1) {
         if (Arrays.equals(subBytes(bytes, i, 2), PIC_BT)) { // 包头
           startIndex = i;

@@ -414,6 +414,8 @@
         zo.look_tv_computer_duration,
         zo.sit_tilt,
         zo.outdoors_duration,
+        zo.sit_num,
+        zo.light_num,
         tur.remindsNum,
         tut.userDurtion
         FROM
@@ -542,7 +544,7 @@
         use_jianhuyi_duration,
         sport_duration,
         `del_flag`,
-        status
+        status,sit_num,light_num
         from t_use_jianhuyi_log
         where
         save_time &gt;= date_sub(#{saveTime}, INTERVAL - 0 DAY)

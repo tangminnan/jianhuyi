@@ -77,6 +77,26 @@ public class UseJianhuyiLogDO implements Serializable {
 
   private int serialNumber;
 
+  private int lightNum;
+
+  private int sitNum;
+
+  public int getLightNum() {
+    return lightNum;
+  }
+
+  public void setLightNum(int lightNum) {
+    this.lightNum = lightNum;
+  }
+
+  public int getSitNum() {
+    return sitNum;
+  }
+
+  public void setSitNum(int sitNum) {
+    this.sitNum = sitNum;
+  }
+
   public int getSerialNumber() {
     return serialNumber;
   }

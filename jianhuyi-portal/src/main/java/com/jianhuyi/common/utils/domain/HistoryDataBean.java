@@ -15,6 +15,8 @@ public class HistoryDataBean {
   private List<ErrorBean> errorDataDOList; // 报错信息
   private List<RemindBean> remaind; // 震动提醒
 
+  private String fileUrl;
+
   private String readData; // 阅读信息
   private String energysData; // 电源信息
   private String errorData; // 报错信息
@@ -23,6 +25,14 @@ public class HistoryDataBean {
   private String startTime;
 
   private int type;
+
+  public String getFileUrl() {
+    return fileUrl;
+  }
+
+  public void setFileUrl(String fileUrl) {
+    this.fileUrl = fileUrl;
+  }
 
   public String getStartTime() {
     return startTime;
@@ -91,7 +101,7 @@ public class HistoryDataBean {
     this.remaindData = remaindData;
   }
 
-  public int getUserId() {
+  public Integer getUserId() {
     return userId;
   }
 

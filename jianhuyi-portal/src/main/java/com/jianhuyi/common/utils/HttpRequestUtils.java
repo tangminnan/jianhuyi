@@ -262,12 +262,13 @@ public class HttpRequestUtils {
         // 打印响应内容
         respJson = EntityUtils.toString(resEntity, Charset.forName("UTF-8"));
       }
-
       // 销毁
       EntityUtils.consume(resEntity);
+      return respJson;
     } catch (Exception e) {
       System.out.println("出错啦...." + e.getMessage());
       e.printStackTrace();
+      return "预测失败";
     } finally {
       try {
         if (response != null) {
@@ -285,7 +286,6 @@ public class HttpRequestUtils {
         e.printStackTrace();
       }
     }
-    return respJson;
   }
 
   private static String entityToString(HttpEntity entity) throws IOException {

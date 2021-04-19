@@ -59,4 +59,6 @@ public interface OwnerUserService {
     List<OwnerUserDO> getUserByIdCardAndSchoolAndGrade(String identityCard, String name, String grade);
 
     void updateTaskIdNullInUser(Long userId);
+
+	void updateTaskIdsNullInUser(Long userId);
 }

@@ -26,6 +26,7 @@ public class AvgDataUtil {
   @Autowired private static UseRemindsService useRemindsService;
   @Autowired private static DataEverydayService everydayService;
   @Autowired private static DataService tdataService;
+  @Autowired private static DataInitService tdataInitService;
   static JSONObject jsonObject = null;
 
   @Autowired private UseJianhuyiLogService jianhuyiLogService;
@@ -33,6 +34,7 @@ public class AvgDataUtil {
   @Autowired private UseRemindsService remindsService;
   @Autowired private DataEverydayService dataEverydayService;
   @Autowired private DataService dataService;
+  @Autowired private DataInitService dataInitService;
 
   @PostConstruct
   public void init() {
@@ -41,6 +43,7 @@ public class AvgDataUtil {
     useRemindsService = remindsService;
     everydayService = dataEverydayService;
     tdataService = dataService;
+    tdataInitService = dataInitService;
   }
 
   // 某日统计数(t_use_jianhuyi_log)
@@ -57,6 +60,7 @@ public class AvgDataUtil {
     Double readDistance = 0.0; // 阅读距离
     int readDistanceCount = 0; // 符合阅读距离条件的条数
     Double sitTilt = 0.0; // 坐姿角度
+    int sitNum = 0;
     Double lookPhoneDuration = 0.0; // 看手机时长
     int lookPhoneCount = 0; // 看手机次数
     Double lookTvComputerDuration = 0.0; // 看屏幕时长
@@ -77,19 +81,12 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setUserId(useJianhuyiLogDOList.get(0).getUserId());
       for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOList) {
         if (jianhuyiLogDO.getStatus() != null && jianhuyiLogDO.getStatus() == 1) {
-          // (1)筛选：0＜L≤412  and  15＜D≤60                 (2)调整：L = L * LOG(L , 4.3)
-          if (jianhuyiLogDO.getReadLight() != null && jianhuyiLogDO.getReadDistance() != null) {
-            if ((jianhuyiLogDO.getReadLight() > 0 && jianhuyiLogDO.getReadLight() <= 412)
-                && (jianhuyiLogDO.getReadDistance() > 15
-                    && jianhuyiLogDO.getReadDistance() <= 60)) {
-              Double linshilight = jianhuyiLogDO.getReadLight();
-              // 4.3为底数原始值的对数
-              readLight += 100 * (Math.log(linshilight) / Math.log(4.3));
-              sitTilt += jianhuyiLogDO.getSitTilt();
+          // 4.3为底数原始值的对数
+          readLight += jianhuyiLogDO.getReadLight();
+          readLightCount += jianhuyiLogDO.getLightNum();
 
-              readLightCount++;
-            }
-          }
+          sitTilt += jianhuyiLogDO.getSitTilt();
+          sitNum += jianhuyiLogDO.getSitNum();
 
           // 判断上一条时间
           if (!date.equals("")) {
@@ -155,13 +152,9 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setLookTvComputerDuration(0.0);
     }
 
-    if (readLightCount > 0) {
-      useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readLightCount)));
-      useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / readLightCount)));
-    } else {
-      useJianhuyiLogDO.setReadLight(0.0);
-      useJianhuyiLogDO.setSitTilt(0.0);
-    }
+    useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readLightCount)));
+    useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / sitNum)));
+
     if (allDurtion > 0) {
       useJianhuyiLogDO.setAllreadDuration(allDurtion);
     } else {
@@ -471,10 +464,13 @@ public class AvgDataUtil {
   public static Double selectDisList(Long userId, String time) {
     Double distances = 0.0;
     int distancesCount = 0;
+    // 查询t_data表今天的数据记录 1状态的数据
     List<DataDO> dataDOList = tdataService.getList(userId, time);
+
     List<List<BaseDataDO>> data = new ArrayList<>();
     List<BaseDataDO> olddata = new ArrayList<>();
     List<BaseDataDO> allData = new ArrayList<>();
+    // 循环原始数据
     for (DataDO dataDO : dataDOList) {
       String baseData = dataDO.getBaseData();
       olddata = JSON.parseArray(baseData, BaseDataDO.class);
@@ -485,16 +481,16 @@ public class AvgDataUtil {
         allData.add(baseDataDO);
       }
     }
-
+    // 取出距离 筛选>=10 并且 <=60 的距离值
     List<BaseDataDO> baseDataDOList = countDistance(allData);
     for (BaseDataDO baseDataDO : baseDataDOList) {
-      if (baseDataDO.getDistances() >= 10 && baseDataDO.getDistances() <= 60) {
+      if (baseDataDO.getDistances() >= 100 && baseDataDO.getDistances() <= 600) {
         distances += baseDataDO.getDistances();
         distancesCount++;
       }
     }
     if (distancesCount > 0) {
-      return distances / distancesCount;
+      return distances / distancesCount / 10;
     } else {
       return 0.0;
     }
@@ -503,9 +499,10 @@ public class AvgDataUtil {
   // 调整数据范围
   public static List<BaseDataDO> countDistance(List<BaseDataDO> dataDOList) {
     List<BaseDataDO> newData = new ArrayList<>();
-    // 筛选距离范围 光强值L ＜2000； 距离 10≤D≤80；
+    // 筛选距离范围 光强值L ＜3000； 距离 10≤D≤80；
     for (BaseDataDO datum : dataDOList) {
-      if (datum.getLights() < 2000 && (datum.getDistances() >= 10 && datum.getDistances() <= 80)) {
+      if (datum.getLights() < 30000
+          && (datum.getDistances() >= 100 && datum.getDistances() <= 800)) {
         newData.add(datum);
       }
     }
