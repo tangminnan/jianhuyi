@@ -152,8 +152,12 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setLookTvComputerDuration(0.0);
     }
 
-    useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readLightCount)));
-    useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / sitNum)));
+    if (readLightCount > 0) {
+      useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readLightCount)));
+    }
+    if (sitNum > 0) {
+      useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / sitNum)));
+    }
 
     if (allDurtion > 0) {
       useJianhuyiLogDO.setAllreadDuration(allDurtion);

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jianhuyi.information.dao.DataInitDao">
+
+    <select id="get" resultType="com.jianhuyi.information.domain.DataInitDO">
+		select `id`,`user_id`,`upload_id`,`equipment_id`,`file_url`,`read_data`,`energys_data`,`error_data`,`remaind_data`,`start_time`,`add_time`,`type` from t_data_init where id = #{value}
+	</select>
+
+    <select id="list" resultType="com.jianhuyi.information.domain.DataInitDO">
+        select
+        `id`,`user_id`,`upload_id`,`equipment_id`,`file_url`,`read_data`,`energys_data`,`error_data`,`remaind_data`,`start_time`,`add_time`,`type`
+        from t_data_init
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="uploadId != null and uploadId != ''">and upload_id = #{uploadId}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
+            <if test="fileUrl != null and fileUrl != ''">and file_url = #{fileUrl}</if>
+            <if test="readData != null and readData != ''">and read_data = #{readData}</if>
+            <if test="energysData != null and energysData != ''">and energys_data = #{energysData}</if>
+            <if test="errorData != null and errorData != ''">and error_data = #{errorData}</if>
+            <if test="remaindData != null and remaindData != ''">and remaind_data = #{remaindData}</if>
+            <if test="startTime != null and startTime != ''">and start_time = #{startTime}</if>
+            <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
+            <if test="type != null and type != ''">and type = #{type}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from t_data_init
+        <where>
+            <if test="id != null and id != ''">and id = #{id}</if>
+            <if test="userId != null and userId != ''">and user_id = #{userId}</if>
+            <if test="uploadId != null and uploadId != ''">and upload_id = #{uploadId}</if>
+            <if test="equipmentId != null and equipmentId != ''">and equipment_id = #{equipmentId}</if>
+            <if test="fileUrl != null and fileUrl != ''">and file_url = #{fileUrl}</if>
+            <if test="readData != null and readData != ''">and read_data = #{readData}</if>
+            <if test="energysData != null and energysData != ''">and energys_data = #{energysData}</if>
+            <if test="errorData != null and errorData != ''">and error_data = #{errorData}</if>
+            <if test="remaindData != null and remaindData != ''">and remaind_data = #{remaindData}</if>
+            <if test="startTime != null and startTime != ''">and start_time = #{startTime}</if>
+            <if test="addTime != null and addTime != ''">and add_time = #{addTime}</if>
+            <if test="type != null and type != ''">and type = #{type}</if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.jianhuyi.information.domain.DataInitDO" useGeneratedKeys="true"
+            keyProperty="id">
+		insert into t_data_init
+		(
+			`user_id`, 
+			`upload_id`, 
+			`equipment_id`, 
+			`file_url`, 
+			`read_data`, 
+			`energys_data`, 
+			`error_data`, 
+			`remaind_data`, 
+			`start_time`, 
+			`add_time`, 
+			`type`
+		)
+		values
+		(
+			#{userId}, 
+			#{uploadId}, 
+			#{equipmentId}, 
+			#{fileUrl}, 
+			#{readData}, 
+			#{energysData}, 
+			#{errorData}, 
+			#{remaindData}, 
+			#{startTime}, 
+			#{addTime}, 
+			#{type}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.jianhuyi.information.domain.DataInitDO">
+        update t_data_init
+        <set>
+            <if test="userId != null">`user_id` = #{userId},</if>
+            <if test="uploadId != null">`upload_id` = #{uploadId},</if>
+            <if test="equipmentId != null">`equipment_id` = #{equipmentId},</if>
+            <if test="fileUrl != null">`file_url` = #{fileUrl},</if>
+            <if test="readData != null">`read_data` = #{readData},</if>
+            <if test="energysData != null">`energys_data` = #{energysData},</if>
+            <if test="errorData != null">`error_data` = #{errorData},</if>
+            <if test="remaindData != null">`remaind_data` = #{remaindData},</if>
+            <if test="startTime != null">`start_time` = #{startTime},</if>
+            <if test="addTime != null">`add_time` = #{addTime},</if>
+            <if test="type != null">`type` = #{type}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="remove">
+		delete from t_data_init where id = #{value}
+	</delete>
+
+    <delete id="batchRemove">
+        delete from t_data_init where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
