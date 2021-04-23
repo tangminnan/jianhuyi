@@ -81,7 +81,7 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setUserId(useJianhuyiLogDOList.get(0).getUserId());
       for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOList) {
         if (jianhuyiLogDO.getStatus() != null && jianhuyiLogDO.getStatus() == 1) {
-          // 4.3为底数原始值的对数
+
           readLight += jianhuyiLogDO.getReadLight();
           readLightCount += jianhuyiLogDO.getLightNum();
 

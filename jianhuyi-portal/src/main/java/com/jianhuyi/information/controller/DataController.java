@@ -344,11 +344,6 @@ public class DataController {
           for (BaseDataBean baseData : serialDataBean.getBaseDatas()) {
             double sit = baseData.getAngles() - 10;
 
-            /*if (sit > 30) {
-              sit = Math.abs(sit) - 30;
-            } else if (sit < -30) {
-              sit = Math.abs(sit) + 30;
-            }*/
             sitTilt += sit;
             sitSize++;
 
