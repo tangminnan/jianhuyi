@@ -82,9 +82,9 @@ public class DataEverydayController {
             mapp.put("学校", userDO.getSchool());
             mapp.put("年级", userDO.getGrade());
 
-            if (userDO.getSex() == 1) {
+            if (userDO.getSex() != null && userDO.getSex() == 1) {
               mapp.put("性别", "男");
-            } else if (userDO.getSex() == 2) {
+            } else if (userDO.getSex() != null && userDO.getSex() == 2) {
               mapp.put("性别", "女");
             } else {
               mapp.put("性别", "未知");

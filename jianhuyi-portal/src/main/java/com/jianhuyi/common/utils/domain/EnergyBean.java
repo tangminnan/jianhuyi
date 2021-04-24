@@ -1,5 +1,7 @@
 package com.jianhuyi.common.utils.domain;
 
+import java.util.Date;
+
 /** * 电量信息 */
 public class EnergyBean {
   private Integer power; // 电量
@@ -14,6 +16,26 @@ public class EnergyBean {
   private Integer noneffectiveTime; // 无效时长
 
   private Integer serialNumber;
+
+  private Integer useId;
+
+  private Date updateTime;
+
+  public Integer getUseId() {
+    return useId;
+  }
+
+  public void setUseId(Integer useId) {
+    this.useId = useId;
+  }
+
+  public Date getUpdateTime() {
+    return updateTime;
+  }
+
+  public void setUpdateTime(Date updateTime) {
+    this.updateTime = updateTime;
+  }
 
   public Integer getSerialNumber() {
     return serialNumber;

@@ -629,6 +629,7 @@ public class ResultUtils {
      avgReadDistance = AvgDataUtil.selectDisList(userId, time);
 
 
+
     Map<String, Double> resultMap = new HashMap<>();
     resultMap.put("avgReadDuration", avgReadDuration);
     resultMap.put("avgLookPhoneDuration", avgLookPhoneDuration);

@@ -37,21 +37,25 @@ public class DataParseUtil {
    * @param file
    */
   public static HistoryDataBean readFileTo(File file) {
-
+    Integer uploadId = 0;
     String hexString = readFile(file.getAbsolutePath());
     if (hexString.contains("sourceData")) {
       JSONObject jsonObject = JSONObject.parseObject(hexString);
+      uploadId = (Integer) jsonObject.get("uploadId");
       hexString = jsonObject.get("sourceData").toString();
       hexString = hexString.replace(" ", "");
     } else {
       hexString = hexString.replace(" ", "");
     }
-    return parseData(hexStringToByteArray(hexString));
+    return parseData(hexStringToByteArray(hexString), uploadId);
   }
 
-  private static HistoryDataBean parseData(byte[] bytes) {
+  private static HistoryDataBean parseData(byte[] bytes, Integer uploadId) {
 
     HistoryDataBean historyDataBean = new HistoryDataBean();
+    if (uploadId > 0) {
+      historyDataBean.setUploadId(uploadId);
+    }
     try {
 
       List<SerialDataBean> datas = new ArrayList();
@@ -190,7 +194,7 @@ public class DataParseUtil {
 
     int startIndex = -1;
     int endIndex = -1;
-    for (int i = 0; i < bytes.length; i++) {
+    for (int i = index; i < bytes.length; i++) {
       if (i < bytes.length - 1) {
         if (Arrays.equals(subBytes(bytes, i, 2), PIC_BT)) { // 包头
           startIndex = i;

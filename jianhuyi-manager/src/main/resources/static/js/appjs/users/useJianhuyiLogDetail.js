@@ -115,46 +115,32 @@ function load() {
                      colspan: 1
                   },
                   {
-                     field: 'readDistance',
-                     title: '阅读距离(厘米)',
-                     align: 'center',
-                     valign: 'middle',
-                     colspan: 1
-                  },
-                  {
                      field: 'readLight',
                      title: '阅读光照(lux)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 1
+                     colspan: 2
                   },
                   {
                      field: 'lookPhoneDuration',
                      title: '看手机时长<br>(分钟)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 2
+                     colspan: 1
                   },
                   {
                      field: 'lookTvComputerDuration',
                      title: '看电脑电视时长<br>(分钟)',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 2
+                     colspan: 1
                   },
                   {
                      field: 'sitTilt',
                      title: '坐姿倾斜度',
                      align: 'center',
                      valign: 'middle',
-                     colspan: 1
-                  },
-                  {
-                     field: 'useJianhuyiDuration',
-                     title: '使用监护仪时长<br>(小时)',
-                     align: 'center',
-                     valign: 'middle',
-                     colspan: 1
+                     colspan: 2
                   },
 
                   /*								{
@@ -196,18 +182,10 @@ function load() {
                      align: 'center'
                   },
 
-                  {
-                     field: 'readDistance',
-                     title: '距离',
-                     valign: 'middle',
-                     sortable: true,
-                     align: 'center'
-                  },
-
 
                   {
                      field: 'readLight',
-                     title: '光照',
+                     title: '光照总和',
                      valign: 'middle',
                      sortable: true, cellStyle: function (value, row, index, field) {
                         return {
@@ -216,7 +194,19 @@ function load() {
                         }
                      },
                      align: 'center'
+                  }, {
+                  field: 'lightNum',
+                  title: '光照点数',
+                  valign: 'middle',
+                  sortable: true, cellStyle: function (value, row, index, field) {
+                     return {
+                        classes: 'text - nowrap another - class',
+                        css: {'background-color': '#5792C6', 'font - size': '50px'}
+                     }
                   },
+                  align: 'center'
+
+               },
 
 
                   {
@@ -225,13 +215,7 @@ function load() {
                      valign: 'middle',
                      sortable: true,
                      align: 'center'
-                  }, {
-                  field: 'lookPhoneCount',
-                  title: '次数',
-                  valign: 'middle',
-                  sortable: true,
-                  align: 'center'
-               },
+                  },
 
 
                   {
@@ -246,9 +230,17 @@ function load() {
                      },
                      align: 'center'
                   },
+
                   {
-                     field: 'lookTvComputerCount',
-                     title: '次数',
+                     field: 'sitTilt',
+                     title: '坐姿总和',
+                     valign: 'middle',
+                     sortable: true,
+                     align: 'center'
+                  },
+                  {
+                     field: 'sitNum',
+                     title: '坐姿点数',
                      valign: 'middle',
                      sortable: true, cellStyle: function (value, row, index, field) {
                         return {
@@ -257,31 +249,8 @@ function load() {
                         }
                      },
                      align: 'center'
+
                   },
-
-                  {
-                     field: 'sitTilt',
-                     title: '坐姿',
-                     valign: 'middle',
-                     sortable: true,
-                     align: 'center'
-                  },
-
-
-                  {
-                     field: 'useJianhuyiDuration',
-                     title: '使用时长',
-                     sortable: true,
-                     valign: 'middle', cellStyle: function (value, row, index, field) {
-                        return {
-                           classes: 'text - nowrap another - class',
-                           css: {'background-color': '#5792C6', 'font - size': '50px'}
-                        }
-                     },
-                     align: 'center'
-                  },
-
-
                ]
             ]
          });
