@@ -124,5 +124,13 @@
 			#{id}
 		</foreach>
 	</delete>
+	
+	<select id="getById" resultType="com.jianhuyi.information.domain.UserTaskLinshiDO">
+		  select t.`user_id`,t.`eye_rate`,t.score,t.`avg_read`,t.`avg_out`,t.`avg_read_distance`,t.`avg_look_phone`,
+		  t.`avg_look_tv`,t.`avg_sit_tilt`,t.`effective_use_time`,t.`avg_light`,t.`create_time`,u.name,u.school,u.grade,u.identity_card from t_user_task_linshi t
+		  join t_user u on t.user_id=u.id
+          and t.task_id = #{value}
+
+	</select>
 
 </mapper>

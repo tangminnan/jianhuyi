@@ -1,10 +1,8 @@
 package com.jianhuyi.information.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.jianhuyi.information.domain.UseJianhuyiLogDO;
-import com.jianhuyi.information.domain.UseTimeDO;
-import com.jianhuyi.information.domain.UserTaskDO;
-import com.jianhuyi.information.domain.UserTaskLinshiDO;
+import com.jianhuyi.information.domain.*;
+import com.jianhuyi.information.service.DataEverydayService;
 import com.jianhuyi.information.service.UseTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,14 +15,23 @@ import java.util.*;
 /** 监护仪等级判断标准 */
 @Component
 public class ResultUtils {
-
   private static UseTimeService useTimeService;
   static JSONObject jsonObject = null;
-
+  private static DataEverydayService everydayService;
   @Autowired
   public void setUseTimeService(UseTimeService useTimeService) {
     ResultUtils.useTimeService = useTimeService;
   }
+
+  @Autowired
+  public static void setEverydayService(DataEverydayService everydayService) {
+    ResultUtils.everydayService = everydayService;
+  }
+  /**优秀=3分  良=分  差=1分 极差=0分*/
+  private static final int YOU=3;
+  private static final int LIANG=2;
+  private static final int CHA=1;
+  private static final int JICHA=0;
 
   /** 平均单次阅读时长判断 */
   public static String resultAvgReadDuration(Double avgReadDuration) {
@@ -608,23 +615,13 @@ public class ResultUtils {
     }
 
     /** 获取有效使用时长 */
-    Double effectiveTime = null;
-    if (userId != null && time != null) {
-      Map mappp = useTimeService.getSNCount(userId, time);
-      List<UseTimeDO> useTimeDOList = useTimeService.getTodayData(userId, time);
-
-      Optional.ofNullable(mappp)
-          .ifPresent(
-              m -> {
-                jsonObject = (JSONObject) JSONObject.toJSON(m);
-              });
-      String num = jsonObject.get("num").toString();
-      String sum = jsonObject.get("sum").toString();
-      UseJianhuyiLogDO usetime =
-          AvgDataUtil.getSNCount(Integer.parseInt(num), Integer.parseInt(sum), useTimeDOList);
-
-      effectiveTime = usetime.getEffectiveTime();
-    }
+    Double effectiveTime = 0.0;
+    Map<String, Object> params = new HashMap<>();
+    params.put("userId", userId);
+    params.put("useTime", time);
+    List<DataEverydayDO> everydayDOList = everydayService.list(params);
+    if(everydayDOList.size()>0)
+      effectiveTime=everydayDOList.get(0).getEffectiveTime();
     /**
      *  平均阅读距离
      */

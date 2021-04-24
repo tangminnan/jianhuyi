@@ -71,6 +71,10 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
         userTaskLinshiDao.updateScore(userTaskLinshiDO);
     }
 
+    @Override
+    public UserTaskLinshiDO getUserLinShiTaskDO(Long userId, Long id, Date createTime) {
+        return userTaskLinshiDao.getUserLinShiTaskDO(userId,id,createTime);
+    }
 
 
 }

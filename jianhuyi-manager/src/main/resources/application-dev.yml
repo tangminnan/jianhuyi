@@ -1,5 +1,6 @@
 jianhuyi:
-  uploadPath: /www/uploaded_files/
+  uploadPath: D:/www/uploaded_files/
+  poiword: D:/www/poiword/
 logging:
   level:
     root: info

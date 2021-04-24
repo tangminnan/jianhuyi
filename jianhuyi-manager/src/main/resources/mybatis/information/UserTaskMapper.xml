@@ -70,7 +70,7 @@
 		  		  <if test="gift != null and gift != ''"> and gift = #{gift} </if>
 		  		  <if test="totalScore != null and totalScore != ''"> and total_score = #{totalScore} </if>
 		  		  <if test="flag != null and flag != ''"> and flag = #{flag} </if>
-		  		  <if test="startTime != null and startTime != ''"> and start_time = #{startTime} </if>
+		  		  <if test="startTime != null and startTime != ''"> and DATE_FORMAT(start_time,'%Y-%m-%d')  = #{startTime} </if>
 		  		  <if test="addreadyScore != null and addreadyScore != ''"> and addready_score = #{addreadyScore} </if>
 		  		  <if test="lastavgread != null and lastavgread != ''"> and lastavgRead = #{lastavgread} </if>
 		  		  <if test="lastavgout != null and lastavgout != ''"> and lastavgOut = #{lastavgout} </if>
@@ -81,6 +81,9 @@
 		  		  <if test="lastavglight != null and lastavglight != ''"> and lastavgLight = #{lastavglight} </if>
 		  		  <if test="lastavglookphone != null and lastavglookphone != ''"> and lastavgLookPhone = #{lastavglookphone} </if>
 		  		  <if test="pcorapp != null and pcorapp != ''"> and pcorapp = #{pcorapp} </if>
+			      <if test="name != null and name != ''"> and u.name = #{name} </if>
+			      <if test="school != null and school != ''"> and u.school = #{school} </if>
+			      <if test="grade != null and grade != ''"> and u.grade = #{grade} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -96,7 +99,17 @@
 	</select>
 	
  	<select id="count" resultType="int">
-		select count(*) from t_user_task
+		select count(*) from t_user_task t
+		join t_user u on t.user_id=u.id
+
+
+
+
+
+
+
+
+
 		 <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
@@ -144,7 +157,7 @@
 		  		  <if test="gift != null and gift != ''"> and gift = #{gift} </if>
 		  		  <if test="totalScore != null and totalScore != ''"> and total_score = #{totalScore} </if>
 		  		  <if test="flag != null and flag != ''"> and flag = #{flag} </if>
-		  		  <if test="startTime != null and startTime != ''"> and start_time = #{startTime} </if>
+			      <if test="startTime != null and startTime != ''"> and DATE_FORMAT(start_time,'%Y-%m-%d')  = #{startTime} </if>
 		  		  <if test="addreadyScore != null and addreadyScore != ''"> and addready_score = #{addreadyScore} </if>
 		  		  <if test="lastavgread != null and lastavgread != ''"> and lastavgRead = #{lastavgread} </if>
 		  		  <if test="lastavgout != null and lastavgout != ''"> and lastavgOut = #{lastavgout} </if>
@@ -155,6 +168,9 @@
 		  		  <if test="lastavglight != null and lastavglight != ''"> and lastavgLight = #{lastavglight} </if>
 		  		  <if test="lastavglookphone != null and lastavglookphone != ''"> and lastavgLookPhone = #{lastavglookphone} </if>
 		  		  <if test="pcorapp != null and pcorapp != ''"> and pcorapp = #{pcorapp} </if>
+			 <if test="name != null and name != ''"> and u.name = #{name} </if>
+			 <if test="school != null and school != ''"> and u.school = #{school} </if>
+			 <if test="grade != null and grade != ''"> and u.grade = #{grade} </if>
 		  		</where>
 	</select>
 	 

@@ -3,6 +3,7 @@ package com.jianhuyi.information.service;
 
 import com.jianhuyi.information.domain.UserTaskLinshiDO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,4 +37,5 @@ public interface UserTaskLinshiService {
     void updateScore(UserTaskLinshiDO userTaskLinshiDO);
 
 
+    UserTaskLinshiDO getUserLinShiTaskDO(Long userId, Long id, Date createTime);
 }

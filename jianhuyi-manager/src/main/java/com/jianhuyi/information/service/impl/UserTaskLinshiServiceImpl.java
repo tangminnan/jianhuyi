@@ -51,5 +51,10 @@ public class UserTaskLinshiServiceImpl implements UserTaskLinshiService {
 	public int batchRemove(Long[] ids){
 		return userTaskLinshiDao.batchRemove(ids);
 	}
-	
+
+	@Override
+	public List<UserTaskLinshiDO> getById(Long id) {
+		return userTaskLinshiDao.getById(id);
+	}
+
 }

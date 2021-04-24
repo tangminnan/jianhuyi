@@ -381,7 +381,7 @@ public class GiftController {
         fillMapDays(map,userTask);
         for(Map.Entry<String,UserTaskLinshiDO> entry: utmap.entrySet()){
             map.put(entry.getKey(),entry.getValue());
-        }
+    }
        /* resultMap.put("renwu",map.size());//已完成任务天数
         resultMap.put("countGrade",userTask.getCountGrade());//平均等级
         resultMap.put("totaluser",userTask.getTotaluser());//有效使用时长*/

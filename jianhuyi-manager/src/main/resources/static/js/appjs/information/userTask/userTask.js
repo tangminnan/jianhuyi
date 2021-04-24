@@ -32,7 +32,11 @@ function load() {
 							return {
 								//说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
 								limit: params.limit,
-								offset:params.offset
+								offset:params.offset,
+                                startTime:$("#startTime").val(),
+                                name:$("#name").val(),
+                                school:$("#school").val(),
+                                grade:$("#grade").val()
 					           // name:$('#searchName').val(),
 					           // username:$('#searchName').val()
 							};
@@ -334,6 +338,38 @@ function remove(id) {
 }
 
 function resetPwd(id) {
+}
+
+/**
+ *  积分导出
+ */
+function scoreExport(){
+    var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组
+    if (rows.length == 0) {
+        layer.msg("请选择导出的数据");
+        return;
+    }
+    let ids = new Array();
+    // 遍历所有选择的行数据，取每条数据对应的ID
+    $.each(rows, function(i, row) {
+        ids[i] = row['id'];
+    });
+    console.info(ids);
+    $.ajax({
+        url : prefix+"/checkIfExist",
+		type:'post',
+        data : {
+            'ids' : ids
+        },
+        success : function(r) {
+			ids=ids.filter(item=>!r.data.includes(item));
+			console.info(ids);
+			layer.msg("所选项中 "+r.data +" 没有上传过数据,无法导出");
+			if(ids.length>0)
+            	window.location.href=prefix + '/scoreExport/'+ids;
+
+        }
+    });
 }
 function batchRemove() {
 	var rows = $('#exampleTable').bootstrapTable('getSelections'); // 返回所有选择的行，当没有选择的记录时，返回一个空数组

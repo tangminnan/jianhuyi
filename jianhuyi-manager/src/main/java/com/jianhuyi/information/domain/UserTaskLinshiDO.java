@@ -48,6 +48,14 @@ public class UserTaskLinshiDO implements Serializable {
 	//任务id
 	private Integer taskId;
 	private String day;
+	//真实姓名
+	private String name;
+	//学校
+	private String school;
+	//年级
+	private String grade;
+	//身份证号
+	private String identityCard;
 
 	/**
 	 * 设置：id
@@ -248,5 +256,37 @@ public class UserTaskLinshiDO implements Serializable {
 
 	public void setDay(String day) {
 		this.day = day;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSchool() {
+		return school;
+	}
+
+	public void setSchool(String school) {
+		this.school = school;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public String getIdentityCard() {
+		return identityCard;
+	}
+
+	public void setIdentityCard(String identityCard) {
+		this.identityCard = identityCard;
 	}
 }

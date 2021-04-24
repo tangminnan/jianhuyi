@@ -27,4 +27,6 @@ public interface UserTaskLinshiService {
 	int remove(Long id);
 	
 	int batchRemove(Long[] ids);
+
+    List<UserTaskLinshiDO> getById(Long id);
 }

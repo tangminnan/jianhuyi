@@ -3,6 +3,7 @@ package com.jianhuyi.information.dao;
 import com.jianhuyi.information.domain.UserTaskLinshiDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
@@ -39,4 +40,5 @@ public interface UserTaskLinshiDao {
     void updateScore(UserTaskLinshiDO userTaskLinshiDO);
 
 
+    UserTaskLinshiDO getUserLinShiTaskDO(@Param("userId") Long userId,@Param("taskId") Long id,@Param("createTime")  Date createTime);
 }

@@ -656,25 +656,16 @@ public class DataController {
       Integer score = ResultUtils.countScore(userTaskDO, userTaskLinshiDO);
       userTaskLinshiDO.setScore(score);
       userTaskLinshiDO.setEyeRate(ResultUtils.totalDegree(null, userTaskLinshiDO)); // 当日等级
-      /** t_user_task_linshi表中已经存在的数据来说，更新表最后的一条数据，对于之前的数据不做任何处理，对于新数据会新增 */
-      UserTaskLinshiDO userTaskLinshiDO11 =
-              userTaskLinshiService.getRecentlyDate(userTaskDO.getUserId(), userTaskDO.getId());
+      UserTaskLinshiDO userTaskLinshiDO11= userTaskLinshiService.getUserLinShiTaskDO(userTaskDO.getUserId(),userTaskDO.getId(),userTaskDO.getCreateTime());
       if (userTaskLinshiDO11 == null) {
         userTaskLinshiService.save(userTaskLinshiDO);
         return score;
-      } else {
-        Date allreadyDate = userTaskLinshiDO11.getCreateTime();
-        if (userTaskLinshiDO.getCreateTime().compareTo(allreadyDate) == 0) {
-          userTaskLinshiService.updateCurrentDay(userTaskLinshiDO);
-          Integer score1 =
-                  userTaskLinshiDO11.getScore() == null ? 0 : userTaskLinshiDO11.getScore();
-          return score - score1;
-        } else if (userTaskLinshiDO.getCreateTime().compareTo(allreadyDate) > 0) {
-          userTaskLinshiService.save(userTaskLinshiDO);
-          return score;
-        } else return 0;
+      } else {//数据记录已经存在  做更新操作
+        userTaskLinshiService.updateCurrentDay(userTaskLinshiDO);
+        Integer score1 =
+                userTaskLinshiDO11.getScore() == null ? 0 : userTaskLinshiDO11.getScore();
+        return score - score1;
       }
-
     } else if (flag == 1) {
       List<UserTaskLinshiDO> l = userTaskLinshiService.getTotalScore(userTaskDO.getId());
       Integer totalScore = 0;
