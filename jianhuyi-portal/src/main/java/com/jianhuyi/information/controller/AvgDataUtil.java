@@ -82,7 +82,7 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setUserId(useJianhuyiLogDOList.get(0).getUserId());
       for (UseJianhuyiLogDO jianhuyiLogDO : useJianhuyiLogDOList) {
         if (jianhuyiLogDO.getStatus() != null && jianhuyiLogDO.getStatus() == 1) {
-          // 4.3为底数原始值的对数
+
           readLight += jianhuyiLogDO.getReadLight();
           readLightCount += jianhuyiLogDO.getLightNum();
 
@@ -153,8 +153,12 @@ public class AvgDataUtil {
       useJianhuyiLogDO.setLookTvComputerDuration(0.0);
     }
 
-    useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readLightCount)));
-    useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / sitNum)));
+    if (readLightCount > 0) {
+      useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight / readLightCount)));
+    }
+    if (sitNum > 0) {
+      useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt / sitNum)));
+    }
 
     if (allDurtion > 0) {
       useJianhuyiLogDO.setAllreadDuration(allDurtion);

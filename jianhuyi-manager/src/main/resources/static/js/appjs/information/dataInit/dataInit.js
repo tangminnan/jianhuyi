@@ -1,4 +1,4 @@
-var prefix = "/information/energysData"
+var prefix = "/information/dataInit"
 $(function () {
    load();
 });
@@ -31,9 +31,7 @@ function load() {
                return {
                   //说明：传入后台的参数包括offset开始索引，limit步长，sort排序列，order：desc或者,以及所有列的键值对
                   limit: params.limit,
-                  offset: params.offset,
-                  userId: $('#userId').val(),
-                  time: $('#time').val()
+                  offset: params.offset
                   // name:$('#searchName').val(),
                   // username:$('#searchName').val()
                };
@@ -48,98 +46,113 @@ function load() {
                {
                   checkbox: true
                },
+               // {
+               //    field: 'id',
+               //    title: 'id'
+               // },
                {
-                  field: 'id',
-                  title: 'id'
+                  field: 'userId',
+                  title: '用户id'
                },
                {
-                  field: 'time',
-                  title: '时间'
+                  field: 'uploadId',
+                  title: '上传人id'
                },
                {
-                  field: 'updateTime',
-                  title: '上传时间'
+                  field: 'equipmentId',
+                  title: '设备id'
                },
                {
-                  field: 'power',
-                  title: '电量等级'
+                  field: 'fileUrl',
+                  title: '上传文件路径',
+                  formatter: function (value, row) {
+                     if (value) {
+                        return '<a href="' + value + '" target="_blank">' + row.startTime + '</a>'
+                     }
+                  }
                },
                {
-                  field: 'usbStatus',
-                  title: 'usb状态',
+                  field: 'readData',
+                  title: '阅读信息',
                   formatter: function (value) {
-                     if (value == 0) {
-                        return "无usb"
-                     } else if (value == 1) {
-                        return "usb接入"
+                     if (value) {
+                        return value.split(0, 10)
                      } else {
                         return ""
                      }
                   }
                },
                {
-                  field: 'effectiveTime',
-                  title: '有效时长(min)',
+                  field: 'energysData',
+                  title: '电源信息',
                   formatter: function (value) {
                      if (value) {
-                        return (value * 5 / 60).toFixed(2)
+                        return value.split(0, 10)
+                     } else {
+                        return ""
                      }
                   }
                },
                {
-                  field: 'readTime',
-                  title: '阅读时长(min)',
+                  field: 'errorData',
+                  title: '错误信息',
                   formatter: function (value) {
                      if (value) {
-                        return (value * 5 / 60).toFixed(2)
+                        return value.split(0, 5)
+                     } else {
+                        return ""
                      }
                   }
                },
                {
-                  field: 'unreadTime',
-                  title: '非阅读时长(min)',
+                  field: 'remaindData',
+                  title: '震动信息',
                   formatter: function (value) {
                      if (value) {
-                        return (value * 5 / 60).toFixed(2)
+                        return value.split(0, 5)
+                     } else {
+                        return ""
                      }
                   }
                },
                {
-                  field: 'coverTime',
-                  title: '遮挡时长(min)',
-                  formatter: function (value) {
-                     if (value) {
-                        return (value * 5 / 60).toFixed(2)
-                     }
-                  }
+                  field: 'startTime',
+                  title: '开始时间'
                },
                {
-                  field: 'runningTime',
-                  title: '开机时长(min)',
+                  field: 'addTime',
+                  title: '添加时间'
+               },
+               {
+                  field: 'type',
+                  title: '类型',
                   formatter: function (value) {
-                     if (value) {
-                        return (value * 5 / 60).toFixed(2)
+                     if (value == 1) {
+                        return "app上传"
+                     } else if (value == 2) {
+                        return "文件导入"
+                     } else if (value == 3) {
+                        return "工装解析"
                      }
                   }
-               }
 
-               /*,
-               {
-                   title: '操作',
-                   field: 'id',
-                   align: 'center',
-                   formatter: function (value, row, index) {
-                       var e = '<a class="btn btn-primary btn-sm ' + s_edit_h + '" href="#" mce_href="#" title="编辑" onclick="edit(\''
-                           + row.id
-                           + '\')"><i class="fa fa-edit"></i></a> ';
-                       var d = '<a class="btn btn-warning btn-sm ' + s_remove_h + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
-                           + row.id
-                           + '\')"><i class="fa fa-remove"></i></a> ';
-                       var f = '<a class="btn btn-success btn-sm" href="#" title="备用"  mce_href="#" onclick="resetPwd(\''
-                           + row.id
-                           + '\')"><i class="fa fa-key"></i></a> ';
-                       return e + d;
-                   }
+               },
+               /*{
+                  title: '操作',
+                  field: 'id',
+                  align: 'center',
+                  formatter: function (value, row, index) {
+                     var e = '<a class="btn btn-primary btn-sm ' + s_edit_h + '" href="#" mce_href="#" title="编辑" onclick="edit(\''
+                        + row.id
+                        + '\')"><i class="fa fa-edit"></i></a> ';
+                     var d = '<a class="btn btn-warning btn-sm ' + s_remove_h + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
+                        + row.id
+                        + '\')"><i class="fa fa-remove"></i></a> ';
+                     var f = '<a class="btn btn-success btn-sm" href="#" title="备用"  mce_href="#" onclick="resetPwd(\''
+                        + row.id
+                        + '\')"><i class="fa fa-key"></i></a> ';
+                     return e + d;
+                  }
                }*/]
          });
 }

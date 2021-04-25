@@ -63,8 +63,7 @@
             <if test="userId != null and userId != ''">and user_id = #{userId}</if>
             <if test="time != null and time != ''">and use_time like CONCAT("%",#{time},"%")</if>
         </where>
-        ORDER BY
-        use_time
+
     </select>
 
 

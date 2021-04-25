@@ -294,6 +294,20 @@ public class DataController {
 
     for (SerialDataBean serialDataBean : finalHistoryDataBean.getDataDOList()) {
       UseJianhuyiLogDO useJianhuyiLogDO = new UseJianhuyiLogDO();
+
+      DataDO dataDO = new DataDO();
+
+      dataDO.setBaseDatasDB(JSON.toJSON(serialDataBean.getBaseDatas()).toString());
+      dataDO.setImgs(JSON.toJSON(serialDataBean.getPictures()).toString());
+      dataDO.setEquipmentId(finalHistoryDataBean.getEquipmentId());
+      dataDO.setUserId(Long.parseLong(finalHistoryDataBean.getUserId() + ""));
+      dataDO.setStatus(serialDataBean.getStatus());
+      dataDO.setStartTime(serialDataBean.getStartTime());
+      dataDO.setUpdateTime(new Date());
+      if (finalHistoryDataBean.getUploadId() != null) {
+        dataDO.setUploadId(Long.parseLong(finalHistoryDataBean.getUploadId() + ""));
+      }
+      dataDOList.add(dataDO);
       if (serialDataBean.getStatus() == 1
           || serialDataBean.getStatus() == 2
           || serialDataBean.getStatus() == 6) {
@@ -391,14 +405,9 @@ public class DataController {
 
         if (serialDataBean.getStatus() == 1) { // 阅读
           for (BaseDataBean baseData : serialDataBean.getBaseDatas()) {
-            baseData.setAngles(baseData.getAngles() - 10);
+            double sit = baseData.getAngles() - 10;
 
-            if (baseData.getAngles() > 30) {
-              baseData.setAngles(Math.abs(baseData.getAngles()) - 30);
-            } else if (baseData.getAngles() < -30) {
-              baseData.setAngles(Math.abs(baseData.getAngles()) + 30);
-            }
-            sitTilt += baseData.getAngles();
+            sitTilt += sit;
             sitSize++;
 
             readDuration += 5;
@@ -442,20 +451,6 @@ public class DataController {
 
         useJianhuyiLogDOList.add(useJianhuyiLogDO);
       }
-
-      DataDO dataDO = new DataDO();
-
-      dataDO.setBaseDatasDB(JSON.toJSON(serialDataBean.getBaseDatas()).toString());
-      dataDO.setImgs(JSON.toJSON(serialDataBean.getPictures()).toString());
-      dataDO.setEquipmentId(finalHistoryDataBean.getEquipmentId());
-      dataDO.setUserId(Long.parseLong(finalHistoryDataBean.getUserId() + ""));
-      dataDO.setStatus(serialDataBean.getStatus());
-      dataDO.setStartTime(serialDataBean.getStartTime());
-      dataDO.setUpdateTime(new Date());
-      if (finalHistoryDataBean.getUploadId() != null) {
-        dataDO.setUploadId(Long.parseLong(finalHistoryDataBean.getUploadId() + ""));
-      }
-      dataDOList.add(dataDO);
     }
     map.put("useJianhuyiLogDOList", useJianhuyiLogDOList);
     map.put("dataDOList", dataDOList);
