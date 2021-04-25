@@ -25,6 +25,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.stream.Collectors;
 
 /**
@@ -91,8 +93,10 @@ public class DataController {
 
       if (dataInitService.save(historyDataBean) > 0) {
         HistoryDataBean finalHistoryDataBean = historyDataBean;
+        AtomicReferenceArray<DataEverydayDO> atomicReferenceArray = new AtomicReferenceArray<DataEverydayDO>(1000);
+        AtomicLong atomicLong  =new AtomicLong();
         if (type == 1) {
-          new Thread(
+         Thread thread= new Thread(
                   () -> {
                     try {
                       long startTime = System.nanoTime();
@@ -147,56 +151,9 @@ public class DataController {
                           Long.parseLong(finalHistoryDataBean.getUploadId().toString()));
                       saveParamsDOList.setUserId(
                           Long.parseLong(finalHistoryDataBean.getUserId() + ""));
-
-                      AvgDataUtil.addOrUpdateData(saveParamsDOList);
+                      atomicLong.set(saveParamsDOList.getUserId());
+                      AvgDataUtil.addOrUpdateData(saveParamsDOList,atomicReferenceArray);
                       System.out.println("=============今日数据已更新=======================");
-                      /** 任务数据统计 */
-                      if (useJianhuyiLogDOList.size() > 0) {
-                        Long userId = useJianhuyiLogDOList.get(0).getUserId().longValue();
-                        UserDO userDO = userService.getById(userId);
-                        if (userDO != null) {
-                          List<Long> list = Arrays.asList(userDO.getTaskId(), userDO.getTaskIds());
-                          for (Long taskId : list) {
-                            if (taskId == null) continue;
-                            UserTaskDO userTaskDO = userTaskService.get(taskId);
-                            if (userTaskDO != null) {
-                              System.out.println(
-                                  "统计分析任务数据========="
-                                      + userId
-                                      + "================= "
-                                      + userTaskDO.getId());
-                              Date createTime = userTaskDO.getStartTime(); // 最近一次任务的开始时间
-                              Integer taskTime = userTaskDO.getTaskTime(); // 最近一次任务的天数
-                              Calendar calendar = Calendar.getInstance();
-                              calendar.setTime(createTime);
-                              calendar.add(Calendar.DAY_OF_YEAR, taskTime - 1);
-                              calendar.add(Calendar.HOUR, 20); // 任务的最大持续时间
-                              Date taskDate = calendar.getTime();
-                              if (taskDate.compareTo(new Date()) >= 0) { // 最近一次任务的数据统计
-                                Map<String, Object> params = new HashMap<>();
-                                params.put("userId", userId);
-                                params.put("startTime", createTime);
-                                params.put("endTime", new Date());
-                                List<UseJianhuyiLogDO> useJianhuyiLogDOS =
-                                    useJianhuyiLogService.getMyData(params);
-                                System.out.println(
-                                    "有数据否======================" + useJianhuyiLogDOList.size());
-                                if (useJianhuyiLogDOList.size() > 0) { // 创建线程进行统计分析
-                                  countPerDay(userTaskDO, useJianhuyiLogDOS); // 统计任务每天评级
-                                  countTotal(userTaskDO, useJianhuyiLogDOS); // /统计最终评级
-                                }
-
-                              } else {
-                                System.out.println("上传的数据时间 已经超过最近任务的截止时间，数据不会被统计进入最近一次任务中了");
-                                if (taskId == userDO.getTaskId())
-                                  userService.updateTaskIdNullInUser(userId);
-                                else if (taskId == userDO.getTaskIds())
-                                  userService.updateTaskIdsNullInUser(userId);
-                              }
-                            }
-                          }
-                        }
-                      }
                       long endTime = System.nanoTime();
                       long duration = (endTime - startTime);
                       System.out.println(
@@ -207,8 +164,113 @@ public class DataController {
                     } catch (Exception e) {
                       e.printStackTrace();
                     }
-                  })
-              .start();
+                  });
+              thread.start();
+              thread.join();
+          /**
+           *  此处不放在一个线程里执行，是为了防止新添加的代码报错，而影响原有的正常的执行
+           */
+          new Thread(()->{
+              System.out.println("开启线程统计分析任务等级 评分");
+              final Long userId = atomicLong.get();
+              UserDO userDO = userService.getById(userId);
+              if(userDO!=null) {
+                  List<Long> list = Arrays.asList(userDO.getTaskId(), userDO.getTaskIds());
+                  for (Long taskId : list) {
+                      if (taskId == null) continue;
+                      UserTaskDO userTaskDO = userTaskService.get(taskId);
+                      if (userTaskDO != null) {
+                          System.out.println(userId+"===================="+taskId);
+                          Date startTime = userTaskDO.getStartTime(); // 最近一次任务的开始时间
+                          Integer taskTime = userTaskDO.getTaskTime(); // 最近一次任务的天数
+                          Calendar calendar = Calendar.getInstance();
+                          calendar.setTime(startTime);
+                          calendar.add(Calendar.DAY_OF_YEAR, taskTime - 1);
+                          calendar.add(Calendar.HOUR, 20); // 任务的最大持续时间
+                          Date taskDate = calendar.getTime();
+                          if (taskDate.compareTo(new Date()) >= 0) { // 最近一次任务的数据统计
+                             System.out.println("任务有效，开始统计分析");  Integer allScore=0;Double useTimes=0.0;
+                             for(int index=0;index<atomicReferenceArray.length();index++){
+                               DataEverydayDO dataEverydayDO = atomicReferenceArray.get(index);
+                               if(dataEverydayDO!=null){
+                                 String useTime = dataEverydayDO.getUseTime();
+                                 Date date = null;
+                                 if(useTime!=null && !"".equals(useTime)){
+                                   try {
+                                     date = new SimpleDateFormat("yyyy-MM-dd").parse(useTime);
+                                   } catch (ParseException e) {
+                                     e.printStackTrace();
+                                   }
+                                 }
+
+                                 UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
+                                 userTaskLinshiDO.setUserId(userId);
+                                 userTaskLinshiDO.setTaskId(taskId);
+                                 userTaskLinshiDO.setCreateTime(date);
+                                 userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(dataEverydayDO.getReadDuration()));
+                                 userTaskLinshiDO.setAvgLookPhone(
+                                         ResultUtils.resultAvgLookPhoneDuration(dataEverydayDO.getLookPhoneDuration()));
+                                 userTaskLinshiDO.setAvgLookTv(
+                                         ResultUtils.resultAvgLookTvComputerDuration(dataEverydayDO.getLookTvComputerDuration()));
+                                 userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(dataEverydayDO.getReadDistance()));
+                                 userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(dataEverydayDO.getReadLight()));
+                                 userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(dataEverydayDO.getSitTilt()));
+                                 userTaskLinshiDO.setAvgOut(ResultUtils.resultOutdoorsDuration(dataEverydayDO.getOutdoorsDuration()));
+                                 userTaskLinshiDO.setEffectiveUseTime(
+                                         ResultUtils.resultUseJianhuyiDuration(dataEverydayDO.getEffectiveTime()));
+                                 userTaskLinshiDO.setHourtime(Double.toString(dataEverydayDO.getEffectiveTime()));
+                                 useTimes+=dataEverydayDO.getEffectiveTime();
+                                 Integer score = ResultUtils.countScore(userTaskDO, userTaskLinshiDO);
+                                 userTaskLinshiDO.setScore(score);//积分
+                                 allScore+=score;
+                                 UserTaskLinshiDO userLinShiTaskDO = userTaskLinshiService.getUserLinShiTaskDO(userId, taskId, date);
+                                 if(userLinShiTaskDO!=null){//任务详情表中 已经存在这天的统计数据 ，只进行更新操作
+                                   allScore-=userLinShiTaskDO.getScore();
+                                   userTaskLinshiService.updateCurrentDay(userTaskLinshiDO);
+                                 }else{//新增统计数据
+                                   userTaskLinshiService.save(userTaskLinshiDO);
+                                 }
+                               }else{
+                                 break;
+                               }
+                             }
+                            /**
+                             *  分析 统计总的任务等级
+                             */
+                            DataEverydayDO addAllData = AvgDataUtil.addAllData(userId,startTime,new Date());
+                            userTaskDO.setTotalScore(allScore); // 总积分
+                            userTaskDO.setTotaluser(useTimes); // 监护仪使用时长
+                            userTaskDO.setAvgReadResult(ResultUtils.resultAvgReadDuration(addAllData.getReadDuration()));
+                            userTaskDO.setAvgLookPhoneResult(
+                                    ResultUtils.resultAvgLookPhoneDuration(addAllData.getLookPhoneDuration()));
+                            userTaskDO.setAvgLookTvResult(
+                                    ResultUtils.resultAvgLookTvComputerDuration(addAllData.getLookTvComputerDuration()));
+                            userTaskDO.setAvgReadDistanceResult(ResultUtils.resultAvgReadDistance(addAllData.getReadDistance()));
+                            userTaskDO.setAvgLightResult(ResultUtils.resultAvgReadLight(addAllData.getReadLight()));
+                            userTaskDO.setAvgSitTiltResult(ResultUtils.resultAvgSitTilt(addAllData.getSitTilt()));
+                            userTaskDO.setAvgOutResult(ResultUtils.resultOutdoorsDuration(addAllData.getOutdoorsDuration()));
+                            userTaskDO.setEffectiveUseTimeResult(
+                                    ResultUtils.resultUseJianhuyiDuration(useTimes));
+
+                            userTaskDO.setCountGrade(ResultUtils.totalDegree(userTaskDO, null)); // 平均等级
+                            userTaskService.update(userTaskDO);
+                            userDO.setScores(userDO.getScores() + allScore);
+                            userService.updateScores(userDO);
+                          }else{
+                            System.out.println("上传的数据时间 已经超过最近任务的截止时间，数据不会被统计进入最近一次任务中了");
+                            if (taskId == userDO.getTaskId())
+                                userService.updateTaskIdNullInUser(userId);
+                            else if (taskId == userDO.getTaskIds())
+                                userService.updateTaskIdsNullInUser(userId);
+                          }
+                      }
+                  }
+              }
+          }).start();
+
+
+
+
         }
         return R.ok();
       } else {
@@ -219,6 +281,7 @@ public class DataController {
       return R.error(500, e.toString());
     }
   }
+
 
   // 1和2状态的数据预测及统计
   public List<Map<String, List>> yuceAnddetail(

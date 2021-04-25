@@ -289,7 +289,7 @@
     
     <update id="updateTaskIdNullInUser" parameterType="int">
         update t_user set
-        `task_id` = null,
+        `task_id` = null
 
 
     where id = #{id}
@@ -297,7 +297,7 @@
     
     <update id="updateTaskIdsNullInUser" parameterType="int">
         update t_user set
-        `task_ids` = null,
+        `task_ids` = null
 
 
         where id = #{id}

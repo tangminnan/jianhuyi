@@ -59,6 +59,21 @@
             AND start_time LIKE CONCAT('%',#{startTime},'%')
             AND STATUS = 1
     </select>
+    
+    
+    <select id="getAllList" parameterType="com.jianhuyi.information.domain.DataDO"
+            resultType="com.jianhuyi.information.domain.DataDO">
+        SELECT DISTINCT
+        (start_time),
+        equipment_id,
+        base_data
+        FROM
+        t_data
+        WHERE
+        user_id = #{userId}
+        AND start_time BETWEEN DATE_FORMAT(#{startDate},'%Y-%m-%d %H:%i:%s') and DATE_FORMAT(#{endDate},'%Y-%m-%d %H:%i:%s')
+        AND STATUS = 1
+    </select>
 
 
     <insert id="save" parameterType="com.jianhuyi.information.domain.DataDO" useGeneratedKeys="true" keyProperty="id">

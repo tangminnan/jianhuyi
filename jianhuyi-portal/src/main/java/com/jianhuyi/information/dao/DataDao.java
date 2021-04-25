@@ -3,7 +3,9 @@ package com.jianhuyi.information.dao;
 import com.jianhuyi.information.domain.DataDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,4 +34,6 @@ public interface DataDao {
   int saveList(@Param("dataDOList") List<DataDO> dataDOList);
 
   List<DataDO> getList(@Param("userId") Long userId, @Param("startTime") String time);
+
+  List<DataDO> getAllList(@Param("userId") Long userId,@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 }

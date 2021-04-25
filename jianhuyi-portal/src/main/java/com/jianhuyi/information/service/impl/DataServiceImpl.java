@@ -6,6 +6,7 @@ import com.jianhuyi.information.service.DataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -56,5 +57,10 @@ public class DataServiceImpl implements DataService {
   @Override
   public List<DataDO> getList(Long userId, String time) {
     return dataDao.getList(userId, time);
+  }
+
+  @Override
+  public List<DataDO> getAllList(Long userId, Date startDate, Date endDate) {
+    return dataDao.getAllList(userId,startDate,endDate);
   }
 }

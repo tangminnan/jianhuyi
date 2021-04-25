@@ -2,6 +2,7 @@ package com.jianhuyi.information.service;
 
 import com.jianhuyi.information.domain.DataDO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,4 +30,6 @@ public interface DataService {
   int saveList(List<DataDO> dataDOList);
 
   List<DataDO> getList(Long userId, String time);
+
+    List<DataDO> getAllList(Long userId, Date startDate, Date endDate);
 }
