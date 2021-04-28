@@ -27,4 +27,6 @@ public interface DataEverydayService {
   int batchRemove(Integer[] ids);
 
   int saveList(List<DataEverydayDO> everydayDOList);
+
+  DataEverydayDO getByUserIdAndTime(Long userId, String substring);
 }

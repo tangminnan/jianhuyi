@@ -6,6 +6,14 @@
     <select id="get" resultType="com.jianhuyi.information.domain.DataEverydayDO">
 		select `id`,`upload_id`,`user_id`,`equipment_id`,`use_time`,`add_time`,`all_read_duration`,`read_duration`,`outdoors_duration`,`read_distance`,`read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,`remind`,`running_time`,`effective_time`,`cover_time`,`noneffective_time` from t_data_everyday where id = #{value}
 	</select>
+    
+    <select id="getByUserIdAndTime" resultType="com.jianhuyi.information.domain.DataEverydayDO">
+        select `id`,`upload_id`,`user_id`,`equipment_id`,`use_time`,`add_time`,
+        `all_read_duration`,`read_duration`,`outdoors_duration`,`read_distance`,
+        `read_light`,`look_phone_duration`,`look_tv_computer_duration`,`sit_tilt`,
+        `remind`,`running_time`,`effective_time`,`cover_time`,`noneffective_time`
+         from t_data_everyday where user_id = #{userId} and use_time=#{date} limit 1
+    </select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.DataEverydayDO">
         select

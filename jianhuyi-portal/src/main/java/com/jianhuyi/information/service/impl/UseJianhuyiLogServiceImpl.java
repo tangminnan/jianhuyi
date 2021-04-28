@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.information.controller.AvgDataUtil;
 import com.jianhuyi.information.dao.UseJianhuyiLogDao;
 import com.jianhuyi.information.domain.UseJianhuyiLogDO;
+import com.jianhuyi.information.service.DataEverydayService;
 import com.jianhuyi.information.service.UseJianhuyiLogService;
 import com.jianhuyi.information.service.UseRemindsService;
 import com.jianhuyi.information.service.UseTimeService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
   @Autowired private UseJianhuyiLogDao useJianhuyiLogDao;
   @Autowired private UseRemindsService useRemindsService;
   @Autowired private UseTimeService useTimeService;
+  @Autowired  private  DataEverydayService everydayService;
+
 
   @Override
   public UseJianhuyiLogDO get(Integer id) {
@@ -56,8 +60,10 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
   public Map<String, Object> getByDayTime(Long userId) {
     Map<String, Object> mapP = new HashMap<String, Object>();
 
+//    mapP.put(
+//        "data", AvgDataUtil.getAvgReadTime(userId, formatter.format(new Date()).substring(0, 10)));
     mapP.put(
-        "data", AvgDataUtil.getAvgReadTime(userId, formatter.format(new Date()).substring(0, 10)));
+        "data", everydayService.getByUserIdAndTime(userId, formatter.format(new Date()).substring(0, 10)));
     mapP.put("msg", "操作成功");
     mapP.put("code", 0);
     return mapP;

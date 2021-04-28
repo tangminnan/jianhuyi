@@ -52,4 +52,9 @@ public class DataEverydayServiceImpl implements DataEverydayService {
   public int saveList(List<DataEverydayDO> everydayDOList) {
     return dataEverydayDao.saveList(everydayDOList);
   }
+
+  @Override
+  public DataEverydayDO getByUserIdAndTime(Long userId, String date) {
+    return dataEverydayDao.getByUserIdAndTime(userId,date);
+  }
 }

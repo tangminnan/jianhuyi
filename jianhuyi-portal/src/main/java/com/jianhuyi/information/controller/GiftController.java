@@ -206,35 +206,30 @@ public class GiftController {
             resultMap.put("code", -1);
             resultMap.put("msg", "没有获取不到数据，请先上传一次呗");
         }else{
-            List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.getNearData(userId,date);
-            List<UseJianhuyiLogDO> sublist = useJianhuyiLogDOS.stream().filter(a->a.getStatus()!=null && a.getStatus()==1).collect(Collectors.toList());
-            Double outdoorsDuration = 0.0;//户外时间累计版本
-            Map<String,Double> map = ResultUtils.countData(userId,sublist,sdf.format(date));
-            outdoorsDuration=useJianhuyiLogDOS.stream()
-                    .filter(a->a.getStatus()!=null && a.getStatus()==2)
-                    .collect(Collectors.summingDouble(UseJianhuyiLogDO::getOutdoorsDuration));
+ //           List<UseJianhuyiLogDO> useJianhuyiLogDOS = useJianhuyiLogService.getNearData(userId,date);
+            UseJianhuyiLogDO useJianhuyiLogDO = AvgDataUtil.getAvgReadTime(userId, new SimpleDateFormat("yyyy-MM-dd").format(date));
             UserTaskLinshiDO userTaskLinshiDO = new UserTaskLinshiDO();
-            userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(map.get("avgReadDuration")));
-            userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(map.get("avgLookPhoneDuration")));
-            userTaskLinshiDO.setAvgLookTv(ResultUtils.resultAvgLookTvComputerDuration(map.get("avgLookTvComputerDuration")));
-            userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(map.get("avgReadDistance")));
-            userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(map.get("avgReadLight")));
-            userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(map.get("avgSitTilt")));
-            userTaskLinshiDO.setAvgOut(ResultUtils.resultOutdoorsDuration(outdoorsDuration));
-            userTaskLinshiDO.setEffectiveUseTime(ResultUtils.resultUseJianhuyiDuration( map.get("effectiveTime")));
+            userTaskLinshiDO.setAvgRead(ResultUtils.resultAvgReadDuration(useJianhuyiLogDO.getReadDuration()));
+            userTaskLinshiDO.setAvgLookPhone(ResultUtils.resultAvgLookPhoneDuration(useJianhuyiLogDO.getLookPhoneDuration()));
+            userTaskLinshiDO.setAvgLookTv(ResultUtils.resultAvgLookTvComputerDuration(useJianhuyiLogDO.getLookTvComputerDuration()));
+            userTaskLinshiDO.setAvgReadDistance(ResultUtils.resultAvgReadDistance(useJianhuyiLogDO.getReadDistance()));
+            userTaskLinshiDO.setAvgLight(ResultUtils.resultAvgReadLight(useJianhuyiLogDO.getReadLight()));
+            userTaskLinshiDO.setAvgSitTilt(ResultUtils.resultAvgSitTilt(useJianhuyiLogDO.getSitTilt()));
+            userTaskLinshiDO.setAvgOut(ResultUtils.resultOutdoorsDuration(useJianhuyiLogDO.getOutdoorsDuration()));
+            userTaskLinshiDO.setEffectiveUseTime(ResultUtils.resultUseJianhuyiDuration(useJianhuyiLogDO.getEffectiveTime()));
             resultMap.put("data", userTaskLinshiDO);
             resultMap.put("code", 0);
             resultMap.put("msg", "获取成功");
 
             System.out.println(date);
-            System.out.println("平均每次阅读时长 "+map.get("avgReadDuration"));
-            System.out.println("使用时长 "+ map.get("effectiveTime"));
-            System.out.println("户外时间累计 "+outdoorsDuration);
-            System.out.println("平均阅读距离 "+map.get("avgReadDistance"));
-            System.out.println("平均阅读光照 "+map.get("avgReadLight"));
-            System.out.println("平均单次看手机时长 "+map.get("avgLookPhoneDuration"));
-            System.out.println("平均单次看电脑及电视时长 "+map.get("avgLookTvComputerDuration"));
-            System.out.println("平均旋转角度 "+map.get("avgSitTilt"));
+            System.out.println("平均每次阅读时长 "+useJianhuyiLogDO.getReadDuration());
+            System.out.println("使用时长 "+ useJianhuyiLogDO.getEffectiveTime());
+            System.out.println("户外时间累计 "+useJianhuyiLogDO.getOutdoorsDuration());
+            System.out.println("平均阅读距离 "+useJianhuyiLogDO.getReadDistance());
+            System.out.println("平均阅读光照 "+useJianhuyiLogDO.getReadLight());
+            System.out.println("平均单次看手机时长 "+useJianhuyiLogDO.getLookPhoneDuration());
+            System.out.println("平均单次看电脑及电视时长 "+useJianhuyiLogDO.getLookTvComputerDuration());
+            System.out.println("平均旋转角度 "+useJianhuyiLogDO.getSitTilt());
         }
 
         return resultMap;

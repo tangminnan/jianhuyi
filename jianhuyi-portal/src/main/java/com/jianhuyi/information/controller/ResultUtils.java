@@ -27,89 +27,100 @@ public class ResultUtils {
   public static void setEverydayService(DataEverydayService everydayService) {
     ResultUtils.everydayService = everydayService;
   }
-  /**优秀=3分  良=分  差=1分 极差=0分*/
-  private static final int YOU=3;
-  private static final int LIANG=2;
-  private static final int CHA=1;
-  private static final int JICHA=0;
 
   /** 平均单次阅读时长判断 */
   public static String resultAvgReadDuration(Double avgReadDuration) {
     String result = "1"; // 默认极差
-    if (avgReadDuration <= 20) result = "5"; // 优
-    else if (avgReadDuration > 20 && avgReadDuration <= 40) result = "4"; // 良好
-    else if (avgReadDuration > 40 && avgReadDuration <= 90) result = "2"; // 差
-    else if (avgReadDuration > 90) result = "1"; // 极差
+    if(avgReadDuration!=null) {
+      if (avgReadDuration <= 20) result = "5"; // 优
+      else if (avgReadDuration > 20 && avgReadDuration <= 40) result = "4"; // 良好
+      else if (avgReadDuration > 40 && avgReadDuration <= 90) result = "2"; // 差
+      else if (avgReadDuration > 90) result = "1"; // 极差
+    }
     return result;
   }
 
   /** 户外累计时间 */
   public static String resultOutdoorsDuration(Double outdoorsDuration) {
     String result = "1"; // 默认极差
-    if (outdoorsDuration >= 2) result = "5"; // 优
-    else if (outdoorsDuration >= 1 && outdoorsDuration < 2) result = "4"; // 良好
-    else if (outdoorsDuration >= 0.5 && outdoorsDuration <= 1) result = "2"; // 差
-    else if (outdoorsDuration < 0.5) result = "1"; // 极差
+    if(outdoorsDuration!=null) {
+      if (outdoorsDuration >= 2) result = "5"; // 优
+      else if (outdoorsDuration >= 1 && outdoorsDuration < 2) result = "4"; // 良好
+      else if (outdoorsDuration >= 0.5 && outdoorsDuration <= 1) result = "2"; // 差
+      else if (outdoorsDuration < 0.5) result = "1"; // 极差
+    }
     return result;
   }
 
   /** 平均阅读距离 */
   public static String resultAvgReadDistance(Double avgReadDistance) {
     String result = "1"; // 默认极差
-    if (avgReadDistance >= 33) result = "5"; // 优
-    else if (avgReadDistance >= 30 && avgReadDistance < 33) result = "4"; // 良好
-    else if (avgReadDistance >= 20 && avgReadDistance < 30) result = "2"; // 差
-    else if (avgReadDistance < 20) result = "1"; // 极差
+    if(avgReadDistance!=null) {
+      if (avgReadDistance >= 33) result = "5"; // 优
+      else if (avgReadDistance >= 30 && avgReadDistance < 33) result = "4"; // 良好
+      else if (avgReadDistance >= 20 && avgReadDistance < 30) result = "2"; // 差
+      else if (avgReadDistance < 20) result = "1"; // 极差
+    }
     return result;
   }
 
   /** 平均阅读光照 */
   public static String resultAvgReadLight(Double avgReadLight) {
     String result = "1"; // 默认极差
-    if (avgReadLight >= 300) result = "5"; // 优
-    else if (avgReadLight >= 250 && avgReadLight < 300) result = "4"; // 良好
-    else if (avgReadLight >= 200 && avgReadLight < 250) result = "2"; // 差
-    else if (avgReadLight < 200) result = "1"; // 极差
+    if(avgReadLight!=null) {
+      if (avgReadLight >= 300) result = "5"; // 优
+      else if (avgReadLight >= 250 && avgReadLight < 300) result = "4"; // 良好
+      else if (avgReadLight >= 200 && avgReadLight < 250) result = "2"; // 差
+      else if (avgReadLight < 200) result = "1"; // 极差
+    }
     return result;
   }
 
   /** 平均单次看手机时长 */
   public static String resultAvgLookPhoneDuration(Double avgLookPhoneDuration) {
     String result = "1"; // 默认极差
-    if (avgLookPhoneDuration <= 10) result = "5"; // 优
-    else if (avgLookPhoneDuration > 10 && avgLookPhoneDuration <= 20) result = "4"; // 良好
-    else if (avgLookPhoneDuration > 20 && avgLookPhoneDuration <= 40) result = "2"; // 差
-    else if (avgLookPhoneDuration > 40) result = "1"; // 极差
+    if(avgLookPhoneDuration!=null) {
+      if (avgLookPhoneDuration <= 10) result = "5"; // 优
+      else if (avgLookPhoneDuration > 10 && avgLookPhoneDuration <= 20) result = "4"; // 良好
+      else if (avgLookPhoneDuration > 20 && avgLookPhoneDuration <= 40) result = "2"; // 差
+      else if (avgLookPhoneDuration > 40) result = "1"; // 极差
+    }
     return result;
   }
 
   /** 看电脑与电视时长 */
   public static String resultAvgLookTvComputerDuration(Double avgLookTvComputerDuration) {
     String result = "1"; // 默认极差
-    if (avgLookTvComputerDuration <= 20) result = "5"; // 优
-    else if (avgLookTvComputerDuration > 20 && avgLookTvComputerDuration <= 40) result = "4"; // 良好
-    else if (avgLookTvComputerDuration > 40 && avgLookTvComputerDuration <= 60) result = "2"; // 差
-    else if (avgLookTvComputerDuration > 60) result = "1"; // 极差
+    if(avgLookTvComputerDuration!=null) {
+      if (avgLookTvComputerDuration <= 20) result = "5"; // 优
+      else if (avgLookTvComputerDuration > 20 && avgLookTvComputerDuration <= 40) result = "4"; // 良好
+      else if (avgLookTvComputerDuration > 40 && avgLookTvComputerDuration <= 60) result = "2"; // 差
+      else if (avgLookTvComputerDuration > 60) result = "1"; // 极差
+    }
     return result;
   }
 
   /** 平均阅读旋转角度 */
   public static String resultAvgSitTilt(Double avgSitTilt) {
     String result = "1"; // 默认极差
-    if (avgSitTilt <= 5) result = "5"; // 优
-    else if (avgSitTilt > 5 && avgSitTilt <= 10) result = "4"; // 良好
-    else if (avgSitTilt > 10 && avgSitTilt <= 15) result = "2"; // 差
-    else if (avgSitTilt > 15) result = "1"; // 极差
+    if(avgSitTilt!=null) {
+      if (avgSitTilt <= 5) result = "5"; // 优
+      else if (avgSitTilt > 5 && avgSitTilt <= 10) result = "4"; // 良好
+      else if (avgSitTilt > 10 && avgSitTilt <= 15) result = "2"; // 差
+      else if (avgSitTilt > 15) result = "1"; // 极差
+    }
     return result;
   }
 
   /** 有效监护仪使用时长 */
   public static String resultUseJianhuyiDuration(Double useJianhuyiDuration) {
     String result = "1"; // 默认极差
-    if (useJianhuyiDuration >= 10) result = "5"; // 优
-    else if (useJianhuyiDuration >= 8 && useJianhuyiDuration < 10) result = "4"; // 良好
-    else if (useJianhuyiDuration >= 5 && useJianhuyiDuration < 8) result = "2"; // 差
-    else if (useJianhuyiDuration < 5) result = "1"; // 极差
+    if(useJianhuyiDuration!=null) {
+      if (useJianhuyiDuration >= 10) result = "5"; // 优
+      else if (useJianhuyiDuration >= 8 && useJianhuyiDuration < 10) result = "4"; // 良好
+      else if (useJianhuyiDuration >= 5 && useJianhuyiDuration < 8) result = "2"; // 差
+      else if (useJianhuyiDuration < 5) result = "1"; // 极差
+    }
     return result;
   }
 
@@ -528,7 +539,7 @@ public class ResultUtils {
    * @return
    * @throws ParseException
    */
-  public static Map<String, Double> countData(
+  /*public static Map<String, Double> countData(
       Long userId, List<UseJianhuyiLogDO> useJianhuyiLogDOList, String time) throws ParseException {
     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Double avgReadDuration = 0.0; // 平均每次阅读时长
@@ -549,7 +560,7 @@ public class ResultUtils {
         count++;
       }
       UseJianhuyiLogDO useJianhuyiLogDO = useJianhuyiLogDOList.get(i);
-      /** 光照强度 */
+      *//** 光照强度 *//*
       if (useJianhuyiLogDO.getReadLight() != null
           && useJianhuyiLogDO.getReadLight() > 0
           && useJianhuyiLogDO.getReadLight() <= 412
@@ -559,7 +570,7 @@ public class ResultUtils {
         avgReadLight += 100 * ResultUtils.log(useJianhuyiLogDO.getReadLight(), 4.3);
         avgReadLightCount++;
       }
-      /** 坐姿旋转角度 */
+      *//** 坐姿旋转角度 *//*
       if (useJianhuyiLogDO.getReadLight() != null
           && useJianhuyiLogDO.getReadLight() > 0
           && useJianhuyiLogDO.getReadLight() <= 412
@@ -569,17 +580,17 @@ public class ResultUtils {
         avgSitTilt += useJianhuyiLogDO.getSitTilt();
         avgSitTiltCount++;
       }
-      /** 看手机时长 */
+      *//** 看手机时长 *//*
       if (useJianhuyiLogDO.getLookPhoneDuration() != null) {
         avgLookPhoneDuration += useJianhuyiLogDO.getLookPhoneDuration();
       }
-      /** 看电脑电视时长 */
+      *//** 看电脑电视时长 *//*
       if (useJianhuyiLogDO.getLookTvComputerDuration() != null) {
         avgLookTvComputerDuration += useJianhuyiLogDO.getLookTvComputerDuration();
       }
-      /** 单次阅读 */
+      *//** 单次阅读 *//*
       avgReadDuration += useJianhuyiLogDO.getReadDuration();
-      /** 看电脑、手机次数统计 */
+      *//** 看电脑、手机次数统计 *//*
       if (i + 1 < useJianhuyiLogDOList.size()) {
         UseJianhuyiLogDO useJianhuyiLogDO1 = useJianhuyiLogDOList.get(i + 1);
         long minute =
@@ -614,17 +625,17 @@ public class ResultUtils {
       avgSitTilt = Double.parseDouble(df.format(avgSitTilt / avgSitTiltCount));
     }
 
-    /** 获取有效使用时长 */
+    *//** 获取有效使用时长 *//*
     Double effectiveTime = 0.0;
     Map<String, Object> params = new HashMap<>();
     params.put("userId", userId);
     params.put("useTime", time);
-    List<DataEverydayDO> everydayDOList = everydayService.list(params);
+    List<DataEverydayDO> everydayDOList = everydayService.list(params);//此处报错
     if(everydayDOList.size()>0)
       effectiveTime=everydayDOList.get(0).getEffectiveTime();
-    /**
+    *//**
      *  平均阅读距离
-     */
+     *//*
 
      avgReadDistance = AvgDataUtil.selectDisList(userId, time);
 
@@ -640,5 +651,5 @@ public class ResultUtils {
     resultMap.put("effectiveTime", effectiveTime);
 
     return resultMap;
-  }
+  }*/
 }

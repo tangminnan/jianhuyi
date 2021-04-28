@@ -30,4 +30,6 @@ public interface DataEverydayDao {
   int batchRemove(Integer[] ids);
 
   int saveList(@Param("everydayDOList") List<DataEverydayDO> everydayDOList);
+
+    DataEverydayDO getByUserIdAndTime(@Param("userId") Long userId,@Param("date") String date);
 }

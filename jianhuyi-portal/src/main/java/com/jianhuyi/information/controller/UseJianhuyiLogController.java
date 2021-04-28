@@ -130,7 +130,7 @@ public class UseJianhuyiLogController {
       }
 
       /** 统计分析数据 */
-      if (saveParamsDOList.getUseJianhuyiLogDOList() != null
+      /*if (saveParamsDOList.getUseJianhuyiLogDOList() != null
           && saveParamsDOList.getUseJianhuyiLogDOList().size() > 0) {
 
         Long userId = saveParamsDOList.getUserId();
@@ -178,7 +178,7 @@ public class UseJianhuyiLogController {
             }
           }
         }
-      }
+      }*/
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -191,7 +191,7 @@ public class UseJianhuyiLogController {
    *
    * @param useJianhuyiLogDOList
    */
-  private void countTotal(UserTaskDO userTaskDO, List<UseJianhuyiLogDO> useJianhuyiLogDOList)
+ /* private void countTotal(UserTaskDO userTaskDO, List<UseJianhuyiLogDO> useJianhuyiLogDOList)
       throws ParseException {
     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     Double outdoorsDuration = 0.0; // 户外时间累计版本
@@ -217,14 +217,14 @@ public class UseJianhuyiLogController {
         resultMap.get("avgReadDistance"),
         outdoorsDuration,
         0.0);
-  }
+  }*/
 
   /**
    * 统计每天的数据情况
    *
    * @param useJianhuyiLogDOList
    */
-  private void countPerDay(UserTaskDO userTaskDO, List<UseJianhuyiLogDO> useJianhuyiLogDOList)
+  /*private void countPerDay(UserTaskDO userTaskDO, List<UseJianhuyiLogDO> useJianhuyiLogDOList)
       throws ParseException {
     useJianhuyiLogDOList.forEach(
         a -> {
@@ -266,7 +266,7 @@ public class UseJianhuyiLogController {
     UserDO userDO = userService.getById(userTaskDO.getUserId());
     userDO.setScores(userDO.getScores() + scores);
     userService.updateScores(userDO);
-  }
+  }*/
 
   /**
    * 统计分析最终评级
@@ -282,7 +282,7 @@ public class UseJianhuyiLogController {
    * @param outdoorsDuration
    * @return
    */
-  private synchronized Integer resultScore(
+  /*private synchronized Integer resultScore(
       Integer flag,
       UserTaskDO userTaskDO,
       String createTime,
@@ -319,7 +319,7 @@ public class UseJianhuyiLogController {
       Integer score = ResultUtils.countScore(userTaskDO, userTaskLinshiDO);
       userTaskLinshiDO.setScore(score);
       userTaskLinshiDO.setEyeRate(ResultUtils.totalDegree(null, userTaskLinshiDO)); // 当日等级
-      /** t_user_task_linshi表中已经存在的数据来说，更新表最后的一条数据，对于之前的数据不做任何处理，对于新数据会新增 */
+      *//** t_user_task_linshi表中已经存在的数据来说，更新表最后的一条数据，对于之前的数据不做任何处理，对于新数据会新增 *//*
       UserTaskLinshiDO userTaskLinshiDO11 =
           userTaskLinshiService.getRecentlyDate(userTaskDO.getUserId(), userTaskDO.getId());
       if (userTaskLinshiDO11 == null) {
@@ -366,7 +366,7 @@ public class UseJianhuyiLogController {
       userTaskService.update(userTaskDO);
     }
     return null;
-  }
+  }*/
 
   /**
    * 获取今天数据
