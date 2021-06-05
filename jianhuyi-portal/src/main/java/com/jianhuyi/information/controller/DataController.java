@@ -296,15 +296,15 @@ public class DataController {
     DecimalFormat df = new DecimalFormat("#.##");
 
     for (SerialDataBean serialDataBean : finalHistoryDataBean.getDataDOList()) {
-      UseJianhuyiLogDO useJianhuyiLogDO = new UseJianhuyiLogDO();
 
       DataDO dataDO = new DataDO();
 
       dataDO.setBaseDatasDB(JSON.toJSON(serialDataBean.getBaseDatas()).toString());
+      dataDO.setBaseData(JSON.toJSON(serialDataBean.getBaseDatas()).toString());
       dataDO.setImgs(JSON.toJSON(serialDataBean.getPictures()).toString());
       dataDO.setEquipmentId(finalHistoryDataBean.getEquipmentId());
       dataDO.setUserId(Long.parseLong(finalHistoryDataBean.getUserId() + ""));
-      dataDO.setStatus(serialDataBean.getStatus());
+      dataDO.setStatus(serialDataBean.getStatus());//阅读  非阅读  遮挡  无效  户外
       dataDO.setStartTime(serialDataBean.getStartTime());
       dataDO.setUpdateTime(new Date());
       if (finalHistoryDataBean.getUploadId() != null) {
@@ -408,7 +408,11 @@ public class DataController {
 
         if (serialDataBean.getStatus() == 1) { // 阅读
           for (BaseDataBean baseData : serialDataBean.getBaseDatas()) {
-            double sit = baseData.getAngles() - 10;
+              double sit = baseData.getAngles();
+              if(baseData.getDeflection()!=null && baseData.getDeflection()==2){
+                  sit=-sit;
+              }
+                      sit=sit-10;
 
             sitTilt += sit;
             sitSize++;
@@ -425,33 +429,72 @@ public class DataController {
             }
           }
         }
+        UseJianhuyiLogDO useJianhuyiLogDO = new UseJianhuyiLogDO();
 
         useJianhuyiLogDO.setReadDuration(Double.parseDouble(df.format(readDuration / 60)));
         // useJianhuyiLogDO.setReadDistance(Double.parseDouble(df.format(readDistance)));
-
         useJianhuyiLogDO.setSitTilt(Double.parseDouble(df.format(sitTilt)));
         useJianhuyiLogDO.setSitNum(sitSize);
-
+        if(sitSize>0)
+          useJianhuyiLogDO.setAvgSit(useJianhuyiLogDO.getSitTilt()/sitSize);
+        else
+          useJianhuyiLogDO.setAvgSit(0.0);
         useJianhuyiLogDO.setLookPhoneDuration(Double.parseDouble(df.format(lookPhoneDuration)));
         useJianhuyiLogDO.setLookTvComputerDuration(
             Double.parseDouble(df.format(lookTvComputerDuration)));
         useJianhuyiLogDO.setReadLight(Double.parseDouble(df.format(readLight)));
         useJianhuyiLogDO.setLightNum(size);
 
+        if(size>0)
+          useJianhuyiLogDO.setAvgLight(useJianhuyiLogDO.getReadLight()/size);
+        else
+          useJianhuyiLogDO.setAvgLight(0.0);
         useJianhuyiLogDO.setOutdoorsDuration(Double.parseDouble(df.format(outdoorTime)));
 
         useJianhuyiLogDO.setUserId(finalHistoryDataBean.getUserId());
         useJianhuyiLogDO.setUploadId(finalHistoryDataBean.getUploadId());
         useJianhuyiLogDO.setSaveTime(serialDataBean.getStartTime());
         useJianhuyiLogDO.setEquipmentId(serialDataBean.getEquipmentId());
+        /**
+         *     计算阅读距离
+          */
+        Double distances = 0.0;
+        int distancesCount = 0;
+
+        List<List<BaseDataDO>> data = new ArrayList<>();
+        List<BaseDataDO> allData = new ArrayList<>();
+        if(dataDO.getStatus()==1) {
+            String baseData = dataDO.getBaseData();
+            data.add(JSON.parseArray(baseData, BaseDataDO.class));
+        }
+        for (List<BaseDataDO> datum : data) {
+          for (BaseDataDO baseDataDO : datum) {
+            allData.add(baseDataDO);
+          }
+        }
+        // 取出距离 筛选>=10 并且 <=60 的距离值
+        List<BaseDataDO> baseDataDOList = AvgDataUtil.countDistance(allData);
+        for (BaseDataDO baseDataDO : baseDataDOList) {
+          if (baseDataDO.getDistances() >= 100 && baseDataDO.getDistances() <= 600) {
+            distances += baseDataDO.getDistances();
+            distancesCount++;
+          }
+        }
+        if (distancesCount > 0 && serialDataBean.getStatus()==1) {
+          useJianhuyiLogDO.setDistanceNum(distancesCount);
+          useJianhuyiLogDO.setReadDistance(distances / distancesCount / 10);
+        }else{
+          useJianhuyiLogDO.setReadDistance(0.0);
+          useJianhuyiLogDO.setDistanceNum(0);//距离点数
+        }
         useJianhuyiLogDO.setAddTime(DateUtil.nowDate());
         if (serialDataBean.getStatus() == 6) {
           useJianhuyiLogDO.setStatus(2);
         } else {
           useJianhuyiLogDO.setStatus(serialDataBean.getStatus());
         }
-        useJianhuyiLogDO.setType(type);
 
+        useJianhuyiLogDO.setType(type);
         useJianhuyiLogDOList.add(useJianhuyiLogDO);
       }
     }

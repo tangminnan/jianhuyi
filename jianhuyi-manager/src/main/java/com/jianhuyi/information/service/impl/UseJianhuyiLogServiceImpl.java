@@ -193,6 +193,11 @@ public class UseJianhuyiLogServiceImpl implements UseJianhuyiLogService {
   }
 
   @Override
+  public UseJianhuyiLogDO getStart(Long id, String useTime) {
+    return useJianhuyiLogDao.getStart(id,useTime);
+  }
+
+  @Override
   public Map<String, Collection<Double>> getlineData(Date start, Date end, Long userId) {
     Map<String, Object> params = new HashMap<>();
     params.put("startTime", start);

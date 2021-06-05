@@ -1,5 +1,7 @@
 server:
   session-timeout: 86400
+  tomcat:
+    max-http-post-size: -1
 #    tomcat:
 #        max-threads: 1000
 #        min-spare-threads: 30

@@ -7,6 +7,7 @@ import com.jianhuyi.common.utils.OBSUtils;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.owneruser.domain.OwnerUserDO;
 import com.jianhuyi.owneruser.service.OwnerUserService;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,23 @@ public class OwnerUserController extends BaseController {
     }
   }
 
+  @Log("根据姓名查询管理员ID")
+  @GetMapping("/getManagerId")
+  public Map<String,Object> getManagerId(String name){
+    Map<String,Object> paramsMap = new HashedMap();
+    paramsMap.put("name",name);
+    paramsMap.put("bindType",1);
+    List<OwnerUserDO> list = userService.list(paramsMap);
+    list.forEach(a->{
+      a.setManageId(a.getId().intValue());
+    });
+    Map<String,Object> resultMap = new HashMap<>();
+      resultMap.put("msg", "获取成功");
+      resultMap.put("data", list);
+      resultMap.put("code", 0);
+      return resultMap;
+  }
+
   /**
    * 编辑用户信息
    *
@@ -67,6 +85,9 @@ public class OwnerUserController extends BaseController {
     }
     if (user.getBirthday() != null) {
       userd.setBirthday(user.getBirthday());
+    }
+    if (user.getManageId() != null) {
+      userd.setManagerId(user.getManageId());
     }
     if (user.getPhone() != null) {
       userd.setPhone(user.getPhone());

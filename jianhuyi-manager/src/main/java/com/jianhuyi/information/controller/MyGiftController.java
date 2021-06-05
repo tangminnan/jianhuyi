@@ -1,11 +1,14 @@
 package com.jianhuyi.information.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
+import com.jianhuyi.users.domain.UserDO;
+import com.jianhuyi.users.service.UserService;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -57,7 +60,7 @@ public class MyGiftController {
 	public PageUtils list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-		List<MyGiftDO> myGiftList = myGiftService.list(query);
+        List<MyGiftDO> myGiftList = myGiftService.list(query);
 		int total = myGiftService.count(query);
 		PageUtils pageUtils = new PageUtils(myGiftList, total);
 		return pageUtils;

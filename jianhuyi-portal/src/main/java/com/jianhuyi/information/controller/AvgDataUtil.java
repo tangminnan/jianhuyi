@@ -184,8 +184,8 @@ public class AvgDataUtil {
             m -> {
               jsonObject = (JSONObject) JSONObject.toJSON(m);
             });
-    String num = jsonObject.get("num").toString();
-    String sum = jsonObject.get("sum").toString();
+    String num = jsonObject.get("num").toString();//条数
+    String sum = jsonObject.get("sum").toString();//=0的个数
     UseJianhuyiLogDO usetime =
         getSNCount(Integer.parseInt(num), Integer.parseInt(sum), useTimeDOList);
 
@@ -663,7 +663,7 @@ public class AvgDataUtil {
     // 筛选距离范围 光强值L ＜3000； 距离 10≤D≤80；
     for (BaseDataDO datum : dataDOList) {
       if (datum.getLights() < 30000
-          && (datum.getDistances() >= 100 && datum.getDistances() <= 800)) {
+              && (datum.getDistances() >= 100 && datum.getDistances() <= 800)) {
         newData.add(datum);
       }
     }

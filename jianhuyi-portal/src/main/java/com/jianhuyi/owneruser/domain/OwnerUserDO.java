@@ -99,15 +99,16 @@ public class OwnerUserDO implements Serializable {
 
   private String studentNum;
 
-  private int managerId;
+  private Integer managerId;
+  private Integer manageId;
 
   private int bindType;
 
-  public int getManagerId() {
+  public Integer getManagerId() {
     return managerId;
   }
 
-  public void setManagerId(int managerId) {
+  public void setManagerId(Integer managerId) {
     this.managerId = managerId;
   }
 
@@ -501,6 +502,14 @@ public class OwnerUserDO implements Serializable {
 
   public void setTaskIds(Long taskIds) {
     this.taskIds = taskIds;
+  }
+
+  public Integer getManageId() {
+    return manageId;
+  }
+
+  public void setManageId(Integer manageId) {
+    this.manageId = manageId;
   }
 
   @Override

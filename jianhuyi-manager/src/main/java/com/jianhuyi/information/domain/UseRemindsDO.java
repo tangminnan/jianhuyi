@@ -26,7 +26,8 @@ public class UseRemindsDO implements Serializable {
 	//用户id
 	private Long userId;
 	//设备id
-	private Long equipmentId;
+	private String equipmentId;
+	private Integer type;
 
 	/**
 	 * 设置：ID
@@ -91,13 +92,21 @@ public class UseRemindsDO implements Serializable {
 	/**
 	 * 设置：设备id
 	 */
-	public void setEquipmentId(Long equipmentId) {
+	public void setEquipmentId(String equipmentId) {
 		this.equipmentId = equipmentId;
 	}
 	/**
 	 * 获取：设备id
 	 */
-	public Long getEquipmentId() {
+	public String getEquipmentId() {
 		return equipmentId;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 }

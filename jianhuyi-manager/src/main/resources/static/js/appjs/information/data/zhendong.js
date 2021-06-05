@@ -49,7 +49,7 @@ function load() {
                         checkbox : true
                     },*/
                     {
-                        field: 'time',
+                        field: 'remindsTime',
                         title: '时间',
                         align: 'center'
                     },
@@ -64,9 +64,10 @@ function load() {
                                 return "光线较暗"
                             }else if(value == 3){
                                 return "坐姿不正"
-                            }else{
+                            }else if(value==4){
+                                return "遮挡";
+                            }else
                                 return "";
-                            }
                         }
                     }
                     /*			{

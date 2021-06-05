@@ -4,12 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.jianhuyi.common.utils.PageUtils;
 import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
-import com.jianhuyi.information.domain.BaseDataDO;
-import com.jianhuyi.information.domain.DataDO;
-import com.jianhuyi.information.domain.DataImgDO;
-import com.jianhuyi.information.domain.RemaindDO;
+import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.DataImgService;
 import com.jianhuyi.information.service.DataService;
+import com.jianhuyi.information.service.UseRemindsService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +33,9 @@ public class DataController {
     private DataService dataService;
     @Autowired
     private DataImgService dataImgService;
+    @Autowired
+    private UseRemindsService useRemindsService;
+
 
     @GetMapping("/listdata")
     @RequiresPermissions("information:data:data")
@@ -129,13 +130,15 @@ public class DataController {
     public PageUtils zhendongdata(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
-        List<DataDO> dataList = dataService.list(query);
-        List<RemaindDO> data = null;
+//        List<DataDO> dataList = dataService.list(query);
+//        List<RemaindDO> data = null;
+//
+//        for (DataDO dataDO : dataList) {
+//            String baseData = dataDO.getRemaind();
+//            data = JSON.parseArray(baseData, RemaindDO.class);
+//        }
 
-        for (DataDO dataDO : dataList) {
-            String baseData = dataDO.getRemaind();
-            data = JSON.parseArray(baseData, RemaindDO.class);
-        }
+        List<UseRemindsDO> data = useRemindsService.list(query);
 
         PageUtils pageUtils = new PageUtils(data, data.size());
         return pageUtils;

@@ -53,4 +53,6 @@ public interface UseJianhuyiLogService {
     List<UploadRecordDO> uploadRecordList(Map<String, Object> params);
 
     int uploadRecordCount(Map<String, Object> params);
+
+    UseJianhuyiLogDO getStart(Long id, String useTime);
 }

@@ -137,11 +137,18 @@ function load() {
                   },
                   {
                      field: 'sitTilt',
-                     title: '坐姿倾斜度',
+                     title: '坐姿倾斜度（-右偏 +左偏）',
                      align: 'center',
                      valign: 'middle',
                      colspan: 2
                   },
+                   {
+                       field: 'readDistance',
+                       title: '阅读距离',
+                       align: 'center',
+                       valign: 'middle',
+                       colspan: 2
+                   },
 
                   /*								{
                       field : 'delFlag',
@@ -184,8 +191,8 @@ function load() {
 
 
                   {
-                     field: 'readLight',
-                     title: '光照总和',
+                     field: 'avgLight',
+                     title: '平均光照',
                      valign: 'middle',
                      sortable: true, cellStyle: function (value, row, index, field) {
                         return {
@@ -232,8 +239,8 @@ function load() {
                   },
 
                   {
-                     field: 'sitTilt',
-                     title: '坐姿总和',
+                     field: 'avgSit',
+                     title: '平均坐姿',
                      valign: 'middle',
                      sortable: true,
                      align: 'center'
@@ -251,6 +258,32 @@ function load() {
                      align: 'center'
 
                   },
+                   {
+                       field: 'readDistance',
+                       title: '平均距离',
+                       valign: 'middle',
+                       sortable: true, cellStyle: function (value, row, index, field) {
+                       return {
+                           classes: 'text - nowrap another - class',
+                           css: {'background-color': '#5792C6', 'font - size': '50px'}
+                       }
+                   },
+                       align: 'center'
+                   },
+                   {
+                       field: 'distanceNum',
+                       title: '距离点数',
+                       valign: 'middle',
+                       sortable: true, cellStyle: function (value, row, index, field) {
+                       return {
+                           classes: 'text - nowrap another - class',
+                           css: {'background-color': '#5792C6', 'font - size': '50px'}
+                       }
+                   },
+                       align: 'center'
+
+                   },
+
                ]
             ]
          });

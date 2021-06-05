@@ -15,6 +15,7 @@
 		  		  <if test="userId != null and userId != ''"> and m.user_id = #{userId} </if>
 		  		  <if test="giftId != null and giftId != ''"> and m.gift_id = #{giftId} </if>
 		  		  <if test="createTime != null and createTime != ''"> and m.create_time = #{createTime} </if>
+			      <if test="name != null and name != ''"> and t.name = #{name} </if>
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">

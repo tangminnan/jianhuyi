@@ -128,7 +128,7 @@ function load() {
                },
                {
                   field: 'sitTilt',
-                  title: '坐姿倾斜度</br>(°)',
+                  title: '坐姿倾斜度 -右偏 +左偏</br>(°)',
                   valign: 'middle',
                   align: 'center'
                },
@@ -173,7 +173,9 @@ function load() {
                      function (value, row, index) {
                         var e = '<a class="btn btn-success btn-sm" href="#" mce_href="#" title="当日统计数据" onclick="detaildata(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-bar-chart-o"></i></a> ';
                         var d = '<a class="btn btn-warning btn-sm" href="#" title="当日原始数据"  mce_href="#" onclick="historyData(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-navicon"></i></a> ';
-                        return e + d;
+                        var f = '<a class="btn btn-warning btn-sm" href="#" title="监护仪报告"  mce_href="#" onclick="jianhuyiReport(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-navicon"></i></a> ';
+
+                         return e + d;
                      }
                }]
          });
@@ -207,6 +209,12 @@ function historyData(userId, saveTime) {
    layer.full(page)
 }
 
+/**
+ * 监护仪报告
+ */
+function jianhuyiReport(userId,saveTime){
+   alert("监护仪报告");
+}
 
 /*function treeDetail(index, row) {
    var alldate = {

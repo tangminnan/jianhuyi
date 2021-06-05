@@ -4,11 +4,11 @@
 <mapper namespace="com.jianhuyi.information.dao.UseRemindsDao">
 
     <select id="get" resultType="com.jianhuyi.information.domain.UseRemindsDO">
-		select `id`,`upload_id`,`reminds_time`,`save_time`,`user_id`,`equipment_id` from t_use_reminds where id = #{value}
+		select `id`,`upload_id`,`reminds_time`,`save_time`,`user_id`,`equipment_id`,type from t_use_reminds where id = #{value}
 	</select>
 
     <select id="list" resultType="com.jianhuyi.information.domain.UseRemindsDO">
-        select `id`,`upload_id`,`reminds_time`,`save_time`,`user_id`,`equipment_id` from t_use_reminds
+        select `id`,`upload_id`,`reminds_time`,`save_time`,`user_id`,`equipment_id`,type from t_use_reminds
         <where>
             <if test="id != null and id != ''">and id = #{id}</if>
             <if test="uploadId != null and uploadId != ''">and upload_id = #{uploadId}</if>

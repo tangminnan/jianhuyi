@@ -4,7 +4,7 @@
 <mapper namespace="com.jianhuyi.users.dao.UserDao">
 
     <select id="get" resultType="com.jianhuyi.users.domain.UserDO">
-		select `id`,`user_id`,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`unionid`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`flag`,`age`,`school`,`grade`,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`,bind_type,manager_id,is_wear_glasses from t_user where id = #{value}
+		select `id`,`user_id`,student_num,`open_id`,`nickname`,`password`,`phone`,`heard_url`,`name`,`identity_card`,`unionid`,`register_time`,`pay_num`,`serve_num`,`balance`,`restitution`,`pay_time`,`login_time`,`add_time`,`update_time`,`delete_flag`,`username`,`sex`,`birthday`,`flag`,`age`,`school`,`grade`,`L_vision`,`R_vision`,`L_eye_ball_diameter`,`R_eye_ball_diameter`,`L_column_diameter`,`R_column_diameter`,`L_eye_axis`,`R_eye_axis`,bind_type,manager_id,is_wear_glasses from t_user where id = #{value}
 	</select>
     <select id="list" resultType="com.jianhuyi.users.domain.UserDO">
         select

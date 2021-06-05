@@ -183,7 +183,8 @@
 			`sex`, 
 			`birthday`,
 			`flag`,
-			`unionid`
+			`unionid`,
+			manager_id
 			
 		)
 		values
@@ -212,7 +213,8 @@
 			#{sex}, 
 			#{birthday},
 			#{flag},
-			#{unionid}
+			#{unionid},
+			#{managerId}
 		)
 	</insert>
 
@@ -242,7 +244,8 @@
             <if test="sex != null">`sex` = #{sex},</if>
             <if test="birthday != null">`birthday` = #{birthday},</if>
             <if test="taskId != null">`task_id` = #{taskId},</if>
-            <if test="taskIds != null">`task_ids` = #{taskIds}</if>
+            <if test="taskIds != null">`task_ids` = #{taskIds},</if>
+            <if test="managerId != null">`manager_id` = #{managerId}</if>
         </set>
         where id = #{id}
     </update>

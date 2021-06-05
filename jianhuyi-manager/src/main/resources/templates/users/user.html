@@ -19,7 +19,12 @@
                         <button type="button" class="btn  btn-primary" onclick="batchBind()">
                             <i class="fa fa-plus" aria-hidden="true"></i>批量绑定
                         </button>
-
+                        <button type="button" class="btn  btn-default" onclick="exportData()">
+                            班级数据导出
+                        </button>
+                        <button type="button" class="btn  btn-success" onclick="exportReportC()">
+                            班级报告批量导出
+                        </button>
                         <!--<button shiro:hasPermission="information:user:batchRemove" type="button" class="btn  btn-danger"
                             onclick="batchRemove()">
                             <i class="fa fa-trash" aria-hidden="true"></i>删除
@@ -43,6 +48,10 @@
                     <div class="columns pull-right col-md-1 nopadding">
                         <input id="grade" type="text" class="form-control"
                                placeholder="班级">
+                    </div>
+                    <div class="columns pull-right col-md-1 nopadding">
+                        <input id="date" type="text" class="form-control"
+                               placeholder="数据时间">
                     </div>
 
                 </div>
@@ -76,12 +85,22 @@
     </script>
 </div>
 </div>
+<div style="display: none">
+    <div id="light" style="height: 500px;width: 1500px;"></div>
+    <div id="distance" style="height: 500px;width: 1500px;"></div>
+    <div id="sit" style="height: 500px;width: 1500px;"></div>
+</div>
 <div th:include="include :: footer"></div>
+<script src="/js/plugins/echarts/echarts.js"></script>
 <script type="text/javascript" src="/js/appjs/users/user.js"></script>
 <script type="text/javascript">
    laydate.render({
       elem: '#registerTime',
       type: 'datetime',
+   });
+   laydate.render({
+       elem: '#date',
+       type: 'date',
    });
 </script>
 </body>

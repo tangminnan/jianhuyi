@@ -30,13 +30,19 @@
                     <input type="hidden" th:value="${userId}" id="userId">
 
                 </div>
-                <table id="exampleTable" data-mobile-responsive="true">
+              <table id="exampleTable" data-mobile-responsive="true">
                 </table>
+                <div style="display: none">
+                    <div id="light" style="height: 500px;width: 1500px;"></div>
+                    <div id="distance" style="height: 500px;width: 1500px;"></div>
+                    <div id="sit" style="height: 500px;width: 1500px;"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <!--shiro控制bootstraptable行内按钮看见性 来自bootdo的创新方案 -->
+<script src="/js/plugins/echarts/echarts.js"></script>
 <div>
     <script type="text/javascript">
        var s_edit_h = 'hidden';

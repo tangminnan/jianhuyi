@@ -544,7 +544,7 @@
         use_jianhuyi_duration,
         sport_duration,
         `del_flag`,
-        status,sit_num,light_num
+        status,sit_num,light_num,distance_num,avg_light,avg_sit
         from t_use_jianhuyi_log
         where
         save_time &gt;= date_sub(#{saveTime}, INTERVAL - 0 DAY)
@@ -787,6 +787,12 @@
             #{id}
         </foreach>
     </delete>
+    
+    <select id="getStart" resultType="com.jianhuyi.information.domain.UseJianhuyiLogDO">
+        select `id`,`user_id`,`save_time`,`add_time`,`status` from t_use_jianhuyi_log
+        where user_id=#{userId} and DATE_FORMAT(save_time,'%Y-%m-%d')=#{saveTime}
+        order by save_time asc limit 1
+    </select>
 
 
 </mapper>

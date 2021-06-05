@@ -86,6 +86,12 @@ public class UseJianhuyiLogDO implements Serializable {
 
   private int sitNum;
 
+  private int distanceNum;
+  //平均阅读光照
+  private Double avgLight;
+  //平均坐姿
+  private Double avgSit;
+
   public int getLightNum() {
     return lightNum;
   }
@@ -398,6 +404,30 @@ public class UseJianhuyiLogDO implements Serializable {
   /** 获取：删除标志(1:删除 0：未删除) */
   public Integer getDelFlag() {
     return delFlag;
+  }
+
+  public int getDistanceNum() {
+    return distanceNum;
+  }
+
+  public void setDistanceNum(int distanceNum) {
+    this.distanceNum = distanceNum;
+  }
+
+  public Double getAvgLight() {
+    return avgLight;
+  }
+
+  public void setAvgLight(Double avgLight) {
+    this.avgLight = avgLight;
+  }
+
+  public Double getAvgSit() {
+    return avgSit;
+  }
+
+  public void setAvgSit(Double avgSit) {
+    this.avgSit = avgSit;
   }
 
   @Override

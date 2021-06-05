@@ -1,7 +1,11 @@
 package com.jianhuyi.users.domain;
 
+import com.jianhuyi.information.domain.Data;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户信息表
@@ -93,6 +97,7 @@ public class UserDO implements Serializable {
   private int bindType;
 
   private String isWearGlasses;
+  private List<Data> dataList;
 
   public String getIsWearGlasses() {
     return isWearGlasses;
@@ -412,6 +417,14 @@ public class UserDO implements Serializable {
 
   public Double getrEyeAxis() {
     return rEyeAxis;
+  }
+
+  public List<Data> getDataList() {
+    return dataList;
+  }
+
+  public void setDataList(List<Data> dataList) {
+    this.dataList = dataList;
   }
 
   @Override

@@ -56,4 +56,6 @@ public interface UseJianhuyiLogDao {
     int uploadRecordCount(Map<String, Object> params);
 
     List<UploadRecordDO> uploadRecordList(Map<String, Object> params);
+
+    UseJianhuyiLogDO getStart(@Param("userId") Long id,@Param("saveTime") String useTime);
 }

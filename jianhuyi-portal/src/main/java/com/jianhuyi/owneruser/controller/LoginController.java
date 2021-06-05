@@ -365,10 +365,18 @@ public class LoginController extends BaseController {
     return map;
   }
 
+  /**
+   *  用户快速注册的时候不需要验证码
+   * @param phone
+   * @param codenum
+   * @param password
+   * @param secondPassword
+   * @return
+   */
   @Log("用户注册")
   @PostMapping("/register")
   Map<String, Object> register(
-      String phone, String codenum, String password, String secondPassword) {
+      String phone, String codenum, String password, String secondPassword,Integer manageId) {
     Map<String, Object> message = new HashMap<>();
     if (StringUtils.isBlank(phone)) {
       message.put("msg", "手机号码不能为空");
@@ -380,17 +388,17 @@ public class LoginController extends BaseController {
       if (object != null) {
         String captcha = object.toString();
         // String captcha = "666666";
-        if (captcha == null || "".equals(captcha)) {
-          message.put("msg", "验证码已失效，请重新点击发送验证码");
-          message.put("code", -1);
-          message.put("data", "");
-        } else {
+        if (StringUtils.isNotBlank(captcha)) {
           // session中存放的验证码是手机号+验证码
           if (!captcha.equalsIgnoreCase(phone + codenum)) {
             message.put("msg", "手机验证码错误");
             message.put("code", -1);
             message.put("data", "");
-          } else {
+            return message;
+          }
+        }
+      }
+
             Map<String, Object> mapP = new HashMap<String, Object>();
 
             mapP.put("phone", phone);
@@ -412,6 +420,7 @@ public class LoginController extends BaseController {
                   user.setPassword(password);
                   user.setDeleteFlag(1);
                   user.setRegisterTime(new Date());
+                  user.setManagerId(manageId);
                   if (userService.update(user) > 0) {
                     FunctionSetDO functionSet = new FunctionSetDO();
                     functionSet.setUserId(user.getId());
@@ -448,6 +457,7 @@ public class LoginController extends BaseController {
                 udo.setPassword(password);
                 udo.setDeleteFlag(1);
                 udo.setRegisterTime(new Date());
+                udo.setManagerId(manageId);
                 if (userService.save(udo) > 0) {
                   FunctionSetDO functionSet = new FunctionSetDO();
                   functionSet.setUserId(udo.getId());
@@ -468,13 +478,8 @@ public class LoginController extends BaseController {
               }
             }
           }
-        }
-      } else {
-        message.put("msg", "手机验证码错误");
-        message.put("code", -1);
-        message.put("data", "");
-      }
-    }
+
+
     return message;
   }
 

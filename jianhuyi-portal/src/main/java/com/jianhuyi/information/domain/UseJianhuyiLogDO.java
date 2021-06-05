@@ -34,6 +34,8 @@ public class UseJianhuyiLogDO implements Serializable {
   private Double readDistance;
   // 阅读光照(lux)
   private Double readLight;
+  //平均阅读光照
+  private Double avgLight;
   // 看手机时长(分钟)
   private Double lookPhoneDuration;
   // 看手机次数
@@ -44,6 +46,8 @@ public class UseJianhuyiLogDO implements Serializable {
   private Double lookTvComputerDuration;
   // 坐姿倾斜度
   private Double sitTilt;
+  //平均坐姿
+  private Double avgSit;
   // 使用监护仪时长(小时）
   private Double useJianhuyiDuration;
   // 运动时长(小时)
@@ -80,6 +84,8 @@ public class UseJianhuyiLogDO implements Serializable {
   private int lightNum;
 
   private int sitNum;
+  //距离点数
+  private int distanceNum;
 
   public int getLightNum() {
     return lightNum;
@@ -335,6 +341,30 @@ public class UseJianhuyiLogDO implements Serializable {
 
   public void setCreateTime(String createTime) {
     this.createTime = createTime;
+  }
+
+  public int getDistanceNum() {
+    return distanceNum;
+  }
+
+  public void setDistanceNum(int distanceNum) {
+    this.distanceNum = distanceNum;
+  }
+
+  public Double getAvgLight() {
+    return avgLight;
+  }
+
+  public void setAvgLight(Double avgLight) {
+    this.avgLight = avgLight;
+  }
+
+  public Double getAvgSit() {
+    return avgSit;
+  }
+
+  public void setAvgSit(Double avgSit) {
+    this.avgSit = avgSit;
   }
 
   @Override
