@@ -2,6 +2,7 @@ package com.jianhuyi.information.service.impl;
 
 import com.jianhuyi.common.utils.domain.HistoryDataBean;
 import com.jianhuyi.information.dao.DataInitDao;
+import com.jianhuyi.information.domain.DistanceDO;
 import com.jianhuyi.information.service.DataInitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,10 @@ public class DataInitServiceImpl implements DataInitService {
   @Override
   public List<HistoryDataBean> getList(Long userId, String time) {
     return dataInitDao.getList(userId, time);
+  }
+
+  @Override
+  public int saveDistanceDO(DistanceDO distanceDO) {
+    return dataInitDao.saveDistanceDO(distanceDO);
   }
 }

@@ -1,6 +1,7 @@
 package com.jianhuyi.information.service;
 
 import com.jianhuyi.common.utils.domain.HistoryDataBean;
+import com.jianhuyi.information.domain.DistanceDO;
 
 import java.util.List;
 import java.util.Map;
@@ -29,4 +30,6 @@ public interface DataInitService {
   int batchRemove(Integer[] ids);
 
   List<HistoryDataBean> getList(Long userId, String time);
+
+    int saveDistanceDO(DistanceDO distanceDO);
 }

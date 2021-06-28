@@ -2,6 +2,7 @@ package com.jianhuyi.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jianhuyi.common.utils.domain.*;
+import com.jianhuyi.information.domain.DistanceDO;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -30,6 +31,10 @@ public class DataParseUtil {
 
   public static byte[] PIC_BT = new byte[] {(byte) 0xff, (byte) 0xd8};
   public static byte[] PIC_BW = new byte[] {(byte) 0xff, (byte) 0xd9};
+  //16分位阅读距离包头
+  public static byte[] DATA_BT=new byte[]{(byte) 0xAA,(byte)0x55,(byte)0xA5,(byte)0x5A,(byte)0x53};
+  //16分位阅读距离包尾
+  public static byte[] DATA_BW=new byte[]{(byte)0x0d,(byte)0x0a,(byte)0x0a,(byte)0x0d};
 
   /**
    * 读取文件
@@ -65,6 +70,7 @@ public class DataParseUtil {
       List<ErrorBean> errors = new ArrayList();
 
       List<RemindBean> reminds = new ArrayList();
+      List<DistanceDO> distanceDOS =  new ArrayList<>();
 
       SerialDataBean serialDataBean = null;
       for (int i = 0; i < bytes.length; i++) {
@@ -128,6 +134,20 @@ public class DataParseUtil {
               errors.add(getError(bytes, i));
             }
           }
+
+
+          // 16分位阅读距离验证包头
+          else if (Arrays.equals(subBytes(bytes, i, 5), DATA_BT)) { //16分位阅读距离
+            // 16分位阅读距离验证包尾
+            if (i < bytes.length - 41 && Arrays.equals(subBytes(bytes, i + 37, 4), DATA_BW)) {
+              /**
+               *  解析16分位的阅读距离数据
+               */
+              distanceDOS.add(getDistanceDO(bytes,i));
+
+            }
+          }
+
         }
       }
 
@@ -142,6 +162,7 @@ public class DataParseUtil {
       historyDataBean.setErrorDataDOList(errors);
 
       historyDataBean.setRemaind(reminds);
+      historyDataBean.setDistanceDOS(distanceDOS);
 
       return historyDataBean;
 
@@ -151,6 +172,28 @@ public class DataParseUtil {
       e.printStackTrace();
       return null;
     }
+  }
+
+  private static DistanceDO getDistanceDO(byte[] bytes, int i) {
+    Double[] doubles = new Double[16];
+    byte[] bytes1 = Arrays.copyOfRange(bytes, i + 5, i + 37);
+    int[] byteH=new int[16],byteL=new int[16];
+    for(int j=0,size=bytes1.length;j<size;j++){
+      if(j%2==0){//高字节
+        byteH[j/2]=bytes1[j] & 0xff;
+      }else{//低字节
+        byteL[(j-1)/2]=bytes1[j] & 0xff;
+      }
+    }
+    for(int j=0;j<16;j++){
+      if(byteH[j]>0)
+        doubles[j]=Double.valueOf( byteH[j]<< 8 | byteL[j] );
+      else
+        doubles[j]=Double.valueOf(byteL[j] );
+    }
+    DistanceDO distanceDO = new DistanceDO();
+    distanceDO.setDistanceData(Arrays.toString(doubles));
+    return distanceDO;
   }
 
   /** 解析并返回基础数据 距离 光照 倾斜角 */

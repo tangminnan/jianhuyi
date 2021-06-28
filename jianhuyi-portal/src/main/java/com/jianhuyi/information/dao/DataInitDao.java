@@ -1,6 +1,7 @@
 package com.jianhuyi.information.dao;
 
 import com.jianhuyi.common.utils.domain.HistoryDataBean;
+import com.jianhuyi.information.domain.DistanceDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,4 +33,6 @@ public interface DataInitDao {
   int batchRemove(Integer[] ids);
 
   List<HistoryDataBean> getList(@Param("userId") Long userId, @Param("startTime") String time);
+
+    int saveDistanceDO(DistanceDO distanceDO);
 }

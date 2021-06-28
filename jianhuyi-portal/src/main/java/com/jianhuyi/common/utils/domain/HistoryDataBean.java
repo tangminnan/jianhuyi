@@ -1,5 +1,8 @@
 package com.jianhuyi.common.utils.domain;
 
+import com.jianhuyi.information.domain.DistanceDO;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class HistoryDataBean {
   private String startTime;
 
   private int type;
+  private List<DistanceDO> distanceDOS=new ArrayList<>();//16分位阅读信息
 
   public String getFileUrl() {
     return fileUrl;
@@ -155,6 +159,14 @@ public class HistoryDataBean {
 
   public void setRemaind(List<RemindBean> remaind) {
     this.remaind = remaind;
+  }
+
+  public List<DistanceDO> getDistanceDOS() {
+    return distanceDOS;
+  }
+
+  public void setDistanceDOS(List<DistanceDO> distanceDOS) {
+    this.distanceDOS = distanceDOS;
   }
 
   @Override

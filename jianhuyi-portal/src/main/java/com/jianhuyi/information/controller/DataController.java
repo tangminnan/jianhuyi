@@ -92,6 +92,17 @@ public class DataController {
       historyDataBean.setFileUrl("http://eyemonitor.dddmaker.com/files//initFile/" + filename);
 
       if (dataInitService.save(historyDataBean) > 0) {
+        List<DistanceDO> distanceDOs = historyDataBean.getDistanceDOS();
+        if(distanceDOs.size()>0){
+          for(DistanceDO distanceDO :distanceDOs) {
+            distanceDO.setEquipmentId(historyDataBean.getEquipmentId());
+            distanceDO.setUploadId(historyDataBean.getUploadId());
+            distanceDO.setUserId(historyDataBean.getUserId());
+            distanceDO.setStartTime(historyDataBean.getStartTime());
+            distanceDO.setAddTime(new Date());
+            dataInitService.saveDistanceDO(distanceDO);
+          }
+        }
         HistoryDataBean finalHistoryDataBean = historyDataBean;
         AtomicReferenceArray<DataEverydayDO> atomicReferenceArray = new AtomicReferenceArray<DataEverydayDO>(1000);
         AtomicLong atomicLong  =new AtomicLong();
@@ -337,7 +348,6 @@ public class DataController {
         for (PictureBean pictureBean : serialDataBean.getPictures()) {
           try {
             if (pictureBean != null && pictureBean.getFilename() != null) {
-              System.out.println("===========图片地址==============" + pictureBean.getFilename());
               File localFile = new File(pictureBean.getFilename());
               FileInputStream fileInputStream = new FileInputStream(localFile);
               MultipartFile multipartFile =
