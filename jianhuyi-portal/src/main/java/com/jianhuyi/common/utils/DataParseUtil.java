@@ -7,7 +7,9 @@ import com.jianhuyi.information.domain.DistanceDO;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /** 数据解析工具 */
 public class DataParseUtil {
@@ -191,7 +193,44 @@ public class DataParseUtil {
       else
         doubles[j]=Double.valueOf(byteL[j] );
     }
+    /**
+     *  根据不同的阅读状态 统计实际阅读距离 但并没有四舍五入 可以考虑四舍五入
+     */
+    int   m=0;//数组中小于120mm的数据
+    List<Double> doublesY= new ArrayList<>();
+    List<Double> doubleW = new ArrayList<>();
+    for(int k=0,length=doubles.length;k<length;k++){
+      double d = doubles[k];
+      if(d!=0) doublesY.add(d);
+      if(d<120 && d>0) m++;
+      if(d>=120) doubleW.add(d);
+    }
+    int type=0,size = doublesY.size();
+    double distance=0.0;//实际阅读距离
+    if(m>=0.8*size){//全遮挡
+      type=0;
+      if(size>3)
+        distance = doublesY.stream().sorted().limit(size-3).mapToDouble(Double::doubleValue).average().orElse(0);
+      else
+        distance=doublesY.stream().sorted().mapToDouble(Double::doubleValue).average().orElse(0);
+
+    }else if(m<0.8*size && m>0) {//半遮挡
+      type = 1;
+      if (doubleW.size() > 3)
+        distance = doubleW.stream().sorted(Comparator.comparingDouble(Double::doubleValue)).limit(size - 3).mapToDouble(Double::doubleValue).average().orElse(0);
+      else
+        distance = doubleW.stream().sorted(Comparator.comparingDouble(Double::doubleValue)).mapToDouble(Double::doubleValue).average().orElse(0);
+    }else if(m==0){
+      type=2;
+      if(size>3)
+        distance = doublesY.stream().sorted().limit(size-3).mapToDouble(Double::doubleValue).average().orElse(0);
+      else
+        distance=doublesY.stream().sorted().mapToDouble(Double::doubleValue).average().orElse(0);
+    }
+
     DistanceDO distanceDO = new DistanceDO();
+    distanceDO.setType(type);
+    distanceDO.setDistance(distance);
     distanceDO.setDistanceData(Arrays.toString(doubles));
     return distanceDO;
   }

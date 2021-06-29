@@ -122,8 +122,8 @@
     <insert id="saveDistanceDO" parameterType="com.jianhuyi.information.domain.DistanceDO" useGeneratedKeys="true"
             keyProperty="id">
         insert into t_data_distance
-        (user_id,upload_id,equipment_id,distance_data,start_time,add_time)
-        values(#{userId},#{uploadId},#{equipmentId},#{distanceData},#{startTime},#{addTime})
+        (user_id,upload_id,equipment_id,distance_data,start_time,add_time,type,distance)
+        values(#{userId},#{uploadId},#{equipmentId},#{distanceData},#{startTime},#{addTime},#{type},#{distance})
     </insert>
 
 </mapper>

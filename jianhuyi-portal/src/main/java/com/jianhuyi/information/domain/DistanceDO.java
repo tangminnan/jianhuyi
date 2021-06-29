@@ -13,6 +13,8 @@ public class DistanceDO {
     private String distanceData;//16分位阅读距离信息
     private String startTime;//开始测量时间
     private Date addTime;//添加时间
+    private Integer type;//遮挡状态 0 遮挡   1 半遮挡   2无遮挡
+    private Double distance;//阅读距离
 
     public Long getId() {
         return id;
@@ -68,5 +70,21 @@ public class DistanceDO {
 
     public void setAddTime(Date addTime) {
         this.addTime = addTime;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 }
