@@ -37,6 +37,11 @@
             limit #{offset}, #{limit}
         </if>
     </select>
+    
+    
+    <select id="listDataDO" resultType="com.jianhuyi.information.domain.DataDO">
+        SELECT * from t_data where user_id=#{userId}  and DATE_FORMAT(start_time,'%Y-%m-%d')=#{saveTime}
+    </select>
 
     <select id="count" resultType="int">
         select count(*) from t_data

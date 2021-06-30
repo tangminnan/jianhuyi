@@ -98,7 +98,6 @@ public class DataController {
             distanceDO.setEquipmentId(historyDataBean.getEquipmentId());
             distanceDO.setUploadId(historyDataBean.getUploadId());
             distanceDO.setUserId(historyDataBean.getUserId());
-            distanceDO.setStartTime(historyDataBean.getStartTime());
             distanceDO.setAddTime(new Date());
             dataInitService.saveDistanceDO(distanceDO);
           }

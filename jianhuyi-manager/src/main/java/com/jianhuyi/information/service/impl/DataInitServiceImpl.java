@@ -2,6 +2,7 @@ package com.jianhuyi.information.service.impl;
 
 import com.jianhuyi.information.dao.DataInitDao;
 import com.jianhuyi.information.domain.DataInitDO;
+import com.jianhuyi.information.domain.DistanceDO;
 import com.jianhuyi.information.service.DataInitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,10 @@ public class DataInitServiceImpl implements DataInitService {
   @Override
   public int batchRemove(Integer[] ids) {
     return dataInitDao.batchRemove(ids);
+  }
+
+  @Override
+  public List<DistanceDO> listDistanceDO(Map<String, Object> parmasMap) {
+    return dataInitDao.listDistanceDO(parmasMap);
   }
 }

@@ -51,5 +51,10 @@ public class DataServiceImpl implements DataService {
 	public int batchRemove(Long[] ids){
 		return dataDao.batchRemove(ids);
 	}
-	
+
+	@Override
+	public List<DataDO> listDataDO(Map<String, Object> parmasMap) {
+		return dataDao.listDataDO(parmasMap);
+	}
+
 }

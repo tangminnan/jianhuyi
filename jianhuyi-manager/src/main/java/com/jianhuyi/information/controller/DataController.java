@@ -6,8 +6,13 @@ import com.jianhuyi.common.utils.Query;
 import com.jianhuyi.common.utils.R;
 import com.jianhuyi.information.domain.*;
 import com.jianhuyi.information.service.DataImgService;
+import com.jianhuyi.information.service.DataInitService;
 import com.jianhuyi.information.service.DataService;
 import com.jianhuyi.information.service.UseRemindsService;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +20,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -35,6 +43,8 @@ public class DataController {
     private DataImgService dataImgService;
     @Autowired
     private UseRemindsService useRemindsService;
+    @Autowired
+    private DataInitService dataInitService;
 
 
     @GetMapping("/listdata")
@@ -205,6 +215,89 @@ public class DataController {
     public R remove(@RequestParam("ids[]") Long[] ids) {
         dataService.batchRemove(ids);
         return R.ok();
+    }
+
+    /**
+     *  16分区数据导出 比对
+     */
+    @GetMapping("/exportDistanceData")
+    public void exportDistanceData(HttpServletResponse response,@RequestParam Map<String,Object> parmasMap) throws IOException {
+        List<DataDO> dataList = dataService.listDataDO(parmasMap);
+        List<DistanceDO> distanceDOS = dataInitService.listDistanceDO(parmasMap);
+        Map<String,DistanceDO> distanceMap = distanceDOS.stream().collect(Collectors.toMap(DistanceDO::getStartTime,item->item,
+                (value1, value2 )->{
+                    return value1;
+                }));
+
+        List<BaseDataDO> data = new ArrayList<>();
+
+        for (DataDO dataDO : dataList) {
+            String baseData = dataDO.getBaseData();
+            data.addAll(JSON.parseArray(baseData, BaseDataDO.class));
+        }
+
+        Map<String, BaseDataDO> dataMap = data.stream().collect(Collectors.toMap(BaseDataDO::getTime, item -> item,
+                (value1, value2 )->{
+                    return value1;
+                }));
+        Iterator<String> iterator = dataMap.keySet().iterator();
+        while (iterator.hasNext()){
+            String key = iterator.next();
+            DistanceDO distanceDO = distanceMap.get(key);
+            if(distanceDO!=null){
+                BaseDataDO baseDataDO = dataMap.get(key);
+                baseDataDO.setDistanceData(distanceDO.getDistanceData());
+                baseDataDO.setType(distanceDO.getType());
+                baseDataDO.setDistance(distanceDO.getDistance());
+                baseDataDO.setUserId(distanceDO.getUserId());
+                baseDataDO.setUploadId(distanceDO.getUploadId());
+                baseDataDO.setEquipmentId(distanceDO.getEquipmentId());
+            }
+        }
+        List<BaseDataDO> list = new ArrayList<>(dataMap.values());
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("16分区测距报告.xls");
+        HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+        HSSFSheet sheet = workbook.getSheetAt(0);
+        HSSFRow row = sheet.getRow(0);
+        HSSFCell cell=null;
+        for(int i=0;i<list.size(); i++){
+            BaseDataDO baseDataDO = list.get(i);
+            Integer userId =     baseDataDO.getUserId()==null?0:baseDataDO.getUserId();
+            Integer uploadId=    baseDataDO.getUploadId()==null?0: baseDataDO.getUploadId();
+            String equipmentId = baseDataDO.getEquipmentId()==null?"":baseDataDO.getEquipmentId();
+            String distanceData= baseDataDO.getDistanceData()==null?"":baseDataDO.getDistanceData();
+            String date = baseDataDO.getTime();
+            Integer type=baseDataDO.getType()==null?2:baseDataDO.getType();
+            Double distance  =baseDataDO.getDistance()==null?0.0:baseDataDO.getDistance();
+            Double distances  =baseDataDO.getDistances()==null?0.0:baseDataDO.getDistances();
+            row = sheet.createRow(i+1);
+            cell = row.createCell(0);
+            cell.setCellValue(userId);
+            cell = row.createCell(1);
+            cell.setCellValue(uploadId);
+            cell = row.createCell(2);
+            cell.setCellValue(equipmentId);
+            cell = row.createCell(3);
+            cell.setCellValue(distanceData);
+            cell = row.createCell(4);
+            cell.setCellValue(date);
+            cell = row.createCell(5);
+            cell.setCellValue(type);
+            cell = row.createCell(6);
+            cell.setCellValue(distance);
+            cell = row.createCell(7);
+            cell.setCellValue(distances);
+            cell = row.createCell(8);
+
+        }
+        String d = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String fileName=d+"报告.xls";
+        response.setContentType("application/ms-excel;charset=UTF-8");
+        response.setHeader(
+                "Content-Disposition",
+                "attachment;filename=" + new String(fileName.getBytes(), "iso-8859-1"));
+
+        workbook.write(response.getOutputStream());
     }
 
 }

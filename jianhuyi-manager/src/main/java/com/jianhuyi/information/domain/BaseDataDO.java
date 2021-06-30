@@ -1,6 +1,7 @@
 package com.jianhuyi.information.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -25,6 +26,12 @@ public class BaseDataDO implements Serializable {
 	private Double lights;
 	//距离信息
 	private Double distances;
+	private String distanceData;//16分位  阅读距离信息
+	private Integer type;       //16分区  遮挡状态 0 遮挡   1 半遮挡   2无遮挡
+	private Double distance;    //16分区  实际阅读距离
+	private Integer userId;//用户ID
+	private Integer uploadId;//上传人ID
+	private String equipmentId;//设备号
 
 
 	public Long getId() {
@@ -73,5 +80,53 @@ public class BaseDataDO implements Serializable {
 
 	public void setDistances(Double distances) {
 		this.distances = distances;
+	}
+
+	public String getDistanceData() {
+		return distanceData;
+	}
+
+	public void setDistanceData(String distanceData) {
+		this.distanceData = distanceData;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(Double distance) {
+		this.distance = distance;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public Integer getUploadId() {
+		return uploadId;
+	}
+
+	public void setUploadId(Integer uploadId) {
+		this.uploadId = uploadId;
+	}
+
+	public String getEquipmentId() {
+		return equipmentId;
+	}
+
+	public void setEquipmentId(String equipmentId) {
+		this.equipmentId = equipmentId;
 	}
 }

@@ -5,10 +5,7 @@ import com.jianhuyi.common.utils.domain.*;
 import com.jianhuyi.information.domain.DistanceDO;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /** 数据解析工具 */
@@ -75,8 +72,8 @@ public class DataParseUtil {
       List<DistanceDO> distanceDOS =  new ArrayList<>();
 
       SerialDataBean serialDataBean = null;
+      String date = null;
       for (int i = 0; i < bytes.length; i++) {
-
         // 剩余长度大于5
         if (i < bytes.length - 5) {
           // 验证包头
@@ -98,12 +95,15 @@ public class DataParseUtil {
               serialDataBean.setPictures(pictureBeans);
             }
           }
+
           // 验证包头
           else if (Arrays.equals(subBytes(bytes, i, 5), BASE_DATA)) { // 基础数据  倾斜角 距离 光感
             // 验证包尾
             if (i < bytes.length - 21 && Arrays.equals(subBytes(bytes, i + 17, 4), BW)) {
               if (serialDataBean != null) {
-                serialDataBean.getBaseDatas().add(getBaseData(bytes, i));
+                BaseDataBean baseDataBean=getBaseData(bytes, i);
+                date=baseDataBean.getTime();
+                serialDataBean.getBaseDatas().add(baseDataBean);
               }
             }
           }
@@ -145,7 +145,9 @@ public class DataParseUtil {
               /**
                *  解析16分位的阅读距离数据
                */
-              distanceDOS.add(getDistanceDO(bytes,i));
+              DistanceDO distanceDO = getDistanceDO(bytes, i);
+              distanceDO.setStartTime(date);
+              distanceDOS.add(distanceDO);
 
             }
           }

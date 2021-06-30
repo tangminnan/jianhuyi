@@ -173,9 +173,9 @@ function load() {
                      function (value, row, index) {
                         var e = '<a class="btn btn-success btn-sm" href="#" mce_href="#" title="当日统计数据" onclick="detaildata(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-bar-chart-o"></i></a> ';
                         var d = '<a class="btn btn-warning btn-sm" href="#" title="当日原始数据"  mce_href="#" onclick="historyData(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-navicon"></i></a> ';
-                        var f = '<a class="btn btn-warning btn-sm" href="#" title="监护仪报告"  mce_href="#" onclick="jianhuyiReport(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-navicon"></i></a> ';
+                        var f = '<a class="btn btn-primary btn-sm" href="#" title="监护仪报告"  mce_href="#" onclick="sixteen(\'' + row.userId + '\',\'' + row.useTime + '\')"><i class="fa fa-navicon"></i></a> ';
 
-                         return e + d;
+                         return e + d +f;
                      }
                }]
          });
@@ -210,10 +210,10 @@ function historyData(userId, saveTime) {
 }
 
 /**
- * 监护仪报告
+ * 16分区数据比对导出
  */
-function jianhuyiReport(userId,saveTime){
-   alert("监护仪报告");
+function sixteen(userId,saveTime){
+  window.location.href="/information/data/exportDistanceData?userId="+userId+"&saveTime="+saveTime
 }
 
 /*function treeDetail(index, row) {

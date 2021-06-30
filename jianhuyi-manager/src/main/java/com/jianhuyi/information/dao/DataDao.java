@@ -28,4 +28,6 @@ public interface DataDao {
 	int remove(Long id);
 	
 	int batchRemove(Long[] ids);
+
+	List<DataDO> listDataDO(Map<String, Object> parmasMap);
 }

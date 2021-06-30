@@ -116,5 +116,10 @@
             #{id}
         </foreach>
     </delete>
+    
+    <select id="listDistanceDO" resultType="com.jianhuyi.information.domain.DistanceDO">
+        select * from t_data_distance where   user_id=#{userId}
+        and DATE_FORMAT(start_time,'%Y-%m-%d')=#{saveTime}
+    </select>
 
 </mapper>

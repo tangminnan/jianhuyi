@@ -1,6 +1,7 @@
 package com.jianhuyi.information.service;
 
 import com.jianhuyi.information.domain.DataInitDO;
+import com.jianhuyi.information.domain.DistanceDO;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +28,6 @@ public interface DataInitService {
   int remove(Integer id);
 
   int batchRemove(Integer[] ids);
+
+    List<DistanceDO> listDistanceDO(Map<String, Object> parmasMap);
 }

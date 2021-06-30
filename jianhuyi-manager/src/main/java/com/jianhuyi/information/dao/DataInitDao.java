@@ -1,6 +1,7 @@
 package com.jianhuyi.information.dao;
 
 import com.jianhuyi.information.domain.DataInitDO;
+import com.jianhuyi.information.domain.DistanceDO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface DataInitDao {
   int remove(Integer id);
 
   int batchRemove(Integer[] ids);
+
+    List<DistanceDO> listDistanceDO(Map<String, Object> parmasMap);
 }
